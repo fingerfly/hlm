@@ -1,0 +1,46 @@
+[
+  {
+    "id": "missing_context",
+    "input": {
+      "tiles": ["1W", "1W", "1W", "2W", "3W", "4W", "5W", "6W", "7W", "2T", "3T", "4T", "9B", "9B"],
+      "winType": "zimo",
+      "handState": "menqian",
+      "kongType": "none"
+    },
+    "expect": {
+      "errorCode": "NEED_CONTEXT",
+      "isWin": false,
+      "totalFan": 0
+    }
+  },
+  {
+    "id": "below_threshold",
+    "input": {
+      "tiles": ["1W", "1W", "1W", "2W", "3W", "4W", "5W", "6W", "7W", "2T", "3T", "4T", "9B", "9B"],
+      "winType": "dianhe",
+      "handState": "fulu",
+      "kongType": "none",
+      "timingEvent": "none"
+    },
+    "expect": {
+      "errorCode": "NOT_A_WINNING_HAND",
+      "isWin": false,
+      "totalFan": 0
+    }
+  },
+  {
+    "id": "gangshang_threshold",
+    "input": {
+      "tiles": ["1W", "1W", "1W", "2W", "3W", "4W", "5W", "6W", "7W", "2T", "3T", "4T", "9B", "9B"],
+      "winType": "zimo",
+      "handState": "menqian",
+      "kongType": "none",
+      "timingEvent": "gangshang"
+    },
+    "expect": {
+      "errorCode": null,
+      "isWin": true,
+      "totalFan": 11
+    }
+  }
+]
