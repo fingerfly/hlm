@@ -1,0 +1,12 @@
+/**
+ * Purpose: Define normalized error codes for VLM spike flow.
+ * Author: Luke WU
+ */
+export const SPIKE_ERROR_CODES = Object.freeze({
+  CONSENT_REQUIRED: "CONSENT_REQUIRED",
+  NETWORK_ERROR: "NETWORK_ERROR",
+  PROVIDER_HTTP_ERROR: "PROVIDER_HTTP_ERROR",
+  TIMEOUT: "TIMEOUT",
+  INVALID_VLM_OUTPUT: "INVALID_VLM_OUTPUT",
+  UNSUPPORTED_IMAGE: "UNSUPPORTED_IMAGE"
+});

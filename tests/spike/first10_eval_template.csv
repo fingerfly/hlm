@@ -1,0 +1,11 @@
+sample_id,image_path,lighting,angle,run_cmd_ok,api_ok,tiles_len_14,invalid_tile_count,uncertain_count,gt_tiles,exact_match_14,position_accuracy,tile_set_accuracy,tb_recall,full_hand_correct,correct_after_manual_fix,error_code,notes
+sample_01,tests/spike/images/sample_01.jpg,,,Y,N,N,0,,2W 6W Wh S 5T 7T 9T 6T 7B 3B 9B 8B 1B Ch,N,0.00,0.00,0.00,,,PROVIDER_HTTP_ERROR,
+sample_02,tests/spike/images/sample_02.jpg,,,Y,N,N,0,,2W 6W Wh S 5T 7T 9T 6T 7B 3B 9B 8B 1B Ch,N,0.00,0.00,0.00,,,PROVIDER_HTTP_ERROR,
+sample_03,tests/spike/images/sample_03.jpg,,,Y,N,N,0,,2W 6W Wh S 5T 7T 9T 6T 7B 3B 9B 8B 1B Ch,N,0.00,0.00,0.00,,,PROVIDER_HTTP_ERROR,
+sample_04,tests/spike/images/sample_04.jpg,,,Y,N,N,0,,2W 6W Wh S 5T 7T 9T 6T 7B 3B 9B 8B 1B Ch,N,0.00,0.00,0.00,,,PROVIDER_HTTP_ERROR,
+sample_05,tests/spike/images/sample_05.jpg,,,Y,N,N,0,,2W 6W Wh S 5T 7T 9T 6T 7B 3B 9B 8B 1B Ch,N,0.00,0.00,0.00,,,PROVIDER_HTTP_ERROR,
+sample_06,tests/spike/images/sample_06.jpg,,,Y,N,N,0,,2W 6W Wh S 5T 7T 9T 6T 7B 3B 9B 8B 1B Ch,N,0.00,0.00,0.00,,,PROVIDER_HTTP_ERROR,
+sample_07,tests/spike/images/sample_07.jpg,,,Y,N,N,0,,2W 6W Wh S 5T 7T 9T 6T 7B 3B 9B 8B 1B Ch,N,0.00,0.00,0.00,,,PROVIDER_HTTP_ERROR,
+sample_08,tests/spike/images/sample_08.jpg,,,Y,N,N,0,,2W 6W Wh S 5T 7T 9T 6T 7B 3B 9B 8B 1B Ch,N,0.00,0.00,0.00,,,PROVIDER_HTTP_ERROR,
+sample_09,tests/spike/images/sample_09.jpg,,,Y,N,N,0,,2W 6W Wh S 5T 7T 9T 6T 7B 3B 9B 8B 1B Ch,N,0.00,0.00,0.00,,,PROVIDER_HTTP_ERROR,
+sample_10,tests/spike/images/sample_10.jpg,,,Y,N,N,0,,2W 6W Wh S 5T 7T 9T 6T 7B 3B 9B 8B 1B Ch,N,0.00,0.00,0.00,,,PROVIDER_HTTP_ERROR,
