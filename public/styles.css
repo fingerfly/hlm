@@ -20,6 +20,53 @@ button {
   cursor: pointer;
 }
 
+.actions {
+  display: flex;
+  gap: 8px;
+}
+
+.panel {
+  margin-top: 16px;
+  background: #fff;
+  border: 1px solid #d0d7de;
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.hidden {
+  display: none;
+}
+
+.slot {
+  border: 1px solid #d0d7de;
+  border-radius: 8px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.slot-title {
+  margin: 0 0 8px;
+  font-weight: 600;
+}
+
+.candidate-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+.candidate-btn {
+  background: #1f6feb;
+  padding: 6px 10px;
+}
+
+.slot input {
+  padding: 6px 8px;
+  border-radius: 6px;
+  border: 1px solid #d0d7de;
+}
+
 pre {
   margin-top: 16px;
   background: #111827;

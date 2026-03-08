@@ -43,3 +43,27 @@ test("createOllamaClient reports provider http diagnostics on non-2xx", async ()
     }
   );
 });
+
+test("createOllamaClient maps AbortError to TIMEOUT", async () => {
+  const fetchImpl = async () => {
+    const err = new Error("aborted");
+    err.name = "AbortError";
+    throw err;
+  };
+  const client = createOllamaClient({ fetchImpl, retries: 0 });
+  await assert.rejects(
+    () => client.inferFromImage({ imageDataUrl: "data:image/png;base64,a" }),
+    (error) => error?.code === "TIMEOUT"
+  );
+});
+
+test("createOllamaClient maps unknown errors to NETWORK_ERROR", async () => {
+  const fetchImpl = async () => {
+    throw new Error("connection reset");
+  };
+  const client = createOllamaClient({ fetchImpl, retries: 0 });
+  await assert.rejects(
+    () => client.inferFromImage({ imageDataUrl: "data:image/png;base64,a" }),
+    (error) => error?.code === "NETWORK_ERROR"
+  );
+});

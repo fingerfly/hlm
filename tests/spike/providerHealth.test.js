@@ -21,3 +21,9 @@ test("assertOllamaReady returns actionable message when ollama is unavailable", 
   assert.equal(out.ok, false);
   assert.match(out.message, /ollama service/i);
 });
+
+test("assertOllamaReady includes ollama ps hint when unavailable", () => {
+  const out = assertOllamaReady({ provider: "ollama_qwen3vl", runCommand: () => ({ status: 1 }) });
+  assert.equal(out.ok, false);
+  assert.match(out.message, /ollama ps/i);
+});

@@ -11,7 +11,16 @@
       <h1>胡了么 - 国标麻将计番助手</h1>
       <p id="versionBadge">版本信息加载中...</p>
       <p>欢迎使用胡了么演示页：点击下方按钮，体验“拍牌识别（模拟）→ 国标计番 → 结果解释”的完整流程。</p>
-      <button id="runDemoBtn">开始胡了么计番演示</button>
+      <div class="actions">
+        <button id="runDemoBtn">开始胡了么计番演示</button>
+        <button id="runConfirmDemoBtn">开始人工确认演示</button>
+      </div>
+      <section id="confirmPanel" class="panel hidden">
+        <h2>人工确认牌位</h2>
+        <p>请仅修正高亮牌位，确认后将自动重新计番。</p>
+        <div id="confirmSlots"></div>
+        <button id="confirmSubmitBtn">提交修正并重新计番</button>
+      </section>
       <pre id="output">点击“开始胡了么计番演示”查看结果...</pre>
     </main>
     <script type="module" src="./app.js"></script>

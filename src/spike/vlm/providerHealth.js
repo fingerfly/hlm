@@ -10,7 +10,7 @@ export function assertOllamaReady({ provider, runCommand = defaultRunCommand }) 
   if (run.status === 0) return { ok: true, message: "" };
   return {
     ok: false,
-    message: "Ollama is not reachable. Start it with `ollama service`, then retry."
+    message: "Ollama is not reachable. Check with `ollama ps`, start with `ollama service`, then retry."
   };
 }
 

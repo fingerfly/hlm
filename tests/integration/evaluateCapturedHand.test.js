@@ -51,3 +51,33 @@ test("evaluateCapturedHand returns scoring + replay log on accepted recognition"
   assert.equal(typeof result.replayLog.timestamp, "string");
   assert.match(result.explanation, /总番/);
 });
+
+test("evaluateCapturedHand accepts confirmed tile overrides and resumes scoring", () => {
+  const noisy = stableFrame.map((t, index) => (index === 2 ? { ...t, confidence: 0.2 } : t));
+  const withNeedConfirm = evaluateCapturedHand({
+    frames: [stableFrame, noisy],
+    context: {
+      winType: "zimo",
+      handState: "menqian",
+      kongType: "none",
+      timingEvent: "gangshang"
+    }
+  });
+  assert.equal(withNeedConfirm.recognition.status, "need_human_confirm");
+  assert.equal(withNeedConfirm.recognition.missingIndices.includes(2), true);
+
+  const resumed = evaluateCapturedHand({
+    frames: [stableFrame, noisy],
+    confirmedTiles: { 2: "1W" },
+    context: {
+      winType: "zimo",
+      handState: "menqian",
+      kongType: "none",
+      timingEvent: "gangshang"
+    }
+  });
+
+  assert.equal(resumed.recognition.status, "accepted");
+  assert.equal(resumed.recognition.tiles[2].source, "human");
+  assert.equal(resumed.scoring.isWin, true);
+});
