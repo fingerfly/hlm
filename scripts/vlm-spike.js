@@ -10,6 +10,7 @@ import { recognizeWithDeepSeek } from "../src/spike/vlm/recognizeImage.js";
 import { loadRuntimeEnv } from "../src/spike/vlm/runtimeConfig.js";
 import { validateRuntimeConfig } from "../src/spike/vlm/orchestrator.js";
 import { createVlmClient } from "../src/spike/vlm/vlmClientFactory.js";
+import { buildClientRuntimeOptions } from "../src/spike/vlm/clientRuntime.js";
 
 async function main() {
   loadRuntimeEnv();
@@ -36,10 +37,21 @@ async function main() {
     process.exit(1);
   }
   const preprocessConfig = parsePreprocessConfig(process.env);
+  const runtimeClient = buildClientRuntimeOptions(process.env);
   const client = createVlmClient({
     provider,
-    deepseek: { apiKey: process.env.DEEPSEEK_API_KEY, model: process.env.DEEPSEEK_MODEL || "deepseek-chat" },
-    ollama: { baseUrl: process.env.OLLAMA_BASE_URL || "http://localhost:11434", model: process.env.OLLAMA_MODEL || "qwen3-vl:4b" }
+    deepseek: {
+      apiKey: process.env.DEEPSEEK_API_KEY,
+      model: process.env.DEEPSEEK_MODEL || "deepseek-chat",
+      timeoutMs: runtimeClient.deepseek.timeoutMs,
+      retries: runtimeClient.deepseek.retries
+    },
+    ollama: {
+      baseUrl: process.env.OLLAMA_BASE_URL || "http://localhost:11434",
+      model: process.env.OLLAMA_MODEL || "qwen3-vl:4b",
+      timeoutMs: runtimeClient.ollama.timeoutMs,
+      retries: runtimeClient.ollama.retries
+    }
   });
   const converted = convertHeicToJpegIfNeeded(imagePath);
   let preprocessed = { path: converted.path, cleanup: null };

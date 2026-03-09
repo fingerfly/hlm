@@ -26,7 +26,19 @@ test("scoreHand rejects winning pattern below min fan threshold", () => {
   assert.equal(result.isWin, false);
 });
 
-test("scoreHand accepts hand that reaches 8 fan threshold", () => {
+test("scoreHand accepts hand when total fan reaches min gate", () => {
+  const result = scoreHand({
+    tiles: ["1W", "1W", "1W", "2W", "3W", "4W", "5W", "6W", "7W", "2T", "3T", "4T", "9B", "9B"],
+    winType: "zimo",
+    handState: "menqian",
+    kongType: "none",
+    timingEvent: "none"
+  });
+  assert.equal(result.totalFan, 3);
+  assert.equal(result.isWin, true);
+});
+
+test("scoreHand accepts higher-fan hand", () => {
   const result = scoreHand({
     tiles: ["1W", "1W", "1W", "2W", "3W", "4W", "5W", "6W", "7W", "2T", "3T", "4T", "9B", "9B"],
     winType: "zimo",

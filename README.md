@@ -23,8 +23,8 @@ Blueprint implementation for `胡了么 - 国标麻将计番助手` (`Huleme - G
 - Rule baseline is versioned via `ruleVersion` and min fan gate.
 - Data contract enforces required context fields and `NEED_CONTEXT`.
 - Scoring pipeline includes win validation, fan detection, conflict resolver, and score aggregation.
-- Vision V1 uses multi-frame voting + confidence gate with human confirmation fallback.
-- End-to-end orchestration outputs scoring result, explanation, and replay log object.
+- Primary user path is manual-first: 14 tile codes + context selectors -> scoring -> explanation.
+- End-to-end orchestration outputs scoring result, explanation, and replay log object without AI dependency.
 
 ## Run tests
 
@@ -35,6 +35,7 @@ npm test
 ## Demo
 
 Open `public/index.html` with Live Server in VS Code.
+- Fill 14 tile slots and context fields, then click `计算番数`.
 
 ## DeepSeek VLM spike
 

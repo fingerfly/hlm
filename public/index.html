@@ -8,20 +8,63 @@
   </head>
   <body>
     <main class="container">
-      <h1>胡了么 - 国标麻将计番助手</h1>
+      <h1>和了么 - 国标麻将计番助手</h1>
       <p id="versionBadge">版本信息加载中...</p>
-      <p>欢迎使用胡了么演示页：点击下方按钮，体验“拍牌识别（模拟）→ 国标计番 → 结果解释”的完整流程。</p>
-      <div class="actions">
-        <button id="runDemoBtn">开始胡了么计番演示</button>
-        <button id="runConfirmDemoBtn">开始人工确认演示</button>
-      </div>
-      <section id="confirmPanel" class="panel hidden">
-        <h2>人工确认牌位</h2>
-        <p>请仅修正高亮牌位，确认后将自动重新计番。</p>
-        <div id="confirmSlots"></div>
-        <button id="confirmSubmitBtn">提交修正并重新计番</button>
+      <p>手动输入 14 张手牌与和牌上下文，点击“计算番数”获取结果。</p>
+
+      <section class="panel">
+        <h2>手牌输入</h2>
+        <div id="tileGrid" class="tile-grid"></div>
+        <p class="hint">牌码示例：1W 9T 3B E S Wn N R G Wh</p>
       </section>
-      <pre id="output">点击“开始胡了么计番演示”查看结果...</pre>
+
+      <section class="panel">
+        <h2>和牌上下文</h2>
+        <div class="context-grid">
+          <label>和牌方式
+            <select id="winType">
+              <option value="zimo">自摸</option>
+              <option value="dianhe">点和</option>
+            </select>
+          </label>
+          <label>门前/副露
+            <select id="handState">
+              <option value="menqian">门前清</option>
+              <option value="fulu">副露</option>
+            </select>
+          </label>
+          <label>杠类型
+            <select id="kongType">
+              <option value="none">无杠</option>
+              <option value="an">暗杠</option>
+              <option value="ming">明杠</option>
+              <option value="bu">补杠</option>
+            </select>
+          </label>
+          <label>时机事件
+            <select id="timingEvent">
+              <option value="none">无</option>
+              <option value="haidi">海底</option>
+              <option value="hedi">河底</option>
+              <option value="gangshang">杠上</option>
+            </select>
+          </label>
+        </div>
+        <div class="actions">
+          <button id="calculateBtn">计算番数</button>
+          <button id="resetBtn" class="secondary">重置</button>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>错误信息</h2>
+        <ul id="errors" class="errors"></ul>
+      </section>
+
+      <section class="panel">
+        <h2>计算结果</h2>
+        <pre id="output">请先输入手牌与上下文，再点击“计算番数”。</pre>
+      </section>
     </main>
     <script type="module" src="./app.js"></script>
   </body>

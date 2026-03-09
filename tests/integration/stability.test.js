@@ -2,26 +2,17 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { evaluateCapturedHand } from "../../src/app/evaluateCapturedHand.js";
 
-const stableFrame = [
-  { label: "1W", confidence: 0.97 },
-  { label: "1W", confidence: 0.97 },
-  { label: "1W", confidence: 0.97 },
-  { label: "2W", confidence: 0.97 },
-  { label: "3W", confidence: 0.97 },
-  { label: "4W", confidence: 0.97 },
-  { label: "5W", confidence: 0.97 },
-  { label: "6W", confidence: 0.97 },
-  { label: "7W", confidence: 0.97 },
-  { label: "2T", confidence: 0.97 },
-  { label: "3T", confidence: 0.97 },
-  { label: "4T", confidence: 0.97 },
-  { label: "9B", confidence: 0.97 },
-  { label: "9B", confidence: 0.97 }
+const stableTiles = [
+  "1W", "1W", "1W",
+  "2W", "3W", "4W",
+  "5W", "6W", "7W",
+  "2T", "3T", "4T",
+  "9B", "9B"
 ];
 
 test("stability: repeated e2e calls stay deterministic", () => {
   const request = {
-    frames: [stableFrame, stableFrame, stableFrame],
+    tiles: stableTiles,
     context: {
       winType: "zimo",
       handState: "menqian",

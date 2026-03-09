@@ -5,7 +5,7 @@ import { TERMINOLOGY_MAP } from "../../src/config/terminologyMap.js";
 
 test("rule baseline freezes rule version and min fan gate", () => {
   assert.equal(RULE_BASELINE.ruleVersion, "MCR-SPORTS-GENERAL-ADMIN-2018");
-  assert.equal(RULE_BASELINE.minWinningFan, 8);
+  assert.equal(RULE_BASELINE.minWinningFan, 1);
 });
 
 test("terminology map includes key context vocabulary", () => {

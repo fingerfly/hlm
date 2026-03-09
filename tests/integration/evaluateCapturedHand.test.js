@@ -2,29 +2,19 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { evaluateCapturedHand } from "../../src/app/evaluateCapturedHand.js";
 
-const stableFrame = [
-  { label: "1W", confidence: 0.97 },
-  { label: "1W", confidence: 0.97 },
-  { label: "1W", confidence: 0.97 },
-  { label: "2W", confidence: 0.97 },
-  { label: "3W", confidence: 0.97 },
-  { label: "4W", confidence: 0.97 },
-  { label: "5W", confidence: 0.97 },
-  { label: "6W", confidence: 0.97 },
-  { label: "7W", confidence: 0.97 },
-  { label: "2T", confidence: 0.97 },
-  { label: "3T", confidence: 0.97 },
-  { label: "4T", confidence: 0.97 },
-  { label: "9B", confidence: 0.97 },
-  { label: "9B", confidence: 0.97 }
+const winningTiles = [
+  "1W", "1W", "1W",
+  "2W", "3W", "4W",
+  "5W", "6W", "7W",
+  "2T", "3T", "4T",
+  "9B", "9B"
 ];
 
-test("evaluateCapturedHand asks for human confirm on low confidence tiles", () => {
-  const noisy = stableFrame.map((t, index) =>
-    index === 2 ? { ...t, confidence: 0.3 } : t
-  );
+test("evaluateCapturedHand returns INVALID_INPUT for invalid tile code", () => {
+  const badTiles = [...winningTiles];
+  badTiles[2] = "X9";
   const result = evaluateCapturedHand({
-    frames: [stableFrame, noisy],
+    tiles: badTiles,
     context: {
       winType: "zimo",
       handState: "menqian",
@@ -32,13 +22,33 @@ test("evaluateCapturedHand asks for human confirm on low confidence tiles", () =
       timingEvent: "none"
     }
   });
-  assert.equal(result.recognition.status, "need_human_confirm");
-  assert.equal(result.scoring.errorCode, "NEED_HUMAN_CONFIRM");
+  assert.equal(result.recognition.status, "manual_invalid");
+  assert.equal(result.scoring.errorCode, "INVALID_INPUT");
+  assert.equal(result.scoring.isWin, false);
+  assert.match(result.explanation, /手牌输入无效/);
+  assert.equal(result.scoring.problems.some((p) => p.includes("tile_2")), true);
 });
 
-test("evaluateCapturedHand returns scoring + replay log on accepted recognition", () => {
+test("evaluateCapturedHand returns NEED_CONTEXT when context is missing", () => {
   const result = evaluateCapturedHand({
-    frames: [stableFrame, stableFrame, stableFrame],
+    tiles: winningTiles,
+    context: {
+      handState: "menqian",
+      kongType: "none",
+      timingEvent: "gangshang"
+    }
+  });
+  assert.equal(result.recognition.status, "manual_ready");
+  assert.equal(result.scoring.errorCode, "NEED_CONTEXT");
+  assert.equal(result.scoring.isWin, false);
+  assert.deepEqual(result.scoring.missingFields, ["winType"]);
+});
+
+test("evaluateCapturedHand normalizes aliases and returns scoring + replay log", () => {
+  const tilesWithAlias = [...winningTiles];
+  tilesWithAlias[0] = " 1W ";
+  const result = evaluateCapturedHand({
+    tiles: tilesWithAlias,
     context: {
       winType: "zimo",
       handState: "menqian",
@@ -46,56 +56,26 @@ test("evaluateCapturedHand returns scoring + replay log on accepted recognition"
       timingEvent: "gangshang"
     }
   });
-  assert.equal(result.recognition.status, "accepted");
-  assert.equal(Array.isArray(result.recognition.missingIndices), true);
+  assert.equal(result.recognition.status, "manual_ready");
   assert.equal(result.recognition.tileCodes.length, 14);
+  assert.equal(result.recognition.tileCodes[0], "1W");
   assert.equal(result.scoring.isWin, true);
   assert.equal(typeof result.replayLog.timestamp, "string");
   assert.match(result.explanation, /总番/);
 });
 
-test("evaluateCapturedHand accepts confirmed tile overrides and resumes scoring", () => {
-  const noisy = stableFrame.map((t, index) => (index === 2 ? { ...t, confidence: 0.2 } : t));
-  const withNeedConfirm = evaluateCapturedHand({
-    frames: [stableFrame, noisy],
-    context: {
-      winType: "zimo",
-      handState: "menqian",
-      kongType: "none",
-      timingEvent: "gangshang"
-    }
-  });
-  assert.equal(withNeedConfirm.recognition.status, "need_human_confirm");
-  assert.equal(withNeedConfirm.recognition.missingIndices.includes(2), true);
-
-  const resumed = evaluateCapturedHand({
-    frames: [stableFrame, noisy],
-    confirmedTiles: { 2: "1W" },
-    context: {
-      winType: "zimo",
-      handState: "menqian",
-      kongType: "none",
-      timingEvent: "gangshang"
-    }
-  });
-
-  assert.equal(resumed.recognition.status, "accepted");
-  assert.equal(resumed.recognition.tiles[2].source, "human");
-  assert.equal(resumed.scoring.isWin, true);
-});
-
-test("evaluateCapturedHand blocks scoring when recognition payload is malformed", () => {
+test("evaluateCapturedHand treats 3-fan manual hand as win with min gate 1", () => {
   const result = evaluateCapturedHand({
-    frames: [[]],
+    tiles: [...winningTiles],
     context: {
       winType: "zimo",
       handState: "menqian",
       kongType: "none",
-      timingEvent: "gangshang"
+      timingEvent: "none"
     }
   });
-  assert.equal(result.recognition.status, "failed");
-  assert.equal(result.scoring.errorCode, "RECOGNITION_INVALID");
-  assert.equal(result.scoring.isWin, false);
-  assert.match(result.explanation, /识别结果结构无效/);
+  assert.equal(result.recognition.status, "manual_ready");
+  assert.equal(result.scoring.totalFan, 3);
+  assert.equal(result.scoring.isWin, true);
+  assert.equal(result.scoring.errorCode, null);
 });
