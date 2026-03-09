@@ -4,9 +4,15 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased] - 2026-03-09
 
+
+## [0.4.0] - 2026-03-09
+
 ### Added
 - Added manual tile input normalization/validation module (`src/app/manualTileInput.js`) with 14-slot strict checks, canonical code normalization, and slot-level error reporting.
 - Added unit tests for manual tile input helpers (`tests/unit/manualTileInput.test.js`).
+- Added result view-model mapping module (`src/app/resultViewModel.js`) to convert internal status/winPattern/fan IDs into Chinese UI labels.
+- Added dedicated UI result renderer module (`src/app/resultRenderer.js`) to render structured result cards and collapsible debug details.
+- Added unit tests for result view-model mapping behavior (`tests/unit/resultViewModel.test.js`).
 
 ### Changed
 - Replaced app-layer evaluation primary path to manual-first input (`tiles + context`) in `src/app/evaluateCapturedHand.js`, including deterministic statuses (`manual_ready`, `manual_invalid`) and direct scoring boundary behavior.
@@ -16,6 +22,8 @@ All notable changes to this project will be documented in this file.
 - Lowered Guobiao minimum winning fan gate from `8` to `1` in `src/config/ruleBaseline.js` so valid winning hands with at least one fan are treated as wins.
 - Updated scoring baseline tests and regression fixtures to reflect the new minimum-fan behavior (`tests/unit/ruleBaseline.test.js`, `tests/unit/scoringEngine.test.js`, `tests/regression/goldenCases.json`, `tests/integration/evaluateCapturedHand.test.js`).
 - Synced app version baseline expectations in `tests/unit/appVersion.test.js` with the current `0.3.0` runtime version.
+- Replaced plain-text/JSON-first result output with structured UI sections (status badge, summary cards, fan lists, explanation, collapsible JSON debug) in `public/index.html`, `public/app.js`, and `public/styles.css`.
+- Localized context selector labels/options to Chinese display text while keeping internal enum values unchanged for scoring compatibility.
 
 ## [0.2.0] - 2026-02-27
 

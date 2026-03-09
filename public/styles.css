@@ -82,6 +82,86 @@ select {
   margin: 8px 0 0;
 }
 
+.result-wrap {
+  display: grid;
+  gap: 12px;
+}
+
+.placeholder {
+  margin: 0;
+  color: #57606a;
+}
+
+.result-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.badge {
+  display: inline-block;
+  border-radius: 999px;
+  padding: 4px 10px;
+  color: #fff;
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.badge.ok {
+  background: #1a7f37;
+}
+
+.badge.bad {
+  background: #cf222e;
+}
+
+.status {
+  color: #57606a;
+  font-size: 13px;
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(120px, 1fr));
+  gap: 8px;
+}
+
+.summary-grid > div {
+  border: 1px solid #d0d7de;
+  border-radius: 8px;
+  padding: 8px;
+}
+
+.summary-grid .k {
+  margin: 0;
+  color: #57606a;
+  font-size: 12px;
+}
+
+.summary-grid .v {
+  margin: 4px 0 0;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.result-block h3 {
+  margin: 0 0 8px;
+  font-size: 15px;
+}
+
+.fan-list {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.fan-empty {
+  color: #57606a;
+}
+
+.explain {
+  margin: 0;
+}
+
 pre {
   margin-top: 16px;
   background: #111827;

@@ -1,5 +1,6 @@
 import { evaluateCapturedHand } from "../src/app/evaluateCapturedHand.js";
 import { getDisplayVersion } from "../src/config/appVersion.js";
+import { renderResultInto } from "../src/app/resultRenderer.js";
 
 const versionLabel = getDisplayVersion();
 const byId = (id) => document.getElementById(id);
@@ -10,18 +11,6 @@ const errorsEl = byId("errors");
 const tileInputs = [];
 
 const defaultTiles = ["1W", "1W", "1W", "2W", "3W", "4W", "5W", "6W", "7W", "2T", "3T", "4T", "9B", "9B"];
-const summarize = (result) => [
-  "胡了么计算结果",
-  "--------------------",
-  `版本: ${versionLabel}`,
-  `输入状态: ${result.recognition.status}`,
-  `和牌判定: ${result.scoring.isWin ? "是" : "否"}`,
-  `总番数: ${result.scoring.totalFan}`,
-  `解释: ${result.explanation}`,
-  "",
-  "JSON 明细:",
-  JSON.stringify(result, null, 2)
-].join("\n");
 
 function renderTileInputs() {
   tileGridEl.innerHTML = "";
@@ -72,7 +61,7 @@ function renderErrors(result) {
 byId("calculateBtn").addEventListener("click", () => {
   const result = evaluateCapturedHand(getRequest());
   renderErrors(result);
-  outputEl.textContent = summarize(result);
+  renderResultInto(outputEl, result, versionLabel);
 });
 
 byId("resetBtn").addEventListener("click", () => {
@@ -84,7 +73,7 @@ byId("resetBtn").addEventListener("click", () => {
   byId("kongType").value = "none";
   byId("timingEvent").value = "none";
   errorsEl.innerHTML = "";
-  outputEl.textContent = "请先输入手牌与上下文，再点击“计算番数”。";
+  outputEl.innerHTML = '<p class="placeholder">请先输入手牌与上下文，再点击“计算番数”。</p>';
 });
 
 renderTileInputs();
