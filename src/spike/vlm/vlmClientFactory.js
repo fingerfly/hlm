@@ -16,6 +16,8 @@ export function createVlmClient({
       apiKey: deepseek.apiKey,
       model: deepseek.model,
       provider,
+      timeoutMs: deepseek.timeoutMs,
+      retries: deepseek.retries,
       fetchImpl
     });
   }
@@ -24,6 +26,8 @@ export function createVlmClient({
       baseUrl: ollama.baseUrl,
       model: ollama.model,
       provider,
+      timeoutMs: ollama.timeoutMs,
+      retries: ollama.retries,
       fetchImpl
     });
   }

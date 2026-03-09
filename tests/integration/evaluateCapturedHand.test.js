@@ -47,6 +47,8 @@ test("evaluateCapturedHand returns scoring + replay log on accepted recognition"
     }
   });
   assert.equal(result.recognition.status, "accepted");
+  assert.equal(Array.isArray(result.recognition.missingIndices), true);
+  assert.equal(result.recognition.tileCodes.length, 14);
   assert.equal(result.scoring.isWin, true);
   assert.equal(typeof result.replayLog.timestamp, "string");
   assert.match(result.explanation, /总番/);
@@ -80,4 +82,20 @@ test("evaluateCapturedHand accepts confirmed tile overrides and resumes scoring"
   assert.equal(resumed.recognition.status, "accepted");
   assert.equal(resumed.recognition.tiles[2].source, "human");
   assert.equal(resumed.scoring.isWin, true);
+});
+
+test("evaluateCapturedHand blocks scoring when recognition payload is malformed", () => {
+  const result = evaluateCapturedHand({
+    frames: [[]],
+    context: {
+      winType: "zimo",
+      handState: "menqian",
+      kongType: "none",
+      timingEvent: "gangshang"
+    }
+  });
+  assert.equal(result.recognition.status, "failed");
+  assert.equal(result.scoring.errorCode, "RECOGNITION_INVALID");
+  assert.equal(result.scoring.isWin, false);
+  assert.match(result.explanation, /识别结果结构无效/);
 });
