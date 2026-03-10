@@ -14,9 +14,33 @@ Blueprint implementation for `胡了么 - 国标麻将计番助手` (`Huleme - G
 - Initial app version: `0.1.0`
 - Initial build number: `1`
 - Version policy: semantic versioning (`MAJOR.MINOR.PATCH`) with separate incrementing build number.
-- Deploy command standard: `npm run deploy -- build|patch|minor|major`
+- Deploy command standard: `npm run deploy -- major|minor|patch|build`
   - `build`: keep semver, increment build only
   - `patch|minor|major`: bump semver and reset build to `1`
+  - Safety gate: release/build modes now run `npm test` first and require `--confirm` before writing files
+    - Example: `npm run deploy -- patch --confirm`
+- Easy-to-remember shortcuts:
+  - `npm run release` (interactive selection: `1/2/3/4` or `build/patch/minor/major` + `yes` confirmation)
+  - `npm run release -- 3 --confirm` (numeric shortcut for `minor`)
+  - `npm run release:build`
+  - `npm run release:patch`
+  - `npm run release:minor`
+  - `npm run release:major`
+- Changelog prompt templates (for AI-assisted update workflow):
+  - `npm run deploy -- prompt-update`: print strict prompt template for updating `[Unreleased]`
+  - `npm run deploy -- prompt-release`: print strict prompt template for release archiving
+  - `npm run deploy -- prompt-all`: print both templates in one output
+  - `npm run deploy -- prompt-update-agent`: print Cursor Agent pipeline command for update prompt
+  - `npm run deploy -- prompt-release-agent`: print Cursor Agent pipeline command for release prompt
+  - Shortcut aliases: `npm run prompt:update`, `npm run prompt:release`, `npm run prompt:all`
+  - Agent aliases: `npm run prompt:update:agent`, `npm run prompt:release:agent`
+  - Run agent directly: `npm run prompt:update:agent:run`, `npm run prompt:release:agent:run`
+- Deploy CLI integration coverage (`tests/unit/deployCli.test.js`):
+  - invalid mode: prints normalized usage
+  - `build`: only increments build number
+  - `patch`: bumps patch and resets build to `1`
+  - `minor`: bumps minor and resets build to `1`
+  - `major`: bumps major and resets build to `1`
 
 ## Scope in this iteration
 

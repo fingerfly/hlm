@@ -1,60 +1,60 @@
 import { readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
-import { assertDeployMode, nextVersionState } from "../src/config/versioning.js";
+import {
+  formatDeploySummary,
+  nextVersionState
+} from "../src/config/versioning.js";
+import {
+  parseAppVersionState,
+  updateAppVersionSource
+} from "../src/config/deployWorkflow.js";
+import {
+  runProjectTestsOrExit
+} from "./deployRuntime.js";
+import {
+  assertModeOrExit,
+  handlePromptMode,
+  resolveDeployMode,
+  writeReleaseState
+} from "./deployHandlers.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const rootDir = join(__dirname, "..");
 
-const mode = process.argv[2];
+async function main() {
+  const inputMode = process.argv[2];
+  const extraArgs = process.argv.slice(3);
+  const flags = new Set(extraArgs.filter((arg) => arg.startsWith("--")));
+  if (handlePromptMode(inputMode, flags.has("--run-agent"), rootDir)) {
+    return;
+  }
 
-try {
-  assertDeployMode(mode);
-} catch (error) {
-  console.error(`Invalid usage: npm run deploy -- build|patch|minor|major\n${error.message}`);
-  process.exit(1);
+  const resolved = await resolveDeployMode(
+    inputMode,
+    extraArgs,
+    flags.has("--confirm")
+  );
+  assertModeOrExit(resolved.mode);
+  runProjectTestsOrExit(rootDir);
+  if (!resolved.shouldConfirm) {
+    console.error("Missing required flag: --confirm");
+    process.exit(1);
+  }
+
+  const packageJsonPath = join(rootDir, "package.json");
+  const appVersionPath = join(rootDir, "src/config/appVersion.js");
+  const changelogPath = join(rootDir, "CHANGELOG.md");
+  const appVersionSource = readFileSync(appVersionPath, "utf8");
+  const current = parseAppVersionState(appVersionSource);
+  const next = nextVersionState(current, resolved.mode);
+  const updatedSource = updateAppVersionSource(appVersionSource, next);
+  writeFileSync(appVersionPath, updatedSource, "utf8");
+  writeReleaseState(resolved.mode, next, packageJsonPath, changelogPath);
+  console.log(
+    formatDeploySummary({ mode: resolved.mode, previous: current, next })
+  );
 }
 
-const packageJsonPath = join(rootDir, "package.json");
-const appVersionPath = join(rootDir, "src/config/appVersion.js");
-
-const pkg = JSON.parse(readFileSync(packageJsonPath, "utf8"));
-const appVersionSource = readFileSync(appVersionPath, "utf8");
-
-const versionMatch = appVersionSource.match(/APP_VERSION = "([^"]+)"/);
-const buildMatch = appVersionSource.match(/APP_BUILD = (\d+)/);
-if (!versionMatch || !buildMatch) {
-  console.error("Unable to parse APP_VERSION / APP_BUILD from src/config/appVersion.js");
-  process.exit(1);
-}
-
-const current = {
-  appVersion: versionMatch[1],
-  appBuild: Number.parseInt(buildMatch[1], 10)
-};
-
-const next = nextVersionState(current, mode);
-
-const updatedVersionSource = appVersionSource
-  .replace(/APP_VERSION = "[^"]+"/, `APP_VERSION = "${next.appVersion}"`)
-  .replace(/APP_BUILD = \d+/, `APP_BUILD = ${next.appBuild}`);
-
-writeFileSync(appVersionPath, updatedVersionSource, "utf8");
-
-if (mode !== "build") {
-  pkg.version = next.appVersion;
-  writeFileSync(packageJsonPath, `${JSON.stringify(pkg, null, 2)}\n`, "utf8");
-}
-
-console.log(
-  JSON.stringify(
-    {
-      mode,
-      previous: current,
-      next
-    },
-    null,
-    2
-  )
-);
+await main();

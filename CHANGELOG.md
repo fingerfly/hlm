@@ -2,7 +2,66 @@
 
 All notable changes to this project will be documented in this file.
 
-## [Unreleased] - 2026-03-09
+## [Unreleased]
+
+## [1.2.0] - 2026-03-10
+
+### Added
+- Added deploy workflow utility module with pure functions for release-token normalization, changelog archiving, and app-version parsing/updating (`src/config/deployWorkflow.js`).
+- Added deploy prompt constants module to centralize embedded changelog/agent templates and CLI usage text (`src/config/deployPrompts.js`).
+- Added deploy runtime helper module to isolate process execution and interactive input handling (`scripts/deployRuntime.js`).
+- Added deploy orchestration helper module to split prompt handling, mode resolution, mode assertion, and release-state writes (`scripts/deployHandlers.js`).
+- Added reusable deploy sandbox helper for unit tests (`tests/helpers/deploySandbox.js`).
+- Added split deploy CLI test suites for prompt output and release flow (`tests/unit/deployCli.prompts.test.js`, `tests/unit/deployCli.release.core.test.js`, `tests/unit/deployCli.release.bump.test.js`).
+- Added unit tests for deploy workflow pure functions (`tests/unit/deployWorkflow.test.js`).
+
+### Changed
+- Refactored deploy entry script into thin orchestration with delegated modules, reducing single-file size and mixed responsibilities (`scripts/deploy.js`).
+- Updated app version baseline test expectation to current runtime version `1.1.1` (`tests/unit/appVersion.test.js`).
+- Replaced monolithic deploy CLI test file with modular test structure while preserving coverage (`tests/unit/deployCli.test.js` -> split files above).
+
+
+## [1.1.1] - 2026-03-10
+
+### Added
+- Added regression test to ensure changelog release archiving works for `CRLF` files (`tests/unit/deployCli.test.js`).
+
+### Changed
+- Fixed deploy changelog archiving logic to normalize line endings before parsing, so released changes are moved correctly from `[Unreleased]` (`scripts/deploy.js`).
+- Synced app version baseline test with current runtime `1.1.0` (`tests/unit/appVersion.test.js`).
+
+## [1.1.0] - 2026-03-10
+
+### Added
+- Added deploy CLI prompt-template modes for AI-assisted changelog workflow: `prompt-update` and `prompt-release` (`scripts/deploy.js`).
+- Added unit tests for embedded prompt-template output modes (`tests/unit/deployCli.test.js`).
+- Added `prompt-all` mode to print both changelog prompt templates in a single output (`scripts/deploy.js`).
+- Added agent-pipeline prompt modes to print Cursor Agent command lines: `prompt-update-agent` and `prompt-release-agent` (`scripts/deploy.js`).
+- Added deploy safety-gate tests that verify no file mutation happens without explicit `--confirm` (`tests/unit/deployCli.test.js`).
+- Added intuitive npm shortcut commands for release flow and prompt workflow (`package.json`).
+- Added single-entry interactive release command `npm run release` with mode selection and explicit `yes` confirmation (`scripts/deploy.js`, `package.json`).
+- Added numeric release shortcuts (`1/2/3/4`) support for interactive and inline release entry (`scripts/deploy.js`).
+
+### Changed
+- Expanded deploy invalid-usage help text to include prompt-template modes (`scripts/deploy.js`).
+- Updated app version baseline test to match current `1.0.0` runtime (`tests/unit/appVersion.test.js`).
+- Changed deploy release/build flow to run `npm test` before mutation and require `--confirm` for write actions (`scripts/deploy.js`).
+- Documented shortcut commands in README to reduce memory burden and improve day-to-day usability (`README.md`).
+- Extended deploy CLI tests to cover interactive release flow (`tests/unit/deployCli.test.js`).
+- Updated README examples to include numeric release shortcuts for simpler daily usage (`README.md`).
+## [1.0.0] - 2026-03-10
+
+### Added
+- Added deploy CLI integration tests in sandbox mode to validate end-to-end behavior without mutating workspace files (`tests/unit/deployCli.test.js`).
+- Added deploy CLI coverage for all core modes: invalid mode usage, `build`, `patch`, `minor`, and `major` output/state transitions (`tests/unit/deployCli.test.js`).
+- Added deploy summary formatter to produce concise Chinese CLI output for version upgrades (`src/config/versioning.js`).
+
+### Changed
+- Standardized deploy command usage text to `npm run deploy -- major|minor|patch|build` across CLI and docs (`scripts/deploy.js`, `README.md`).
+- Improved semver input validation to reject malformed versions before upgrade execution (`src/config/versioning.js`).
+- Switched deploy success output from JSON blob to Chinese summary lines for readability (`scripts/deploy.js`).
+- Updated UI Chinese terminology in user-facing text to use standardized wording and full event names (`public/index.html`, `public/app.js`).
+- Synced app version baseline unit test expectations with the runtime version used in this release cycle (`tests/unit/appVersion.test.js`).
 
 
 ## [0.4.0] - 2026-03-09

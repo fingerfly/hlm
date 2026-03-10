@@ -1,14 +1,18 @@
-const DEPLOY_MODES = new Set(["build", "patch", "minor", "major"]);
+const DEPLOY_MODES = new Set(["major", "minor", "patch", "build"]);
 
 export function assertDeployMode(mode) {
   if (!DEPLOY_MODES.has(mode)) {
-    throw new Error("Mode must be one of: build | patch | minor | major");
+    throw new Error("Mode must be one of: major | minor | patch | build");
   }
 }
 
 export function bumpSemver(version, mode) {
-  const [major, minor, patch] = version.split(".").map((n) => Number.parseInt(n, 10));
-  if ([major, minor, patch].some(Number.isNaN)) {
+  const parts = version.split(".");
+  if (parts.length !== 3) {
+    throw new Error(`Invalid semver version: ${version}`);
+  }
+  const [major, minor, patch] = parts.map((n) => Number.parseInt(n, 10));
+  if ([major, minor, patch].some((n) => Number.isNaN(n) || n < 0)) {
     throw new Error(`Invalid semver version: ${version}`);
   }
 
@@ -31,4 +35,18 @@ export function nextVersionState(current, mode) {
     appVersion: bumpSemver(current.appVersion, mode),
     appBuild: 1
   };
+}
+
+export function formatDeploySummary(result) {
+  const mode = String(result?.mode || "");
+  const previousVersion = String(result?.previous?.appVersion || "");
+  const previousBuild = String(result?.previous?.appBuild || "");
+  const nextVersion = String(result?.next?.appVersion || "");
+  const nextBuild = String(result?.next?.appBuild || "");
+  return [
+    "版本升级完成",
+    `升级模式: ${mode}`,
+    `应用版本: ${previousVersion} -> ${nextVersion}`,
+    `构建号: ${previousBuild} -> ${nextBuild}`
+  ].join("\n");
 }

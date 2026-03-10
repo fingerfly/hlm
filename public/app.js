@@ -73,7 +73,7 @@ byId("resetBtn").addEventListener("click", () => {
   byId("kongType").value = "none";
   byId("timingEvent").value = "none";
   errorsEl.innerHTML = "";
-  outputEl.innerHTML = '<p class="placeholder">请先输入手牌与上下文，再点击“计算番数”。</p>';
+  outputEl.innerHTML = '<p class="placeholder">请先输入手牌与和牌信息，再点击“计算番数”。</p>';
 });
 
 renderTileInputs();
