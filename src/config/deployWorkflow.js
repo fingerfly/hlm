@@ -1,9 +1,27 @@
+/**
+ * Purpose: Provide deploy workflow text/version update helpers.
+ * Description:
+ * - Selects and normalizes release mode tokens.
+ * - Archives changelog unreleased section into release heading.
+ * - Parses and rewrites appVersion source constants.
+ */
 const RELEASE_MODES = new Set(["build", "patch", "minor", "major"]);
 
+/**
+ * Return today's date in ISO yyyy-mm-dd format.
+ *
+ * @returns {string}
+ */
 export function getTodayIsoDate() {
   return new Date().toISOString().slice(0, 10);
 }
 
+/**
+ * Normalize numeric/text release token into canonical mode.
+ *
+ * @param {string} value - User-provided token.
+ * @returns {string}
+ */
 export function normalizeReleaseToken(value) {
   const modeMap = {
     "1": "build",
@@ -19,6 +37,12 @@ export function normalizeReleaseToken(value) {
   return modeMap[key] || key;
 }
 
+/**
+ * Pick first valid release mode token from argv tail.
+ *
+ * @param {string[]} extraArgs - CLI arguments after command token.
+ * @returns {string|undefined}
+ */
 export function selectReleaseModeArg(extraArgs) {
   return extraArgs
     .filter((arg) => !arg.startsWith("--"))
@@ -26,7 +50,19 @@ export function selectReleaseModeArg(extraArgs) {
     .find((arg) => RELEASE_MODES.has(arg));
 }
 
-export function archiveUnreleasedToRelease(source, releaseVersion, releaseDate) {
+/**
+ * Move [Unreleased] body into a versioned release heading.
+ *
+ * @param {string} source - Original changelog content.
+ * @param {string} releaseVersion - Version string.
+ * @param {string} releaseDate - ISO date string.
+ * @returns {string}
+ */
+export function archiveUnreleasedToRelease(
+  source,
+  releaseVersion,
+  releaseDate
+) {
   const text = source.replace(/\r\n/g, "\n");
   const heading = `## [${releaseVersion}] - ${releaseDate}`;
   if (text.includes(heading)) {
@@ -47,7 +83,9 @@ export function archiveUnreleasedToRelease(source, releaseVersion, releaseDate) 
   const unreleasedBody = text.slice(headingEnd, bodyEnd).trim();
   const before = text.slice(0, headingStart);
   const after = text.slice(bodyEnd).replace(/^\n+/, "");
-  const releaseBody = unreleasedBody.length > 0 ? `${unreleasedBody}\n\n` : "";
+  const releaseBody = unreleasedBody.length > 0
+    ? `${unreleasedBody}\n\n`
+    : "";
 
   return [
     `${before}## [Unreleased]\n\n`,
@@ -57,6 +95,13 @@ export function archiveUnreleasedToRelease(source, releaseVersion, releaseDate) 
   ].join("");
 }
 
+/**
+ * Parse app version/build constants from source text.
+ *
+ * @param {string} appVersionSource - Source file content.
+ * @returns {{appVersion: string, appBuild: number}}
+ * @throws {Error}
+ */
 export function parseAppVersionState(appVersionSource) {
   const versionMatch = appVersionSource.match(/APP_VERSION = "([^"]+)"/);
   const buildMatch = appVersionSource.match(/APP_BUILD = (\d+)/);
@@ -72,6 +117,13 @@ export function parseAppVersionState(appVersionSource) {
   };
 }
 
+/**
+ * Rewrite app version/build constants in source text.
+ *
+ * @param {string} appVersionSource - Source file content.
+ * @param {{appVersion: string, appBuild: number}} next - Next state.
+ * @returns {string}
+ */
 export function updateAppVersionSource(appVersionSource, next) {
   return appVersionSource
     .replace(/APP_VERSION = "[^"]+"/, `APP_VERSION = "${next.appVersion}"`)

@@ -1,3 +1,10 @@
+/**
+ * Purpose: Validate whether a 14-tile hand forms a legal win.
+ * Description:
+ * - Supports standard hand, seven pairs, and thirteen orphans.
+ * - Uses recursive meld removal for standard hand detection.
+ * - Returns both win boolean and matched pattern identifier.
+ */
 function countTiles(tiles) {
   const counts = new Map();
   for (const t of tiles) {
@@ -73,7 +80,10 @@ function isSevenPairs(tiles) {
 }
 
 function isThirteenOrphans(tiles) {
-  const required = new Set(["1W", "9W", "1T", "9T", "1B", "9B", "E", "S", "Wn", "N", "R", "G", "Wh"]);
+  const required = new Set([
+    "1W", "9W", "1T", "9T", "1B", "9B",
+    "E", "S", "Wn", "N", "R", "G", "Wh"
+  ]);
   const counts = countTiles(tiles);
   for (const tile of required) {
     if (!counts.has(tile)) return false;
@@ -93,10 +103,20 @@ function isThirteenOrphans(tiles) {
   return pairFound;
 }
 
+/**
+ * Validate win pattern for one 14-tile hand.
+ *
+ * @param {string[]} tiles - Tile code list.
+ * @returns {{isWin: boolean, pattern: string|null}}
+ */
 export function validateWin(tiles) {
-  if (!Array.isArray(tiles) || tiles.length !== 14) return { isWin: false, pattern: null };
+  if (!Array.isArray(tiles) || tiles.length !== 14) {
+    return { isWin: false, pattern: null };
+  }
 
-  if (isThirteenOrphans(tiles)) return { isWin: true, pattern: "thirteen_orphans" };
+  if (isThirteenOrphans(tiles)) {
+    return { isWin: true, pattern: "thirteen_orphans" };
+  }
   if (isSevenPairs(tiles)) return { isWin: true, pattern: "seven_pairs" };
   if (isStandardWin(tiles)) return { isWin: true, pattern: "standard" };
   return { isWin: false, pattern: null };

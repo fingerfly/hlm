@@ -1,6 +1,6 @@
 {
   "name": "hlm",
-  "version": "1.2.0",
+  "version": "2.0.0",
   "private": true,
   "type": "module",
   "description": "Huleme (HLM) - Guobiao Mahjong Fan Calculator.",
@@ -10,6 +10,7 @@
     "test:spike": "node --test tests/spike/**/*.test.js",
     "test:regression": "node --test tests/regression/**/*.test.js",
     "test:integration": "node --test tests/integration/**/*.test.js",
+    "quality:complexity": "node scripts/quality-complexity.js",
     "perf:smoke": "node scripts/perf-smoke.js",
     "deploy": "node scripts/deploy.js",
     "release": "node scripts/deploy.js release",

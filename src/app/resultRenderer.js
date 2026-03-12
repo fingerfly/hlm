@@ -1,5 +1,12 @@
 import { buildResultViewModel } from "./resultViewModel.js";
 
+/**
+ * Purpose: Render full result panel content into DOM container.
+ * Description:
+ * - Builds result view model and summary cards.
+ * - Renders matched/excluded fan lists with empty fallbacks.
+ * - Appends expandable debug JSON for traceability.
+ */
 function renderFansList(items, emptyText) {
   const list = document.createElement("ul");
   list.className = "fan-list";
@@ -28,6 +35,14 @@ function makeBlock(titleText, className = "result-block") {
   return block;
 }
 
+/**
+ * Render complete result panel into target container.
+ *
+ * @param {HTMLElement} container - Render target.
+ * @param {object} result - Raw evaluation payload.
+ * @param {string} versionLabel - App version text.
+ * @returns {void}
+ */
 export function renderResultInto(container, result, versionLabel) {
   const vm = buildResultViewModel(result);
   container.innerHTML = "";

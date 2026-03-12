@@ -57,5 +57,35 @@
       "isWin": true,
       "totalFan": 3
     }
+  },
+  {
+    "id": "qing_yi_se_zimo_menqian",
+    "input": {
+      "tiles": ["1W", "1W", "1W", "2W", "3W", "4W", "5W", "6W", "7W", "3W", "4W", "5W", "9W", "9W"],
+      "winType": "zimo",
+      "handState": "menqian",
+      "kongType": "none",
+      "timingEvent": "none"
+    },
+    "expect": {
+      "errorCode": null,
+      "isWin": true,
+      "totalFan": 27
+    }
+  },
+  {
+    "id": "duan_yao_hand",
+    "input": {
+      "tiles": ["2W", "3W", "4W", "2W", "3W", "4W", "5T", "6T", "7T", "4B", "5B", "6B", "8T", "8T"],
+      "winType": "dianhe",
+      "handState": "fulu",
+      "kongType": "none",
+      "timingEvent": "none"
+    },
+    "expect": {
+      "errorCode": null,
+      "isWin": true,
+      "totalFan": 2
+    }
   }
 ]

@@ -5,6 +5,19 @@ import { detectFans } from "./fanDetectors.js";
 import { resolveFanConflicts } from "./conflictResolver.js";
 import { aggregateScore } from "./scoreAggregator.js";
 
+/**
+ * Purpose: Orchestrate full hand scoring pipeline.
+ * Description:
+ * - Validates input contract and required context fields.
+ * - Verifies winning pattern before fan detection.
+ * - Resolves fan conflicts and aggregates final fan total.
+ */
+/**
+ * Score one hand with baseline rule gates.
+ *
+ * @param {object} input - Hand input with tiles and context.
+ * @returns {object}
+ */
 export function scoreHand(input) {
   const validation = validateHandInput(input);
   if (!validation.ok) {
@@ -34,7 +47,7 @@ export function scoreHand(input) {
     };
   }
 
-  const rawFans = detectFans(input, win.pattern);
+  const rawFans = detectFans(input, win);
   const { matchedFans, excludedFans } = resolveFanConflicts(rawFans);
   const { totalFan, reachesMinWinningFan } = aggregateScore(matchedFans);
 

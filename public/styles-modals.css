@@ -1,0 +1,30 @@
+/* Modal sheet pattern optimized for bottom-up mobile flows. */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.36);
+  display: none;
+  align-items: end;
+  z-index: 100;
+}
+
+.modal.is-open {
+  display: flex;
+}
+
+.sheet {
+  width: 100%;
+  background: var(--card);
+  border-radius: 18px 18px 0 0;
+  padding: 14px;
+  max-height: 84vh;
+  overflow: auto;
+}
+
+.sheet h3 {
+  margin: 0;
+}
+
+.sheet h4 {
+  margin: 14px 0 8px;
+}

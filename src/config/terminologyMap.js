@@ -1,3 +1,9 @@
+/**
+ * Purpose: Map internal context codes to Chinese display terminology.
+ * Description:
+ * - Provides stable text labels for common context tokens.
+ * - Keeps UI rendering independent from raw internal ids.
+ */
 export const TERMINOLOGY_MAP = Object.freeze({
   zimo: "自摸",
   dianhe: "点和",

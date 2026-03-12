@@ -1,3 +1,10 @@
+/**
+ * Purpose: Fuse per-frame tile predictions into one hand result.
+ * Description:
+ * - Ranks candidate labels by vote count and mean confidence.
+ * - Detects low-confidence and ambiguous slot indices.
+ * - Returns top candidates per slot for later confirmation.
+ */
 function rankCandidates(predictions) {
   const byLabel = new Map();
   for (const pred of predictions) {
@@ -24,7 +31,9 @@ function rankCandidates(predictions) {
 }
 
 function isAmbiguous(topCandidates) {
-  if (!Array.isArray(topCandidates) || topCandidates.length < 2) return false;
+  if (!Array.isArray(topCandidates) || topCandidates.length < 2) {
+    return false;
+  }
   const first = topCandidates[0];
   const second = topCandidates[1];
   if (first.count === second.count) return true;
@@ -35,6 +44,14 @@ function isAmbiguous(topCandidates) {
   return false;
 }
 
+/**
+ * Fuse frame-level predictions into slot-level decision payload.
+ *
+ * @param {Array<Array<{label: string, confidence: number}>>}
+ *   framePredictions
+ * @returns {{tiles: object[], lowConfidenceIndices: number[],
+ *   ambiguousIndices: number[]}}
+ */
 export function fuseFrames(framePredictions) {
   if (!Array.isArray(framePredictions) || framePredictions.length === 0) {
     return { tiles: [], lowConfidenceIndices: [], ambiguousIndices: [] };
@@ -58,7 +75,9 @@ export function fuseFrames(framePredictions) {
     tiles.push({
       label,
       confidence,
-      candidates: candidates.slice(0, 3).map((it) => ({ label: it.label, score: it.score })),
+      candidates: candidates
+        .slice(0, 3)
+        .map((it) => ({ label: it.label, score: it.score })),
       source: "model"
     });
     if (confidence < 0.85) lowConfidenceIndices.push(i);

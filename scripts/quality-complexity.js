@@ -1,0 +1,119 @@
+import { readdirSync, readFileSync, statSync } from "node:fs";
+import { execSync } from "node:child_process";
+import path from "node:path";
+
+/**
+ * Purpose: Enforce local file-size and width guardrails.
+ * Description:
+ * - Locates changed JS files under src/public/scripts.
+ * - Flags long lines and oversized function bodies.
+ * - Exits non-zero when any guardrail is violated.
+ */
+const JS_EXT = ".js";
+const MAX_FUNCTION_LINES = 60;
+const MAX_LINE_WIDTH = 78;
+const ROOT = new URL("../", import.meta.url).pathname;
+
+/**
+ * Recursively collect JavaScript files from one directory.
+ *
+ * @param {string} dir - Root directory for recursion.
+ * @param {string[]} [acc=[]] - Mutable result accumulator.
+ * @returns {string[]}
+ */
+function collectJsFiles(dir, acc = []) {
+  for (const name of readdirSync(dir)) {
+    const full = path.join(dir, name);
+    const st = statSync(full);
+    if (st.isDirectory()) {
+      if (name === "node_modules" || name === ".git") continue;
+      collectJsFiles(full, acc);
+      continue;
+    }
+    if (full.endsWith(JS_EXT)) acc.push(full);
+  }
+  return acc;
+}
+
+/**
+ * Collect changed JS files scoped to hlm source areas.
+ *
+ * @returns {string[]}
+ */
+function collectChangedJsFiles() {
+  const output = execSync("git diff --name-only HEAD -- .", {
+    cwd: ROOT,
+    encoding: "utf8"
+  });
+  return output
+    .split("\n")
+    .map((line) => line.trim())
+    .filter((line) => line.endsWith(JS_EXT))
+    .map((line) => {
+      if (line.startsWith("/")) return line;
+      const marker = `${path.sep}hlm${path.sep}`;
+      const normalized = line.replaceAll("/", path.sep);
+      const idx = normalized.lastIndexOf(marker);
+      if (idx >= 0) {
+        const rel = normalized.slice(idx + marker.length);
+        return path.join(ROOT, rel);
+      }
+      return path.join(ROOT, normalized);
+    })
+    .filter((full) => full.includes(`${path.sep}src${path.sep}`)
+      || full.includes(`${path.sep}public${path.sep}`)
+      || full.includes(`${path.sep}scripts${path.sep}`));
+}
+
+/**
+ * Check one file for width and function-size guardrails.
+ *
+ * @param {string} filePath - Absolute file path.
+ * @returns {string[]}
+ */
+function checkFile(filePath) {
+  const text = readFileSync(filePath, "utf8");
+  const lines = text.split("\n");
+  const issues = [];
+  let fnStart = null;
+  for (let i = 0; i < lines.length; i += 1) {
+    const line = lines[i];
+    if (line.length > MAX_LINE_WIDTH) {
+      issues.push(`${filePath}:${i + 1} line exceeds ${MAX_LINE_WIDTH}`);
+    }
+    if (fnStart === null && /function\s+\w+\s*\(/.test(line)) {
+      fnStart = i;
+    }
+    if (fnStart !== null && line.includes("}")) {
+      const size = i - fnStart + 1;
+      if (size > MAX_FUNCTION_LINES) {
+        const msg = `${filePath}:${fnStart + 1} function exceeds`;
+        issues.push(`${msg} ${MAX_FUNCTION_LINES} lines`);
+      }
+      fnStart = null;
+    }
+  }
+  return issues;
+}
+
+/**
+ * Run complexity guardrail scan and set process exit code.
+ *
+ * @returns {void}
+ */
+function run() {
+  const changed = collectChangedJsFiles();
+  const files = changed.length > 0
+    ? changed
+    : [path.join(ROOT, "src"), path.join(ROOT, "public")]
+      .flatMap((root) => collectJsFiles(root));
+  const allIssues = files.flatMap((f) => checkFile(f));
+  if (allIssues.length > 0) {
+    process.stderr.write(`${allIssues.join("\n")}\n`);
+    process.exitCode = 1;
+    return;
+  }
+  process.stdout.write("complexity check passed\n");
+}
+
+run();

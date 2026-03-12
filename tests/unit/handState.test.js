@@ -19,3 +19,12 @@ test("validateHandInput validates successful shape", () => {
   assert.equal(result.ok, true);
   assert.deepEqual(result.missingFields, []);
 });
+
+test("validateHandInput rejects invalid seat wind", () => {
+  const result = validateHandInput({
+    ...base,
+    seatWind: "X"
+  });
+  assert.equal(result.ok, false);
+  assert.equal(result.code, "INVALID_INPUT");
+});

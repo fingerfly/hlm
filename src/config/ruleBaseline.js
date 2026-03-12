@@ -1,3 +1,9 @@
+/**
+ * Purpose: Define immutable scoring baseline metadata.
+ * Description:
+ * - Stores baseline rule version and minimum winning fan.
+ * - Stores stable error codes consumed by app/rules modules.
+ */
 export const RULE_BASELINE = Object.freeze({
   ruleVersion: "MCR-SPORTS-GENERAL-ADMIN-2018",
   ruleName: "Chinese Official Mahjong (MCR / Guobiao)",

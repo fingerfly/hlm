@@ -1,60 +1,42 @@
-const FAN_DEFS = Object.freeze({
-  MEN_QIAN_QING: { id: "MEN_QIAN_QING", fan: 2 },
-  ZI_MO: { id: "ZI_MO", fan: 1 },
-  QI_DUI: { id: "QI_DUI", fan: 24 },
-  SHI_SAN_YAO: { id: "SHI_SAN_YAO", fan: 88 },
-  GANG_SHANG_HUA: { id: "GANG_SHANG_HUA", fan: 8 },
-  HAI_DI_LAO_YUE: { id: "HAI_DI_LAO_YUE", fan: 8 },
-  HE_DI_LAO_YU: { id: "HE_DI_LAO_YU", fan: 8 }
-});
+import { FAN_CATALOG } from "./fanCatalog.js";
+import { extractHandFeatures } from "./handFeatures.js";
 
-export function detectFans(input, winPattern) {
+/**
+ * Purpose: Detect all fan hits from input and win pattern.
+ * Description:
+ * - Extracts reusable hand features once per request.
+ * - Evaluates all catalog detector predicates in order.
+ * - Returns normalized fan match objects for conflict resolution.
+ */
+/**
+ * Convert fan definition into runtime match object.
+ *
+ * @param {{id: string, fan: number, evidence: string}} def
+ * @returns {{id: string, fan: number, evidence: string}}
+ */
+function toMatchedFan(def) {
+  return {
+    id: def.id,
+    fan: def.fan,
+    evidence: def.evidence
+  };
+}
+
+/**
+ * Detect fan candidates for one validated hand.
+ *
+ * @param {object} input - Validated hand input.
+ * @param {object} [win={}] - Win metadata from win validator.
+ * @returns {{id: string, fan: number, evidence: string}[]}
+ */
+export function detectFans(input, win = {}) {
+  const features = extractHandFeatures(input, win);
+  const context = { input, win, features };
   const fans = [];
-
-  if (input.handState === "menqian") {
-    fans.push({
-      ...FAN_DEFS.MEN_QIAN_QING,
-      evidence: "handState=menqian"
-    });
+  for (const def of FAN_CATALOG) {
+    if (def.detect(context)) {
+      fans.push(toMatchedFan(def));
+    }
   }
-
-  if (input.winType === "zimo") {
-    fans.push({
-      ...FAN_DEFS.ZI_MO,
-      evidence: "winType=zimo"
-    });
-  }
-
-  if (winPattern === "seven_pairs") {
-    fans.push({
-      ...FAN_DEFS.QI_DUI,
-      evidence: "pattern=seven_pairs"
-    });
-  }
-
-  if (winPattern === "thirteen_orphans") {
-    fans.push({
-      ...FAN_DEFS.SHI_SAN_YAO,
-      evidence: "pattern=thirteen_orphans"
-    });
-  }
-
-  if (input.timingEvent === "gangshang") {
-    fans.push({
-      ...FAN_DEFS.GANG_SHANG_HUA,
-      evidence: "timingEvent=gangshang"
-    });
-  } else if (input.timingEvent === "haidi") {
-    fans.push({
-      ...FAN_DEFS.HAI_DI_LAO_YUE,
-      evidence: "timingEvent=haidi"
-    });
-  } else if (input.timingEvent === "hedi") {
-    fans.push({
-      ...FAN_DEFS.HE_DI_LAO_YU,
-      evidence: "timingEvent=hedi"
-    });
-  }
-
   return fans;
 }

@@ -1,3 +1,10 @@
+/**
+ * Purpose: Store static prompt templates for deploy automation.
+ * Description:
+ * - Provides changelog update template for unreleased section.
+ * - Provides release-archive template with date/version rules.
+ * - Provides normalized deploy CLI usage guidance text.
+ */
 export const UPDATE_PROMPT_TEMPLATE = [
   "请根据当前工作区的实际变更更新 CHANGELOG.md 的 [Unreleased]。",
   "硬性要求：",

@@ -1,79 +1,83 @@
 import { evaluateCapturedHand } from "../src/app/evaluateCapturedHand.js";
 import { getDisplayVersion } from "../src/config/appVersion.js";
-import { renderResultInto } from "../src/app/resultRenderer.js";
+import {
+  createTilePickerState,
+  addTileToPicker,
+  clearTilePicker,
+  undoLastTile
+} from "../src/app/tilePickerState.js";
+import { createUiFlowState } from "../src/app/uiFlowState.js";
+import { TAB_TILES, CONTEXT_PRESETS } from "./uiConfig.js";
+import {
+  renderTilePreview,
+  renderPickerTabButtons,
+  renderTilePickerGrid
+} from "./uiRenderers.js";
+import {
+  resetContext,
+  bindTabButtons,
+  bindPresetButtons
+} from "./uiBindings.js";
+import { bindCloseButtons } from "./modalUi.js";
+import { renderResultModal, renderInfoTip } from "./resultModalView.js";
+import { createModalActions } from "./appModalActions.js";
+import { createStateActions } from "./appStateActions.js";
+import { wireAppEvents, renderPickerByTab } from "./appEventWiring.js";
+import { createAppRefs } from "./appRefs.js";
 
+/**
+ * Purpose: Bootstrap HLM web UI and connect app modules.
+ * Description:
+ * - Initializes store, refs, and action factories.
+ * - Wires DOM events to state and modal transitions.
+ * - Performs first render and default home-state sync.
+ */
 const versionLabel = getDisplayVersion();
 const byId = (id) => document.getElementById(id);
 byId("versionBadge").textContent = `当前版本: ${versionLabel}`;
-const tileGridEl = byId("tileGrid");
-const outputEl = byId("output");
-const errorsEl = byId("errors");
-const tileInputs = [];
+const { refs, modalRefs } = createAppRefs(byId);
 
-const defaultTiles = ["1W", "1W", "1W", "2W", "3W", "4W", "5W", "6W", "7W", "2T", "3T", "4T", "9B", "9B"];
-
-function renderTileInputs() {
-  tileGridEl.innerHTML = "";
-  for (let i = 0; i < 14; i += 1) {
-    const wrap = document.createElement("label");
-    wrap.className = "tile-cell";
-    wrap.textContent = `牌位 ${i + 1}`;
-    const input = document.createElement("input");
-    input.placeholder = "牌码";
-    input.value = defaultTiles[i] || "";
-    wrap.appendChild(input);
-    tileGridEl.appendChild(wrap);
-    tileInputs.push(input);
-  }
-}
-
-function getRequest() {
-  return {
-    tiles: tileInputs.map((input) => input.value.trim()),
-    context: {
-      winType: byId("winType").value,
-      handState: byId("handState").value,
-      kongType: byId("kongType").value,
-      timingEvent: byId("timingEvent").value
-    }
-  };
-}
-
-function renderErrors(result) {
-  errorsEl.innerHTML = "";
-  const items = [];
-  if (result.scoring.errorCode) items.push(`errorCode: ${result.scoring.errorCode}`);
-  for (const problem of result.scoring.problems || []) items.push(problem);
-  for (const field of result.scoring.missingFields || []) items.push(`missing: ${field}`);
-  if (items.length === 0) {
-    const ok = document.createElement("li");
-    ok.textContent = "无错误";
-    errorsEl.appendChild(ok);
-    return;
-  }
-  for (const text of items) {
-    const li = document.createElement("li");
-    li.textContent = text;
-    errorsEl.appendChild(li);
-  }
-}
-
-byId("calculateBtn").addEventListener("click", () => {
-  const result = evaluateCapturedHand(getRequest());
-  renderErrors(result);
-  renderResultInto(outputEl, result, versionLabel);
+const store = {
+  uiState: createUiFlowState(),
+  pickerState: createTilePickerState([]),
+  resultVm: null
+};
+const stateActions = createStateActions(store, {
+  byId,
+  refs,
+  contextPresets: CONTEXT_PRESETS,
+  clearTilePicker,
+  undoLastTile,
+  evaluateCapturedHand,
+  renderTilePreview,
+  renderResultModal,
+  renderInfoTip
 });
+const modalActions = createModalActions(store, modalRefs);
 
-byId("resetBtn").addEventListener("click", () => {
-  for (let i = 0; i < tileInputs.length; i += 1) {
-    tileInputs[i].value = "";
-  }
-  byId("winType").value = "zimo";
-  byId("handState").value = "menqian";
-  byId("kongType").value = "none";
-  byId("timingEvent").value = "none";
-  errorsEl.innerHTML = "";
-  outputEl.innerHTML = '<p class="placeholder">请先输入手牌与和牌信息，再点击“计算番数”。</p>';
+wireAppEvents({
+  byId,
+  bindTabButtons,
+  bindPresetButtons,
+  bindCloseButtons,
+  modalActions,
+  stateActions,
+  store,
+  tabTiles: TAB_TILES,
+  tilePickerGridEl: refs.tilePickerGridEl,
+  renderPickerTabButtons,
+  renderTilePickerGrid,
+  addTileToPicker,
+  resetContext
 });
-
-renderTileInputs();
+renderPickerByTab({
+  store,
+  tabTiles: TAB_TILES,
+  tilePickerGridEl: refs.tilePickerGridEl,
+  renderPickerTabButtons,
+  renderTilePickerGrid,
+  addTileToPicker,
+  stateActions
+});
+stateActions.syncHomeState();
+modalActions.updateModalUi();

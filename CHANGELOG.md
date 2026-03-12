@@ -4,6 +4,28 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [2.0.0] - 2026-03-12
+
+### Added
+- Added structured source-comment coverage test for modular stylesheet links in `index.html` (`tests/unit/indexStylesheetLinks.test.js`).
+- Added recognition-normalization helper module to split confirmation-map and tile-code derivation logic (`src/app/recognitionHelpers.js`).
+- Added tile catalog module to centralize canonical tile constants, aliases, labels, and lookup maps (`src/spike/vlm/tileCatalog.js`).
+- Added tile encoding module to isolate tile-id and uncertain-mask encode/decode helpers (`src/spike/vlm/tileEncoding.js`).
+- Added dedicated unit tests for recognition-normalization behavior (`tests/unit/recognitionNormalizer.test.js`).
+- Added modular public stylesheet files (`public/styles-base.css`, `public/styles-components.css`, `public/styles-modals.css`, `public/styles-responsive.css`).
+
+### Changed
+- Applied Goja-aligned commenting rules across HLM source/public files: module `Purpose`/`Description` headers, function JSDoc for non-trivial logic, and concise rationale comments in HTML/CSS.
+- Refactored recognition normalization flow into smaller cooperating helpers while preserving behavior (`src/app/recognitionNormalizer.js`).
+- Refactored tile-code utilities into catalog/encoding cooperation while keeping `tileCodes` API compatibility (`src/spike/vlm/tileCodes.js`).
+- Updated `index.html` to load split CSS modules in deterministic order and removed the previous monolithic stylesheet (`public/index.html`, removed `public/styles.css`).
+
+### Validation
+- Verified static guardrails after each refactor pass with `npm run quality:complexity`.
+- Verified full test matrix passes (`npm test`: unit + spike + regression + integration).
+- Verified per-file SLOC reductions with `cloc --by-file`, including `src/app/recognitionNormalizer.js` and `src/spike/vlm/tileCodes.js` now below 100 code lines.
+
+
 ## [1.2.0] - 2026-03-10
 
 ### Added

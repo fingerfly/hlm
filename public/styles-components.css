@@ -1,0 +1,82 @@
+.tile-preview {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.tile-chip {
+  min-height: 34px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: #fafafa;
+  display: grid;
+  place-items: center;
+  font-size: 13px;
+}
+
+.picker-tabs {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  margin: 12px 0;
+}
+
+.tab-btn.active {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.tile-picker-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.tile-picker-grid button {
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: #f8f8f8;
+  min-height: 44px;
+}
+
+.preset-actions,
+.context-grid {
+  display: grid;
+  gap: 8px;
+}
+
+.context-grid label {
+  display: flex;
+  flex-direction: column;
+  font-size: 13px;
+  gap: 6px;
+}
+
+select {
+  min-height: 40px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0 10px;
+}
+
+.status-pill {
+  display: inline-block;
+  margin: 10px 0 4px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #eceef5;
+  color: #1f2328;
+  font-size: 13px;
+}
+
+.total-fan {
+  margin: 4px 0 10px;
+  font-size: 34px;
+  font-weight: 700;
+}
+
+.fan-list {
+  margin: 0;
+  padding-left: 18px;
+}

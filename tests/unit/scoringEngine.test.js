@@ -49,3 +49,15 @@ test("scoreHand accepts higher-fan hand", () => {
   assert.equal(result.totalFan, 11);
   assert.equal(result.isWin, true);
 });
+
+test("scoreHand detects qing yi se in pure one-suit hand", () => {
+  const result = scoreHand({
+    tiles: ["1W", "1W", "1W", "2W", "3W", "4W", "5W", "6W", "7W", "3W", "4W", "5W", "9W", "9W"],
+    winType: "zimo",
+    handState: "menqian",
+    kongType: "none",
+    timingEvent: "none"
+  });
+  assert.equal(result.isWin, true);
+  assert.equal(result.totalFan, 27);
+});
