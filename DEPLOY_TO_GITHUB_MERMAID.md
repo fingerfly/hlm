@@ -7,7 +7,7 @@ Pages using Mermaid diagrams.
 
 ```mermaid
 flowchart TD
-  A[Push to main with public or workflow changes]
+  A[Push to main with public/src/index/workflow changes]
   --> B[GitHub Actions: deploy-pages.yml]
   B --> C[Upload Pages artifact from path .]
   C --> D[Deploy via actions/deploy-pages]

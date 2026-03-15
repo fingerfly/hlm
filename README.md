@@ -82,6 +82,11 @@ Open `public/index.html` with Live Server in VS Code.
 - Fill 14 tile slots and context fields, then click `计算番数`.
 - GitHub Pages URL: https://fingerfly.github.io/hlm/
 - Current Pages deploy source: `.github/workflows/deploy-pages.yml`.
+- Current deploy trigger scope includes:
+  - `public/**`
+  - `src/**`
+  - `index.html`
+  - `.github/workflows/deploy-pages.yml`
 - Current deploy publishes project root (`.`), with root `index.html`
   redirecting to `public/index.html`.
 - Migration target state (planned): split test/deploy workflows
