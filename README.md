@@ -1,10 +1,10 @@
 # Huleme (hlm)
 
-Blueprint implementation for `胡了么 - 国标麻将计番助手` (`Huleme - Guobiao Mahjong Fan Calculator`).
+Blueprint implementation for `和了么 - 国标麻将计番助手` (`Huleme - Guobiao Mahjong Fan Calculator`).
 
 ## Official naming
 
-- App Store title (CN): `胡了么 - 国标麻将计番助手`
+- App Store title (CN): `和了么 - 国标麻将计番助手`
 - App Store title (EN): `Huleme - Guobiao Mahjong Fan Calculator`
 - Repo/package short name: `hlm`
 - Internal codename: `hlm`
@@ -44,6 +44,8 @@ Blueprint implementation for `胡了么 - 国标麻将计番助手` (`Huleme - G
   - `npm run release:patch`
   - `npm run release:minor`
   - `npm run release:major`
+  - Detailed runbook:
+    - `RELEASE_AND_PUBLISH.md`
 - Changelog prompt templates (for AI-assisted update workflow):
   - `npm run deploy -- prompt-update`: print strict prompt template for updating `[Unreleased]`
   - `npm run deploy -- prompt-release`: print strict prompt template for release archiving
@@ -79,9 +81,13 @@ npm test
 Open `public/index.html` with Live Server in VS Code.
 - Fill 14 tile slots and context fields, then click `计算番数`.
 - GitHub Pages URL: https://fingerfly.github.io/hlm/
-- Pages deploy source: GitHub Actions workflow
-  `.github/workflows/deploy-pages.yml` publishes project root (`.`), with
-  root `index.html` redirecting to `public/index.html`.
+- Current Pages deploy source: `.github/workflows/deploy-pages.yml`.
+- Current deploy publishes project root (`.`), with root `index.html`
+  redirecting to `public/index.html`.
+- Migration target state (planned): split test/deploy workflows
+  (`test.yml` + `deploy.yml`) in dedicated repo `fingerfly/hlm`.
+- Deployment flow diagrams and migration path:
+  `DEPLOY_TO_GITHUB_MERMAID.md`.
 
 ## DeepSeek VLM spike
 

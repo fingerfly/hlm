@@ -5,7 +5,7 @@
  * - Exposes formatted display string for version badge.
  */
 export const APP_VERSION = "2.0.7";
-export const APP_BUILD = 1;
+export const APP_BUILD = 2;
 
 /**
  * Build display label used in UI version badge.
