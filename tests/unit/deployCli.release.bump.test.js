@@ -3,13 +3,30 @@ import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
 import { readFileSync, rmSync } from "node:fs";
 import { join } from "node:path";
-import { prepareDeploySandbox, today } from "../helpers/deploySandbox.js";
+import {
+  getSandboxDeployRemote,
+  prepareDeploySandbox,
+  today
+} from "../helpers/deploySandbox.js";
 
 function runInSandbox(sandboxRoot, ...args) {
   return spawnSync(process.execPath, [join("scripts", "deploy.js"), ...args], {
     cwd: sandboxRoot,
-    encoding: "utf8"
+    encoding: "utf8",
+    env: {
+      ...process.env,
+      TMPDIR: sandboxRoot,
+      HLM_DEPLOY_REMOTE: getSandboxDeployRemote(sandboxRoot)
+    }
   });
+}
+
+function readRemoteMainFile(remotePath, filePath) {
+  return spawnSync(
+    "git",
+    ["--git-dir", remotePath, "show", `main:${filePath}`],
+    { encoding: "utf8" }
+  );
 }
 
 test("deploy CLI updates semver/build and prints Chinese summary", (t) => {
@@ -33,6 +50,13 @@ test("deploy CLI updates semver/build and prints Chinese summary", (t) => {
   assert.match(changelog, /^## \[Unreleased\]\n/m);
   assert.match(changelog, new RegExp(`^## \\[0\\.5\\.0\\] - ${today}$`, "m"));
   assert.match(changelog, /Temporary unreleased entry for deploy test\./);
+  const remotePkg = readRemoteMainFile(
+    getSandboxDeployRemote(sandboxRoot),
+    "package.json"
+  );
+  assert.equal(remotePkg.status, 0);
+  const remotePkgData = JSON.parse(remotePkg.stdout);
+  assert.equal(remotePkgData.version, "0.5.0");
 });
 
 test("deploy CLI build mode only increments build number", (t) => {

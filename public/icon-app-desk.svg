@@ -1,0 +1,66 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="512"
+  height="512"
+  viewBox="0 0 512 512"
+  role="img"
+  aria-label="guobiao mahjong fan icon desk"
+>
+  <rect width="512" height="512" rx="112" fill="#0f5031" />
+  <rect x="86" y="164" width="170" height="238" rx="24" fill="#faf8ef" />
+  <rect x="256" y="112" width="170" height="238" rx="24" fill="#fffdf5" />
+  <rect x="164" y="86" width="184" height="64" rx="20" fill="#d12d34" />
+  <text
+    x="256"
+    y="130"
+    text-anchor="middle"
+    font-family="'PingFang SC', 'Noto Sans SC', sans-serif"
+    font-size="40"
+    font-weight="800"
+    fill="#fff9ec"
+  >
+    &#x7B97;&#x756A;
+  </text>
+  <text
+    x="171"
+    y="296"
+    text-anchor="middle"
+    font-family="'Kaiti SC', STKaiti, serif"
+    font-size="92"
+    fill="#c5282f"
+  >
+    &#x4E2D;
+  </text>
+  <text
+    x="340"
+    y="248"
+    text-anchor="middle"
+    font-family="'Kaiti SC', STKaiti, serif"
+    font-size="76"
+    fill="#1f8f43"
+  >
+    &#x4E07;
+  </text>
+  <text
+    x="340"
+    y="315"
+    text-anchor="middle"
+    font-family="'PingFang SC', 'Noto Sans SC', sans-serif"
+    font-size="44"
+    font-weight="800"
+    fill="#1f8f43"
+  >
+    &#x7B52;&#x6761;
+  </text>
+  <text
+    x="256"
+    y="454"
+    text-anchor="middle"
+    font-family="'PingFang SC', 'Noto Sans SC', sans-serif"
+    font-size="38"
+    font-weight="700"
+    fill="#ffe9bf"
+  >
+    &#x9EBB;&#x5C06;&#x8BA1;&#x756A;
+  </text>
+</svg>

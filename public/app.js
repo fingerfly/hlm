@@ -3,15 +3,19 @@ import { getDisplayVersion } from "../src/config/appVersion.js";
 import {
   createTilePickerState,
   addTileToPicker,
+  selectPickerSlot,
+  deleteSelectedSlot,
   clearTilePicker,
   undoLastTile
 } from "../src/app/tilePickerState.js";
+import { resolvePatternAction } from "../src/app/tilePatternActions.js";
 import { createUiFlowState } from "../src/app/uiFlowState.js";
 import { TAB_TILES, CONTEXT_PRESETS } from "./uiConfig.js";
 import {
   renderTilePreview,
   renderPickerTabButtons,
-  renderTilePickerGrid
+  renderTilePickerGrid,
+  renderPatternActionButtons
 } from "./uiRenderers.js";
 import {
   resetContext,
@@ -40,12 +44,18 @@ const { refs, modalRefs } = createAppRefs(byId);
 const store = {
   uiState: createUiFlowState(),
   pickerState: createTilePickerState([]),
+  pickerAction: "single",
   resultVm: null
 };
 const stateActions = createStateActions(store, {
   byId,
   refs,
   contextPresets: CONTEXT_PRESETS,
+  addTileToPicker,
+  resolvePatternAction,
+  renderPatternActionButtons,
+  selectPickerSlot,
+  deleteSelectedSlot,
   clearTilePicker,
   undoLastTile,
   evaluateCapturedHand,

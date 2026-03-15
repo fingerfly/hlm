@@ -1,0 +1,45 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="512"
+  height="512"
+  viewBox="0 0 512 512"
+  role="img"
+  aria-label="国标麻将算番图标 minimal"
+>
+  <rect width="512" height="512" rx="112" fill="#123b2a" />
+  <rect x="126" y="82" width="260" height="338" rx="46" fill="#f8f7f1" />
+  <rect x="142" y="102" width="228" height="282" rx="30" fill="#fffef9" />
+  <text
+    x="256"
+    y="206"
+    text-anchor="middle"
+    font-family="'Kaiti SC', STKaiti, serif"
+    font-size="124"
+    fill="#c5282f"
+  >
+    中
+  </text>
+  <text
+    x="256"
+    y="276"
+    text-anchor="middle"
+    font-family="'PingFang SC', 'Noto Sans SC', sans-serif"
+    font-size="56"
+    font-weight="800"
+    fill="#1f8f43"
+  >
+    万
+  </text>
+  <rect x="146" y="322" width="220" height="64" rx="28" fill="#d12d34" />
+  <text
+    x="256"
+    y="367"
+    text-anchor="middle"
+    font-family="'PingFang SC', 'Noto Sans SC', sans-serif"
+    font-size="46"
+    font-weight="800"
+    fill="#fff9ec"
+  >
+    算番
+  </text>
+</svg>

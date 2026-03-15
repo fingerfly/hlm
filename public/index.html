@@ -4,6 +4,12 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>和了么 - 国标麻将计番助手</title>
+    <link rel="icon" type="image/svg+xml" href="./favicon-traditional.svg" />
+    <link
+      rel="apple-touch-icon"
+      type="image/svg+xml"
+      href="./icon-app-traditional.svg"
+    />
     <link rel="stylesheet" href="./styles-base.css" />
     <link rel="stylesheet" href="./styles-components.css" />
     <link rel="stylesheet" href="./styles-modals.css" />
@@ -21,19 +27,15 @@
       <section class="card">
         <div class="card-top">
           <h2>当前手牌 <span id="tileCount">0/14</span></h2>
-          <div class="inline-actions">
-            <button id="undoBtn" class="ghost-btn">撤销</button>
-            <button id="clearBtn" class="ghost-btn">清空</button>
-          </div>
         </div>
         <div id="tilePreview" class="tile-preview"></div>
-        <button id="openPickerBtn" class="primary-btn">添加牌</button>
+        <button id="openPickerBtn" class="primary-btn">继续选牌</button>
       </section>
 
       <section class="card">
         <h2>和牌条件</h2>
         <p id="contextSummary" class="summary-text">自摸 · 门前清 · 无杠</p>
-        <button id="openContextBtn" class="ghost-btn">编辑条件</button>
+        <button id="openContextBtn" class="ghost-btn">可选：编辑条件</button>
       </section>
 
       <footer class="sticky-footer">
@@ -55,12 +57,32 @@
           <button data-tab="B" class="tab-btn">筒</button>
           <button data-tab="Z" class="tab-btn">字牌</button>
         </div>
+        <div class="pattern-actions">
+          <button data-pattern-action="single" class="ghost-btn active">单张</button>
+          <details class="pattern-secondary">
+            <summary class="ghost-btn">组合</summary>
+            <div class="pattern-secondary-grid">
+              <button data-pattern-action="pair" class="ghost-btn">对子</button>
+              <button data-pattern-action="pung" class="ghost-btn">刻子</button>
+              <button data-pattern-action="chow_front" class="ghost-btn">顺子前位</button>
+              <button data-pattern-action="chow_middle" class="ghost-btn">顺子中位</button>
+              <button data-pattern-action="chow_back" class="ghost-btn">顺子后位</button>
+            </div>
+          </details>
+        </div>
+        <p id="pickerActionHint" class="summary-text">当前快捷动作：单张</p>
         <div id="tilePickerGrid" class="tile-picker-grid"></div>
         <div class="sheet-footer">
           <span id="pickerCount">已选 0/14</span>
           <div class="inline-actions">
+            <button id="pickerDeleteBtn" class="ghost-btn">删除选中</button>
             <button id="pickerUndoBtn" class="ghost-btn">撤销</button>
-            <button id="pickerClearBtn" class="ghost-btn">清空</button>
+            <details class="picker-more-actions">
+              <summary class="ghost-btn">更多</summary>
+              <div class="picker-more-actions-panel">
+                <button id="pickerClearBtn" class="ghost-btn">清空</button>
+              </div>
+            </details>
           </div>
         </div>
       </div>

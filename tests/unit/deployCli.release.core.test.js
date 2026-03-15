@@ -3,12 +3,21 @@ import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
 import { readFileSync, rmSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { prepareDeploySandbox, today } from "../helpers/deploySandbox.js";
+import {
+  getSandboxDeployRemote,
+  prepareDeploySandbox,
+  today
+} from "../helpers/deploySandbox.js";
 
 function runInSandbox(sandboxRoot, ...args) {
   return spawnSync(process.execPath, [join("scripts", "deploy.js"), ...args], {
     cwd: sandboxRoot,
-    encoding: "utf8"
+    encoding: "utf8",
+    env: {
+      ...process.env,
+      TMPDIR: sandboxRoot,
+      HLM_DEPLOY_REMOTE: getSandboxDeployRemote(sandboxRoot)
+    }
   });
 }
 
@@ -65,4 +74,31 @@ test("deploy CLI archives changelog when source uses CRLF line endings", (t) => 
   const changelog = readFileSync(changelogPath, "utf8");
   assert.match(changelog, /^## \[Unreleased\]\n/m);
   assert.match(changelog, new RegExp(`^## \\[0\\.5\\.0\\] - ${today}$`, "m"));
+});
+
+test("deploy CLI fails remote preflight before mutating files", (t) => {
+  const sandboxRoot = prepareDeploySandbox();
+  t.after(() => rmSync(sandboxRoot, { recursive: true, force: true }));
+  const run = spawnSync(
+    process.execPath,
+    [join("scripts", "deploy.js"), "minor", "--confirm"],
+    {
+      cwd: sandboxRoot,
+      encoding: "utf8",
+      env: {
+        ...process.env,
+        TMPDIR: sandboxRoot,
+        HLM_DEPLOY_REMOTE: join(sandboxRoot, "missing-remote.git")
+      }
+    }
+  );
+  assert.equal(run.status, 1);
+  assert.match(run.stderr, /Deploy preflight failed/);
+  const pkg = JSON.parse(readFileSync(join(sandboxRoot, "package.json"), "utf8"));
+  const appVersion = readFileSync(
+    join(sandboxRoot, "src", "config", "appVersion.js"),
+    "utf8"
+  );
+  assert.equal(pkg.version, "0.4.0");
+  assert.match(appVersion, /APP_VERSION = "0.4.0"/);
 });

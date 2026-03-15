@@ -1,0 +1,54 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="512"
+  height="512"
+  viewBox="0 0 512 512"
+  role="img"
+  aria-label="guobiao mahjong fan icon seal"
+>
+  <rect width="512" height="512" rx="112" fill="#8f1e24" />
+  <rect x="88" y="88" width="336" height="336" rx="40" fill="#fbf4e6" />
+  <rect
+    x="112"
+    y="112"
+    width="288"
+    height="288"
+    rx="28"
+    fill="none"
+    stroke="#8f1e24"
+    stroke-width="10"
+  />
+  <text
+    x="256"
+    y="244"
+    text-anchor="middle"
+    font-family="'Kaiti SC', STKaiti, serif"
+    font-size="152"
+    fill="#8f1e24"
+  >
+    &#x756A;
+  </text>
+  <rect x="132" y="286" width="248" height="86" rx="28" fill="#12543a" />
+  <text
+    x="256"
+    y="344"
+    text-anchor="middle"
+    font-family="'PingFang SC', 'Noto Sans SC', sans-serif"
+    font-size="54"
+    font-weight="800"
+    fill="#fff9ec"
+  >
+    &#x9EBB;&#x5C06;&#x7B97;&#x756A;
+  </text>
+  <text
+    x="256"
+    y="168"
+    text-anchor="middle"
+    font-family="'PingFang SC', 'Noto Sans SC', sans-serif"
+    font-size="34"
+    font-weight="700"
+    fill="#1f8f43"
+  >
+    &#x4E2D;&#x53D1;&#x767D; &#x4E07;&#x7B52;&#x6761;
+  </text>
+</svg>

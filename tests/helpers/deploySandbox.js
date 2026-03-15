@@ -1,4 +1,7 @@
 import {
+  execFileSync
+} from "node:child_process";
+import {
   copyFileSync,
   mkdtempSync,
   mkdirSync,
@@ -13,6 +16,10 @@ const __dirname = dirname(__filename);
 export const rootDir = join(__dirname, "..", "..");
 export const deployScriptPath = join(rootDir, "scripts", "deploy.js");
 export const today = new Date().toISOString().slice(0, 10);
+
+export function getSandboxDeployRemote(sandboxRoot) {
+  return join(sandboxRoot, "remote.git");
+}
 
 export function prepareDeploySandbox() {
   const sandboxRoot = mkdtempSync(join(tmpdir(), "hlm-deploy-test-"));
@@ -80,5 +87,8 @@ export function prepareDeploySandbox() {
     ].join("\n"),
     "utf8"
   );
+  execFileSync("git", ["init", "--bare", getSandboxDeployRemote(sandboxRoot)], {
+    stdio: "pipe"
+  });
   return sandboxRoot;
 }

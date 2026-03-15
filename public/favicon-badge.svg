@@ -1,0 +1,33 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="64"
+  height="64"
+  viewBox="0 0 64 64"
+  role="img"
+  aria-label="guobiao mahjong fan icon badge"
+>
+  <rect width="64" height="64" rx="14" fill="#143f30" />
+  <circle cx="32" cy="32" r="22" fill="#f8f3e7" />
+  <circle cx="32" cy="32" r="19" fill="none" stroke="#c9a24c" stroke-width="2" />
+  <text
+    x="32"
+    y="30"
+    text-anchor="middle"
+    font-family="'PingFang SC', 'Noto Sans SC', sans-serif"
+    font-size="10"
+    font-weight="700"
+    fill="#1f8f43"
+  >
+    &#x9EBB;&#x5C06;
+  </text>
+  <text
+    x="32"
+    y="43"
+    text-anchor="middle"
+    font-family="'Kaiti SC', STKaiti, serif"
+    font-size="16"
+    fill="#c5282f"
+  >
+    &#x756A;
+  </text>
+</svg>

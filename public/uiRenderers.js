@@ -1,4 +1,31 @@
 import { pickerToTiles } from "../src/app/tilePickerState.js";
+import { getTileImageDataUrl, getTileLabel } from "./tileAssets.js";
+
+function makeTileFace(tileCode, fallbackText) {
+  const wrap = document.createElement("span");
+  wrap.className = "tile-face";
+  if (!tileCode) {
+    const text = document.createElement("span");
+    text.className = "tile-face-text";
+    text.textContent = fallbackText;
+    wrap.appendChild(text);
+    return wrap;
+  }
+  const imageUrl = getTileImageDataUrl(tileCode);
+  if (!imageUrl) {
+    const text = document.createElement("span");
+    text.className = "tile-face-text";
+    text.textContent = getTileLabel(tileCode);
+    wrap.appendChild(text);
+    return wrap;
+  }
+  const img = document.createElement("img");
+  img.className = "tile-face-img";
+  img.src = imageUrl;
+  img.alt = getTileLabel(tileCode);
+  wrap.appendChild(img);
+  return wrap;
+}
 
 /**
  * Purpose: Render tile picker widgets on the client.
@@ -16,13 +43,20 @@ import { pickerToTiles } from "../src/app/tilePickerState.js";
 export function renderTilePreview({
   tilePreviewEl,
   tileCountEl,
-  pickerState
+  pickerState,
+  editingIndex = null
 }) {
   tilePreviewEl.innerHTML = "";
   for (let i = 0; i < 14; i += 1) {
-    const chip = document.createElement("span");
+    const chip = document.createElement("button");
+    chip.type = "button";
     chip.className = "tile-chip";
-    chip.textContent = pickerState.slots[i] || `${i + 1}`;
+    if (i === editingIndex) {
+      chip.classList.add("tile-chip-selected");
+    }
+    chip.dataset.slotIndex = String(i);
+    chip.setAttribute("aria-label", `编辑第${i + 1}张手牌`);
+    chip.appendChild(makeTileFace(pickerState.slots[i], `${i + 1}`));
     tilePreviewEl.appendChild(chip);
   }
   tileCountEl.textContent = `${pickerToTiles(pickerState).length}/14`;
@@ -50,8 +84,23 @@ export function renderTilePickerGrid({ tilePickerGridEl, tiles, onPick }) {
   tilePickerGridEl.innerHTML = "";
   for (const tile of tiles) {
     const button = document.createElement("button");
-    button.textContent = tile;
+    button.type = "button";
+    button.setAttribute("aria-label", `添加${getTileLabel(tile)}`);
+    button.appendChild(makeTileFace(tile, tile));
     button.addEventListener("click", () => onPick(tile));
     tilePickerGridEl.appendChild(button);
+  }
+}
+
+/**
+ * Render active quick-action button state.
+ *
+ * @param {string} actionId - Current quick action id.
+ * @returns {void}
+ */
+export function renderPatternActionButtons(actionId) {
+  for (const button of document.querySelectorAll("[data-pattern-action]")) {
+    const isActive = button.dataset.patternAction === actionId;
+    button.classList.toggle("active", isActive);
   }
 }

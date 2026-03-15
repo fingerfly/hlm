@@ -1,0 +1,72 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="512"
+  height="512"
+  viewBox="0 0 512 512"
+  role="img"
+  aria-label="国标麻将算番图标 traditional"
+>
+  <defs>
+    <linearGradient id="desk" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f5031" />
+      <stop offset="100%" stop-color="#0b3f24" />
+    </linearGradient>
+    <linearGradient id="tileFace" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#fffef9" />
+      <stop offset="100%" stop-color="#efe8d8" />
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="url(#desk)" />
+  <g transform="translate(94 72)">
+    <rect x="0" y="0" width="324" height="370" rx="52" fill="#0a2f1b" />
+    <rect
+      x="20"
+      y="20"
+      width="284"
+      height="292"
+      rx="34"
+      fill="url(#tileFace)"
+    />
+    <rect x="34" y="36" width="256" height="260" rx="24" fill="#fffef8" />
+    <text
+      x="162"
+      y="118"
+      text-anchor="middle"
+      font-family="'Kaiti SC', STKaiti, serif"
+      font-size="98"
+      fill="#c3262f"
+    >
+      中
+    </text>
+    <g fill="#1f8f43">
+      <circle cx="120" cy="172" r="13" />
+      <circle cx="162" cy="172" r="13" />
+      <circle cx="204" cy="172" r="13" />
+      <circle cx="141" cy="206" r="13" />
+      <circle cx="183" cy="206" r="13" />
+    </g>
+    <text
+      x="162"
+      y="266"
+      text-anchor="middle"
+      font-family="'PingFang SC', 'Noto Sans SC', sans-serif"
+      font-size="58"
+      font-weight="800"
+      fill="#1f8f43"
+    >
+      万筒
+    </text>
+    <rect x="62" y="322" width="200" height="72" rx="28" fill="#d12d34" />
+    <text
+      x="162"
+      y="371"
+      text-anchor="middle"
+      font-family="'PingFang SC', 'Noto Sans SC', sans-serif"
+      font-size="46"
+      font-weight="800"
+      fill="#fff9ec"
+    >
+      算番
+    </text>
+  </g>
+</svg>

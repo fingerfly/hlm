@@ -18,6 +18,24 @@ Blueprint implementation for `胡了么 - 国标麻将计番助手` (`Huleme - G
   - `build`: keep semver, increment build only
   - `patch|minor|major`: bump semver and reset build to `1`
   - Safety gate: release/build modes now run `npm test` first and require `--confirm` before writing files
+  - Remote preflight: deploy checks remote access with
+    `git ls-remote` before version or changelog writes
+  - Local deploy clone dir:
+    - `path.join(TMPDIR|TEMP|TMP|"/tmp", "hlm-deploy")`
+    - Example on macOS: `/var/folders/.../T/hlm-deploy`
+  - Deploy source folder:
+    - project root `02product/01_coding/project/hlm`
+  - Deploy flow mirrors Goja:
+    - bump version/changelog in source
+    - clone or refresh temp deploy repo
+    - sync source tree into temp clone
+    - commit and push to GitHub `main`
+  - Remote defaults by OS:
+    - Windows: `https://github.com/fingerfly/hlm.git`
+    - macOS/Linux: `git@github.com:fingerfly/hlm.git`
+  - Override remote per shell: `HLM_DEPLOY_REMOTE=<remote-url>`
+  - Non-destructive remote check:
+    - `git ls-remote <your-remote-url> HEAD`
     - Example: `npm run deploy -- patch --confirm`
 - Easy-to-remember shortcuts:
   - `npm run release` (interactive selection: `1/2/3/4` or `build/patch/minor/major` + `yes` confirmation)

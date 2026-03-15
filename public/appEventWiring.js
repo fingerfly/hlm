@@ -25,10 +25,7 @@ export function renderPickerByTab(params) {
   renderTilePickerGrid({
     tilePickerGridEl,
     tiles: tabTiles[store.uiState.hand.activeTab],
-    onPick: (tile) => {
-      store.pickerState = addTileToPicker(store.pickerState, tile);
-      stateActions.syncHomeState();
-    }
+    onPick: (tile) => stateActions.pickTile(tile)
   });
 }
 
@@ -54,6 +51,11 @@ export function wireAppEvents(params) {
     addTileToPicker,
     resetContext
   } = params;
+  const bindClick = (id, onClick) => {
+    const element = byId(id);
+    if (!element) return;
+    element.addEventListener("click", onClick);
+  };
 
   bindTabButtons((tab) => {
     store.uiState = {
@@ -85,27 +87,43 @@ export function wireAppEvents(params) {
     modalActions.closeModalByKey("info");
   });
 
-  byId("openPickerBtn").addEventListener("click", () => {
+  bindClick("openPickerBtn", () => {
     modalActions.openModalByKey("picker");
   });
-  byId("openContextBtn").addEventListener("click", () => {
+  bindClick("openContextBtn", () => {
     modalActions.openModalByKey("context");
   });
-  byId("undoBtn").addEventListener("click", () => stateActions.undoHand());
-  byId("pickerUndoBtn").addEventListener("click", () => {
+  for (const button of document.querySelectorAll("[data-pattern-action]")) {
+    button.addEventListener("click", () => {
+      stateActions.setPatternAction(button.dataset.patternAction);
+    });
+  }
+  bindClick("undoBtn", () => stateActions.undoHand());
+  byId("tilePreview").addEventListener("click", (event) => {
+    const target = event.target.closest("[data-slot-index]");
+    if (!target) return;
+    const index = Number.parseInt(target.dataset.slotIndex || "", 10);
+    if (!Number.isInteger(index)) return;
+    stateActions.selectSlot(index);
+    modalActions.openModalByKey("picker");
+  });
+  bindClick("pickerDeleteBtn", () => {
+    stateActions.deleteSelected();
+  });
+  bindClick("pickerUndoBtn", () => {
     stateActions.undoHand();
   });
-  byId("clearBtn").addEventListener("click", stateActions.clearHand);
-  byId("pickerClearBtn").addEventListener("click", stateActions.clearHand);
-  byId("calculateBtn").addEventListener("click", () => {
+  bindClick("clearBtn", stateActions.clearHand);
+  bindClick("pickerClearBtn", stateActions.clearHand);
+  bindClick("calculateBtn", () => {
     if (stateActions.calculate()) modalActions.updateModalUi();
   });
-  byId("playAgainBtn").addEventListener("click", () => {
+  bindClick("playAgainBtn", () => {
     stateActions.clearHand();
     modalActions.closeModalByKey("result");
     modalActions.closeModalByKey("info");
   });
-  byId("openInfoBtn").addEventListener("click", () => {
+  bindClick("openInfoBtn", () => {
     if (!stateActions.openInfo()) return;
     modalActions.openModalByKey("info");
   });
@@ -113,7 +131,7 @@ export function wireAppEvents(params) {
   for (const id of ["winType", "handState", "kongType", "timingEvent"]) {
     byId(id).addEventListener("change", stateActions.syncHomeState);
   }
-  byId("moreBtn").addEventListener("click", () => {
+  bindClick("moreBtn", () => {
     resetContext(byId);
     stateActions.syncHomeState();
   });

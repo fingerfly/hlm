@@ -10,6 +10,9 @@ import {
   updateAppVersionSource
 } from "../src/config/deployWorkflow.js";
 import {
+  preflightRemoteAccess,
+  pushReleaseToRemote,
+  resolveDeployRemote,
   runProjectTestsOrExit
 } from "./deployRuntime.js";
 import {
@@ -37,6 +40,8 @@ async function main() {
     flags.has("--confirm")
   );
   assertModeOrExit(resolved.mode);
+  const deployRemote = resolveDeployRemote();
+  preflightRemoteAccess(deployRemote);
   runProjectTestsOrExit(rootDir);
   if (!resolved.shouldConfirm) {
     console.error("Missing required flag: --confirm");
@@ -52,6 +57,11 @@ async function main() {
   const updatedSource = updateAppVersionSource(appVersionSource, next);
   writeFileSync(appVersionPath, updatedSource, "utf8");
   writeReleaseState(resolved.mode, next, packageJsonPath, changelogPath);
+  pushReleaseToRemote({
+    sourceDir: rootDir,
+    remoteUrl: deployRemote,
+    releaseLabel: `v${next.appVersion} (${next.appBuild})`
+  });
   console.log(
     formatDeploySummary({ mode: resolved.mode, previous: current, next })
   );

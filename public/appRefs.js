@@ -13,10 +13,14 @@
  */
 export function createAppRefs(byId) {
   const refs = {
+    openPickerBtn: byId("openPickerBtn"),
+    openContextBtn: byId("openContextBtn"),
     tilePickerGridEl: byId("tilePickerGrid"),
     tilePreviewEl: byId("tilePreview"),
     tileCountEl: byId("tileCount"),
     pickerCountEl: byId("pickerCount"),
+    pickerActionHintEl: byId("pickerActionHint"),
+    pickerDeleteBtn: byId("pickerDeleteBtn"),
     contextSummaryEl: byId("contextSummary"),
     readyHintEl: byId("readyHint"),
     calculateBtn: byId("calculateBtn"),
