@@ -6,7 +6,8 @@ import {
   normalizeRemoteRepo,
   preflightRemoteAccess,
   resolveDeployDir,
-  resolveDeployRemote
+  resolveDeployRemote,
+  shouldSyncOriginRemote
 } from "../../scripts/deployRuntime.js";
 
 test("resolveDeployRemote prefers HLM_DEPLOY_REMOTE override", () => {
@@ -78,4 +79,28 @@ test("resolveDeployDir follows TMPDIR -> TEMP -> TMP -> /tmp order", () => {
   );
   assert.equal(resolveDeployDir({ TMP: "/custom/t" }), "/custom/t/hlm-deploy");
   assert.equal(resolveDeployDir({}), "/tmp/hlm-deploy");
+});
+
+test("shouldSyncOriginRemote syncs HTTPS/SSH for same repo", () => {
+  assert.equal(
+    shouldSyncOriginRemote(
+      "https://github.com/fingerfly/hlm.git",
+      "git@github.com:fingerfly/hlm.git"
+    ),
+    true
+  );
+  assert.equal(
+    shouldSyncOriginRemote(
+      "git@github.com:fingerfly/hlm.git",
+      "git@github.com:fingerfly/hlm.git"
+    ),
+    false
+  );
+  assert.equal(
+    shouldSyncOriginRemote(
+      "https://github.com/fingerfly/other.git",
+      "git@github.com:fingerfly/hlm.git"
+    ),
+    false
+  );
 });

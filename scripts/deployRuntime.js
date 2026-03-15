@@ -59,6 +59,18 @@ export function isExpectedDeployRepo(remoteUrl) {
   return normalizeRemoteRepo(remoteUrl) === EXPECTED_REPO;
 }
 
+export function shouldSyncOriginRemote(actualRemote, desiredRemote) {
+  const actual = String(actualRemote ?? "").trim();
+  const desired = String(desiredRemote ?? "").trim();
+  if (!actual || !desired) {
+    return false;
+  }
+  if (actual === desired) {
+    return false;
+  }
+  return normalizeRemoteRepo(actual) === normalizeRemoteRepo(desired);
+}
+
 export function preflightRemoteAccess(
   remoteUrl,
   platform = process.platform,
@@ -158,6 +170,13 @@ function ensureDeployCheckout(deployDir, remoteUrl, platform, env) {
       );
       if (isExpectedDeployRepo(actualRemote)) {
         shouldClone = false;
+        if (shouldSyncOriginRemote(actualRemote, remoteUrl)) {
+          runGitOrThrow(["remote", "set-url", "origin", remoteUrl], {
+            cwd: deployDir,
+            platform,
+            env
+          });
+        }
         runGitOrThrow(["pull", "--ff-only", "origin", "main"], {
           cwd: deployDir,
           platform,

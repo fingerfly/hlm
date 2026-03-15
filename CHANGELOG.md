@@ -4,7 +4,25 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [2.0.6] - 2026-03-15
+
 ## [2.0.5] - 2026-03-15
+
+### Added
+- Added origin-remote sync helper to detect same-repository URL format
+  differences (HTTPS vs SSH) before pull (`scripts/deployRuntime.js`).
+- Added unit coverage for origin-remote sync behavior across matching,
+  identical, and mismatched repositories (`tests/unit/deployRuntime.test.js`).
+
+### Changed
+- Updated deploy checkout flow to auto-sync `origin` URL when the remote points
+  to the expected repository but uses a different URL format, then continue
+  `pull --ff-only` (`scripts/deployRuntime.js`).
+- Updated app-version baseline test to read `package.json` dynamically so
+  `APP_VERSION` and display-version assertions always track release bumps
+  (`tests/unit/appVersion.test.js`).
+- Bumped runtime/package version baseline from `2.0.2` to `2.0.5`
+  (`src/config/appVersion.js`, `package.json`).
 
 ## [2.0.4] - 2026-03-15
 

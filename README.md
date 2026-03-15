@@ -78,6 +78,9 @@ npm test
 
 Open `public/index.html` with Live Server in VS Code.
 - Fill 14 tile slots and context fields, then click `计算番数`.
+- GitHub Pages URL: https://fingerfly.github.io/hlm/
+- Pages deploy source: GitHub Actions workflow
+  `.github/workflows/deploy-pages.yml` publishes `public/`.
 
 ## DeepSeek VLM spike
 
