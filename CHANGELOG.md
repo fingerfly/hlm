@@ -4,7 +4,26 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [2.0.7] - 2026-03-15
+
+### Added
+- Added root landing page `index.html` that redirects to
+  `public/index.html` for GitHub Pages project-site routing.
+
+### Changed
+- Updated Pages Actions artifact upload path from `public/` to project root
+  (`.`) so `public/` and `src/` are both available at runtime and browser
+  module imports resolve correctly on `/hlm` URL base.
+
 ## [2.0.6] - 2026-03-15
+
+### Added
+- Added GitHub Pages deployment workflow to publish the `public/` directory
+  from `main` via Actions (`.github/workflows/deploy-pages.yml`).
+
+### Changed
+- Updated README demo/deploy notes to document the GitHub Pages URL and
+  Actions-based publishing source (`README.md`).
 
 ## [2.0.5] - 2026-03-15
 
