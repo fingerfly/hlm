@@ -13,7 +13,6 @@ Coding agent instructions for the HLM (Huleme) codebase - a Chinese Mahjong scor
 ```bash
 npm test                           # Run all tests
 npm run test:unit                  # Unit tests only
-npm run test:spike                 # VLM spike tests
 npm run test:regression           # Regression tests
 npm run test:integration          # Integration tests
 node --test tests/unit/scoringEngine.test.js  # Single test file
@@ -33,7 +32,7 @@ hlm/
 │   ├── config/           # Configuration, version constants
 │   ├── contracts/        # Input validation contracts
 │   ├── rules/            # Mahjong scoring rules
-│   └── spike/            # VLM spike/experimental code
+│   └── tiles/            # Canonical tile catalog + encoding utilities
 ├── tests/
 │   ├── helpers/          # Test helper utilities
 │   └── unit/             # Unit tests
@@ -152,7 +151,6 @@ test("test with cleanup", (t) => {
 ## Validation Contracts
 
 - `src/contracts/handState.js`: Input validation for hand scoring
-- `src/contracts/visionResult.js`: VLM output normalization
 - Validate at module boundaries; internal functions assume valid data
 
 ## Notes for Agents

@@ -1,7 +1,7 @@
 import {
   isValidTileCode as baseIsValidTileCode,
   normalizeTileCode as baseNormalizeTileCode
-} from "../spike/vlm/tileCodes.js";
+} from "../tiles/tileCodes.js";
 
 /**
  * Purpose: Normalize and validate manual tile input.

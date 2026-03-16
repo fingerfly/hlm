@@ -79,3 +79,22 @@ test("evaluateCapturedHand treats 3-fan manual hand as win with min gate 1", () 
   assert.equal(result.scoring.isWin, true);
   assert.equal(result.scoring.errorCode, null);
 });
+
+test("evaluateCapturedHand accepts legacy flower aliases as valid tiles", () => {
+  const tiles = [...winningTiles];
+  tiles[0] = "F1";
+  tiles[1] = "J1";
+  const result = evaluateCapturedHand({
+    tiles,
+    context: {
+      winType: "zimo",
+      handState: "menqian",
+      kongType: "none",
+      timingEvent: "none"
+    }
+  });
+  assert.equal(result.recognition.status, "manual_ready");
+  assert.equal(result.recognition.tileCodes[0], "Ch");
+  assert.equal(result.recognition.tileCodes[1], "Mm");
+  assert.notEqual(result.scoring.errorCode, "INVALID_INPUT");
+});

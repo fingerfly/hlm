@@ -31,6 +31,8 @@ export function prepareDeploySandbox() {
   [
     ["scripts/deploy.js", "scripts/deploy.js"],
     ["scripts/deployHandlers.js", "scripts/deployHandlers.js"],
+    ["scripts/deployPublish.js", "scripts/deployPublish.js"],
+    ["scripts/deployRemote.js", "scripts/deployRemote.js"],
     ["scripts/deployRuntime.js", "scripts/deployRuntime.js"],
     ["src/config/deployPrompts.js", "src/config/deployPrompts.js"],
     ["src/config/deployWorkflow.js", "src/config/deployWorkflow.js"],

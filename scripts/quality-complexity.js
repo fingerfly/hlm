@@ -1,6 +1,7 @@
-import { readdirSync, readFileSync, statSync } from "node:fs";
-import { execSync } from "node:child_process";
+import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
+import { spawnSync } from "node:child_process";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 
 /**
  * Purpose: Enforce local file-size and width guardrails.
@@ -12,7 +13,7 @@ import path from "node:path";
 const JS_EXT = ".js";
 const MAX_FUNCTION_LINES = 60;
 const MAX_LINE_WIDTH = 78;
-const ROOT = new URL("../", import.meta.url).pathname;
+const ROOT = fileURLToPath(new URL("../", import.meta.url));
 
 /**
  * Recursively collect JavaScript files from one directory.
@@ -41,11 +42,22 @@ function collectJsFiles(dir, acc = []) {
  * @returns {string[]}
  */
 function collectChangedJsFiles() {
-  const output = execSync("git diff --name-only HEAD -- .", {
+  const out = spawnSync("git", ["diff", "--name-only", "HEAD", "--", "."], {
     cwd: ROOT,
     encoding: "utf8"
   });
-  return output
+  if (out.error) {
+    throw new Error(
+      `git diff failed for complexity scan: ${out.error.message}`
+    );
+  }
+  if (out.status !== 0) {
+    const detail = String(out.stderr || out.stdout || "").trim();
+    throw new Error(
+      `git diff failed for complexity scan: ${detail}`
+    );
+  }
+  return String(out.stdout || "")
     .split("\n")
     .map((line) => line.trim())
     .filter((line) => line.endsWith(JS_EXT))
@@ -62,7 +74,8 @@ function collectChangedJsFiles() {
     })
     .filter((full) => full.includes(`${path.sep}src${path.sep}`)
       || full.includes(`${path.sep}public${path.sep}`)
-      || full.includes(`${path.sep}scripts${path.sep}`));
+      || full.includes(`${path.sep}scripts${path.sep}`))
+    .filter((full) => existsSync(full));
 }
 
 /**

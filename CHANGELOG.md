@@ -4,6 +4,19 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [3.0.0] - 2026-03-16
+
+### Changed (2026-03-16)
+- Retired the photo/VLM spike surface and kept manual input as the only
+  supported scoring path.
+- Moved shared tile-code catalog/encoding utilities from `src/spike/vlm` to
+  `src/tiles` and updated manual input to use the new location.
+- Removed spike npm scripts and dropped `test:spike` from default `npm test`.
+
+### Removed (2026-03-16)
+- Removed retired VLM spike scripts, modules, and `tests/spike` assets.
+- Removed unused `src/vision` modules and their dedicated unit tests.
+
 ## [2.0.7] - 2026-03-15
 
 ### Added

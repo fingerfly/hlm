@@ -13,6 +13,7 @@ const winningTiles = [
 test("normalizeTileCode trims and maps legacy aliases", () => {
   assert.equal(normalizeTileCode(" 1W "), "1W");
   assert.equal(normalizeTileCode("F1"), "Ch");
+  assert.equal(normalizeTileCode("J4"), "Ju");
 });
 
 test("isValidTileCode returns false for unknown code", () => {
@@ -39,4 +40,14 @@ test("normalizeManualTiles reports slot-level invalid code", () => {
   const out = normalizeManualTiles(badTiles);
   assert.equal(out.ok, false);
   assert.equal(out.problems.some((p) => p.includes("tile_4")), true);
+});
+
+test("normalizeManualTiles canonicalizes legacy flower aliases", () => {
+  const tiles = [...winningTiles];
+  tiles[0] = "F1";
+  tiles[1] = "J2";
+  const out = normalizeManualTiles(tiles);
+  assert.equal(out.ok, true);
+  assert.equal(out.tileCodes[0], "Ch");
+  assert.equal(out.tileCodes[1], "La");
 });

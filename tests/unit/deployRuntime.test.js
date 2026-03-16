@@ -1,5 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { sep } from "node:path";
 import {
   getDefaultDeployRemoteForPlatform,
   isExpectedDeployRepo,
@@ -69,16 +70,20 @@ test("preflightRemoteAccess throws clear error on failed ls-remote", () => {
 });
 
 test("resolveDeployDir follows TMPDIR -> TEMP -> TMP -> /tmp order", () => {
+  const normalized = (path) => path.split(sep).join("/");
   assert.equal(
-    resolveDeployDir({ TMPDIR: "/custom/tmp" }),
+    normalized(resolveDeployDir({ TMPDIR: "/custom/tmp" })),
     "/custom/tmp/hlm-deploy"
   );
   assert.equal(
-    resolveDeployDir({ TEMP: "/custom/temp" }),
+    normalized(resolveDeployDir({ TEMP: "/custom/temp" })),
     "/custom/temp/hlm-deploy"
   );
-  assert.equal(resolveDeployDir({ TMP: "/custom/t" }), "/custom/t/hlm-deploy");
-  assert.equal(resolveDeployDir({}), "/tmp/hlm-deploy");
+  assert.equal(
+    normalized(resolveDeployDir({ TMP: "/custom/t" })),
+    "/custom/t/hlm-deploy"
+  );
+  assert.equal(normalized(resolveDeployDir({})), "/tmp/hlm-deploy");
 });
 
 test("shouldSyncOriginRemote syncs HTTPS/SSH for same repo", () => {
