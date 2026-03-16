@@ -62,10 +62,10 @@ test("resolveExpectedDeployRepo normalizes env override and fallback", () => {
 test("resolveExpectedDeployRepo auto-detects repository from origin remote", () => {
   const fakeSpawn = () => ({
     status: 0,
-    stdout: "git@github.com:fingerfly/hlm.git\n",
+    stdout: "git@github.com:example-owner/hlm.git\n",
     stderr: ""
   });
-  assert.equal(resolveExpectedDeployRepo({}, fakeSpawn), "fingerfly/hlm");
+  assert.equal(resolveExpectedDeployRepo({}, fakeSpawn), "example-owner/hlm");
 });
 
 test("resolveExpectedDeployRepo falls back when origin detection fails", () => {
@@ -96,12 +96,12 @@ test("resolveDeployRemote uses detected origin repo defaults", () => {
 test("resolveExpectedDeployRepo prefers npm package name under same owner", () => {
   const fakeSpawn = () => ({
     status: 0,
-    stdout: "git@github.com:fingerfly/00_mundo.git\n",
+    stdout: "git@github.com:example-owner/monorepo.git\n",
     stderr: ""
   });
   assert.equal(
     resolveExpectedDeployRepo({ npm_package_name: "hlm" }, fakeSpawn),
-    "fingerfly/hlm"
+    "example-owner/hlm"
   );
 });
 

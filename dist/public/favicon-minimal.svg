@@ -1,0 +1,32 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="64"
+  height="64"
+  viewBox="0 0 64 64"
+  role="img"
+  aria-label="国标麻将算番图标 minimal"
+>
+  <rect width="64" height="64" rx="14" fill="#123b2a" />
+  <rect x="16" y="10" width="32" height="42" rx="6" fill="#faf8f0" />
+  <text
+    x="32"
+    y="31"
+    text-anchor="middle"
+    font-family="'Kaiti SC', STKaiti, serif"
+    font-size="20"
+    fill="#c5282f"
+  >
+    万
+  </text>
+  <text
+    x="32"
+    y="47"
+    text-anchor="middle"
+    font-family="'PingFang SC', 'Noto Sans SC', sans-serif"
+    font-size="10"
+    font-weight="800"
+    fill="#d12d34"
+  >
+    番
+  </text>
+</svg>

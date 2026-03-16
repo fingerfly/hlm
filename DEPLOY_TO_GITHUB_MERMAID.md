@@ -9,7 +9,7 @@ Pages using Mermaid diagrams.
 flowchart TD
   A[Push to main with public/src/index/workflow changes]
   --> B[GitHub Actions: deploy-pages.yml]
-  B --> C[Upload Pages artifact from path .]
+  B --> C[Build dist and upload Pages artifact from path dist]
   C --> D[Deploy via actions/deploy-pages]
   D --> E[Root index.html redirects to public/index.html]
   E --> F[Live at https://<owner>.github.io/<repo>/]
@@ -31,9 +31,12 @@ flowchart TD
   H -- No --> I[Fix branch and push updates]
   I --> G
   H -- Yes --> J[Merge PR to main]
-  J --> K[Deploy workflow runs]
-  K --> L[Publish GitHub Pages artifact]
-  L --> M[Live at https://<owner>.github.io/<repo>/]
+  J --> K[Security scan workflow runs]
+  K --> L{Security scan pass?}
+  L -- No --> I
+  L -- Yes --> M[Deploy workflow runs]
+  M --> N[Publish dist runtime artifact]
+  N --> O[Live at https://<owner>.github.io/<repo>/]
 ```
 
 ## 3) Target CI/CD Workflow Sequence
@@ -46,19 +49,22 @@ flowchart TD
 sequenceDiagram
   participant Dev as Developer
   participant GH as GitHub
-  participant CI as test.yml
-  participant CD as deploy.yml
+  participant CI as test_or_deploy_checks
+  participant Sec as security_scan_yml
+  participant CD as deploy_pages_yml
   participant Pages as GitHub Pages
 
   Dev->>GH: Push branch
   GH->>CI: Trigger tests on push/PR
   CI-->>GH: Pass/Fail status
+  GH->>Sec: Trigger security scan on push/PR
+  Sec-->>GH: Pass/Fail status
   Dev->>GH: Open PR to main
   GH->>CI: Re-run checks for PR
   CI-->>GH: Required checks pass
   Dev->>GH: Merge PR
   GH->>CD: Trigger deploy on main
-  CD->>Pages: Upload and deploy _site artifact
+  CD->>Pages: Upload and deploy dist artifact
   Pages-->>Dev: Site update published
 ```
 

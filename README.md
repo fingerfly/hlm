@@ -90,9 +90,15 @@ Open `public/index.html` with Live Server in VS Code.
   - `public/**`
   - `src/**`
   - `index.html`
+  - `scripts/buildDist.js`
+  - `package.json`
   - `.github/workflows/deploy-pages.yml`
-- Current deploy publishes project root (`.`), with root `index.html`
-  redirecting to `public/index.html`.
+- Current deploy builds runtime-only artifact via
+  `npm run build:dist` and publishes `dist/`.
+- Runtime deploy artifact contains `index.html`, `public/`, and `src/`
+  only (non-runtime files are excluded).
+- Security scan workflow runs on `push`/`pull_request`:
+  `.github/workflows/security-scan.yml`.
 - Migration target state (planned): split test/deploy workflows
   (`test.yml` + `deploy.yml`) in dedicated repo `<owner>/<repo>`.
 - Deployment flow diagrams and migration path:

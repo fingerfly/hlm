@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>和了么 - 国标麻将计番助手</title>
+    <link rel="icon" type="image/svg+xml" href="./favicon-traditional.svg" />
+    <link
+      rel="apple-touch-icon"
+      type="image/svg+xml"
+      href="./icon-app-traditional.svg"
+    />
+    <link rel="stylesheet" href="./styles-base.css" />
+    <link rel="stylesheet" href="./styles-components.css" />
+    <link rel="stylesheet" href="./styles-modals.css" />
+    <link rel="stylesheet" href="./styles-responsive.css" />
+  </head>
+  <body>
+    <!-- Home screen keeps primary actions always visible on mobile. -->
+    <main class="container">
+      <header class="nav-bar">
+        <h1>和了番数</h1>
+        <button id="moreBtn" class="icon-btn" aria-label="更多">...</button>
+      </header>
+      <p id="versionBadge" class="version-badge">版本信息加载中...</p>
+
+      <section class="card">
+        <div class="card-top">
+          <h2>当前手牌 <span id="tileCount">0/14</span></h2>
+        </div>
+        <div id="tilePreview" class="tile-preview"></div>
+        <button id="openPickerBtn" class="primary-btn">继续选牌</button>
+      </section>
+
+      <section class="card">
+        <h2>和牌条件</h2>
+        <p id="contextSummary" class="summary-text">自摸 · 门前清 · 无杠</p>
+        <button id="openContextBtn" class="ghost-btn">可选：编辑条件</button>
+      </section>
+
+      <footer class="sticky-footer">
+        <p id="readyHint" class="hint">请先选满 14 张牌</p>
+        <button id="calculateBtn" class="primary-btn" disabled>计算番数</button>
+      </footer>
+    </main>
+
+    <!-- Bottom-sheet modal keeps picker reachable with one thumb. -->
+    <section id="pickerModal" class="modal">
+      <div class="sheet">
+        <div class="sheet-header">
+          <h3>选择手牌</h3>
+          <button data-close="picker" class="ghost-btn">完成</button>
+        </div>
+        <div class="picker-tabs">
+          <button data-tab="W" class="tab-btn active">万</button>
+          <button data-tab="T" class="tab-btn">条</button>
+          <button data-tab="B" class="tab-btn">筒</button>
+          <button data-tab="Z" class="tab-btn">字牌</button>
+        </div>
+        <div class="pattern-actions">
+          <button data-pattern-action="single" class="ghost-btn active">单张</button>
+          <details class="pattern-secondary">
+            <summary class="ghost-btn">组合</summary>
+            <div class="pattern-secondary-grid">
+              <button data-pattern-action="pair" class="ghost-btn">对子</button>
+              <button data-pattern-action="pung" class="ghost-btn">刻子</button>
+              <button data-pattern-action="chow_front" class="ghost-btn">顺子前位</button>
+              <button data-pattern-action="chow_middle" class="ghost-btn">顺子中位</button>
+              <button data-pattern-action="chow_back" class="ghost-btn">顺子后位</button>
+            </div>
+          </details>
+        </div>
+        <p id="pickerActionHint" class="summary-text">当前快捷动作：单张</p>
+        <div id="tilePickerGrid" class="tile-picker-grid"></div>
+        <div class="sheet-footer">
+          <span id="pickerCount">已选 0/14</span>
+          <div class="inline-actions">
+            <button id="pickerDeleteBtn" class="ghost-btn">删除选中</button>
+            <button id="pickerUndoBtn" class="ghost-btn">撤销</button>
+            <details class="picker-more-actions">
+              <summary class="ghost-btn">更多</summary>
+              <div class="picker-more-actions-panel">
+                <button id="pickerClearBtn" class="ghost-btn">清空</button>
+              </div>
+            </details>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Context settings are isolated to avoid accidental edits. -->
+    <section id="contextModal" class="modal">
+      <div class="sheet">
+        <div class="sheet-header">
+          <h3>和牌条件</h3>
+          <button data-close="context" class="ghost-btn">应用</button>
+        </div>
+        <div class="preset-actions">
+          <button data-preset="zimo-menqian" class="ghost-btn">自摸 + 门前清</button>
+          <button data-preset="dianhe-menqian" class="ghost-btn">点和 + 门前清</button>
+          <button data-preset="dianhe-fulu" class="ghost-btn">点和 + 副露</button>
+        </div>
+        <div class="context-grid">
+          <label>和牌方式
+            <select id="winType">
+              <option value="zimo">自摸</option>
+              <option value="dianhe">点和</option>
+            </select>
+          </label>
+          <label>门前/副露
+            <select id="handState">
+              <option value="menqian">门前清</option>
+              <option value="fulu">副露</option>
+            </select>
+          </label>
+        </div>
+        <details>
+          <summary>高级条件</summary>
+          <div class="context-grid">
+            <label>杠类型
+              <select id="kongType">
+                <option value="none">无杠</option>
+                <option value="an">暗杠</option>
+                <option value="ming">明杠</option>
+                <option value="bu">补杠</option>
+              </select>
+            </label>
+            <label>时机事件
+              <select id="timingEvent">
+                <option value="none">无</option>
+                <option value="haidi">海底捞月</option>
+                <option value="hedi">河底捞鱼</option>
+                <option value="gangshang">杠上开花</option>
+              </select>
+            </label>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <!-- Result modal summarizes top fan hits before details. -->
+    <section id="resultModal" class="modal">
+      <div class="sheet">
+        <div class="sheet-header">
+          <h3>结果</h3>
+          <button data-close="result" class="ghost-btn">关闭</button>
+        </div>
+        <p id="resultStatus" class="status-pill">未和牌</p>
+        <p id="resultTotalFan" class="total-fan">0 番</p>
+        <h4>命中番种（前3项）</h4>
+        <ul id="hitPreview" class="fan-list"></ul>
+        <div class="inline-actions">
+          <button id="openInfoBtn" class="ghost-btn">Info</button>
+          <button id="playAgainBtn" class="ghost-btn">再来一手</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Info modal shows full explanation lists for auditability. -->
+    <section id="infoModal" class="modal">
+      <div class="sheet">
+        <div class="sheet-header">
+          <h3>详细解释</h3>
+          <button data-close="info" class="ghost-btn">关闭</button>
+        </div>
+        <h4>命中番种</h4>
+        <ul id="infoHitList" class="fan-list"></ul>
+        <h4>排除番种</h4>
+        <ul id="infoExcludedList" class="fan-list"></ul>
+        <h4>解释</h4>
+        <p id="infoExplanation" class="summary-text"></p>
+      </div>
+    </section>
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>

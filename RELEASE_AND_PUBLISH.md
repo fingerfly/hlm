@@ -84,9 +84,12 @@ npm run deploy -- major --confirm
 
 - Confirm remote has latest commit:
   - `git ls-remote <deploy-remote> HEAD`
+- Confirm security scan workflow passes on latest commit:
+  - `.github/workflows/security-scan.yml`
 - Confirm GitHub Pages build/deploy is successful in Actions.
 - Open and verify site:
   - `https://<owner>.github.io/<repo>/`
+- Confirm deploy workflow uploaded runtime-only `dist/` artifact.
 - Smoke-check core flow in UI:
   - tile entry -> context -> `计算番数`.
 
