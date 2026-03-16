@@ -31,8 +31,12 @@ Blueprint implementation for `和了么 - 国标麻将计番助手` (`Huleme - G
     - sync source tree into temp clone
     - commit and push to GitHub `main`
   - Remote defaults by OS:
-    - Windows: `https://github.com/fingerfly/hlm.git`
-    - macOS/Linux: `git@github.com:fingerfly/hlm.git`
+    - Auto-detected from local `git remote origin` when available
+    - Fallback: `owner/repo` template when origin is unavailable
+    - Windows format: `https://github.com/<owner>/<repo>.git`
+    - macOS/Linux format: `git@github.com:<owner>/<repo>.git`
+  - Override expected repo template:
+    - `HLM_DEPLOY_REPO=<owner>/<repo>`
   - Override remote per shell: `HLM_DEPLOY_REMOTE=<remote-url>`
   - Non-destructive remote check:
     - `git ls-remote <your-remote-url> HEAD`
@@ -80,7 +84,7 @@ npm test
 
 Open `public/index.html` with Live Server in VS Code.
 - Fill 14 tile slots and context fields, then click `计算番数`.
-- GitHub Pages URL: https://fingerfly.github.io/hlm/
+- GitHub Pages URL: `https://<owner>.github.io/<repo>/`
 - Current Pages deploy source: `.github/workflows/deploy-pages.yml`.
 - Current deploy trigger scope includes:
   - `public/**`
@@ -90,7 +94,7 @@ Open `public/index.html` with Live Server in VS Code.
 - Current deploy publishes project root (`.`), with root `index.html`
   redirecting to `public/index.html`.
 - Migration target state (planned): split test/deploy workflows
-  (`test.yml` + `deploy.yml`) in dedicated repo `fingerfly/hlm`.
+  (`test.yml` + `deploy.yml`) in dedicated repo `<owner>/<repo>`.
 - Deployment flow diagrams and migration path:
   `DEPLOY_TO_GITHUB_MERMAID.md`.
 

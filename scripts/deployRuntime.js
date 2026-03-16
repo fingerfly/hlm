@@ -6,6 +6,7 @@ import {
   normalizeRemoteRepo,
   preflightRemoteAccess,
   resolveDeployDir,
+  resolveExpectedDeployRepo,
   resolveDeployRemote,
   shouldSyncOriginRemote
 } from "./deployRemote.js";
@@ -18,6 +19,7 @@ export {
   preflightRemoteAccess,
   pushReleaseToRemote,
   resolveDeployDir,
+  resolveExpectedDeployRepo,
   resolveDeployRemote,
   shouldSyncOriginRemote
 };

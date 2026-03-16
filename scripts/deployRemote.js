@@ -1,9 +1,7 @@
 import { spawnSync } from "node:child_process";
 import { join } from "node:path";
 
-const DEFAULT_REMOTE = "git@github.com:fingerfly/hlm.git";
-const WINDOWS_DEFAULT_REMOTE = "https://github.com/fingerfly/hlm.git";
-const EXPECTED_REPO = "fingerfly/hlm";
+const DEFAULT_EXPECTED_REPO = "owner/repo";
 const DEPLOY_DIR_NAME = "hlm-deploy";
 
 /**
@@ -15,23 +13,74 @@ const DEPLOY_DIR_NAME = "hlm-deploy";
  */
 
 export function getDefaultDeployRemoteForPlatform(
-  platform = process.platform
+  platform = process.platform,
+  env = process.env,
+  runSync = spawnSync,
+  cwd = process.cwd()
 ) {
+  const expectedRepo = resolveExpectedDeployRepo(env, runSync, cwd);
   if (platform === "win32") {
-    return WINDOWS_DEFAULT_REMOTE;
+    return `https://github.com/${expectedRepo}.git`;
   }
-  return DEFAULT_REMOTE;
+  return `git@github.com:${expectedRepo}.git`;
+}
+
+function detectRepoFromOriginRemote(
+  runSync = spawnSync,
+  cwd = process.cwd()
+) {
+  const result = runSync(
+    "git",
+    ["config", "--get", "remote.origin.url"],
+    { cwd, encoding: "utf8", shell: process.platform === "win32" }
+  );
+  if (result.status !== 0) {
+    return null;
+  }
+  const remoteText = String(result.stdout || "").trim();
+  return normalizeRemoteRepo(remoteText);
+}
+
+export function resolveExpectedDeployRepo(
+  env = process.env,
+  runSync = spawnSync,
+  cwd = process.cwd()
+) {
+  const override = String(env.HLM_DEPLOY_REPO ?? "").trim().toLowerCase();
+  if (override) {
+    const text = override.replace(/^github\.com[:/]/i, "");
+    const normalized = text.replace(/\/+$/, "").replace(/\.git$/i, "");
+    const matched = normalized.match(/^[a-z0-9._-]+\/[a-z0-9._-]+$/i);
+    if (matched) {
+      return normalized;
+    }
+  }
+  const detected = detectRepoFromOriginRemote(runSync, cwd);
+  if (detected) {
+    const packageName = String(env.npm_package_name ?? "")
+      .trim()
+      .toLowerCase();
+    if (packageName && detected.includes("/")) {
+      const owner = detected.split("/")[0];
+      const candidate = `${owner}/${packageName}`;
+      return candidate;
+    }
+    return detected;
+  }
+  return DEFAULT_EXPECTED_REPO;
 }
 
 export function resolveDeployRemote(
   platform = process.platform,
-  env = process.env
+  env = process.env,
+  runSync = spawnSync,
+  cwd = process.cwd()
 ) {
   const override = String(env.HLM_DEPLOY_REMOTE ?? "").trim();
   if (override) {
     return override;
   }
-  return getDefaultDeployRemoteForPlatform(platform);
+  return getDefaultDeployRemoteForPlatform(platform, env, runSync, cwd);
 }
 
 export function normalizeRemoteRepo(remoteUrl) {
@@ -46,8 +95,13 @@ export function normalizeRemoteRepo(remoteUrl) {
   return `${matched[1]}/${matched[2]}`.toLowerCase();
 }
 
-export function isExpectedDeployRepo(remoteUrl) {
-  return normalizeRemoteRepo(remoteUrl) === EXPECTED_REPO;
+export function isExpectedDeployRepo(
+  remoteUrl,
+  expectedRepo = DEFAULT_EXPECTED_REPO
+) {
+  return (
+    normalizeRemoteRepo(remoteUrl) === String(expectedRepo).toLowerCase()
+  );
 }
 
 export function shouldSyncOriginRemote(actualRemote, desiredRemote) {
@@ -75,7 +129,7 @@ export function preflightRemoteAccess(
     const detail = (result.stderr || result.stdout || "").trim();
     throw new Error(
       `Deploy preflight failed: cannot access remote "${remoteUrl}". ` +
-      `Tip: set HLM_DEPLOY_REMOTE to SSH or HTTPS remote for this shell. ` +
+      `Tip: set HLM_DEPLOY_REMOTE or HLM_DEPLOY_REPO in this shell. ` +
       `${detail}`
     );
   }

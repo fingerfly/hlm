@@ -4,6 +4,26 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [3.0.1] - 2026-03-16
+
+### Changed
+- Hardened deploy defaults to avoid account-specific public identifiers:
+  default Git remotes now auto-detect from local origin, with
+  `owner/repo` fallback and `HLM_DEPLOY_REPO` override support
+  (`scripts/deployRemote.js`).
+- Improved monorepo deploy-target inference by combining origin owner
+  with `npm_package_name` when available (e.g., `owner/hlm`).
+- Replaced hardcoded deploy commit email default with neutral
+  `hlm-release@local.invalid` and aligned repo safety checks with
+  env-configurable expected repo (`scripts/deployPublish.js`).
+- Updated deployment docs/examples to use placeholder repo/site values
+  instead of account-specific URLs (`README.md`,
+  `RELEASE_AND_PUBLISH.md`, `DEPLOY_TO_GITHUB_MERMAID.md`).
+
+### Added
+- Added unit coverage for expected-repo resolution and env-driven default
+  remote generation (`tests/unit/deployRuntime.test.js`).
+
 ## [3.0.0] - 2026-03-16
 
 ### Changed (2026-03-16)

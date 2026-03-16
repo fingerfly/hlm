@@ -7,24 +7,31 @@ publish `hlm`.
 
 - Repository: `02product/01_coding/project/hlm`
 - Release script: `scripts/deploy.js`
-- Deploy target repo: `fingerfly/hlm`
-- Site URL: `https://fingerfly.github.io/hlm/`
+- Deploy target repo: `<owner>/<repo>`
+- Site URL: `https://<owner>.github.io/<repo>/`
 
 ## Prerequisites
 
 - You are in project root:
   - `cd 02product/01_coding/project/hlm`
 - Git remote access works:
-  - `git ls-remote git@github.com:fingerfly/hlm.git HEAD`
+  - `git ls-remote <your-remote-url> HEAD`
+- Default deploy repo behavior:
+  - auto-detect from local `git remote origin` when available
+  - fallback to `owner/repo` template when origin is unavailable
+- Optional explicit expected repo override:
+  - PowerShell: `$env:HLM_DEPLOY_REPO="<owner>/<repo>"`
+  - Bash: `export HLM_DEPLOY_REPO=<owner>/<repo>`
 - If needed, override deploy remote for current shell:
-  - `export HLM_DEPLOY_REMOTE=<ssh-or-https-remote>`
+  - PowerShell: `$env:HLM_DEPLOY_REMOTE="<ssh-or-https-remote>"`
+  - Bash: `export HLM_DEPLOY_REMOTE=<ssh-or-https-remote>`
 
 ## What the release script enforces
 
 - Runs `npm test` before writing release files.
 - Requires `--confirm` for non-interactive release commands.
 - Performs remote preflight with `git ls-remote`.
-- Pushes release commit to `fingerfly/hlm` `main`.
+- Pushes release commit to `<owner>/<repo>` `main`.
 
 ## Choose release type
 
@@ -79,7 +86,7 @@ npm run deploy -- major --confirm
   - `git ls-remote <deploy-remote> HEAD`
 - Confirm GitHub Pages build/deploy is successful in Actions.
 - Open and verify site:
-  - `https://fingerfly.github.io/hlm/`
+  - `https://<owner>.github.io/<repo>/`
 - Smoke-check core flow in UI:
   - tile entry -> context -> `计算番数`.
 
@@ -88,7 +95,7 @@ npm run deploy -- major --confirm
 - Missing `--confirm`:
   - rerun with `--confirm`.
 - Remote preflight failure:
-  - set `HLM_DEPLOY_REMOTE` to a reachable SSH/HTTPS remote.
+  - set `HLM_DEPLOY_REMOTE` or `HLM_DEPLOY_REPO` in your shell.
 - Tests fail:
   - fix failures locally, rerun `npm test`, then retry release.
 - No changes to deploy:

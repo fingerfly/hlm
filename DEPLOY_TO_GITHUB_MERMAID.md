@@ -12,7 +12,7 @@ flowchart TD
   B --> C[Upload Pages artifact from path .]
   C --> D[Deploy via actions/deploy-pages]
   D --> E[Root index.html redirects to public/index.html]
-  E --> F[Live at https://fingerfly.github.io/hlm/]
+  E --> F[Live at https://<owner>.github.io/<repo>/]
 ```
 
 ## 2) Target Deployment Flow (After Migration)
@@ -33,7 +33,7 @@ flowchart TD
   H -- Yes --> J[Merge PR to main]
   J --> K[Deploy workflow runs]
   K --> L[Publish GitHub Pages artifact]
-  L --> M[Live at https://fingerfly.github.io/hlm/]
+  L --> M[Live at https://<owner>.github.io/<repo>/]
 ```
 
 ## 3) Target CI/CD Workflow Sequence
@@ -67,7 +67,7 @@ sequenceDiagram
 ```mermaid
 flowchart LR
   M1[Monorepo path: 00_Mundo/.../hlm] --> M2[Subtree split]
-  M2 --> M3[Dedicated repo: fingerfly/hlm]
+  M2 --> M3[Dedicated repo: <owner>/<repo>]
   M3 --> M4[Root layout refactor]
   M4 --> M5[Add test.yml and deploy.yml]
   M5 --> M6[Merge to main]

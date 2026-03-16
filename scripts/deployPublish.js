@@ -10,13 +10,13 @@ import { join, sep } from "node:path";
 import {
   isExpectedDeployRepo,
   normalizeRemoteRepo,
+  resolveExpectedDeployRepo,
   resolveDeployDir,
   shouldSyncOriginRemote
 } from "./deployRemote.js";
 
 const DEFAULT_DEPLOY_GIT_NAME = "hlm-release";
-const DEFAULT_DEPLOY_GIT_EMAIL =
-  "10357401+fingerfly@users.noreply.github.com";
+const DEFAULT_DEPLOY_GIT_EMAIL = "hlm-release@local.invalid";
 const EXCLUDE = new Set([
   ".git",
   "node_modules",
@@ -89,6 +89,7 @@ function resolveDeployIdentity(env = process.env) {
 }
 
 function ensureDeployCheckout(deployDir, remoteUrl, platform, env) {
+  const expectedRepo = resolveExpectedDeployRepo(env);
   let shouldClone = true;
   if (existsSync(join(deployDir, ".git"))) {
     try {
@@ -96,7 +97,7 @@ function ensureDeployCheckout(deployDir, remoteUrl, platform, env) {
         ["remote", "get-url", "origin"],
         { cwd: deployDir, platform, env }
       );
-      if (isExpectedDeployRepo(actualRemote)) {
+      if (isExpectedDeployRepo(actualRemote, expectedRepo)) {
         shouldClone = false;
         if (shouldSyncOriginRemote(actualRemote, remoteUrl)) {
           runGitOrThrow(["remote", "set-url", "origin", remoteUrl], {
@@ -127,6 +128,7 @@ function ensureDeployCheckout(deployDir, remoteUrl, platform, env) {
 }
 
 function commitAndPushDeploy(deployDir, releaseLabel, platform, env) {
+  const expectedRepo = resolveExpectedDeployRepo(env);
   const identity = resolveDeployIdentity(env);
   const author = `${identity.name} <${identity.email}>`;
   runGitOrThrow(
@@ -147,10 +149,10 @@ function commitAndPushDeploy(deployDir, releaseLabel, platform, env) {
     env
   });
   const normalizedRemote = normalizeRemoteRepo(actualRemote);
-  if (normalizedRemote && !isExpectedDeployRepo(actualRemote)) {
+  if (normalizedRemote && !isExpectedDeployRepo(actualRemote, expectedRepo)) {
     throw new Error(
       `Safety check failed: deploy repo remote is ` +
-      `"${actualRemote}", expected "fingerfly/hlm".`
+      `"${actualRemote}", expected "${expectedRepo}".`
     );
   }
   runGitOrThrow(["push", "origin", "HEAD:main"], {
