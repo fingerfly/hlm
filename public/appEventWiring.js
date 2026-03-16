@@ -5,6 +5,19 @@
  * - Connects click/change handlers to action modules.
  * - Keeps event glue separate from state mutations.
  */
+
+/**
+ * Whether a context menu button should open the picker modal.
+ * Parent items (data-menu-level="parent") expand only;
+ * leaf items open picker.
+ *
+ * @param {HTMLElement} btn - Button with data-context-action.
+ * @returns {boolean}
+ */
+export function shouldOpenPickerForContextButton(btn) {
+  if (!btn || !btn.dataset) return false;
+  return btn.dataset.menuLevel !== "parent";
+}
 /**
  * Render current tab buttons and tile picker grid.
  *
@@ -104,7 +117,11 @@ function wireSlotContextMenu(params) {
     if (!btn) return;
     const action = btn.dataset.contextAction;
     const tab = btn.dataset.tab;
-    if (action === "tab" && tab) {
+    if (action === "undo_last") {
+      stateActions.undoHand();
+    } else if (action === "undo_slot") {
+      stateActions.undoSelectedSlot();
+    } else if (action === "tab" && tab) {
       store.uiState = {
         ...store.uiState,
         hand: { ...store.uiState.hand, activeTab: tab }
@@ -114,13 +131,15 @@ function wireSlotContextMenu(params) {
       stateActions.setPatternAction(action);
     }
     hideMenu();
-    renderPickerTabButtons(store.uiState.hand.activeTab);
-    renderTilePickerGrid({
-      tilePickerGridEl,
-      tiles: tabTiles[store.uiState.hand.activeTab],
-      onPick: (tile) => stateActions.pickTile(tile)
-    });
-    modalActions.openModalByKey("picker");
+    if (shouldOpenPickerForContextButton(btn)) {
+      renderPickerTabButtons(store.uiState.hand.activeTab);
+      renderTilePickerGrid({
+        tilePickerGridEl,
+        tiles: tabTiles[store.uiState.hand.activeTab],
+        onPick: (tile) => stateActions.pickTile(tile)
+      });
+      modalActions.openModalByKey("picker");
+    }
   });
 }
 

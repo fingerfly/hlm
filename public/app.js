@@ -3,10 +3,13 @@ import { getDisplayVersion } from "../src/config/appVersion.js";
 import {
   createTilePickerState,
   addTileToPicker,
+  addTilesToPicker,
   selectPickerSlot,
   deleteSelectedSlot,
   clearTilePicker,
-  undoLastTile
+  undoLastTile,
+  undoLastAction,
+  undoBySlot
 } from "../src/app/tilePickerState.js";
 import { resolvePatternAction } from "../src/app/tilePatternActions.js";
 import { createUiFlowState } from "../src/app/uiFlowState.js";
@@ -52,12 +55,15 @@ const stateActions = createStateActions(store, {
   refs,
   contextPresets: CONTEXT_PRESETS,
   addTileToPicker,
+  addTilesToPicker,
   resolvePatternAction,
   renderPatternActionButtons,
   selectPickerSlot,
   deleteSelectedSlot,
   clearTilePicker,
   undoLastTile,
+  undoLastAction,
+  undoBySlot,
   evaluateCapturedHand,
   renderTilePreview,
   renderResultModal,

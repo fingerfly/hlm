@@ -3,9 +3,12 @@ import assert from "node:assert/strict";
 import {
   createTilePickerState,
   addTileToPicker,
+  addTilesToPicker,
   selectPickerSlot,
   deleteSelectedSlot,
   undoLastTile,
+  undoLastAction,
+  undoBySlot,
   clearTilePicker,
   pickerToTiles,
   isPickerReady
@@ -67,4 +70,37 @@ test("clear and undo reset editing mode", () => {
   state = selectPickerSlot(state, 0);
   state = clearTilePicker(state);
   assert.equal(state.editingIndex, null);
+});
+
+test("undoLastAction rolls back whole pung in one step", () => {
+  let state = createTilePickerState();
+  state = addTilesToPicker(state, ["1W", "1W", "1W"]);
+  assert.deepEqual(pickerToTiles(state), ["1W", "1W", "1W"]);
+  state = undoLastAction(state);
+  assert.deepEqual(pickerToTiles(state), []);
+});
+
+test("undoLastAction rolls back chow then single", () => {
+  let state = createTilePickerState();
+  state = addTilesToPicker(state, ["2W", "3W", "4W"]);
+  state = addTilesToPicker(state, ["5W"]);
+  state = undoLastAction(state);
+  assert.deepEqual(pickerToTiles(state), ["2W", "3W", "4W"]);
+  state = undoLastAction(state);
+  assert.deepEqual(pickerToTiles(state), []);
+});
+
+test("undoBySlot removes last action affecting selected slot", () => {
+  let state = createTilePickerState();
+  state = addTilesToPicker(state, ["1W", "1W", "1W"]);
+  state = addTilesToPicker(state, ["2W", "2W", "2W"]);
+  state = selectPickerSlot(state, 2);
+  state = undoBySlot(state, 2);
+  assert.deepEqual(pickerToTiles(state), ["2W", "2W", "2W"]);
+});
+
+test("undoBySlot with no history returns state unchanged", () => {
+  const state = createTilePickerState(["1W"]);
+  const next = undoBySlot(state, 0);
+  assert.deepEqual(pickerToTiles(next), ["1W"]);
 });

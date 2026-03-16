@@ -25,12 +25,15 @@ export function createStateActions(store, deps) {
     refs,
     contextPresets,
     addTileToPicker,
+    addTilesToPicker,
     resolvePatternAction,
     renderPatternActionButtons,
     selectPickerSlot,
     deleteSelectedSlot,
     clearTilePicker,
     undoLastTile,
+    undoLastAction,
+    undoBySlot,
     evaluateCapturedHand,
     renderTilePreview,
     renderResultModal,
@@ -142,13 +145,7 @@ export function createStateActions(store, deps) {
       }
       return false;
     }
-    store.pickerState = {
-      ...store.pickerState,
-      editingIndex: null
-    };
-    for (const tile of result.tiles) {
-      store.pickerState = addTileToPicker(store.pickerState, tile);
-    }
+    store.pickerState = addTilesToPicker(store.pickerState, result.tiles);
     syncHomeState();
     return true;
   }
@@ -164,7 +161,14 @@ export function createStateActions(store, deps) {
   }
 
   function undoHand() {
-    store.pickerState = undoLastTile(store.pickerState);
+    store.pickerState = undoLastAction(store.pickerState);
+    syncHomeState();
+  }
+
+  function undoSelectedSlot() {
+    const idx = store.pickerState.editingIndex;
+    if (!Number.isInteger(idx)) return;
+    store.pickerState = undoBySlot(store.pickerState, idx);
     syncHomeState();
   }
 
@@ -203,6 +207,7 @@ export function createStateActions(store, deps) {
     deleteSelected,
     clearHand,
     undoHand,
+    undoSelectedSlot,
     calculate,
     openInfo
   };

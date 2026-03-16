@@ -18,7 +18,7 @@ body {
 .container {
   max-width: 640px;
   margin: 0 auto;
-  padding: 12px 12px 92px;
+  padding: 12px 12px 24px;
 }
 
 .nav-bar {
@@ -92,12 +92,11 @@ body {
   font-size: 14px;
 }
 
-/* Fixed footer keeps score action visible during long forms. */
+/* Sticky footer stays at bottom in flow, reduces mid-screen whitespace. */
 .sticky-footer {
-  position: fixed;
-  left: 0;
-  right: 0;
+  position: sticky;
   bottom: 0;
+  margin-top: 12px;
   background: rgba(242, 242, 247, 0.94);
   backdrop-filter: blur(8px);
   border-top: 1px solid var(--border);

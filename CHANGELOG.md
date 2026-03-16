@@ -4,6 +4,28 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [3.1.3] - 2026-03-16
+
+### Added
+- Added smart undo in slot context menu: 撤销最近一次 (rolls back last
+  action/group) and 撤销当前槽位 (rolls back action affecting selected slot)
+  (`public/index.html`, `public/appEventWiring.js`, `src/app/tilePickerState.js`).
+- Added action history and `addTilesToPicker`, `undoLastAction`, `undoBySlot`
+  in tile picker state (`src/app/tilePickerState.js`).
+- Added unit tests for menu routing and smart undo
+  (`tests/unit/appEventWiring.test.js`, `tests/unit/tilePickerState.test.js`,
+  `tests/unit/appStateActions.test.js`).
+
+### Changed
+- Fixed slot context menu cascade: parent items (tab buttons) no longer jump
+  to picker modal; only leaf actions open picker (`public/appEventWiring.js`,
+  `public/index.html`).
+- Changed footer from fixed to sticky to reduce mid-screen whitespace
+  (`public/styles-base.css`).
+- Enlarged tile display for readability: tile-chip 52px, tile-face-unicode 2em
+  (`public/styles-components.css`).
+- Reduced container bottom padding (`public/styles-base.css`).
+
 ## [3.1.2] - 2026-03-16
 
 ### Added

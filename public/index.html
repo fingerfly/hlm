@@ -26,6 +26,10 @@
         </div>
         <div id="tilePreview" class="tile-preview"></div>
         <div id="slotContextMenu" class="slot-context-menu" role="menu" hidden>
+          <button type="button" data-context-action="undo_last"
+            data-menu-level="parent" role="menuitem">撤销最近一次</button>
+          <button type="button" data-context-action="undo_slot"
+            data-menu-level="parent" role="menuitem">撤销当前槽位</button>
           <button type="button" data-context-action="single" role="menuitem">单张</button>
           <button type="button" data-context-action="pair" role="menuitem">对子</button>
           <button type="button" data-context-action="pung" role="menuitem">刻子</button>
@@ -38,10 +42,14 @@
             </div>
           </details>
           <div class="context-suit-row">
-            <button type="button" data-context-action="tab" data-tab="W">万</button>
-            <button type="button" data-context-action="tab" data-tab="T">条</button>
-            <button type="button" data-context-action="tab" data-tab="B">筒</button>
-            <button type="button" data-context-action="tab" data-tab="Z">字牌</button>
+            <button type="button" data-context-action="tab" data-tab="W"
+              data-menu-level="parent">万</button>
+            <button type="button" data-context-action="tab" data-tab="T"
+              data-menu-level="parent">条</button>
+            <button type="button" data-context-action="tab" data-tab="B"
+              data-menu-level="parent">筒</button>
+            <button type="button" data-context-action="tab" data-tab="Z"
+              data-menu-level="parent">字牌</button>
           </div>
         </div>
         <button id="openPickerBtn" class="primary-btn">继续选牌</button>

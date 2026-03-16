@@ -3,10 +3,14 @@ import assert from "node:assert/strict";
 import {
   createTilePickerState,
   addTileToPicker,
+  addTilesToPicker,
   selectPickerSlot,
   deleteSelectedSlot,
   clearTilePicker,
-  undoLastTile
+  undoLastTile,
+  undoLastAction,
+  undoBySlot,
+  pickerToTiles
 } from "../../src/app/tilePickerState.js";
 import { createStateActions } from "../../public/appStateActions.js";
 
@@ -54,12 +58,15 @@ test("syncHomeState toggles delete button visibility by editing state", () => {
     refs,
     contextPresets: {},
     addTileToPicker,
+    addTilesToPicker,
     resolvePatternAction: () => ({ ok: true, reason: null, tiles: ["1W"] }),
     renderPatternActionButtons: () => {},
     selectPickerSlot,
     deleteSelectedSlot,
     clearTilePicker,
     undoLastTile,
+    undoLastAction,
+    undoBySlot,
     evaluateCapturedHand: () => ({ scoring: { isWin: false } }),
     renderTilePreview: () => {},
     renderResultModal: () => ({}),
@@ -90,12 +97,15 @@ test("syncHomeState updates primary picker CTA by tile count", () => {
     refs,
     contextPresets: {},
     addTileToPicker,
+    addTilesToPicker,
     resolvePatternAction: () => ({ ok: true, reason: null, tiles: ["1W"] }),
     renderPatternActionButtons: () => {},
     selectPickerSlot,
     deleteSelectedSlot,
     clearTilePicker,
     undoLastTile,
+    undoLastAction,
+    undoBySlot,
     evaluateCapturedHand: () => ({ scoring: { isWin: false } }),
     renderTilePreview: () => {},
     renderResultModal: () => ({}),
@@ -128,12 +138,15 @@ test("syncHomeState shows remaining tile count and optional context cue", () => 
     refs,
     contextPresets: {},
     addTileToPicker,
+    addTilesToPicker,
     resolvePatternAction: () => ({ ok: true, reason: null, tiles: ["1W"] }),
     renderPatternActionButtons: () => {},
     selectPickerSlot,
     deleteSelectedSlot,
     clearTilePicker,
     undoLastTile,
+    undoLastAction,
+    undoBySlot,
     evaluateCapturedHand: () => ({ scoring: { isWin: false } }),
     renderTilePreview: () => {},
     renderResultModal: () => ({}),
@@ -147,4 +160,85 @@ test("syncHomeState shows remaining tile count and optional context cue", () => 
   byIdState.controls.kongType.value = "an";
   actions.syncHomeState();
   assert.equal(refs.openContextBtn.textContent, "已设置条件");
+});
+
+test("undoHand rolls back last pattern action (e.g. pung)", () => {
+  const byIdState = createByIdMap();
+  const store = {
+    uiState: { hand: { tiles: [] } },
+    pickerState: createTilePickerState([]),
+    pickerAction: "pung",
+    resultVm: null
+  };
+  const refs = createRefs();
+  const actions = createStateActions(store, {
+    byId: byIdState.byId,
+    refs,
+    contextPresets: {},
+    addTileToPicker,
+    addTilesToPicker,
+    resolvePatternAction: (s, baseTile, actionId) => {
+      if (actionId === "pung") {
+        return { ok: true, reason: null, tiles: ["1W", "1W", "1W"] };
+      }
+      return { ok: true, reason: null, tiles: [baseTile] };
+    },
+    renderPatternActionButtons: () => {},
+    selectPickerSlot,
+    deleteSelectedSlot,
+    clearTilePicker,
+    undoLastTile,
+    undoLastAction,
+    undoBySlot,
+    evaluateCapturedHand: () => ({ scoring: { isWin: false } }),
+    renderTilePreview: () => {},
+    renderResultModal: () => ({}),
+    renderInfoTip: () => {}
+  });
+  actions.pickTile("1W");
+  assert.equal(pickerToTiles(store.pickerState).length, 3);
+  actions.undoHand();
+  assert.equal(pickerToTiles(store.pickerState).length, 0);
+});
+
+test("undoSelectedSlot rolls back action affecting selected slot", () => {
+  const byIdState = createByIdMap();
+  const store = {
+    uiState: { hand: { tiles: [] } },
+    pickerState: createTilePickerState([]),
+    pickerAction: "pung",
+    resultVm: null
+  };
+  const refs = createRefs();
+  const actions = createStateActions(store, {
+    byId: byIdState.byId,
+    refs,
+    contextPresets: {},
+    addTileToPicker,
+    addTilesToPicker,
+    resolvePatternAction: (s, baseTile, actionId) => {
+      if (actionId === "pung") {
+        const t = baseTile === "1W" ? "1W" : "2W";
+        return { ok: true, reason: null, tiles: [t, t, t] };
+      }
+      return { ok: true, reason: null, tiles: [baseTile] };
+    },
+    renderPatternActionButtons: () => {},
+    selectPickerSlot,
+    deleteSelectedSlot,
+    clearTilePicker,
+    undoLastTile,
+    undoLastAction,
+    undoBySlot,
+    evaluateCapturedHand: () => ({ scoring: { isWin: false } }),
+    renderTilePreview: () => {},
+    renderResultModal: () => ({}),
+    renderInfoTip: () => {}
+  });
+  actions.pickTile("1W");
+  actions.pickTile("2W");
+  assert.equal(pickerToTiles(store.pickerState).length, 6);
+  actions.selectSlot(2);
+  actions.undoSelectedSlot();
+  assert.deepEqual(pickerToTiles(store.pickerState), ["2W", "2W", "2W"]);
 });
