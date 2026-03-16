@@ -4,7 +4,25 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [3.0.4] - 2026-03-16
+
 ## [3.0.3] - 2026-03-16
+
+### Changed
+- Reduced duplicated event wiring by collapsing modal close-handler
+  bindings into one loop and removing unused parameter plumbing
+  (`public/appEventWiring.js`, `public/app.js`).
+- Clarified Option B artifact policy in docs: `public/` remains source,
+  `dist/` is generated deploy output (`README.md`).
+- Added local project ignore rules to keep generated artifacts out of
+  version control (`.gitignore`).
+- Wrapped previously long lines to satisfy quality guardrails
+  (`public/tileAssets.js`, `src/app/tilePatternActions.js`,
+  `src/config/deployWorkflow.js`).
+
+### Removed
+- Removed unused request-builder helper from UI bindings
+  (`public/uiBindings.js`).
 
 ## [3.0.2] - 2026-03-16
 

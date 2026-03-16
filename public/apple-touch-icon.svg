@@ -1,0 +1,45 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="1024"
+  height="1024"
+  viewBox="0 0 1024 1024"
+  role="img"
+  aria-label="guobiao mahjong fan touch icon"
+>
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f5031" />
+      <stop offset="100%" stop-color="#0b3f24" />
+    </linearGradient>
+    <linearGradient id="tileFace" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#fffef8" />
+      <stop offset="100%" stop-color="#eee5d5" />
+    </linearGradient>
+  </defs>
+  <rect width="1024" height="1024" rx="228" fill="url(#bg)" />
+  <rect x="196" y="132" width="632" height="760" rx="116" fill="#0a2f1b" />
+  <rect x="232" y="168" width="560" height="620" rx="88" fill="url(#tileFace)" />
+  <rect x="256" y="192" width="512" height="572" rx="68" fill="#fffef8" />
+  <text
+    x="512"
+    y="474"
+    text-anchor="middle"
+    font-family="'Kaiti SC', STKaiti, serif"
+    font-size="320"
+    fill="#c5282f"
+  >
+    &#x4E2D;
+  </text>
+  <rect x="278" y="806" width="468" height="148" rx="60" fill="#d12d34" />
+  <text
+    x="512"
+    y="906"
+    text-anchor="middle"
+    font-family="'PingFang SC', 'Noto Sans SC', sans-serif"
+    font-size="108"
+    font-weight="800"
+    fill="#fff9ec"
+  >
+    &#x7B97;&#x756A;
+  </text>
+</svg>

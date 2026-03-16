@@ -46,6 +46,10 @@ const appIconBadgePath = resolve(
   import.meta.dirname,
   "../../public/icon-app-badge.svg"
 );
+const appleTouchIconPath = resolve(
+  import.meta.dirname,
+  "../../public/apple-touch-icon.png"
+);
 
 test("index.html loads modular stylesheets", () => {
   const html = readFileSync(indexPath, "utf8");
@@ -58,13 +62,14 @@ test("index.html loads modular stylesheets", () => {
 test("index.html links app icon assets", () => {
   const html = readFileSync(indexPath, "utf8");
   const iconLinkRe = /rel="icon"\s+type="image\/svg\+xml"\s+href="\.\/favicon-/;
-  const touchIconLinkRe = /rel="apple-touch-icon"\s+type="image\/svg\+xml"\s+href="\.\/icon-app-/;
+  const touchIconLinkRe = /rel="apple-touch-icon"\s+href="\.\/apple-touch-icon\.png"/;
   assert.equal(existsSync(iconPath), true);
   assert.equal(existsSync(appIconPath), true);
   assert.equal(existsSync(iconTraditionalPath), true);
   assert.equal(existsSync(iconMinimalPath), true);
   assert.equal(existsSync(appIconTraditionalPath), true);
   assert.equal(existsSync(appIconMinimalPath), true);
+  assert.equal(existsSync(appleTouchIconPath), true);
   assert.match(html, iconLinkRe);
   assert.match(html, touchIconLinkRe);
 });
@@ -77,7 +82,7 @@ test("index.html pins traditional icon set", () => {
   );
   assert.match(
     html,
-    /rel="apple-touch-icon"\s+type="image\/svg\+xml"\s+href="\.\/icon-app-traditional\.svg"/
+    /rel="apple-touch-icon"\s+href="\.\/apple-touch-icon\.png"/
   );
 });
 
