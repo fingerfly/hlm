@@ -6,6 +6,29 @@
  */
 
 /**
+ * Sync hidden context inputs to their radio buttons.
+ *
+ * @param {(id: string) => HTMLElement} byId - Id lookup helper.
+ * @returns {void}
+ */
+export function syncContextRadios(byId) {
+  const map = [
+    ["winType", "winType"],
+    ["handState", "handState"],
+    ["kongType", "kongType"],
+    ["timingEvent", "timingEvent"]
+  ];
+  for (const [hiddenId, radioName] of map) {
+    const hidden = byId(hiddenId);
+    if (!hidden) continue;
+    const radio = document.querySelector(
+      `input[name="${radioName}"][value="${hidden.value}"]`
+    );
+    if (radio) radio.checked = true;
+  }
+}
+
+/**
  * Reset context selectors to app default values.
  *
  * @param {(id: string) => HTMLElement} byId - Id lookup helper.
@@ -16,6 +39,7 @@ export function resetContext(byId) {
   byId("handState").value = "menqian";
   byId("kongType").value = "none";
   byId("timingEvent").value = "none";
+  syncContextRadios(byId);
   const autoCalculate = byId("autoCalculate");
   if (autoCalculate) autoCalculate.checked = true;
 }

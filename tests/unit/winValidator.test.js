@@ -7,6 +7,9 @@ test("validateWin returns standard pattern for 4 meld + 1 pair", () => {
   const result = validateWin(tiles);
   assert.equal(result.isWin, true);
   assert.equal(result.pattern, "standard");
+  assert.equal(Array.isArray(result.meldGroups), true);
+  assert.equal(result.meldGroups.length, 5);
+  assert.equal(result.meldGroups.at(-1).type, "pair");
 });
 
 test("validateWin returns seven_pairs pattern", () => {
@@ -14,6 +17,9 @@ test("validateWin returns seven_pairs pattern", () => {
   const result = validateWin(tiles);
   assert.equal(result.isWin, true);
   assert.equal(result.pattern, "seven_pairs");
+  assert.equal(Array.isArray(result.meldGroups), true);
+  assert.equal(result.meldGroups.length, 7);
+  assert.equal(result.meldGroups[0].type, "pair");
 });
 
 test("validateWin rejects non-winning hand", () => {

@@ -27,7 +27,9 @@ export function createAppRefs(byId) {
     resultRefs: {
       total: byId("resultTotalFan"),
       status: byId("resultStatus"),
-      hitPreview: byId("hitPreview")
+      meldRows: byId("resultMeldRows"),
+      hitPreview: byId("hitPreview"),
+      explanation: byId("resultExplanation")
     },
     infoRefs: {
       hitAll: byId("infoHitList"),

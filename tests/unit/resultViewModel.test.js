@@ -47,3 +47,25 @@ test("buildResultViewModel handles invalid/manual error states", () => {
   assert.equal(vm.winPatternText, "未成和");
   assert.equal(vm.winText, "未和牌");
 });
+
+test("buildResultViewModel keeps meld groups for row rendering", () => {
+  const vm = buildResultViewModel({
+    recognition: { status: "manual_ready" },
+    scoring: {
+      isWin: true,
+      totalFan: 3,
+      minWinningFan: 1,
+      winPattern: "standard",
+      meldGroups: [
+        { type: "chow", tiles: ["2W", "3W", "4W"] },
+        { type: "pair", tiles: ["9B", "9B"] }
+      ],
+      matchedFans: [],
+      excludedFans: []
+    },
+    explanation: "ok"
+  });
+  assert.equal(vm.meldGroups.length, 2);
+  assert.equal(vm.meldGroups[0].type, "chow");
+  assert.equal(vm.meldGroups[1].type, "pair");
+});

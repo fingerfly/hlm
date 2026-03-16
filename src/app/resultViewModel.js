@@ -59,6 +59,7 @@ export function buildResultViewModel(result) {
     minWinningFan: Number(scoring.minWinningFan || 0),
     winPatternText: WIN_PATTERN_TEXT[pattern] || "未成和",
     explanation: result?.explanation || "",
+    meldGroups: scoring.meldGroups || [],
     matchedFans: (scoring.matchedFans || []).map(mapFanItem),
     excludedFans: (scoring.excludedFans || []).map(mapFanItem),
     raw: result

@@ -1,12 +1,13 @@
 .tile-preview {
   display: grid;
-  grid-template-columns: repeat(7, minmax(0, 1fr));
-  gap: 6px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
   margin-bottom: 10px;
 }
 
 .tile-chip {
-  min-height: 34px;
+  min-height: 44px;
+  min-width: 44px;
   border-radius: 10px;
   border: 1px solid var(--border);
   background: #fafafa;
@@ -38,6 +39,11 @@
 .tile-face-text {
   font-size: 12px;
   line-height: 1.2;
+}
+
+.tile-face-unicode {
+  font-size: 1.5em;
+  line-height: 1;
 }
 
 .picker-tabs {
@@ -123,6 +129,79 @@
   background: #fff;
 }
 
+.preset-cards {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.preset-card {
+  min-height: 48px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 0 14px;
+}
+
+.preset-card:hover {
+  background: #f5f5f8;
+}
+
+.context-section-label {
+  margin: 0 0 8px;
+  font-size: 14px;
+  color: var(--subtext);
+}
+
+.context-segmented {
+  margin-bottom: 12px;
+}
+
+.context-label {
+  display: block;
+  font-size: 13px;
+  margin-bottom: 6px;
+}
+
+.segmented-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.segmented-row input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.segmented-row label {
+  min-height: 44px;
+  padding: 0 14px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: #fff;
+  font-size: 14px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+}
+
+.segmented-row input:checked + label {
+  border-color: var(--primary);
+  background: rgba(0, 122, 255, 0.08);
+  color: var(--primary);
+}
+
+.context-advanced summary {
+  cursor: pointer;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
 .preset-actions,
 .context-grid {
   display: grid;
@@ -162,4 +241,43 @@ select {
 .fan-list {
   margin: 0;
   padding-left: 18px;
+}
+
+.fan-breakdown li {
+  display: flex;
+  justify-content: space-between;
+  padding-right: 1em;
+}
+
+.result-explanation {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+
+.meld-rows {
+  display: grid;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.meld-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  padding: 6px 8px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #fafafa;
+}
+
+.meld-type {
+  min-width: 52px;
+  color: var(--subtext);
+  font-size: 13px;
+}
+
+.meld-tiles {
+  font-size: 20px;
+  line-height: 1;
 }

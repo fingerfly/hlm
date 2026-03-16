@@ -1,5 +1,9 @@
 import { pickerToTiles } from "../src/app/tilePickerState.js";
-import { getTileImageDataUrl, getTileLabel } from "./tileAssets.js";
+import {
+  getTileImageDataUrl,
+  getTileLabel,
+  getTileUnicode
+} from "./tileAssets.js";
 
 function makeTileFace(tileCode, fallbackText) {
   const wrap = document.createElement("span");
@@ -9,6 +13,15 @@ function makeTileFace(tileCode, fallbackText) {
     text.className = "tile-face-text";
     text.textContent = fallbackText;
     wrap.appendChild(text);
+    return wrap;
+  }
+  const unicode = getTileUnicode(tileCode);
+  if (unicode) {
+    const span = document.createElement("span");
+    span.className = "tile-face-unicode";
+    span.textContent = unicode;
+    span.setAttribute("aria-label", getTileLabel(tileCode));
+    wrap.appendChild(span);
     return wrap;
   }
   const imageUrl = getTileImageDataUrl(tileCode);

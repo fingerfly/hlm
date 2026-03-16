@@ -2,7 +2,8 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import {
   getTileLabel,
-  getTileImageDataUrl
+  getTileImageDataUrl,
+  getTileUnicode
 } from "../../public/tileAssets.js";
 
 test("getTileLabel returns Chinese labels for suited and honor tiles", () => {
@@ -21,4 +22,16 @@ test("getTileImageDataUrl returns deterministic local data URI", () => {
 test("getTileImageDataUrl returns null for unknown tile code", () => {
   const value = getTileImageDataUrl("X9");
   assert.equal(value, null);
+});
+
+test("getTileUnicode returns Mahjong Unicode for known tiles", () => {
+  assert.equal(getTileUnicode("E"), "\u{1F000}");
+  assert.equal(getTileUnicode("1W"), "\u{1F007}");
+  assert.equal(getTileUnicode("9B"), "\u{1F021}");
+  assert.equal(getTileUnicode("R"), "\u{1F004}");
+});
+
+test("getTileUnicode returns null for unknown tile code", () => {
+  assert.equal(getTileUnicode("X9"), null);
+  assert.equal(getTileUnicode(""), null);
 });

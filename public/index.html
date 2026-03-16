@@ -15,7 +15,7 @@
     <!-- Home screen keeps primary actions always visible on mobile. -->
     <main class="container">
       <header class="nav-bar">
-        <h1>和了番数</h1>
+        <span></span>
         <button id="moreBtn" class="icon-btn" aria-label="更多">...</button>
       </header>
       <p id="versionBadge" class="version-badge">版本信息加载中...</p>
@@ -25,6 +25,25 @@
           <h2>当前手牌 <span id="tileCount">0/14</span></h2>
         </div>
         <div id="tilePreview" class="tile-preview"></div>
+        <div id="slotContextMenu" class="slot-context-menu" role="menu" hidden>
+          <button type="button" data-context-action="single" role="menuitem">单张</button>
+          <button type="button" data-context-action="pair" role="menuitem">对子</button>
+          <button type="button" data-context-action="pung" role="menuitem">刻子</button>
+          <details class="context-chow-submenu">
+            <summary>顺子</summary>
+            <div class="context-chow-options">
+              <button type="button" data-context-action="chow_front">前位</button>
+              <button type="button" data-context-action="chow_middle">中位</button>
+              <button type="button" data-context-action="chow_back">后位</button>
+            </div>
+          </details>
+          <div class="context-suit-row">
+            <button type="button" data-context-action="tab" data-tab="W">万</button>
+            <button type="button" data-context-action="tab" data-tab="T">条</button>
+            <button type="button" data-context-action="tab" data-tab="B">筒</button>
+            <button type="button" data-context-action="tab" data-tab="Z">字牌</button>
+          </div>
+        </div>
         <button id="openPickerBtn" class="primary-btn">继续选牌</button>
       </section>
 
@@ -91,50 +110,67 @@
           <h3>和牌条件</h3>
           <button data-close="context" class="ghost-btn">应用</button>
         </div>
-        <div class="preset-actions">
-          <button data-preset="zimo-menqian" class="ghost-btn">自摸 + 门前清</button>
-          <button data-preset="dianhe-menqian" class="ghost-btn">点和 + 门前清</button>
-          <button data-preset="dianhe-fulu" class="ghost-btn">点和 + 副露</button>
+        <div class="preset-cards">
+          <button data-preset="zimo-menqian" class="preset-card">自摸 + 门前清</button>
+          <button data-preset="dianhe-menqian" class="preset-card">点和 + 门前清</button>
+          <button data-preset="dianhe-fulu" class="preset-card">点和 + 副露</button>
         </div>
-        <div class="context-grid">
-          <label>和牌方式
-            <select id="winType">
-              <option value="zimo">自摸</option>
-              <option value="dianhe">点和</option>
-            </select>
-          </label>
-          <label>门前/副露
-            <select id="handState">
-              <option value="menqian">门前清</option>
-              <option value="fulu">副露</option>
-            </select>
-          </label>
-        </div>
-        <details>
-          <summary>高级条件</summary>
-          <div class="context-grid">
-            <label>杠类型
-              <select id="kongType">
-                <option value="none">无杠</option>
-                <option value="an">暗杠</option>
-                <option value="ming">明杠</option>
-                <option value="bu">补杠</option>
-              </select>
-            </label>
-            <label>时机事件
-              <select id="timingEvent">
-                <option value="none">无</option>
-                <option value="haidi">海底捞月</option>
-                <option value="hedi">河底捞鱼</option>
-                <option value="gangshang">杠上开花</option>
-              </select>
-            </label>
+        <p class="context-section-label">自定义</p>
+        <div class="context-segmented">
+          <span class="context-label">和牌方式</span>
+          <div class="segmented-row" role="radiogroup" aria-label="和牌方式">
+            <input type="radio" id="winTypeZimo" name="winType" value="zimo" checked />
+            <label for="winTypeZimo">自摸</label>
+            <input type="radio" id="winTypeDianhe" name="winType" value="dianhe" />
+            <label for="winTypeDianhe">点和</label>
           </div>
+        </div>
+        <input type="hidden" id="winType" value="zimo" />
+        <div class="context-segmented">
+          <span class="context-label">门前/副露</span>
+          <div class="segmented-row" role="radiogroup" aria-label="门前副露">
+            <input type="radio" id="handStateMenqian" name="handState" value="menqian" checked />
+            <label for="handStateMenqian">门前清</label>
+            <input type="radio" id="handStateFulu" name="handState" value="fulu" />
+            <label for="handStateFulu">副露</label>
+          </div>
+        </div>
+        <input type="hidden" id="handState" value="menqian" />
+        <details class="context-advanced">
+          <summary>高级条件</summary>
+          <div class="context-segmented">
+            <span class="context-label">杠类型</span>
+            <div class="segmented-row" role="radiogroup" aria-label="杠类型">
+              <input type="radio" id="kongNone" name="kongType" value="none" checked />
+              <label for="kongNone">无杠</label>
+              <input type="radio" id="kongAn" name="kongType" value="an" />
+              <label for="kongAn">暗杠</label>
+              <input type="radio" id="kongMing" name="kongType" value="ming" />
+              <label for="kongMing">明杠</label>
+              <input type="radio" id="kongBu" name="kongType" value="bu" />
+              <label for="kongBu">补杠</label>
+            </div>
+          </div>
+          <input type="hidden" id="kongType" value="none" />
+          <div class="context-segmented">
+            <span class="context-label">时机事件</span>
+            <div class="segmented-row" role="radiogroup" aria-label="时机事件">
+              <input type="radio" id="timingNone" name="timingEvent" value="none" checked />
+              <label for="timingNone">无</label>
+              <input type="radio" id="timingHaidi" name="timingEvent" value="haidi" />
+              <label for="timingHaidi">海底捞月</label>
+              <input type="radio" id="timingHedi" name="timingEvent" value="hedi" />
+              <label for="timingHedi">河底捞鱼</label>
+              <input type="radio" id="timingGangshang" name="timingEvent" value="gangshang" />
+              <label for="timingGangshang">杠上开花</label>
+            </div>
+          </div>
+          <input type="hidden" id="timingEvent" value="none" />
         </details>
       </div>
     </section>
 
-    <!-- Result modal summarizes top fan hits before details. -->
+    <!-- Result modal: total, breakdown, explanation inline. -->
     <section id="resultModal" class="modal">
       <div class="sheet">
         <div class="sheet-header">
@@ -143,10 +179,13 @@
         </div>
         <p id="resultStatus" class="status-pill">未和牌</p>
         <p id="resultTotalFan" class="total-fan">0 番</p>
-        <h4>命中番种（前3项）</h4>
-        <ul id="hitPreview" class="fan-list"></ul>
+        <h4>和牌分组</h4>
+        <div id="resultMeldRows" class="meld-rows"></div>
+        <h4>番种明细</h4>
+        <ul id="hitPreview" class="fan-list fan-breakdown"></ul>
+        <p id="resultExplanation" class="result-explanation summary-text"></p>
         <div class="inline-actions">
-          <button id="openInfoBtn" class="ghost-btn">Info</button>
+          <button id="openInfoBtn" class="ghost-btn">详细解释</button>
           <button id="playAgainBtn" class="ghost-btn">再来一手</button>
         </div>
       </div>

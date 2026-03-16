@@ -28,7 +28,9 @@ publish `hlm`.
 
 ## What the release script enforces
 
-- Runs `npm test` before writing release files.
+- Runs `npm test` before writing release files by default.
+- Supports `--skip-tests` for explicit fast-path releases when
+  tests have already been verified.
 - Requires `--confirm` for non-interactive release commands.
 - Performs remote preflight with `git ls-remote`.
 - Pushes release commit to `<owner>/<repo>` `main`.
@@ -71,6 +73,7 @@ npm run deploy -- build --confirm
 npm run deploy -- patch --confirm
 npm run deploy -- minor --confirm
 npm run deploy -- major --confirm
+npm run deploy -- minor --confirm --skip-tests
 ```
 
 ## What changes on successful release
@@ -101,5 +104,8 @@ npm run deploy -- major --confirm
   - set `HLM_DEPLOY_REMOTE` or `HLM_DEPLOY_REPO` in your shell.
 - Tests fail:
   - fix failures locally, rerun `npm test`, then retry release.
+- Skip tests explicitly:
+  - use `--skip-tests` only when full test gates already passed in
+    current change window.
 - No changes to deploy:
   - script exits safely with "Everything is up to date."

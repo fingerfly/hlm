@@ -1,4 +1,5 @@
 import { buildResultViewModel } from "../src/app/resultViewModel.js";
+import { getTileLabel, getTileUnicode } from "./tileAssets.js";
 
 /**
  * Purpose: Render result and info modal view content.
@@ -29,8 +30,52 @@ function renderFanList(target, fans) {
   }
 }
 
+function groupTypeLabel(type) {
+  const labels = {
+    chow: "顺子",
+    pung: "刻子",
+    pair: "对子",
+    orphans: "十三幺"
+  };
+  return labels[type] || "牌组";
+}
+
+function tileDisplay(tile) {
+  const u = getTileUnicode(tile);
+  return u || getTileLabel(tile);
+}
+
 /**
- * Render result modal summary and return generated view model.
+ * Render grouped meld rows for result readability.
+ *
+ * @param {HTMLElement} target - Group rows container.
+ * @param {{type: string, tiles: string[]}[]} groups - Grouped hand rows.
+ * @returns {void}
+ */
+function renderMeldRows(target, groups) {
+  if (!target) return;
+  target.innerHTML = "";
+  if (!Array.isArray(groups) || groups.length === 0) {
+    target.textContent = "无";
+    return;
+  }
+  for (const group of groups) {
+    const row = document.createElement("div");
+    row.className = "meld-row";
+    const type = document.createElement("span");
+    type.className = "meld-type";
+    type.textContent = `${groupTypeLabel(group.type)}：`;
+    const tiles = document.createElement("span");
+    tiles.className = "meld-tiles";
+    tiles.textContent = group.tiles.map(tileDisplay).join(" ");
+    row.appendChild(type);
+    row.appendChild(tiles);
+    target.appendChild(row);
+  }
+}
+
+/**
+ * Render result modal: total, full breakdown, explanation inline.
  *
  * @param {object} result - Raw evaluation payload.
  * @param {object} refs - Result modal node references.
@@ -40,8 +85,11 @@ export function renderResultModal(result, refs) {
   const vm = buildResultViewModel(result);
   refs.total.textContent = `${vm.totalFan} 番`;
   refs.status.textContent = vm.winText;
-  const preview = vm.matchedFans.slice(0, 3);
-  renderFanList(refs.hitPreview, preview);
+  renderMeldRows(refs.meldRows, vm.meldGroups);
+  renderFanList(refs.hitPreview, vm.matchedFans);
+  if (refs.explanation) {
+    refs.explanation.textContent = vm.explanation || "";
+  }
   return vm;
 }
 

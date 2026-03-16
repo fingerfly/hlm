@@ -27,9 +27,10 @@ const __dirname = dirname(__filename);
 const rootDir = join(__dirname, "..");
 
 async function main() {
-  const inputMode = process.argv[2];
-  const extraArgs = process.argv.slice(3);
-  const flags = new Set(extraArgs.filter((arg) => arg.startsWith("--")));
+  const rawArgs = process.argv.slice(2);
+  const inputMode = rawArgs[0];
+  const extraArgs = rawArgs.slice(1);
+  const flags = new Set(rawArgs.filter((arg) => arg.startsWith("--")));
   if (handlePromptMode(inputMode, flags.has("--run-agent"), rootDir)) {
     return;
   }
@@ -42,7 +43,9 @@ async function main() {
   assertModeOrExit(resolved.mode);
   const deployRemote = resolveDeployRemote();
   preflightRemoteAccess(deployRemote);
-  runProjectTestsOrExit(rootDir);
+  if (!flags.has("--skip-tests")) {
+    runProjectTestsOrExit(rootDir);
+  }
   if (!resolved.shouldConfirm) {
     console.error("Missing required flag: --confirm");
     process.exit(1);

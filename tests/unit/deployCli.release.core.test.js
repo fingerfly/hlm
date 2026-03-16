@@ -102,3 +102,16 @@ test("deploy CLI fails remote preflight before mutating files", (t) => {
   assert.equal(pkg.version, "0.4.0");
   assert.match(appVersion, /APP_VERSION = "0.4.0"/);
 });
+
+test("deploy CLI can skip tests with --skip-tests", (t) => {
+  const sandboxRoot = prepareDeploySandbox();
+  t.after(() => rmSync(sandboxRoot, { recursive: true, force: true }));
+  const pkgPath = join(sandboxRoot, "package.json");
+  const pkg = JSON.parse(readFileSync(pkgPath, "utf8"));
+  pkg.scripts.test = "node -e \"process.exit(1)\"";
+  writeFileSync(pkgPath, `${JSON.stringify(pkg, null, 2)}\n`, "utf8");
+  const run = runInSandbox(sandboxRoot, "minor", "--confirm", "--skip-tests");
+  assert.equal(run.status, 0);
+  const nextPkg = JSON.parse(readFileSync(pkgPath, "utf8"));
+  assert.equal(nextPkg.version, "0.5.0");
+});

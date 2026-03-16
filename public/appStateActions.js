@@ -1,4 +1,5 @@
 import { setResultPayload, canCalculate } from "../src/app/uiFlowState.js";
+import { syncContextRadios } from "./uiBindings.js";
 import { pickerToTiles } from "../src/app/tilePickerState.js";
 
 /**
@@ -114,6 +115,7 @@ export function createStateActions(store, deps) {
     if (!preset) return;
     byId("winType").value = preset.winType;
     byId("handState").value = preset.handState;
+    syncContextRadios(byId);
     syncHomeState();
   }
 

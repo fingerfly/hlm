@@ -29,6 +29,102 @@ export function renderPickerByTab(params) {
 }
 
 /**
+ * Wire slot tap to context menu and menu actions to picker.
+ *
+ * @param {object} params - DOM and action dependencies.
+ * @returns {void}
+ */
+function wireContextSegmentedControls(byId, stateActions) {
+  const pairs = [
+    ["winType", "winType"],
+    ["handState", "handState"],
+    ["kongType", "kongType"],
+    ["timingEvent", "timingEvent"]
+  ];
+  for (const [hiddenId, radioName] of pairs) {
+    const hidden = byId(hiddenId);
+    if (!hidden) continue;
+    const selector = `input[name="${radioName}"]`;
+    for (const radio of document.querySelectorAll(selector)) {
+      radio.addEventListener("change", () => {
+        hidden.value = radio.value;
+        stateActions.syncHomeState();
+      });
+    }
+  }
+  for (const id of ["winType", "handState", "kongType", "timingEvent"]) {
+    const el = byId(id);
+    if (el) el.addEventListener("change", stateActions.syncHomeState);
+  }
+}
+
+function wireSlotContextMenu(params) {
+  const {
+    byId,
+    store,
+    stateActions,
+    modalActions,
+    tabTiles,
+    tilePickerGridEl,
+    renderPickerTabButtons,
+    renderTilePickerGrid
+  } = params;
+  const menuEl = byId("slotContextMenu");
+  if (!menuEl) return;
+
+  function hideMenu() {
+    menuEl.hidden = true;
+  }
+
+  function showMenuNear(el) {
+    const rect = el.getBoundingClientRect();
+    menuEl.style.left = `${rect.left}px`;
+    menuEl.style.top = `${rect.bottom + 4}px`;
+    menuEl.hidden = false;
+  }
+
+  byId("tilePreview").addEventListener("click", (event) => {
+    const target = event.target.closest("[data-slot-index]");
+    if (!target) return;
+    const index = Number.parseInt(target.dataset.slotIndex || "", 10);
+    if (!Number.isInteger(index)) return;
+    stateActions.selectSlot(index);
+    showMenuNear(target);
+  });
+
+  document.addEventListener("click", (event) => {
+    if (menuEl.hidden) return;
+    if (menuEl.contains(event.target)) return;
+    if (event.target.closest("[data-slot-index]")) return;
+    hideMenu();
+  });
+
+  menuEl.addEventListener("click", (event) => {
+    const btn = event.target.closest("button[data-context-action]");
+    if (!btn) return;
+    const action = btn.dataset.contextAction;
+    const tab = btn.dataset.tab;
+    if (action === "tab" && tab) {
+      store.uiState = {
+        ...store.uiState,
+        hand: { ...store.uiState.hand, activeTab: tab }
+      };
+      stateActions.setPatternAction("single");
+    } else if (action) {
+      stateActions.setPatternAction(action);
+    }
+    hideMenu();
+    renderPickerTabButtons(store.uiState.hand.activeTab);
+    renderTilePickerGrid({
+      tilePickerGridEl,
+      tiles: tabTiles[store.uiState.hand.activeTab],
+      onPick: (tile) => stateActions.pickTile(tile)
+    });
+    modalActions.openModalByKey("picker");
+  });
+}
+
+/**
  * Attach all app-level event listeners.
  *
  * @param {object} params - DOM and action dependencies.
@@ -90,13 +186,15 @@ export function wireAppEvents(params) {
     });
   }
   bindClick("undoBtn", () => stateActions.undoHand());
-  byId("tilePreview").addEventListener("click", (event) => {
-    const target = event.target.closest("[data-slot-index]");
-    if (!target) return;
-    const index = Number.parseInt(target.dataset.slotIndex || "", 10);
-    if (!Number.isInteger(index)) return;
-    stateActions.selectSlot(index);
-    modalActions.openModalByKey("picker");
+  wireSlotContextMenu({
+    byId,
+    store,
+    stateActions,
+    modalActions,
+    tabTiles,
+    tilePickerGridEl,
+    renderPickerTabButtons,
+    renderTilePickerGrid
   });
   bindClick("pickerDeleteBtn", () => {
     stateActions.deleteSelected();
@@ -119,9 +217,7 @@ export function wireAppEvents(params) {
     modalActions.openModalByKey("info");
   });
 
-  for (const id of ["winType", "handState", "kongType", "timingEvent"]) {
-    byId(id).addEventListener("change", stateActions.syncHomeState);
-  }
+  wireContextSegmentedControls(byId, stateActions);
   bindClick("moreBtn", () => {
     resetContext(byId);
     stateActions.syncHomeState();

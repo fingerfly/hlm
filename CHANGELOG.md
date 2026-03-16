@@ -4,7 +4,55 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
-## [3.0.4] - 2026-03-16
+## [3.1.2] - 2026-03-16
+
+### Added
+- Added release CLI support for explicit `--skip-tests` fast-path deploys
+  when tests were already verified (`scripts/deploy.js`).
+- Added unit coverage for `--skip-tests` behavior in release CLI sandbox
+  flow (`tests/unit/deployCli.release.core.test.js`).
+- Added win decomposition output (`meldGroups`) for standard, seven-pairs,
+  and thirteen-orphans paths (`src/rules/winValidator.js`,
+  `src/rules/scoringEngine.js`).
+- Added grouped hand rows in result modal for better mobile readability
+  (`public/resultModalView.js`, `public/index.html`,
+  `public/styles-components.css`, `public/appRefs.js`).
+- Added unit tests for meld-group output and view-model mapping
+  (`tests/unit/winValidator.test.js`, `tests/unit/resultViewModel.test.js`).
+
+### Changed
+- Updated deploy usage/help text to include `--skip-tests`
+  (`src/config/deployPrompts.js`).
+- Updated release runbook with default-safe behavior and explicit
+  `--skip-tests` guidance (`RELEASE_AND_PUBLISH.md`).
+
+## [3.1.0] - 2026-03-16
+
+### Added
+- Added Unicode Mahjong tile display (U+1F000–U+1F021) with text/SVG
+  fallback (`public/tileAssets.js` getTileUnicode).
+- Added slot-tap context menu for hand entry: 单张, 对子, 刻子, 顺子,
+  suit tabs (万/条/筒/字牌) with cascade to picker.
+- Added card-style preset buttons and segmented controls for winning
+  conditions (和牌方式, 门前/副露, 杠, 时机).
+- Added full fan breakdown and inline explanation in result modal.
+- Added app icons with Chinese/Mahjong aesthetic (traditional, minimal,
+  seal, desk, badge variants) and canonical favicon/app icon files
+  (`public/favicon*.svg`, `public/icon-app*.svg`).
+- Added Apple Touch Icon (PNG) for iPhone PWA home screen clarity
+  (`public/apple-touch-icon.png`, `public/apple-touch-icon.svg`).
+- Added unit tests for icon assets, linking, and canonical mirroring
+  (`tests/unit/indexStylesheetLinks.test.js`).
+- Added unit tests for getTileUnicode (`tests/unit/tileAssets.test.js`).
+
+### Changed
+- Changed tile preview to 4x4 grid with 44px touch targets.
+- Replaced winning-condition selects with radio-style segmented controls.
+- Result modal now shows all matched fans and explanation inline;
+  "详细解释" opens Info for excluded fans.
+- Removed "和了番数" title from header.
+- Updated `index.html` to link favicon and apple-touch-icon to
+  traditional-style assets and PNG touch icon.
 
 ## [3.0.3] - 2026-03-16
 
