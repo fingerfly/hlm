@@ -97,6 +97,8 @@ Open `public/index.html` with Live Server in VS Code.
   `npm run build:dist` and publishes `dist/`.
 - Runtime deploy artifact contains `index.html`, `public/`, and `src/`
   only (non-runtime files are excluded).
+- `public/` is the maintainable source tree; `dist/` is generated
+  artifact output and should not be hand-edited.
 - Security scan workflow runs on `push`/`pull_request`:
   `.github/workflows/security-scan.yml`.
 - Migration target state (planned): split test/deploy workflows

@@ -1,28 +1,9 @@
 /**
  * Purpose: Bind UI control actions and input-derived request data.
  * Description:
- * - Builds request payload from tile/context controls.
  * - Resets context controls to app defaults.
  * - Attaches tab and preset click handlers.
  */
-/**
- * Build scoring request from current tile and context inputs.
- *
- * @param {HTMLInputElement[]} tileInputs - Tile input fields.
- * @param {(id: string) => HTMLElement} byId - Id lookup helper.
- * @returns {{tiles: string[], context: object}}
- */
-export function buildRequest(tileInputs, byId) {
-  return {
-    tiles: tileInputs.map((input) => input.value.trim()),
-    context: {
-      winType: byId("winType").value,
-      handState: byId("handState").value,
-      kongType: byId("kongType").value,
-      timingEvent: byId("timingEvent").value
-    }
-  };
-}
 
 /**
  * Reset context selectors to app default values.

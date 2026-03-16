@@ -60,18 +60,34 @@ function chowTiles(baseTile, variant) {
     return { ok: false, reason: "invalid_tile_code", tiles: [] };
   }
   if (variant === "chow_front") {
-    if (rank > 7) return { ok: false, reason: "chow_rank_out_of_range", tiles: [] };
-    return { ok: true, reason: null, tiles: [`${rank}${suit}`, `${rank + 1}${suit}`, `${rank + 2}${suit}`] };
+    if (rank > 7) {
+      return { ok: false, reason: "chow_rank_out_of_range", tiles: [] };
+    }
+    return {
+      ok: true,
+      reason: null,
+      tiles: [`${rank}${suit}`, `${rank + 1}${suit}`, `${rank + 2}${suit}`]
+    };
   }
   if (variant === "chow_middle") {
     if (rank < 2 || rank > 8) {
       return { ok: false, reason: "chow_rank_out_of_range", tiles: [] };
     }
-    return { ok: true, reason: null, tiles: [`${rank - 1}${suit}`, `${rank}${suit}`, `${rank + 1}${suit}`] };
+    return {
+      ok: true,
+      reason: null,
+      tiles: [`${rank - 1}${suit}`, `${rank}${suit}`, `${rank + 1}${suit}`]
+    };
   }
   if (variant === "chow_back") {
-    if (rank < 3) return { ok: false, reason: "chow_rank_out_of_range", tiles: [] };
-    return { ok: true, reason: null, tiles: [`${rank - 2}${suit}`, `${rank - 1}${suit}`, `${rank}${suit}`] };
+    if (rank < 3) {
+      return { ok: false, reason: "chow_rank_out_of_range", tiles: [] };
+    }
+    return {
+      ok: true,
+      reason: null,
+      tiles: [`${rank - 2}${suit}`, `${rank - 1}${suit}`, `${rank}${suit}`]
+    };
   }
   return { ok: false, reason: "unknown_action", tiles: [] };
 }

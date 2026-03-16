@@ -89,9 +89,13 @@ export function getTileImageDataUrl(tileCode) {
   }
   const color = tileColor(tileCode);
   const svg = [
-    "<svg xmlns='http://www.w3.org/2000/svg' width='64' height='84' viewBox='0 0 64 84'>",
-    "<rect x='1.5' y='1.5' width='61' height='81' rx='8' fill='#fff' stroke='#d8dee9' stroke-width='2'/>",
-    `<text x='32' y='49' text-anchor='middle' font-family='Arial, sans-serif' font-size='20' fill='${color}'>${label}</text>`,
+    "<svg xmlns='http://www.w3.org/2000/svg' width='64' height='84'",
+    "viewBox='0 0 64 84'>",
+    "<rect x='1.5' y='1.5' width='61' height='81' rx='8'",
+    "fill='#fff' stroke='#d8dee9' stroke-width='2'/>",
+    "<text x='32' y='49' text-anchor='middle'",
+    "font-family='Arial, sans-serif' font-size='20'",
+    `fill='${color}'>${label}</text>`,
     "</svg>"
   ].join("");
   const url = `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;

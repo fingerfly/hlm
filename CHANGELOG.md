@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [3.0.3] - 2026-03-16
+
 ## [3.0.2] - 2026-03-16
 
 ### Added
@@ -12,20 +14,26 @@ All notable changes to this project will be documented in this file.
   `package.json`, `.github/workflows/deploy-pages.yml`).
 - Added GitHub Actions security workflow to run secret scanning on
   `push` and `pull_request` (`.github/workflows/security-scan.yml`).
-- Added unit tests for dist artifact builder and result-render security
-  path (`tests/unit/buildDist.test.js`, `tests/unit/resultRenderer.test.js`).
+- Added unit tests for dist artifact builder path
+  (`tests/unit/buildDist.test.js`).
 
 ### Changed
 - Switched Pages deploy workflow from publishing repo root (`.`) to
   publishing runtime-only `dist/` artifact after `npm test`.
 - Replaced account-specific test fixtures with neutral placeholders in
   deploy runtime tests (`tests/unit/deployRuntime.test.js`).
-- Replaced summary-card template `innerHTML` rendering with
-  `textContent`-based DOM creation for safer UI rendering
-  (`src/app/resultRenderer.js`).
 - Updated deployment docs to reflect `dist/` artifact publishing and
   security-scan verification (`README.md`, `RELEASE_AND_PUBLISH.md`,
   `DEPLOY_TO_GITHUB_MERMAID.md`).
+
+### Removed
+- Removed unused app-layer result renderer module and its audit-only
+  unit test (`src/app/resultRenderer.js`,
+  `tests/unit/resultRenderer.test.js`).
+- Removed unused recognition-normalization helper modules and their
+  dedicated unit test (`src/app/recognitionHelpers.js`,
+  `src/app/recognitionNormalizer.js`,
+  `tests/unit/recognitionNormalizer.test.js`).
 
 ## [3.0.1] - 2026-03-16
 
