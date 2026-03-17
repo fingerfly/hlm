@@ -6,6 +6,47 @@ All notable changes to this project will be documented in this file.
 
 ## [4.0.0] - 2026-03-17
 
+### Added
+- Added full MCR fan registry coverage (81 official fan items) with stable
+  internal IDs, official fan values, and Chinese display names
+  (`src/rules/fanRegistry.js`).
+- Added modular detector architecture for context/pattern/feature fan rules
+  (`src/rules/detectors/contextDetectors.js`,
+  `src/rules/detectors/patternDetectors.js`,
+  `src/rules/detectors/featureDetectors.js`).
+- Added expanded hand-feature extraction for advanced MCR structures and
+  composition checks (`src/rules/handFeatures.js`).
+- Added dedicated structured context validator module and unit tests for
+  optional context-field contract checks
+  (`src/contracts/structuredContextValidator.js`,
+  `tests/unit/structuredContextValidator.test.js`).
+- Added unit coverage for full fan registry integrity and modular fan-catalog
+  structure (`tests/unit/fanRegistry.test.js`,
+  `tests/unit/fanCatalog.structure.test.js`).
+- Added explainer unit coverage for Chinese fan naming and pattern wording
+  (`tests/unit/explainer.test.js`).
+
+### Changed
+- Changed fan detection pipeline to registry-backed modular composition while
+  preserving deterministic scoring flow (`src/rules/fanCatalog.js`,
+  `src/rules/scoringEngine.js`).
+- Changed conflict resolution to explicit MCR exclusion/precedence behavior
+  with wider interaction coverage (`src/rules/conflictResolver.js`).
+- Changed user-facing fan terminology mapping to canonical registry-driven
+  Chinese names in result and explanation layers
+  (`src/app/resultViewModel.js`, `src/llm/explainer.js`).
+- Changed hand-state input validation to enforce structured optional context
+  semantics (enum bounds, boolean typing, numeric ranges, kong object shape)
+  (`src/contracts/handState.js`,
+  `src/contracts/structuredContextValidator.js`).
+- Changed scoring-engine unit tests from one large file to themed modules for
+  maintainability and guardrail compliance (`tests/unit/scoringEngine/*.test.js`).
+- Changed regression and integration fixtures/expectations to reflect complete
+  MCR fan detection and exclusion outcomes
+  (`tests/regression/goldenCases.json`,
+  `tests/integration/evaluateCapturedHand.test.js`,
+  `tests/integration/stability.test.js`).
+
 ## [3.1.3] - 2026-03-16
 
 ### Added
