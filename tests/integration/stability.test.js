@@ -24,6 +24,6 @@ test("stability: repeated e2e calls stay deterministic", () => {
   for (let i = 0; i < 200; i += 1) {
     const result = evaluateCapturedHand(request);
     assert.equal(result.scoring.isWin, true);
-    assert.equal(result.scoring.totalFan, 11);
+    assert.equal(result.scoring.totalFan, 14);
   }
 });

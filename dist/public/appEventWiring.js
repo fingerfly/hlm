@@ -18,6 +18,7 @@ export function renderPickerByTab(params) {
     tilePickerGridEl,
     renderPickerTabButtons,
     renderTilePickerGrid,
+    addTileToPicker,
     stateActions
   } = params;
   renderPickerTabButtons(store.uiState.hand.activeTab);
@@ -47,6 +48,7 @@ export function wireAppEvents(params) {
     tilePickerGridEl,
     renderPickerTabButtons,
     renderTilePickerGrid,
+    addTileToPicker,
     resetContext
   } = params;
   const bindClick = (id, onClick) => {
@@ -66,17 +68,24 @@ export function wireAppEvents(params) {
       tilePickerGridEl,
       renderPickerTabButtons,
       renderTilePickerGrid,
+      addTileToPicker,
       stateActions
     });
   });
 
   bindPresetButtons(stateActions.applyPreset);
-  const closeMap = ["picker", "context", "result", "info"];
-  for (const modalKey of closeMap) {
-    bindCloseButtons(`[data-close='${modalKey}']`, () => {
-      modalActions.closeModalByKey(modalKey);
-    });
-  }
+  bindCloseButtons("[data-close='picker']", () => {
+    modalActions.closeModalByKey("picker");
+  });
+  bindCloseButtons("[data-close='context']", () => {
+    modalActions.closeModalByKey("context");
+  });
+  bindCloseButtons("[data-close='result']", () => {
+    modalActions.closeModalByKey("result");
+  });
+  bindCloseButtons("[data-close='info']", () => {
+    modalActions.closeModalByKey("info");
+  });
 
   bindClick("openPickerBtn", () => {
     modalActions.openModalByKey("picker");

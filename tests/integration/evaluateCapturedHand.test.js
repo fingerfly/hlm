@@ -64,7 +64,7 @@ test("evaluateCapturedHand normalizes aliases and returns scoring + replay log",
   assert.match(result.explanation, /总番/);
 });
 
-test("evaluateCapturedHand treats 3-fan manual hand as win with min gate 1", () => {
+test("evaluateCapturedHand treats updated baseline hand as winning", () => {
   const result = evaluateCapturedHand({
     tiles: [...winningTiles],
     context: {
@@ -75,7 +75,7 @@ test("evaluateCapturedHand treats 3-fan manual hand as win with min gate 1", () 
     }
   });
   assert.equal(result.recognition.status, "manual_ready");
-  assert.equal(result.scoring.totalFan, 3);
+  assert.equal(result.scoring.totalFan, 6);
   assert.equal(result.scoring.isWin, true);
   assert.equal(result.scoring.errorCode, null);
 });

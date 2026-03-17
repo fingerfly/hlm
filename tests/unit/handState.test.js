@@ -28,3 +28,65 @@ test("validateHandInput rejects invalid seat wind", () => {
   assert.equal(result.ok, false);
   assert.equal(result.code, "INVALID_INPUT");
 });
+
+test("validateHandInput rejects invalid structured context enum values", () => {
+  const result = validateHandInput({
+    ...base,
+    waitType: "bad_wait",
+    specialPattern: "bad_pattern",
+    rankZone: "bad_zone"
+  });
+  assert.equal(result.ok, false);
+  assert.equal(result.code, "INVALID_INPUT");
+  assert.equal(result.problems.some((p) => p.includes("waitType")), true);
+  assert.equal(result.problems.some((p) => p.includes("specialPattern")), true);
+  assert.equal(result.problems.some((p) => p.includes("rankZone")), true);
+});
+
+test("validateHandInput rejects invalid structured context numeric values", () => {
+  const result = validateHandInput({
+    ...base,
+    flowerCount: -1,
+    concealedPungCount: 7,
+    kongSummary: { an: -2, ming: 2.5 }
+  });
+  assert.equal(result.ok, false);
+  assert.equal(result.code, "INVALID_INPUT");
+  assert.equal(result.problems.some((p) => p.includes("flowerCount")), true);
+  assert.equal(result.problems.some((p) => p.includes("concealedPungCount")), true);
+  assert.equal(result.problems.some((p) => p.includes("kongSummary")), true);
+});
+
+test("validateHandInput rejects non-boolean structured context flags", () => {
+  const result = validateHandInput({
+    ...base,
+    allSetsMelded: "yes",
+    noMeldClaims: 1,
+    lastTileOfKind: "true",
+    isChickenHand: null
+  });
+  assert.equal(result.ok, false);
+  assert.equal(result.code, "INVALID_INPUT");
+  assert.equal(result.problems.some((p) => p.includes("allSetsMelded")), true);
+  assert.equal(result.problems.some((p) => p.includes("noMeldClaims")), true);
+  assert.equal(result.problems.some((p) => p.includes("lastTileOfKind")), true);
+  assert.equal(result.problems.some((p) => p.includes("isChickenHand")), true);
+});
+
+test("validateHandInput accepts valid structured context payload", () => {
+  const result = validateHandInput({
+    ...base,
+    waitType: "edge",
+    specialPattern: "mixed_straight",
+    rankZone: "upper",
+    flowerCount: 2,
+    concealedPungCount: 3,
+    kongSummary: { an: 2, ming: 1 },
+    allSetsMelded: true,
+    noMeldClaims: false,
+    lastTileOfKind: true,
+    isChickenHand: false
+  });
+  assert.equal(result.ok, true);
+  assert.equal(result.code, null);
+});

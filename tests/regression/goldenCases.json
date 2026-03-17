@@ -23,9 +23,9 @@
       "timingEvent": "none"
     },
     "expect": {
-      "errorCode": "NOT_A_WINNING_HAND",
-      "isWin": false,
-      "totalFan": 0
+      "errorCode": null,
+      "isWin": true,
+      "totalFan": 3
     }
   },
   {
@@ -40,7 +40,7 @@
     "expect": {
       "errorCode": null,
       "isWin": true,
-      "totalFan": 11
+      "totalFan": 14
     }
   },
   {
@@ -55,7 +55,7 @@
     "expect": {
       "errorCode": null,
       "isWin": true,
-      "totalFan": 3
+      "totalFan": 6
     }
   },
   {
@@ -70,7 +70,7 @@
     "expect": {
       "errorCode": null,
       "isWin": true,
-      "totalFan": 27
+      "totalFan": 28
     }
   },
   {
@@ -85,7 +85,266 @@
     "expect": {
       "errorCode": null,
       "isWin": true,
+      "totalFan": 5
+    }
+  },
+  {
+    "id": "peng_peng_hu_hand",
+    "input": {
+      "tiles": ["1W", "1W", "1W", "2W", "2W", "2W", "3T", "3T", "3T", "5B", "5B", "5B", "9B", "9B"],
+      "winType": "dianhe",
+      "handState": "fulu",
+      "kongType": "none",
+      "timingEvent": "none"
+    },
+    "expect": {
+      "errorCode": null,
+      "isWin": true,
+      "totalFan": 7
+    }
+  },
+  {
+    "id": "hun_yao_jiu_hand",
+    "input": {
+      "tiles": ["1W", "1W", "1W", "9W", "9W", "9W", "1T", "1T", "1T", "E", "E", "E", "9B", "9B"],
+      "winType": "dianhe",
+      "handState": "fulu",
+      "kongType": "none",
+      "timingEvent": "none"
+    },
+    "expect": {
+      "errorCode": null,
+      "isWin": true,
+      "totalFan": 40
+    }
+  },
+  {
+    "id": "zi_yi_se_hand",
+    "input": {
+      "tiles": ["E", "E", "E", "S", "S", "S", "R", "R", "R", "G", "G", "G", "Wh", "Wh"],
+      "winType": "dianhe",
+      "handState": "fulu",
+      "kongType": "none",
+      "timingEvent": "none"
+    },
+    "expect": {
+      "errorCode": null,
+      "isWin": true,
+      "totalFan": 134
+    }
+  },
+  {
+    "id": "qing_yao_jiu_hand",
+    "input": {
+      "tiles": ["1W", "1W", "1W", "9W", "9W", "9W", "1T", "1T", "1T", "9T", "9T", "9T", "9B", "9B"],
+      "winType": "dianhe",
+      "handState": "fulu",
+      "kongType": "none",
+      "timingEvent": "none"
+    },
+    "expect": {
+      "errorCode": null,
+      "isWin": true,
+      "totalFan": 73
+    }
+  },
+  {
+    "id": "qing_long_hand",
+    "input": {
+      "tiles": ["1W", "2W", "3W", "4W", "5W", "6W", "7W", "8W", "9W", "2T", "3T", "4T", "9B", "9B"],
+      "winType": "dianhe",
+      "handState": "fulu",
+      "kongType": "none",
+      "timingEvent": "none"
+    },
+    "expect": {
+      "errorCode": null,
+      "isWin": true,
+      "totalFan": 18
+    }
+  },
+  {
+    "id": "ping_hu_hand",
+    "input": {
+      "tiles": ["1W", "2W", "3W", "4W", "5W", "6W", "2T", "3T", "4T", "6B", "7B", "8B", "5T", "5T"],
+      "winType": "dianhe",
+      "handState": "fulu",
+      "kongType": "none",
+      "timingEvent": "none"
+    },
+    "expect": {
+      "errorCode": null,
+      "isWin": true,
+      "totalFan": 3
+    }
+  },
+  {
+    "id": "yi_ban_gao_hand",
+    "input": {
+      "tiles": ["1W", "2W", "3W", "1W", "2W", "3W", "4T", "4T", "4T", "7B", "8B", "9B", "5W", "5W"],
+      "winType": "dianhe",
+      "handState": "fulu",
+      "kongType": "none",
+      "timingEvent": "none"
+    },
+    "expect": {
+      "errorCode": null,
+      "isWin": true,
       "totalFan": 2
+    }
+  },
+  {
+    "id": "san_se_san_tong_shun_hand",
+    "input": {
+      "tiles": ["1W", "2W", "3W", "1T", "2T", "3T", "1B", "2B", "3B", "7W", "7W", "7W", "9B", "9B"],
+      "winType": "dianhe",
+      "handState": "fulu",
+      "kongType": "none",
+      "timingEvent": "none"
+    },
+    "expect": {
+      "errorCode": null,
+      "isWin": true,
+      "totalFan": 9
+    }
+  },
+  {
+    "id": "seat_prevalent_wind_pungs",
+    "input": {
+      "tiles": ["E", "E", "E", "1W", "2W", "3W", "4W", "5W", "6W", "7T", "8T", "9T", "5B", "5B"],
+      "winType": "dianhe",
+      "handState": "fulu",
+      "kongType": "none",
+      "timingEvent": "none",
+      "seatWind": "E",
+      "prevalentWind": "E"
+    },
+    "expect": {
+      "errorCode": null,
+      "isWin": true,
+      "totalFan": 5
+    }
+  },
+  {
+    "id": "da_si_xi_hand",
+    "input": {
+      "tiles": ["E", "E", "E", "S", "S", "S", "Wn", "Wn", "Wn", "N", "N", "N", "R", "R"],
+      "winType": "dianhe",
+      "handState": "fulu",
+      "kongType": "none",
+      "timingEvent": "none",
+      "seatWind": "E",
+      "prevalentWind": "S"
+    },
+    "expect": {
+      "errorCode": null,
+      "isWin": true,
+      "totalFan": 88
+    }
+  },
+  {
+    "id": "xiao_san_yuan_hand",
+    "input": {
+      "tiles": ["R", "R", "R", "G", "G", "G", "Wh", "Wh", "1W", "2W", "3W", "4T", "5T", "6T"],
+      "winType": "dianhe",
+      "handState": "fulu",
+      "kongType": "none",
+      "timingEvent": "none"
+    },
+    "expect": {
+      "errorCode": null,
+      "isWin": true,
+      "totalFan": 65
+    }
+  },
+  {
+    "id": "hua_long_hand",
+    "input": {
+      "tiles": ["1W", "2W", "3W", "4T", "5T", "6T", "7B", "8B", "9B", "E", "E", "E", "R", "R"],
+      "winType": "dianhe",
+      "handState": "fulu",
+      "kongType": "none",
+      "timingEvent": "none"
+    },
+    "expect": {
+      "errorCode": null,
+      "isWin": true,
+      "totalFan": 8
+    }
+  },
+  {
+    "id": "yi_se_san_bu_gao_hand",
+    "input": {
+      "tiles": ["1W", "2W", "3W", "2W", "3W", "4W", "3W", "4W", "5W", "E", "E", "E", "R", "R"],
+      "winType": "dianhe",
+      "handState": "fulu",
+      "kongType": "none",
+      "timingEvent": "none"
+    },
+    "expect": {
+      "errorCode": null,
+      "isWin": true,
+      "totalFan": 22
+    }
+  },
+  {
+    "id": "quan_da_hand",
+    "input": {
+      "tiles": ["7W", "8W", "9W", "7T", "8T", "9T", "7B", "8B", "9B", "7W", "8W", "9W", "9T", "9T"],
+      "winType": "dianhe",
+      "handState": "fulu",
+      "kongType": "none",
+      "timingEvent": "none"
+    },
+    "expect": {
+      "errorCode": null,
+      "isWin": true,
+      "totalFan": 35
+    }
+  },
+  {
+    "id": "quan_zhong_hand",
+    "input": {
+      "tiles": ["4W", "5W", "6W", "4T", "5T", "6T", "4B", "5B", "6B", "4W", "5W", "6W", "5T", "5T"],
+      "winType": "dianhe",
+      "handState": "fulu",
+      "kongType": "none",
+      "timingEvent": "none"
+    },
+    "expect": {
+      "errorCode": null,
+      "isWin": true,
+      "totalFan": 35
+    }
+  },
+  {
+    "id": "da_san_feng_hand",
+    "input": {
+      "tiles": ["E", "E", "E", "S", "S", "S", "Wn", "Wn", "Wn", "2W", "2W", "2W", "9B", "9B"],
+      "winType": "dianhe",
+      "handState": "fulu",
+      "kongType": "none",
+      "timingEvent": "none"
+    },
+    "expect": {
+      "errorCode": null,
+      "isWin": true,
+      "totalFan": 19
+    }
+  },
+  {
+    "id": "san_tong_ke_hand",
+    "input": {
+      "tiles": ["5W", "5W", "5W", "5T", "5T", "5T", "5B", "5B", "5B", "E", "E", "E", "R", "R"],
+      "winType": "dianhe",
+      "handState": "fulu",
+      "kongType": "none",
+      "timingEvent": "none"
+    },
+    "expect": {
+      "errorCode": null,
+      "isWin": true,
+      "totalFan": 22
     }
   }
 ]

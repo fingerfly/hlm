@@ -77,6 +77,7 @@ wireAppEvents({
   tilePickerGridEl: refs.tilePickerGridEl,
   renderPickerTabButtons,
   renderTilePickerGrid,
+  addTileToPicker,
   resetContext
 });
 renderPickerByTab({
@@ -85,6 +86,7 @@ renderPickerByTab({
   tilePickerGridEl: refs.tilePickerGridEl,
   renderPickerTabButtons,
   renderTilePickerGrid,
+  addTileToPicker,
   stateActions
 });
 stateActions.syncHomeState();

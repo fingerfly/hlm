@@ -1,3 +1,5 @@
+import { getFanDisplayName } from "../rules/fanRegistry.js";
+
 /**
  * Purpose: Translate scoring payload into UI-friendly result view model.
  * Description:
@@ -16,19 +18,6 @@ const WIN_PATTERN_TEXT = Object.freeze({
   thirteen_orphans: "十三幺"
 });
 
-const FAN_ID_TEXT = Object.freeze({
-  MEN_QIAN_QING: "门前清",
-  ZI_MO: "自摸",
-  QI_DUI: "七对",
-  SHI_SAN_YAO: "十三幺",
-  GANG_SHANG_HUA: "杠上开花",
-  HAI_DI_LAO_YUE: "海底捞月",
-  HE_DI_LAO_YU: "河底捞鱼",
-  QING_YI_SE: "清一色",
-  HUN_YI_SE: "混一色",
-  DUAN_YAO: "断幺"
-});
-
 /**
  * Map one fan item into localized display fields.
  *
@@ -38,7 +27,7 @@ const FAN_ID_TEXT = Object.freeze({
 function mapFanItem(item) {
   return {
     ...item,
-    name: FAN_ID_TEXT[item.id] || item.id
+    name: getFanDisplayName(item.id)
   };
 }
 
