@@ -11,7 +11,10 @@ import {
   undoLastAction,
   undoBySlot
 } from "../src/app/tilePickerState.js";
-import { resolvePatternAction } from "../src/app/tilePatternActions.js";
+import {
+  resolvePatternAction,
+  getContextActionAvailability
+} from "../src/app/tilePatternActions.js";
 import { createUiFlowState } from "../src/app/uiFlowState.js";
 import { TAB_TILES, CONTEXT_PRESETS } from "./uiConfig.js";
 import {
@@ -57,6 +60,7 @@ const stateActions = createStateActions(store, {
   addTileToPicker,
   addTilesToPicker,
   resolvePatternAction,
+  getContextActionAvailability,
   renderPatternActionButtons,
   selectPickerSlot,
   deleteSelectedSlot,

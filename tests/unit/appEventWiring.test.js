@@ -1,6 +1,9 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { shouldOpenPickerForContextButton } from "../../public/appEventWiring.js";
+import {
+  getPickerTilesByMode
+} from "../../public/appEventWiring.js";
+import { shouldOpenPickerForContextButton } from "../../public/appEventBindings.js";
 
 test("parent menu button does not open picker", () => {
   const btn = { dataset: { contextAction: "tab", tab: "W", menuLevel: "parent" } };
@@ -27,4 +30,26 @@ test("chow options as leaf open picker", () => {
 test("null or missing btn returns false", () => {
   assert.equal(shouldOpenPickerForContextButton(null), false);
   assert.equal(shouldOpenPickerForContextButton(undefined), false);
+});
+
+test("getPickerTilesByMode returns all tiles in flat mode", () => {
+  const tabTiles = {
+    W: ["1W", "2W"],
+    T: ["1T"],
+    B: ["1B"],
+    Z: ["E"]
+  };
+  const tiles = getPickerTilesByMode(tabTiles, "flat", "W");
+  assert.deepEqual(tiles, ["1W", "2W", "1T", "1B", "E"]);
+});
+
+test("getPickerTilesByMode returns active tab in twoLayer mode", () => {
+  const tabTiles = {
+    W: ["1W", "2W"],
+    T: ["1T"],
+    B: ["1B"],
+    Z: ["E"]
+  };
+  const tiles = getPickerTilesByMode(tabTiles, "twoLayer", "T");
+  assert.deepEqual(tiles, ["1T"]);
 });

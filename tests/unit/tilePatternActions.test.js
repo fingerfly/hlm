@@ -2,7 +2,8 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import {
   buildActionTiles,
-  resolvePatternAction
+  resolvePatternAction,
+  getContextActionAvailability
 } from "../../src/app/tilePatternActions.js";
 
 test("buildActionTiles returns pair and pung for suited tile", () => {
@@ -62,4 +63,45 @@ test("resolvePatternAction accepts legal chow and returns ordered tiles", () => 
   const result = resolvePatternAction(state, "5W", "chow_middle");
   assert.equal(result.ok, true);
   assert.deepEqual(result.tiles, ["4W", "5W", "6W"]);
+});
+
+test("menu availability keeps single and pair at selectedCount 12", () => {
+  const state = {
+    slots: [
+      "1W", "1W", "1W", "2W", "2W", "2W",
+      "3W", "3W", "3W", "4W", "4W", "4W",
+      "", ""
+    ]
+  };
+  const available = getContextActionAvailability(state, "9B");
+  assert.equal(available.single.visible, true);
+  assert.equal(available.pair.visible, true);
+  assert.equal(available.pung.visible, false);
+  assert.equal(available.chow_front.visible, false);
+  assert.equal(available.chow_middle.visible, false);
+  assert.equal(available.chow_back.visible, false);
+});
+
+test("menu availability keeps only single at selectedCount 13", () => {
+  const state = {
+    slots: [
+      "1W", "1W", "1W", "2W", "2W", "2W",
+      "3W", "3W", "3W", "4W", "4W", "4W",
+      "5W", ""
+    ]
+  };
+  const available = getContextActionAvailability(state, "9B");
+  assert.equal(available.single.visible, true);
+  assert.equal(available.pair.visible, false);
+  assert.equal(available.pung.visible, false);
+});
+
+test("menu availability hides chow actions for honor tile", () => {
+  const state = {
+    slots: ["", "", "", "", "", "", "", "", "", "", "", "", "", ""]
+  };
+  const available = getContextActionAvailability(state, "E");
+  assert.equal(available.chow_front.visible, false);
+  assert.equal(available.chow_middle.visible, false);
+  assert.equal(available.chow_back.visible, false);
 });

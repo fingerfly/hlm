@@ -5,143 +5,30 @@
  * - Connects click/change handlers to action modules.
  * - Keeps event glue separate from state mutations.
  */
+import { getPickerTilesByMode } from "./pickerModeView.js";
+import { renderPickerByTab } from "./pickerRenderFlow.js";
+import {
+  createBindClick,
+  bindModalCloseButtons,
+  bindPatternActionButtons,
+  bindPickerModeButtons,
+  shouldOpenPickerForContextButton
+} from "./appEventBindings.js";
+import {
+  wireContextSegmentedControls,
+  wireSlotContextMenu
+} from "./contextWiring.js";
 
 /**
- * Whether a context menu button should open the picker modal.
- * Parent items (data-menu-level="parent") expand only;
- * leaf items open picker.
+ * Resolve tile list by picker mode and active tab.
  *
- * @param {HTMLElement} btn - Button with data-context-action.
- * @returns {boolean}
+ * @param {Record<string, string[]>} tabTiles - Tile groups by tab.
+ * @param {"twoLayer"|"flat"} pickerMode - Picker layout mode.
+ * @param {string} activeTab - Active tab key.
+ * @returns {string[]}
  */
-export function shouldOpenPickerForContextButton(btn) {
-  if (!btn || !btn.dataset) return false;
-  return btn.dataset.menuLevel !== "parent";
-}
-/**
- * Render current tab buttons and tile picker grid.
- *
- * @param {object} params - Rendering and state dependencies.
- * @returns {void}
- */
-export function renderPickerByTab(params) {
-  const {
-    store,
-    tabTiles,
-    tilePickerGridEl,
-    renderPickerTabButtons,
-    renderTilePickerGrid,
-    stateActions
-  } = params;
-  renderPickerTabButtons(store.uiState.hand.activeTab);
-  renderTilePickerGrid({
-    tilePickerGridEl,
-    tiles: tabTiles[store.uiState.hand.activeTab],
-    onPick: (tile) => stateActions.pickTile(tile)
-  });
-}
+export { getPickerTilesByMode, renderPickerByTab };
 
-/**
- * Wire slot tap to context menu and menu actions to picker.
- *
- * @param {object} params - DOM and action dependencies.
- * @returns {void}
- */
-function wireContextSegmentedControls(byId, stateActions) {
-  const pairs = [
-    ["winType", "winType"],
-    ["handState", "handState"],
-    ["kongType", "kongType"],
-    ["timingEvent", "timingEvent"]
-  ];
-  for (const [hiddenId, radioName] of pairs) {
-    const hidden = byId(hiddenId);
-    if (!hidden) continue;
-    const selector = `input[name="${radioName}"]`;
-    for (const radio of document.querySelectorAll(selector)) {
-      radio.addEventListener("change", () => {
-        hidden.value = radio.value;
-        stateActions.syncHomeState();
-      });
-    }
-  }
-  for (const id of ["winType", "handState", "kongType", "timingEvent"]) {
-    const el = byId(id);
-    if (el) el.addEventListener("change", stateActions.syncHomeState);
-  }
-}
-
-function wireSlotContextMenu(params) {
-  const {
-    byId,
-    store,
-    stateActions,
-    modalActions,
-    tabTiles,
-    tilePickerGridEl,
-    renderPickerTabButtons,
-    renderTilePickerGrid
-  } = params;
-  const menuEl = byId("slotContextMenu");
-  if (!menuEl) return;
-
-  function hideMenu() {
-    menuEl.hidden = true;
-  }
-
-  function showMenuNear(el) {
-    const rect = el.getBoundingClientRect();
-    menuEl.style.left = `${rect.left}px`;
-    menuEl.style.top = `${rect.bottom + 4}px`;
-    menuEl.hidden = false;
-  }
-
-  byId("tilePreview").addEventListener("click", (event) => {
-    const target = event.target.closest("[data-slot-index]");
-    if (!target) return;
-    const index = Number.parseInt(target.dataset.slotIndex || "", 10);
-    if (!Number.isInteger(index)) return;
-    stateActions.selectSlot(index);
-    showMenuNear(target);
-  });
-
-  document.addEventListener("click", (event) => {
-    if (menuEl.hidden) return;
-    if (menuEl.contains(event.target)) return;
-    if (event.target.closest("[data-slot-index]")) return;
-    hideMenu();
-  });
-
-  menuEl.addEventListener("click", (event) => {
-    const btn = event.target.closest("button[data-context-action]");
-    if (!btn) return;
-    const action = btn.dataset.contextAction;
-    const tab = btn.dataset.tab;
-    if (action === "undo_last") {
-      stateActions.undoHand();
-    } else if (action === "undo_slot") {
-      stateActions.undoSelectedSlot();
-    } else if (action === "tab" && tab) {
-      store.uiState = {
-        ...store.uiState,
-        hand: { ...store.uiState.hand, activeTab: tab }
-      };
-      stateActions.setPatternAction("single");
-    } else if (action) {
-      stateActions.setPatternAction(action);
-    }
-    hideMenu();
-    if (shouldOpenPickerForContextButton(btn)) {
-      renderPickerTabButtons(store.uiState.hand.activeTab);
-      renderTilePickerGrid({
-        tilePickerGridEl,
-        tiles: tabTiles[store.uiState.hand.activeTab],
-        onPick: (tile) => stateActions.pickTile(tile)
-      });
-      modalActions.openModalByKey("picker");
-    }
-  });
-}
 
 /**
  * Attach all app-level event listeners.
@@ -164,10 +51,16 @@ export function wireAppEvents(params) {
     renderTilePickerGrid,
     resetContext
   } = params;
-  const bindClick = (id, onClick) => {
-    const element = byId(id);
-    if (!element) return;
-    element.addEventListener("click", onClick);
+  const bindClick = createBindClick(byId);
+  const renderPicker = () => {
+    renderPickerByTab({
+      store,
+      tabTiles,
+      tilePickerGridEl,
+      renderPickerTabButtons,
+      renderTilePickerGrid,
+      stateActions
+    });
   };
 
   bindTabButtons((tab) => {
@@ -186,12 +79,7 @@ export function wireAppEvents(params) {
   });
 
   bindPresetButtons(stateActions.applyPreset);
-  const closeMap = ["picker", "context", "result", "info"];
-  for (const modalKey of closeMap) {
-    bindCloseButtons(`[data-close='${modalKey}']`, () => {
-      modalActions.closeModalByKey(modalKey);
-    });
-  }
+  bindModalCloseButtons(bindCloseButtons, modalActions);
 
   bindClick("openPickerBtn", () => {
     modalActions.openModalByKey("picker");
@@ -199,21 +87,16 @@ export function wireAppEvents(params) {
   bindClick("openContextBtn", () => {
     modalActions.openModalByKey("context");
   });
-  for (const button of document.querySelectorAll("[data-pattern-action]")) {
-    button.addEventListener("click", () => {
-      stateActions.setPatternAction(button.dataset.patternAction);
-    });
-  }
+  bindPatternActionButtons(stateActions);
+  bindPickerModeButtons(stateActions, renderPicker);
   bindClick("undoBtn", () => stateActions.undoHand());
   wireSlotContextMenu({
     byId,
     store,
     stateActions,
     modalActions,
-    tabTiles,
-    tilePickerGridEl,
-    renderPickerTabButtons,
-    renderTilePickerGrid
+    renderPicker,
+    shouldOpenPickerForContextButton
   });
   bindClick("pickerDeleteBtn", () => {
     stateActions.deleteSelected();

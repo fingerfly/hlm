@@ -12,7 +12,10 @@ import {
   undoBySlot,
   pickerToTiles
 } from "../../src/app/tilePickerState.js";
-import { createStateActions } from "../../public/appStateActions.js";
+import {
+  createStateActions,
+  resolveInitialPickerMode
+} from "../../public/appStateActions.js";
 
 function createByIdMap() {
   const controls = {
@@ -241,4 +244,63 @@ test("undoSelectedSlot rolls back action affecting selected slot", () => {
   actions.selectSlot(2);
   actions.undoSelectedSlot();
   assert.deepEqual(pickerToTiles(store.pickerState), ["2W", "2W", "2W"]);
+});
+
+test("resolveInitialPickerMode uses twoLayer for mobile first load", () => {
+  const mode = resolveInitialPickerMode({
+    isMobile: true,
+    storedMode: "flat"
+  });
+  assert.equal(mode, "twoLayer");
+});
+
+test("resolveInitialPickerMode restores desktop stored mode", () => {
+  const mode = resolveInitialPickerMode({
+    isMobile: false,
+    storedMode: "flat"
+  });
+  assert.equal(mode, "flat");
+});
+
+test("setPickerMode keeps picker slots and cursor unchanged", () => {
+  const byIdState = createByIdMap();
+  const store = {
+    uiState: { hand: { tiles: [], pickerMode: "twoLayer" } },
+    pickerState: {
+      ...createTilePickerState(["1W", "2W"]),
+      actionHistory: [{ slotIndices: [0], tiles: ["1W"] }]
+    },
+    pickerAction: "single",
+    resultVm: null
+  };
+  const refs = createRefs();
+  const actions = createStateActions(store, {
+    byId: byIdState.byId,
+    refs,
+    contextPresets: {},
+    addTileToPicker,
+    addTilesToPicker,
+    resolvePatternAction: () => ({ ok: true, reason: null, tiles: ["1W"] }),
+    renderPatternActionButtons: () => {},
+    selectPickerSlot,
+    deleteSelectedSlot,
+    clearTilePicker,
+    undoLastTile,
+    undoLastAction,
+    undoBySlot,
+    evaluateCapturedHand: () => ({ scoring: { isWin: false } }),
+    renderTilePreview: () => {},
+    renderResultModal: () => ({}),
+    renderInfoTip: () => {}
+  });
+  const before = {
+    slots: [...store.pickerState.slots],
+    cursor: store.pickerState.cursor,
+    actionHistory: [...store.pickerState.actionHistory]
+  };
+  actions.setPickerMode("flat");
+  assert.equal(store.uiState.hand.pickerMode, "flat");
+  assert.deepEqual(store.pickerState.slots, before.slots);
+  assert.equal(store.pickerState.cursor, before.cursor);
+  assert.deepEqual(store.pickerState.actionHistory, before.actionHistory);
 });

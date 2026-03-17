@@ -6,8 +6,8 @@
 }
 
 .tile-chip {
-  min-height: 52px;
-  min-width: 52px;
+  min-height: 58px;
+  min-width: 58px;
   border-radius: 10px;
   border: 1px solid var(--border);
   background: #fafafa;
@@ -42,8 +42,20 @@
 }
 
 .tile-face-unicode {
-  font-size: 2em;
+  font-size: 2.2em;
   line-height: 1;
+}
+
+.picker-mode-toggle {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+  margin: 8px 0;
+}
+
+.picker-mode-toggle .ghost-btn.active {
+  border-color: var(--primary);
+  color: var(--primary);
 }
 
 .picker-tabs {

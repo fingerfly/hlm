@@ -8,7 +8,11 @@ import {
   pickerToTiles,
   isPickerReady
 } from "../../src/app/tilePickerState.js";
-import { resolvePatternAction } from "../../src/app/tilePatternActions.js";
+import {
+  resolvePatternAction,
+  getContextActionAvailability
+} from "../../src/app/tilePatternActions.js";
+import { resolveInitialPickerMode } from "../../public/appStateActions.js";
 
 test("mobile picker flow can build a winning hand request", () => {
   const hand = [
@@ -94,4 +98,50 @@ test("mobile picker quick actions can build hand with fewer operations", () => {
   });
   assert.equal(result.scoring.isWin, true);
   assert.equal(result.scoring.errorCode, null);
+});
+
+test("dynamic menu narrows actions from 12 to 14 tiles", () => {
+  let picker = createTilePickerState([
+    "1W", "1W", "1W",
+    "2W", "2W", "2W",
+    "3W", "3W", "3W",
+    "4W", "4W", "4W"
+  ]);
+  const at12 = getContextActionAvailability(picker, "9B");
+  assert.equal(at12.single.visible, true);
+  assert.equal(at12.pair.visible, true);
+  assert.equal(at12.pung.visible, false);
+  assert.equal(at12.chow_front.visible, false);
+
+  picker = addTileToPicker(picker, "9B");
+  const at13 = getContextActionAvailability(picker, "9B");
+  assert.equal(at13.single.visible, true);
+  assert.equal(at13.pair.visible, false);
+  assert.equal(at13.pung.visible, false);
+
+  picker = addTileToPicker(picker, "9B");
+  const at14 = getContextActionAvailability(picker, "9B");
+  assert.equal(at14.single.visible, false);
+  assert.equal(at14.pair.visible, false);
+  assert.equal(at14.pung.visible, false);
+});
+
+test("picker mode policy uses mobile twoLayer and desktop restore", () => {
+  const mobile = resolveInitialPickerMode({
+    isMobile: true,
+    storedMode: "flat"
+  });
+  assert.equal(mobile, "twoLayer");
+
+  const desktopStored = resolveInitialPickerMode({
+    isMobile: false,
+    storedMode: "flat"
+  });
+  assert.equal(desktopStored, "flat");
+
+  const desktopFallback = resolveInitialPickerMode({
+    isMobile: false,
+    storedMode: "unknown-mode"
+  });
+  assert.equal(desktopFallback, "twoLayer");
 });
