@@ -14,7 +14,7 @@
 export function createAppRefs(byId) {
   const refs = {
     openPickerBtn: byId("openPickerBtn"),
-    openContextBtn: byId("openContextBtn"),
+    clearHandBtn: byId("clearHandBtn"),
     tilePickerGridEl: byId("tilePickerGrid"),
     tilePreviewEl: byId("tilePreview"),
     tileCountEl: byId("tileCount"),
@@ -22,6 +22,9 @@ export function createAppRefs(byId) {
     pickerActionHintEl: byId("pickerActionHint"),
     pickerDeleteBtn: byId("pickerDeleteBtn"),
     contextSummaryEl: byId("contextSummary"),
+    wizardStepHintEl: byId("wizardStepHint"),
+    wizardBackBtn: byId("wizardBackBtn"),
+    wizardNextBtn: byId("wizardNextBtn"),
     readyHintEl: byId("readyHint"),
     calculateBtn: byId("calculateBtn"),
     resultRefs: {

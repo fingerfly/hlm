@@ -4,6 +4,7 @@
  * - Applies pattern-based tile insertion for selected action.
  * - Applies slot selection, delete, and undo operations.
  */
+import { writeStoredGestureTipDismissed } from "./pickerModeState.js";
 
 /**
  * Create picker mutation action handlers.
@@ -21,29 +22,59 @@ export function createHandPickerActions(input) {
     deleteSelectedSlot,
     clearTilePicker,
     undoLastAction,
-    undoBySlot,
-    getContextActionAvailability,
     syncHomeState
   } = input;
+  function effectiveActionId() {
+    return store.pickerActionLock || store.pickerActionOnce || "single";
+  }
+  function clearOneShotAction() {
+    store.pickerActionOnce = null;
+    if (!store.pickerActionLock) {
+      store.pickerAction = "single";
+    }
+  }
   function clearHand() {
     store.pickerState = clearTilePicker(store.pickerState);
     syncHomeState();
   }
-  function setPatternAction(actionId) {
+  function tapPatternAction(actionId) {
+    if (store.pickerActionLock === actionId) {
+      store.pickerActionLock = null;
+      clearOneShotAction();
+      syncHomeState();
+      return;
+    }
+    store.pickerActionOnce = actionId;
     store.pickerAction = actionId;
     syncHomeState();
   }
-  function getContextMenuAvailability() {
-    const idx = store.pickerState.editingIndex;
-    if (!Number.isInteger(idx)) return {};
-    const baseTile = store.pickerState.slots[idx] || null;
-    return getContextActionAvailability(store.pickerState, baseTile);
+  function lockPatternAction(actionId) {
+    if (store.pickerActionLock === actionId) {
+      store.pickerActionLock = null;
+      clearOneShotAction();
+      syncHomeState();
+      return;
+    }
+    store.pickerActionLock = actionId;
+    store.pickerActionOnce = null;
+    store.pickerAction = actionId;
+    syncHomeState();
+  }
+  function setPatternAction(actionId) {
+    tapPatternAction(actionId);
+  }
+  function dismissPickerGestureTip() {
+    if (store.pickerGestureTipDismissed) return;
+    store.pickerGestureTipDismissed = true;
+    writeStoredGestureTipDismissed(true);
+    syncHomeState();
   }
   function pickTile(baseTile) {
+    const actionId = effectiveActionId();
     const result = resolvePatternAction(
       store.pickerState,
       baseTile,
-      store.pickerAction
+      actionId
     );
     if (!result.ok) {
       if (refs.pickerActionHintEl) {
@@ -53,6 +84,9 @@ export function createHandPickerActions(input) {
       return false;
     }
     store.pickerState = addTilesToPicker(store.pickerState, result.tiles);
+    if (!store.pickerActionLock && store.pickerActionOnce) {
+      clearOneShotAction();
+    }
     syncHomeState();
     return true;
   }
@@ -68,20 +102,15 @@ export function createHandPickerActions(input) {
     store.pickerState = undoLastAction(store.pickerState);
     syncHomeState();
   }
-  function undoSelectedSlot() {
-    const idx = store.pickerState.editingIndex;
-    if (!Number.isInteger(idx)) return;
-    store.pickerState = undoBySlot(store.pickerState, idx);
-    syncHomeState();
-  }
   return {
     clearHand,
+    tapPatternAction,
+    lockPatternAction,
+    dismissPickerGestureTip,
     setPatternAction,
-    getContextMenuAvailability,
     pickTile,
     selectSlot,
     deleteSelected,
-    undoHand,
-    undoSelectedSlot
+    undoHand
   };
 }

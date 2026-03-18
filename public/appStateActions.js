@@ -1,4 +1,9 @@
-import { canCalculate } from "../src/app/uiFlowState.js";
+import {
+  canCalculate,
+  setWizardStep,
+  nextWizardStep,
+  prevWizardStep
+} from "../src/app/uiFlowState.js";
 import { syncHomeStateView } from "./homeStateView.js";
 import {
   resolveInitialPickerMode as resolveInitialPickerModePolicy
@@ -10,13 +15,12 @@ import {
 import { createResultStateActions } from "./resultStateActions.js";
 
 /**
- * Resolve initial picker mode by device and stored value.
+ * Resolve initial picker mode. Always twoLayer after UI simplification.
  *
- * @param {{isMobile: boolean, storedMode: string|null}} input
- * @returns {"twoLayer"|"flat"}
+ * @returns {"twoLayer"}
  */
-export function resolveInitialPickerMode({ isMobile, storedMode }) {
-  return resolveInitialPickerModePolicy({ isMobile, storedMode });
+export function resolveInitialPickerMode() {
+  return resolveInitialPickerModePolicy();
 }
 
 /**
@@ -52,8 +56,7 @@ export function createStateActions(store, deps) {
     evaluateCapturedHand,
     renderTilePreview,
     renderResultModal,
-    renderInfoTip,
-    getContextActionAvailability
+    renderInfoTip
   } = deps;
   initPickerMode(store);
   function syncHomeState() {
@@ -78,7 +81,6 @@ export function createStateActions(store, deps) {
     clearTilePicker,
     undoLastAction,
     undoBySlot,
-    getContextActionAvailability,
     syncHomeState
   });
   const resultActions = createResultStateActions({
@@ -90,8 +92,33 @@ export function createStateActions(store, deps) {
     renderInfoTip
   });
 
+  function jumpWizardStep(step) {
+    store.uiState = setWizardStep(store.uiState, step);
+    syncHomeState();
+    return store.uiState.wizard.step;
+  }
+
+  function goWizardNext() {
+    const step = store.uiState.wizard?.step || 1;
+    if (step === 1 && !canCalculate(store.uiState)) {
+      return { ok: false, needs: "tiles", step };
+    }
+    store.uiState = nextWizardStep(store.uiState);
+    syncHomeState();
+    return { ok: true, step: store.uiState.wizard.step };
+  }
+
+  function goWizardPrev() {
+    store.uiState = prevWizardStep(store.uiState);
+    syncHomeState();
+    return { ok: true, step: store.uiState.wizard.step };
+  }
+
   return {
     syncHomeState,
+    jumpWizardStep,
+    goWizardNext,
+    goWizardPrev,
     ...handActions,
     ...resultActions
   };

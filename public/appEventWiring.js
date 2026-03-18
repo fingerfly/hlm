@@ -10,13 +10,11 @@ import { renderPickerByTab } from "./pickerRenderFlow.js";
 import {
   createBindClick,
   bindModalCloseButtons,
-  bindPatternActionButtons,
-  bindPickerModeButtons,
-  shouldOpenPickerForContextButton
+  bindPatternActionButtons
 } from "./appEventBindings.js";
 import {
   wireContextSegmentedControls,
-  wireSlotContextMenu
+  wireSlotClickToPicker
 } from "./contextWiring.js";
 
 /**
@@ -28,6 +26,35 @@ import {
  * @returns {string[]}
  */
 export { getPickerTilesByMode, renderPickerByTab };
+
+/**
+ * Keep modal stack aligned with wizard step.
+ *
+ * @param {{ok:boolean, needs?:string, step?:number}} result - Step result.
+ * @param {{openModalByKey:Function, closeModalByKey:Function}} modalActions
+ * @returns {void}
+ */
+export function syncWizardModals(result, modalActions) {
+  if (!result.ok && result.needs === "tiles") {
+    modalActions.closeModalByKey("context");
+    modalActions.openModalByKey("picker");
+    return;
+  }
+  if (result.step === 1) {
+    modalActions.closeModalByKey("context");
+    modalActions.openModalByKey("picker");
+    return;
+  }
+  if (result.step === 2) {
+    modalActions.closeModalByKey("picker");
+    modalActions.openModalByKey("context");
+    return;
+  }
+  if (result.step === 3) {
+    modalActions.closeModalByKey("picker");
+    modalActions.closeModalByKey("context");
+  }
+}
 
 
 /**
@@ -82,21 +109,25 @@ export function wireAppEvents(params) {
   bindModalCloseButtons(bindCloseButtons, modalActions);
 
   bindClick("openPickerBtn", () => {
+    stateActions.jumpWizardStep(1);
+    modalActions.closeModalByKey("context");
     modalActions.openModalByKey("picker");
   });
-  bindClick("openContextBtn", () => {
-    modalActions.openModalByKey("context");
+  bindClick("clearHandBtn", stateActions.clearHand);
+  bindClick("wizardNextBtn", () => {
+    const result = stateActions.goWizardNext();
+    syncWizardModals(result, modalActions);
+  });
+  bindClick("wizardBackBtn", () => {
+    const result = stateActions.goWizardPrev();
+    syncWizardModals(result, modalActions);
   });
   bindPatternActionButtons(stateActions);
-  bindPickerModeButtons(stateActions, renderPicker);
-  bindClick("undoBtn", () => stateActions.undoHand());
-  wireSlotContextMenu({
+  wireSlotClickToPicker({
     byId,
-    store,
     stateActions,
     modalActions,
-    renderPicker,
-    shouldOpenPickerForContextButton
+    renderPicker
   });
   bindClick("pickerDeleteBtn", () => {
     stateActions.deleteSelected();
@@ -104,13 +135,13 @@ export function wireAppEvents(params) {
   bindClick("pickerUndoBtn", () => {
     stateActions.undoHand();
   });
-  bindClick("clearBtn", stateActions.clearHand);
   bindClick("pickerClearBtn", stateActions.clearHand);
   bindClick("calculateBtn", () => {
     if (stateActions.calculate()) modalActions.updateModalUi();
   });
   bindClick("playAgainBtn", () => {
     stateActions.clearHand();
+    stateActions.jumpWizardStep(1);
     modalActions.closeModalByKey("result");
     modalActions.closeModalByKey("info");
   });

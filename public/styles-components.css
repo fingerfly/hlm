@@ -6,21 +6,22 @@
 }
 
 .tile-chip {
-  min-height: 58px;
-  min-width: 58px;
+  min-height: 74px;
+  min-width: 68px;
   border-radius: 10px;
-  border: 1px solid var(--border);
-  background: #fafafa;
+  border: 2px solid var(--border);
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
   display: grid;
   place-items: center;
-  font-size: 14px;
+  font-size: 18px;
   cursor: pointer;
-  padding: 2px;
+  padding: 4px;
 }
 
 .tile-chip-selected {
   border-color: var(--primary);
-  box-shadow: 0 0 0 2px rgba(58, 106, 255, 0.2);
+  box-shadow: 0 0 0 2px rgba(0, 122, 255, 0.35);
 }
 
 .tile-face {
@@ -31,19 +32,30 @@
 }
 
 .tile-face-img {
-  width: 36px;
-  height: 48px;
+  width: 48px;
+  height: 64px;
   object-fit: contain;
 }
 
 .tile-face-text {
-  font-size: 14px;
+  font-size: 18px;
   line-height: 1.2;
+  font-weight: 600;
 }
 
 .tile-face-unicode {
-  font-size: 2.2em;
+  font-size: 2.9em;
   line-height: 1;
+}
+
+.wizard-controls {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.wizard-controls .ghost-btn {
+  flex: 1 1 0;
 }
 
 .picker-mode-toggle {
@@ -94,6 +106,18 @@
 .pattern-actions .ghost-btn.active {
   border-color: var(--primary);
   color: var(--primary);
+}
+
+.pattern-actions .ghost-btn.locked {
+  border-color: #13a35f;
+  color: #0f8a4f;
+  box-shadow: 0 0 0 2px rgba(19, 163, 95, 0.2);
+}
+
+.picker-gesture-tip {
+  margin: 2px 0 6px;
+  color: var(--subtext);
+  font-size: 12px;
 }
 
 .pattern-secondary {

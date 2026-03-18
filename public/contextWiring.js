@@ -1,14 +1,9 @@
 /**
- * Purpose: Wire context controls and slot context menu.
+ * Purpose: Wire context controls and slot click to picker.
  * Description:
  * - Syncs hidden inputs with segmented controls.
- * - Binds slot click to dynamic action menu.
- * - Routes menu actions to state and picker opening flow.
+ * - Binds slot click to open picker with that slot selected.
  */
-import {
-  applyContextMenuAvailability,
-  getContextMenuControlState
-} from "./contextMenuView.js";
 
 /**
  * Wire segmented radio controls to hidden inputs.
@@ -42,87 +37,22 @@ export function wireContextSegmentedControls(byId, stateActions) {
 }
 
 /**
- * Wire slot context menu actions and dynamic visibility.
+ * Wire slot click to select slot and open picker modal.
  *
  * @param {object} params - DOM and action dependencies.
  * @returns {void}
  */
-export function wireSlotContextMenu(params) {
-  const {
-    byId,
-    store,
-    stateActions,
-    modalActions,
-    renderPicker,
-    shouldOpenPickerForContextButton
-  } = params;
-  const menuEl = byId("slotContextMenu");
-  if (!menuEl) return;
-
-  function hideMenu() {
-    menuEl.hidden = true;
-  }
-
-  function showMenuNear(el) {
-    const rect = el.getBoundingClientRect();
-    menuEl.style.left = `${rect.left}px`;
-    menuEl.style.top = `${rect.bottom + 4}px`;
-    menuEl.hidden = false;
-  }
-
-  function updateMenuAvailability() {
-    const map = stateActions.getContextMenuAvailability();
-    applyContextMenuAvailability(menuEl, map);
-    const controlState = getContextMenuControlState(store.pickerState);
-    const undoLastBtn = menuEl.querySelector(
-      "[data-context-action='undo_last']"
-    );
-    const undoSlotBtn = menuEl.querySelector(
-      "[data-context-action='undo_slot']"
-    );
-    if (undoLastBtn) undoLastBtn.disabled = !controlState.undoLastEnabled;
-    if (undoSlotBtn) undoSlotBtn.disabled = !controlState.undoSlotEnabled;
-  }
-
-  byId("tilePreview").addEventListener("click", (event) => {
+export function wireSlotClickToPicker(params) {
+  const { byId, stateActions, modalActions, renderPicker } = params;
+  const tilePreview = byId("tilePreview");
+  if (!tilePreview) return;
+  tilePreview.addEventListener("click", (event) => {
     const target = event.target.closest("[data-slot-index]");
     if (!target) return;
     const index = Number.parseInt(target.dataset.slotIndex || "", 10);
     if (!Number.isInteger(index)) return;
     stateActions.selectSlot(index);
-    updateMenuAvailability();
-    showMenuNear(target);
-  });
-
-  document.addEventListener("click", (event) => {
-    if (menuEl.hidden) return;
-    if (menuEl.contains(event.target)) return;
-    if (event.target.closest("[data-slot-index]")) return;
-    hideMenu();
-  });
-
-  menuEl.addEventListener("click", (event) => {
-    const btn = event.target.closest("button[data-context-action]");
-    if (!btn) return;
-    const action = btn.dataset.contextAction;
-    const tab = btn.dataset.tab;
-    if (action === "undo_last") {
-      stateActions.undoHand();
-    } else if (action === "undo_slot") {
-      stateActions.undoSelectedSlot();
-    } else if (action === "tab" && tab) {
-      store.uiState = {
-        ...store.uiState,
-        hand: { ...store.uiState.hand, activeTab: tab }
-      };
-      stateActions.setPatternAction("single");
-    } else if (action) {
-      stateActions.setPatternAction(action);
-    }
-    hideMenu();
-    if (shouldOpenPickerForContextButton(btn)) {
-      renderPicker();
-      modalActions.openModalByKey("picker");
-    }
+    renderPicker();
+    modalActions.openModalByKey("picker");
   });
 }

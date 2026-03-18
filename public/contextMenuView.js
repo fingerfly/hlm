@@ -9,7 +9,7 @@
  * Apply visibility map onto context menu actions.
  *
  * @param {HTMLElement} menuEl - Context menu root element.
- * @param {Record<string, {visible: boolean}>} map - Action availability map.
+ * @param {Record<string, {visible: boolean}>} map
  * @returns {void}
  */
 export function applyContextMenuAvailability(menuEl, map) {
@@ -19,6 +19,7 @@ export function applyContextMenuAvailability(menuEl, map) {
     if (!btn || !map[action]) continue;
     btn.hidden = !map[action].visible;
   }
+
   const chowActions = ["chow_front", "chow_middle", "chow_back"];
   let anyChow = false;
   for (const action of chowActions) {

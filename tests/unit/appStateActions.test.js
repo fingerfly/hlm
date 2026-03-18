@@ -33,13 +33,16 @@ function createByIdMap() {
 function createRefs() {
   return {
     openPickerBtn: { textContent: "" },
-    openContextBtn: { textContent: "" },
+    clearHandBtn: { hidden: false },
     tilePreviewEl: {},
     tileCountEl: { textContent: "" },
     pickerCountEl: { textContent: "" },
     pickerActionHintEl: { textContent: "" },
     pickerDeleteBtn: { hidden: false, disabled: false },
     contextSummaryEl: { textContent: "" },
+    wizardStepHintEl: { textContent: "" },
+    wizardBackBtn: { textContent: "", hidden: false },
+    wizardNextBtn: { textContent: "", hidden: false },
     readyHintEl: { textContent: "" },
     calculateBtn: { disabled: true },
     resultRefs: {},
@@ -127,10 +130,10 @@ test("syncHomeState updates primary picker CTA by tile count", () => {
   assert.equal(refs.openPickerBtn.textContent, "手牌已满，可修改");
 });
 
-test("syncHomeState shows remaining tile count and optional context cue", () => {
+test("syncHomeState shows placeholder for contextSummary at step 1", () => {
   const byIdState = createByIdMap();
   const store = {
-    uiState: { hand: { tiles: [] } },
+    uiState: { hand: { tiles: [] }, wizard: { step: 1 } },
     pickerState: createTilePickerState([]),
     pickerAction: "single",
     resultVm: null
@@ -157,12 +160,86 @@ test("syncHomeState shows remaining tile count and optional context cue", () => 
   });
 
   actions.syncHomeState();
-  assert.equal(refs.readyHintEl.textContent, "再选 14 张即可计算");
-  assert.equal(refs.openContextBtn.textContent, "可选：编辑条件");
+  assert.equal(refs.readyHintEl.textContent, "再选 14 张即可进入下一步");
+  assert.equal(refs.contextSummaryEl.textContent, "—");
+});
+
+test("syncHomeState toggles clearHandBtn visibility by step and tile count", () => {
+  const byIdState = createByIdMap();
+  const store = {
+    uiState: { hand: { tiles: [] }, wizard: { step: 1 } },
+    pickerState: createTilePickerState([]),
+    pickerAction: "single",
+    resultVm: null
+  };
+  const refs = createRefs();
+  const actions = createStateActions(store, {
+    byId: byIdState.byId,
+    refs,
+    contextPresets: {},
+    addTileToPicker,
+    addTilesToPicker,
+    resolvePatternAction: () => ({ ok: true, reason: null, tiles: ["1W"] }),
+    renderPatternActionButtons: () => {},
+    selectPickerSlot,
+    deleteSelectedSlot,
+    clearTilePicker,
+    undoLastTile,
+    undoLastAction,
+    undoBySlot,
+    evaluateCapturedHand: () => ({ scoring: { isWin: false } }),
+    renderTilePreview: () => {},
+    renderResultModal: () => ({}),
+    renderInfoTip: () => {}
+  });
+
+  actions.syncHomeState();
+  assert.equal(refs.clearHandBtn.hidden, true);
+
+  actions.pickTile("1W");
+  actions.syncHomeState();
+  assert.equal(refs.clearHandBtn.hidden, false);
+
+  store.uiState.wizard.step = 2;
+  actions.syncHomeState();
+  assert.equal(refs.clearHandBtn.hidden, true);
+});
+
+test("syncHomeState shows actual context summary at step 2", () => {
+  const byIdState = createByIdMap();
+  const store = {
+    uiState: { hand: { tiles: [] }, wizard: { step: 2 } },
+    pickerState: createTilePickerState(new Array(14).fill("1W")),
+    pickerAction: "single",
+    resultVm: null
+  };
+  const refs = createRefs();
+  const actions = createStateActions(store, {
+    byId: byIdState.byId,
+    refs,
+    contextPresets: {},
+    addTileToPicker,
+    addTilesToPicker,
+    resolvePatternAction: () => ({ ok: true, reason: null, tiles: ["1W"] }),
+    renderPatternActionButtons: () => {},
+    selectPickerSlot,
+    deleteSelectedSlot,
+    clearTilePicker,
+    undoLastTile,
+    undoLastAction,
+    undoBySlot,
+    evaluateCapturedHand: () => ({ scoring: { isWin: false } }),
+    renderTilePreview: () => {},
+    renderResultModal: () => ({}),
+    renderInfoTip: () => {}
+  });
+
+  actions.syncHomeState();
+  assert.equal(refs.contextSummaryEl.textContent, "自摸 · 门前清 · 无杠");
 
   byIdState.controls.kongType.value = "an";
   actions.syncHomeState();
-  assert.equal(refs.openContextBtn.textContent, "已设置条件");
+  assert.equal(refs.contextSummaryEl.textContent, "自摸 · 门前清 · 暗杠");
 });
 
 test("undoHand rolls back last pattern action (e.g. pung)", () => {
@@ -198,68 +275,15 @@ test("undoHand rolls back last pattern action (e.g. pung)", () => {
     renderResultModal: () => ({}),
     renderInfoTip: () => {}
   });
+  actions.lockPatternAction("pung");
   actions.pickTile("1W");
   assert.equal(pickerToTiles(store.pickerState).length, 3);
   actions.undoHand();
   assert.equal(pickerToTiles(store.pickerState).length, 0);
 });
 
-test("undoSelectedSlot rolls back action affecting selected slot", () => {
-  const byIdState = createByIdMap();
-  const store = {
-    uiState: { hand: { tiles: [] } },
-    pickerState: createTilePickerState([]),
-    pickerAction: "pung",
-    resultVm: null
-  };
-  const refs = createRefs();
-  const actions = createStateActions(store, {
-    byId: byIdState.byId,
-    refs,
-    contextPresets: {},
-    addTileToPicker,
-    addTilesToPicker,
-    resolvePatternAction: (s, baseTile, actionId) => {
-      if (actionId === "pung") {
-        const t = baseTile === "1W" ? "1W" : "2W";
-        return { ok: true, reason: null, tiles: [t, t, t] };
-      }
-      return { ok: true, reason: null, tiles: [baseTile] };
-    },
-    renderPatternActionButtons: () => {},
-    selectPickerSlot,
-    deleteSelectedSlot,
-    clearTilePicker,
-    undoLastTile,
-    undoLastAction,
-    undoBySlot,
-    evaluateCapturedHand: () => ({ scoring: { isWin: false } }),
-    renderTilePreview: () => {},
-    renderResultModal: () => ({}),
-    renderInfoTip: () => {}
-  });
-  actions.pickTile("1W");
-  actions.pickTile("2W");
-  assert.equal(pickerToTiles(store.pickerState).length, 6);
-  actions.selectSlot(2);
-  actions.undoSelectedSlot();
-  assert.deepEqual(pickerToTiles(store.pickerState), ["2W", "2W", "2W"]);
-});
-
-test("resolveInitialPickerMode uses twoLayer for mobile first load", () => {
-  const mode = resolveInitialPickerMode({
-    isMobile: true,
-    storedMode: "flat"
-  });
-  assert.equal(mode, "twoLayer");
-});
-
-test("resolveInitialPickerMode restores desktop stored mode", () => {
-  const mode = resolveInitialPickerMode({
-    isMobile: false,
-    storedMode: "flat"
-  });
-  assert.equal(mode, "flat");
+test("resolveInitialPickerMode always returns twoLayer", () => {
+  assert.equal(resolveInitialPickerMode(), "twoLayer");
 });
 
 test("setPickerMode keeps picker slots and cursor unchanged", () => {
@@ -303,4 +327,159 @@ test("setPickerMode keeps picker slots and cursor unchanged", () => {
   assert.deepEqual(store.pickerState.slots, before.slots);
   assert.equal(store.pickerState.cursor, before.cursor);
   assert.deepEqual(store.pickerState.actionHistory, before.actionHistory);
+});
+
+test("wizard buttons show dynamic next and back labels", () => {
+  const byIdState = createByIdMap();
+  const store = {
+    uiState: { hand: { tiles: [] } },
+    pickerState: createTilePickerState(new Array(14).fill("1W")),
+    pickerAction: "single",
+    resultVm: null
+  };
+  const refs = createRefs();
+  const actions = createStateActions(store, {
+    byId: byIdState.byId,
+    refs,
+    contextPresets: {},
+    addTileToPicker,
+    addTilesToPicker,
+    resolvePatternAction: () => ({ ok: true, reason: null, tiles: ["1W"] }),
+    renderPatternActionButtons: () => {},
+    selectPickerSlot,
+    deleteSelectedSlot,
+    clearTilePicker,
+    undoLastTile,
+    undoLastAction,
+    undoBySlot,
+    evaluateCapturedHand: () => ({ scoring: { isWin: false } }),
+    renderTilePreview: () => {},
+    renderResultModal: () => ({}),
+    renderInfoTip: () => {}
+  });
+  actions.syncHomeState();
+  assert.equal(refs.wizardNextBtn.textContent, "下一步：条件设置");
+  actions.goWizardNext();
+  assert.equal(refs.wizardBackBtn.textContent, "上一步：手牌输入");
+  assert.equal(refs.wizardNextBtn.textContent, "下一步：计算番数");
+  actions.goWizardNext();
+  assert.equal(refs.wizardBackBtn.textContent, "上一步：和牌条件");
+  assert.equal(refs.wizardNextBtn.hidden, true);
+});
+
+test("tap action applies once then falls back to single", () => {
+  const byIdState = createByIdMap();
+  const store = {
+    uiState: { hand: { tiles: [] } },
+    pickerState: createTilePickerState([]),
+    pickerAction: "single",
+    pickerActionOnce: null,
+    pickerActionLock: null,
+    resultVm: null
+  };
+  const refs = createRefs();
+  const actions = createStateActions(store, {
+    byId: byIdState.byId,
+    refs,
+    contextPresets: {},
+    addTileToPicker,
+    addTilesToPicker,
+    resolvePatternAction: (s, baseTile, actionId) => {
+      if (actionId === "pair") return { ok: true, reason: null, tiles: [baseTile, baseTile] };
+      return { ok: true, reason: null, tiles: [baseTile] };
+    },
+    renderPatternActionButtons: () => {},
+    selectPickerSlot,
+    deleteSelectedSlot,
+    clearTilePicker,
+    undoLastTile,
+    undoLastAction,
+    undoBySlot,
+    evaluateCapturedHand: () => ({ scoring: { isWin: false } }),
+    renderTilePreview: () => {},
+    renderResultModal: () => ({}),
+    renderInfoTip: () => {}
+  });
+  actions.tapPatternAction("pair");
+  actions.pickTile("1W");
+  assert.equal(pickerToTiles(store.pickerState).length, 2);
+  assert.equal(store.pickerAction, "single");
+  actions.pickTile("2W");
+  assert.equal(pickerToTiles(store.pickerState).length, 3);
+});
+
+test("locked action keeps applying across picks", () => {
+  const byIdState = createByIdMap();
+  const store = {
+    uiState: { hand: { tiles: [] } },
+    pickerState: createTilePickerState([]),
+    pickerAction: "single",
+    pickerActionOnce: null,
+    pickerActionLock: null,
+    resultVm: null
+  };
+  const refs = createRefs();
+  const actions = createStateActions(store, {
+    byId: byIdState.byId,
+    refs,
+    contextPresets: {},
+    addTileToPicker,
+    addTilesToPicker,
+    resolvePatternAction: (s, baseTile, actionId) => {
+      if (actionId === "pair") return { ok: true, reason: null, tiles: [baseTile, baseTile] };
+      return { ok: true, reason: null, tiles: [baseTile] };
+    },
+    renderPatternActionButtons: () => {},
+    selectPickerSlot,
+    deleteSelectedSlot,
+    clearTilePicker,
+    undoLastTile,
+    undoLastAction,
+    undoBySlot,
+    evaluateCapturedHand: () => ({ scoring: { isWin: false } }),
+    renderTilePreview: () => {},
+    renderResultModal: () => ({}),
+    renderInfoTip: () => {}
+  });
+  actions.lockPatternAction("pair");
+  actions.pickTile("1W");
+  actions.pickTile("2W");
+  assert.equal(pickerToTiles(store.pickerState).length, 4);
+  assert.equal(store.pickerActionLock, "pair");
+});
+
+test("dismissPickerGestureTip sets store flag and persists", () => {
+  const byIdState = createByIdMap();
+  const store = {
+    uiState: { hand: { tiles: [] } },
+    pickerState: createTilePickerState([]),
+    pickerAction: "single",
+    pickerActionOnce: null,
+    pickerActionLock: null,
+    pickerGestureTipDismissed: false,
+    resultVm: null
+  };
+  const refs = createRefs();
+  const actions = createStateActions(store, {
+    byId: byIdState.byId,
+    refs,
+    contextPresets: {},
+    addTileToPicker,
+    addTilesToPicker,
+    resolvePatternAction: () => ({ ok: true, reason: null, tiles: ["1W"] }),
+    renderPatternActionButtons: () => {},
+    selectPickerSlot,
+    deleteSelectedSlot,
+    clearTilePicker,
+    undoLastTile,
+    undoLastAction,
+    undoBySlot,
+    evaluateCapturedHand: () => ({ scoring: { isWin: false } }),
+    renderTilePreview: () => {},
+    renderResultModal: () => ({}),
+    renderInfoTip: () => {}
+  });
+  assert.equal(store.pickerGestureTipDismissed, false);
+  actions.dismissPickerGestureTip();
+  assert.equal(store.pickerGestureTipDismissed, true);
 });

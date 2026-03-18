@@ -1,8 +1,4 @@
-import {
-  detectIsMobileViewport,
-  readStoredPickerMode,
-  resolveInitialPickerMode
-} from "./pickerModeState.js";
+import { resolveInitialPickerMode } from "./pickerModeState.js";
 import { createHandPickerActions } from "./handPickerActions.js";
 import { createHandContextActions } from "./handContextActions.js";
 
@@ -13,10 +9,7 @@ import { createHandContextActions } from "./handContextActions.js";
  * @returns {void}
  */
 export function initPickerMode(store) {
-  const mode = resolveInitialPickerMode({
-    isMobile: detectIsMobileViewport(),
-    storedMode: readStoredPickerMode()
-  });
+  const mode = resolveInitialPickerMode();
   store.uiState = {
     ...store.uiState,
     hand: {

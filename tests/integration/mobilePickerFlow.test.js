@@ -126,22 +126,6 @@ test("dynamic menu narrows actions from 12 to 14 tiles", () => {
   assert.equal(at14.pung.visible, false);
 });
 
-test("picker mode policy uses mobile twoLayer and desktop restore", () => {
-  const mobile = resolveInitialPickerMode({
-    isMobile: true,
-    storedMode: "flat"
-  });
-  assert.equal(mobile, "twoLayer");
-
-  const desktopStored = resolveInitialPickerMode({
-    isMobile: false,
-    storedMode: "flat"
-  });
-  assert.equal(desktopStored, "flat");
-
-  const desktopFallback = resolveInitialPickerMode({
-    isMobile: false,
-    storedMode: "unknown-mode"
-  });
-  assert.equal(desktopFallback, "twoLayer");
+test("picker mode policy always returns twoLayer", () => {
+  assert.equal(resolveInitialPickerMode(), "twoLayer");
 });

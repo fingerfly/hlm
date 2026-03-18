@@ -5,17 +5,16 @@
  * - Reads and writes desktop mode preference from localStorage.
  */
 const PICKER_MODE_KEY = "hlm.pickerMode";
+const PICKER_GESTURE_TIP_KEY = "hlm.pickerGestureTipDismissed";
 const PICKER_MODES = new Set(["twoLayer", "flat"]);
 
 /**
- * Resolve initial picker mode by device and stored value.
+ * Resolve initial picker mode. Always twoLayer after UI simplification.
  *
- * @param {{isMobile: boolean, storedMode: string|null}} input
- * @returns {"twoLayer"|"flat"}
+ * @returns {"twoLayer"}
  */
-export function resolveInitialPickerMode({ isMobile, storedMode }) {
-  if (isMobile) return "twoLayer";
-  return PICKER_MODES.has(storedMode) ? storedMode : "twoLayer";
+export function resolveInitialPickerMode() {
+  return "twoLayer";
 }
 
 /**
@@ -60,4 +59,27 @@ export function writeStoredPickerMode(mode) {
  */
 export function isPickerMode(mode) {
   return PICKER_MODES.has(mode);
+}
+
+/**
+ * Read whether picker gesture tip was dismissed before.
+ *
+ * @returns {boolean}
+ */
+export function readStoredGestureTipDismissed() {
+  if (typeof window === "undefined") return false;
+  if (!window.localStorage) return false;
+  return window.localStorage.getItem(PICKER_GESTURE_TIP_KEY) === "1";
+}
+
+/**
+ * Persist picker gesture tip dismissed state.
+ *
+ * @param {boolean} dismissed - Dismissed state.
+ * @returns {void}
+ */
+export function writeStoredGestureTipDismissed(dismissed) {
+  if (typeof window === "undefined") return;
+  if (!window.localStorage) return;
+  window.localStorage.setItem(PICKER_GESTURE_TIP_KEY, dismissed ? "1" : "0");
 }

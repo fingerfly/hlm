@@ -11,10 +11,7 @@ import {
   undoLastAction,
   undoBySlot
 } from "../src/app/tilePickerState.js";
-import {
-  resolvePatternAction,
-  getContextActionAvailability
-} from "../src/app/tilePatternActions.js";
+import { resolvePatternAction } from "../src/app/tilePatternActions.js";
 import { createUiFlowState } from "../src/app/uiFlowState.js";
 import { TAB_TILES, CONTEXT_PRESETS } from "./uiConfig.js";
 import {
@@ -28,6 +25,7 @@ import {
   bindTabButtons,
   bindPresetButtons
 } from "./uiBindings.js";
+import { readStoredGestureTipDismissed } from "./pickerModeState.js";
 import { bindCloseButtons } from "./modalUi.js";
 import { renderResultModal, renderInfoTip } from "./resultModalView.js";
 import { createModalActions } from "./appModalActions.js";
@@ -51,6 +49,9 @@ const store = {
   uiState: createUiFlowState(),
   pickerState: createTilePickerState([]),
   pickerAction: "single",
+  pickerActionOnce: null,
+  pickerActionLock: null,
+  pickerGestureTipDismissed: readStoredGestureTipDismissed(),
   resultVm: null
 };
 const stateActions = createStateActions(store, {
@@ -60,7 +61,6 @@ const stateActions = createStateActions(store, {
   addTileToPicker,
   addTilesToPicker,
   resolvePatternAction,
-  getContextActionAvailability,
   renderPatternActionButtons,
   selectPickerSlot,
   deleteSelectedSlot,

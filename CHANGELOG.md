@@ -4,7 +4,53 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Changed
+- UI cleanup and step 1 fix: flattened pattern row (1–2 clicks per group),
+  removed slot context menu, picker-mode toggle, and 更多 dropdown
+  (`public/index.html`, `public/contextWiring.js`, `public/appEventWiring.js`).
+- Moved 清空 to direct button in picker footer and home screen at step 1
+  (`public/index.html`, `public/homeStateView.js`, `public/appRefs.js`).
+- Step 1 contextSummary shows "—" until conditions are set at step 2
+  (`public/homeStateView.js`).
+- Picker mode always twoLayer; removed getContextMenuAvailability,
+  undoSelectedSlot, contextMenuView, contextMenuPosition
+  (`public/handPickerActions.js`, `public/pickerModeState.js`).
+
+### Removed
+- Removed slot context menu, contextMenuView.js, contextMenuPosition.js.
+- Removed picker-mode-toggle, pickerGestureTip, openContextBtn, clearBtn refs.
+
+## [4.2.0] - 2026-03-17
+
 ## [4.1.0] - 2026-03-17
+
+### Added
+- Added tile-first picker mode controls with two-layer (`分类`) and flat
+  (`平铺34张`) entry options in hand-input modal
+  (`public/index.html`, `public/styles-components.css`).
+- Added picker mode policy and persistence helpers for mobile-default
+  two-layer and desktop preference restore
+  (`public/pickerModeState.js`, `public/handContextActions.js`).
+- Added dynamic context-menu availability rendering utilities and slot-undo
+  state helpers (`public/contextMenuView.js`, `public/contextWiring.js`).
+- Added focused unit coverage for context wiring/state helpers
+  (`tests/unit/contextWiring.test.js`).
+
+### Changed
+- Changed hand-input workflow to tile-first interaction with state-driven
+  picker rendering and event bindings split into smaller modules
+  (`public/appEventWiring.js`, `public/appEventBindings.js`,
+  `public/pickerRenderFlow.js`, `public/pickerModeView.js`).
+- Changed app state action composition to modular hand/context/result
+  cooperators while preserving behavior (`public/appStateActions.js`,
+  `public/handStateActions.js`, `public/handPickerActions.js`,
+  `public/handContextActions.js`, `public/resultStateActions.js`,
+  `public/homeStateView.js`).
+- Changed pattern-action legality to expose deterministic context-menu
+  availability by remaining-slot and tile constraints
+  (`src/app/tilePatternActions.js`).
+- Changed top hand area readability and picker workflow clarity for mobile
+  and desktop (`public/styles-components.css`, `public/index.html`).
 
 ## [4.0.0] - 2026-03-17
 

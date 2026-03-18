@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>麻将牌样张 - 变大后预览</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+      padding: 24px;
+      background: #f2f2f7;
+      color: #111;
+    }
+    h2 { margin: 0 0 8px; }
+    h3 { margin: 16px 0 8px; color: #636366; font-size: 14px; }
+    .spec { font-size: 12px; color: #636366; margin-bottom: 20px; }
+    .row { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 20px; }
+    .tile {
+      width: 80px;
+      height: 105px;
+      border-radius: 10px;
+      border: 2px solid #d8dee9;
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3.2em;
+      line-height: 1;
+      font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji",
+        "Android Emoji", sans-serif;
+    }
+    .bai {
+      border: 2px dashed #9ca3af;
+      background: #fafafa;
+    }
+    .selected {
+      border-color: #007aff;
+      box-shadow: 0 0 0 2px rgba(0, 122, 255, 0.35);
+    }
+  </style>
+</head>
+<body>
+  <h2>麻将牌样张</h2>
+  <p class="spec">规格：80×105px，Unicode 麻将牌 U+1F000–U+1F029，font-size 3.2em</p>
+
+  <h3>万（1-9）</h3>
+  <div class="row">
+    <div class="tile" aria-label="一万">&#x1F007;</div>
+    <div class="tile" aria-label="二万">&#x1F008;</div>
+    <div class="tile" aria-label="三万">&#x1F009;</div>
+    <div class="tile" aria-label="四万">&#x1F00A;</div>
+    <div class="tile" aria-label="五万">&#x1F00B;</div>
+    <div class="tile" aria-label="六万">&#x1F00C;</div>
+    <div class="tile" aria-label="七万">&#x1F00D;</div>
+    <div class="tile" aria-label="八万">&#x1F00E;</div>
+    <div class="tile" aria-label="九万">&#x1F00F;</div>
+  </div>
+
+  <h3>条（1-9）</h3>
+  <div class="row">
+    <div class="tile" aria-label="一条">&#x1F010;</div>
+    <div class="tile" aria-label="二条">&#x1F011;</div>
+    <div class="tile" aria-label="三条">&#x1F012;</div>
+    <div class="tile" aria-label="四条">&#x1F013;</div>
+    <div class="tile" aria-label="五条">&#x1F014;</div>
+    <div class="tile" aria-label="六条">&#x1F015;</div>
+    <div class="tile" aria-label="七条">&#x1F016;</div>
+    <div class="tile" aria-label="八条">&#x1F017;</div>
+    <div class="tile" aria-label="九条">&#x1F018;</div>
+  </div>
+
+  <h3>筒（1-9）</h3>
+  <div class="row">
+    <div class="tile" aria-label="一筒">&#x1F019;</div>
+    <div class="tile" aria-label="二筒">&#x1F01A;</div>
+    <div class="tile" aria-label="三筒">&#x1F01B;</div>
+    <div class="tile" aria-label="四筒">&#x1F01C;</div>
+    <div class="tile" aria-label="五筒">&#x1F01D;</div>
+    <div class="tile" aria-label="六筒">&#x1F01E;</div>
+    <div class="tile" aria-label="七筒">&#x1F01F;</div>
+    <div class="tile" aria-label="八筒">&#x1F020;</div>
+    <div class="tile" aria-label="九筒">&#x1F021;</div>
+  </div>
+
+  <h3>风牌（东南西北）</h3>
+  <div class="row">
+    <div class="tile" aria-label="东风">&#x1F000;</div>
+    <div class="tile" aria-label="南风">&#x1F001;</div>
+    <div class="tile" aria-label="西风">&#x1F002;</div>
+    <div class="tile" aria-label="北风">&#x1F003;</div>
+  </div>
+
+  <h3>箭牌（中发白）</h3>
+  <div class="row">
+    <div class="tile" aria-label="红中">&#x1F004;</div>
+    <div class="tile" aria-label="发财">&#x1F005;</div>
+    <div class="tile bai" aria-label="白板">&#x1F006;</div>
+  </div>
+
+  <h3>花牌（梅兰竹菊）</h3>
+  <div class="row">
+    <div class="tile" aria-label="梅">&#x1F022;</div>
+    <div class="tile" aria-label="兰">&#x1F023;</div>
+    <div class="tile" aria-label="竹">&#x1F024;</div>
+    <div class="tile" aria-label="菊">&#x1F025;</div>
+  </div>
+
+  <h3>季节牌（春夏秋冬）</h3>
+  <div class="row">
+    <div class="tile" aria-label="春">&#x1F026;</div>
+    <div class="tile" aria-label="夏">&#x1F027;</div>
+    <div class="tile" aria-label="秋">&#x1F028;</div>
+    <div class="tile" aria-label="冬">&#x1F029;</div>
+  </div>
+
+  <h3>14 张牌预览（7×2 布局）</h3>
+  <div class="row" style="max-width: 620px;">
+    <div class="tile" aria-label="一万">&#x1F007;</div>
+    <div class="tile" aria-label="一万">&#x1F007;</div>
+    <div class="tile" aria-label="二万">&#x1F008;</div>
+    <div class="tile" aria-label="三万">&#x1F009;</div>
+    <div class="tile" aria-label="四万">&#x1F00A;</div>
+    <div class="tile" aria-label="五万">&#x1F00B;</div>
+    <div class="tile" aria-label="六万">&#x1F00C;</div>
+    <div class="tile" aria-label="七万">&#x1F00D;</div>
+    <div class="tile" aria-label="二条">&#x1F011;</div>
+    <div class="tile" aria-label="三条">&#x1F012;</div>
+    <div class="tile" aria-label="四条">&#x1F013;</div>
+    <div class="tile" aria-label="五筒">&#x1F01D;</div>
+    <div class="tile" aria-label="六筒">&#x1F01E;</div>
+    <div class="tile" aria-label="七筒">&#x1F01F;</div>
+    <div class="tile" aria-label="九筒">&#x1F021;</div>
+    <div class="tile" aria-label="九筒">&#x1F021;</div>
+  </div>
+
+  <h3>选中态示例</h3>
+  <div class="row">
+    <div class="tile" aria-label="一万">&#x1F007;</div>
+    <div class="tile selected" aria-label="五万">&#x1F00B;</div>
+    <div class="tile" aria-label="九万">&#x1F00F;</div>
+  </div>
+</body>
+</html>

@@ -5,7 +5,10 @@ import {
   openModal,
   closeModal,
   setResultPayload,
-  canCalculate
+  canCalculate,
+  setWizardStep,
+  nextWizardStep,
+  prevWizardStep
 } from "../../src/app/uiFlowState.js";
 
 test("ui flow opens and closes modal states", () => {
@@ -33,4 +36,28 @@ test("canCalculate requires 14 tiles and valid context", () => {
     hand: { ...state.hand, tiles: new Array(14).fill("1W") }
   };
   assert.equal(canCalculate(full), true);
+});
+
+test("wizard step starts at tile input and clamps", () => {
+  const state = createUiFlowState();
+  assert.equal(state.wizard.step, 1);
+  assert.equal(setWizardStep(state, 2).wizard.step, 2);
+  assert.equal(setWizardStep(state, 8).wizard.step, 3);
+  assert.equal(setWizardStep(state, -2).wizard.step, 1);
+});
+
+test("wizard next and prev step stay in bounds", () => {
+  let state = createUiFlowState();
+  state = nextWizardStep(state);
+  assert.equal(state.wizard.step, 2);
+  state = nextWizardStep(state);
+  assert.equal(state.wizard.step, 3);
+  state = nextWizardStep(state);
+  assert.equal(state.wizard.step, 3);
+  state = prevWizardStep(state);
+  assert.equal(state.wizard.step, 2);
+  state = prevWizardStep(state);
+  assert.equal(state.wizard.step, 1);
+  state = prevWizardStep(state);
+  assert.equal(state.wizard.step, 1);
 });

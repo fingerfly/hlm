@@ -14,6 +14,17 @@ function initialModalState() {
   };
 }
 
+function initialWizardState() {
+  return { step: 1, totalSteps: 3 };
+}
+
+function clampWizardStep(step) {
+  if (!Number.isInteger(step)) return 1;
+  if (step < 1) return 1;
+  if (step > 3) return 3;
+  return step;
+}
+
 /**
  * Build a fresh UI flow state object.
  *
@@ -27,6 +38,7 @@ export function createUiFlowState() {
       tiles: [],
       activeTab: "W"
     },
+    wizard: initialWizardState(),
     modal: initialModalState(),
     result: null
   };
@@ -92,4 +104,44 @@ export function setResultPayload(state, payload) {
  */
 export function canCalculate(state) {
   return Array.isArray(state.hand.tiles) && state.hand.tiles.length === 14;
+}
+
+/**
+ * Set current wizard step with bounds.
+ *
+ * @param {object} state - Current ui flow state.
+ * @param {number} step - Desired step number.
+ * @returns {object}
+ */
+export function setWizardStep(state, step) {
+  return {
+    ...state,
+    wizard: {
+      ...(state.wizard || initialWizardState()),
+      step: clampWizardStep(step),
+      totalSteps: 3
+    }
+  };
+}
+
+/**
+ * Move wizard one step forward.
+ *
+ * @param {object} state - Current ui flow state.
+ * @returns {object}
+ */
+export function nextWizardStep(state) {
+  const current = state.wizard?.step || 1;
+  return setWizardStep(state, current + 1);
+}
+
+/**
+ * Move wizard one step backward.
+ *
+ * @param {object} state - Current ui flow state.
+ * @returns {object}
+ */
+export function prevWizardStep(state) {
+  const current = state.wizard?.step || 1;
+  return setWizardStep(state, current - 1);
 }

@@ -42,9 +42,70 @@ export function bindModalCloseButtons(bindCloseButtons, modalActions) {
  * @returns {void}
  */
 export function bindPatternActionButtons(stateActions) {
+  function usesLongPressLock() {
+    if (typeof window === "undefined") return false;
+    if (window.matchMedia && window.matchMedia("(pointer: coarse)").matches) {
+      return true;
+    }
+    return "ontouchstart" in window;
+  }
+  const useLongPress = usesLongPressLock();
+  const LONG_PRESS_MS = 360;
   for (const button of document.querySelectorAll("[data-pattern-action]")) {
+    const actionId = button.dataset.patternAction;
+    if (!useLongPress) {
+      button.addEventListener("click", () => {
+        if (typeof stateActions.tapPatternAction === "function") {
+          stateActions.tapPatternAction(actionId);
+          return;
+        }
+        stateActions.setPatternAction(actionId);
+      });
+      button.addEventListener("contextmenu", (event) => {
+        event.preventDefault();
+        if (typeof stateActions.lockPatternAction === "function") {
+          stateActions.lockPatternAction(actionId);
+          if (typeof stateActions.dismissPickerGestureTip === "function") {
+            stateActions.dismissPickerGestureTip();
+          }
+          return;
+        }
+        stateActions.setPatternAction(actionId);
+      });
+      continue;
+    }
+    let timer = null;
+    let longPressHandled = false;
+    button.addEventListener("pointerdown", () => {
+      longPressHandled = false;
+      timer = setTimeout(() => {
+        longPressHandled = true;
+        if (typeof stateActions.lockPatternAction === "function") {
+          stateActions.lockPatternAction(actionId);
+          if (typeof stateActions.dismissPickerGestureTip === "function") {
+            stateActions.dismissPickerGestureTip();
+          }
+          return;
+        }
+        stateActions.setPatternAction(actionId);
+      }, LONG_PRESS_MS);
+    });
+    const clearPress = () => {
+      if (timer) {
+        clearTimeout(timer);
+        timer = null;
+      }
+    };
+    button.addEventListener("pointerup", clearPress);
+    button.addEventListener("pointerleave", clearPress);
+    button.addEventListener("pointercancel", clearPress);
     button.addEventListener("click", () => {
-      stateActions.setPatternAction(button.dataset.patternAction);
+      if (longPressHandled) return;
+      if (typeof stateActions.tapPatternAction === "function") {
+        stateActions.tapPatternAction(actionId);
+        return;
+      }
+      stateActions.setPatternAction(actionId);
     });
   }
 }
