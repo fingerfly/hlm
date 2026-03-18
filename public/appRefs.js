@@ -19,7 +19,6 @@ export function createAppRefs(byId) {
     tilePreviewEl: byId("tilePreview"),
     tileCountEl: byId("tileCount"),
     pickerCountEl: byId("pickerCount"),
-    pickerActionHintEl: byId("pickerActionHint"),
     pickerDeleteBtn: byId("pickerDeleteBtn"),
     contextSummaryEl: byId("contextSummary"),
     wizardStepHintEl: byId("wizardStepHint"),

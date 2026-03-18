@@ -17,8 +17,7 @@ import { TAB_TILES, CONTEXT_PRESETS } from "./uiConfig.js";
 import {
   renderTilePreview,
   renderPickerTabButtons,
-  renderTilePickerGrid,
-  renderPatternActionButtons
+  renderTilePickerGrid
 } from "./uiRenderers.js";
 import {
   resetContext,
@@ -61,7 +60,6 @@ const stateActions = createStateActions(store, {
   addTileToPicker,
   addTilesToPicker,
   resolvePatternAction,
-  renderPatternActionButtons,
   selectPickerSlot,
   deleteSelectedSlot,
   clearTilePicker,
@@ -73,7 +71,9 @@ const stateActions = createStateActions(store, {
   renderResultModal,
   renderInfoTip
 });
-const modalActions = createModalActions(store, modalRefs);
+const modalActions = createModalActions(store, modalRefs, {
+  onBeforeClosePicker: () => stateActions.closeTileContextMenu?.()
+});
 
 wireAppEvents({
   byId,

@@ -9,8 +9,7 @@ import { getPickerTilesByMode } from "./pickerModeView.js";
 import { renderPickerByTab } from "./pickerRenderFlow.js";
 import {
   createBindClick,
-  bindModalCloseButtons,
-  bindPatternActionButtons
+  bindModalCloseButtons
 } from "./appEventBindings.js";
 import {
   wireContextSegmentedControls,
@@ -143,7 +142,6 @@ export function wireAppEvents(params) {
     const result = stateActions.goWizardPrev();
     syncWizardModals(result, modalActions);
   });
-  bindPatternActionButtons(stateActions);
   wireSlotClickToPicker({
     byId,
     stateActions,

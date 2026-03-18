@@ -105,18 +105,3 @@ export function renderTilePickerGrid({ tilePickerGridEl, tiles, onPick }) {
   }
 }
 
-/**
- * Render active quick-action button state.
- *
- * @param {string} actionId - Current quick action id.
- * @returns {void}
- */
-export function renderPatternActionButtons(actionId, lockedActionId = null) {
-  for (const button of document.querySelectorAll("[data-pattern-action]")) {
-    const buttonAction = button.dataset.patternAction;
-    const isActive = buttonAction === actionId;
-    const isLocked = buttonAction === lockedActionId;
-    button.classList.toggle("active", isActive);
-    button.classList.toggle("locked", isLocked);
-  }
-}

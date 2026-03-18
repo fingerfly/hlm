@@ -4,6 +4,32 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [4.4.0] - 2026-03-18
+
+### Changed
+- Tile context menu now floats as overlay (position: fixed) instead of
+  occupying layout space; closed menu takes no space between tabs and grid
+  (`public/styles-components.css`).
+- Exposed closeTileContextMenu; picker modal close now clears menu listeners
+  to prevent leak (`public/tileContextMenuController.js`,
+  `public/handStateActions.js`, `public/appModalActions.js`, `public/app.js`).
+
+### Added
+- `pickTileWithAction(baseTile, actionId)` for tile-click context menu
+  (Phase 1 of tile-click context menu track)
+  (`public/handPickerActions.js`, `tests/unit/tileContextMenu.test.js`).
+- Tile-click context menu: click tile in grid opens popup with single/pair/
+  pung/chow options; impossible options hidden by remaining slots (Phase 2)
+  (`public/tileContextMenuController.js`, `public/index.html`,
+  `public/handStateActions.js`, `public/pickerRenderFlow.js`,
+  `public/styles-components.css`).
+- Removed persistent pattern-action buttons and pickerActionHint (Phase 3)
+  (`public/index.html`, `public/homeStateView.js`, `public/appEventWiring.js`,
+  `public/appStateActions.js`, `public/app.js`, `public/appRefs.js`,
+  `public/uiRenderers.js`, `public/styles-components.css`).
+- Phase 4: Long-press lock removed (simplest flow); slot-tap editingIndex
+  verified; added unit test for editingIndex in pickTileWithAction.
+
 ## [4.3.2] - 2026-03-18
 
 ### Fixed

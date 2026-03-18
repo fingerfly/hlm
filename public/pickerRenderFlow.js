@@ -28,6 +28,6 @@ export function renderPickerByTab(params) {
       pickerMode,
       store.uiState.hand.activeTab
     ),
-    onPick: (tile) => stateActions.pickTile(tile)
+    onPick: (tile) => stateActions.openTileContextMenu(tile)
   });
 }

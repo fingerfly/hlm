@@ -90,6 +90,31 @@ export function createHandPickerActions(input) {
     syncHomeState();
     return true;
   }
+
+  /**
+   * Add tiles using explicit action id (for tile-click context menu).
+   *
+   * @param {string} baseTile - Canonical tile code.
+   * @param {string} actionId - Quick action id (single, pair, pung, etc.).
+   * @returns {boolean} True if tiles were added.
+   */
+  function pickTileWithAction(baseTile, actionId) {
+    const result = resolvePatternAction(
+      store.pickerState,
+      baseTile,
+      actionId
+    );
+    if (!result.ok) {
+      if (refs.pickerActionHintEl) {
+        refs.pickerActionHintEl.textContent =
+          `快捷动作不可用：${result.reason}`;
+      }
+      return false;
+    }
+    store.pickerState = addTilesToPicker(store.pickerState, result.tiles);
+    syncHomeState();
+    return true;
+  }
   function selectSlot(index) {
     store.pickerState = selectPickerSlot(store.pickerState, index);
     syncHomeState();
@@ -109,6 +134,7 @@ export function createHandPickerActions(input) {
     dismissPickerGestureTip,
     setPatternAction,
     pickTile,
+    pickTileWithAction,
     selectSlot,
     deleteSelected,
     undoHand

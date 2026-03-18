@@ -1,6 +1,7 @@
 import { resolveInitialPickerMode } from "./pickerModeState.js";
 import { createHandPickerActions } from "./handPickerActions.js";
 import { createHandContextActions } from "./handContextActions.js";
+import { createOpenTileContextMenu } from "./tileContextMenuController.js";
 
 /**
  * Initialize picker mode in store from policy.
@@ -39,8 +40,18 @@ export function createHandStateActions(input) {
     syncHomeState
   });
   const pickerActions = createHandPickerActions(input);
+  const {
+    openTileContextMenu,
+    closeTileContextMenu
+  } = createOpenTileContextMenu({
+    store,
+    byId,
+    pickTileWithAction: pickerActions.pickTileWithAction
+  });
   return {
     ...contextActions,
-    ...pickerActions
+    ...pickerActions,
+    openTileContextMenu,
+    closeTileContextMenu
   };
 }

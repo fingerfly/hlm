@@ -41,6 +41,11 @@ todos:
   - id: track-deploy-safety-hardening
     content: Execute deploy safety hardening (doctor, dry-run, mismatch warning, auth hints, CI matrix).
     status: completed
+  - id: track-tile-click-context-menu
+    content: >
+      Replace persistent pattern-action buttons with tile-click-triggered
+      dynamic context menu; hide impossible options by remaining slots.
+    status: completed
 isProject: false
 ---
 
@@ -64,6 +69,7 @@ isProject: false
   - `Full MCR fan coverage`
   - `UI cleanup and step 1 fix`
   - `Deploy safety hardening`
+  - `Tile-click context menu`
   - `Final release gate`
 - ValidationBaseline:
   - `npm test` pass
@@ -79,6 +85,7 @@ isProject: false
   - `hlm_ui_cleanup_and_step1_fix_07c1e0a1.plan.md` (historical reference;
   file not present in current workspace)
   - [hlm_deploy_hardening_b0d19373.plan.md](hlm_deploy_hardening_b0d19373.plan.md)
+  - [hlm_tile_click_context_menu_998eab78.plan.md](hlm_tile_click_context_menu_998eab78.plan.md)
 - ReopenDate: `2026-03-17`
 - ReopenIntent:
   - `Implement tile-first hand input UI and workflow overhaul.`
@@ -115,6 +122,8 @@ isProject: false
 not present in current workspace)
 - Deploy safety hardening track (completed):
 [hlm_deploy_hardening_b0d19373.plan.md](hlm_deploy_hardening_b0d19373.plan.md)
+- Tile-click context menu track (completed):
+[hlm_tile_click_context_menu_998eab78.plan.md](hlm_tile_click_context_menu_998eab78.plan.md)
 - Historical supporting plans (traceability only):
   - [hlm_版本升级工具与中文术语统一_35161103.plan.md](hlm_版本升级工具与中文术语统一_35161103.plan.md)
   - `spike_full_automation_6a79ecff.plan.md` (historical reference; file
@@ -161,7 +170,8 @@ flowchart TD
   mcrTrack --> tileFirstUi[TileFirstUi_Overhaul_Completed]
   tileFirstUi --> uiCleanup[UICleanup_Step1Fix_Completed]
   uiCleanup --> deployHardening[DeploySafetyHardening_Completed]
-  deployHardening --> releaseGate[Final_Release_Gate_Completed]
+  deployHardening --> tileClickMenu[TileClickContextMenu_Completed]
+  tileClickMenu --> releaseGate[Final_Release_Gate_Completed]
 ```
 
 
@@ -178,7 +188,9 @@ practicality upgrade exit (or after Pages if practicality is deferred).
 - Tile-first UI overhaul executes after Full MCR fan coverage exits.
 - UI cleanup and step 1 fix executes after tile-first UI overhaul exits.
 - Deploy safety hardening executes after UI cleanup track exits.
-- Final release gate reruns after deploy safety hardening exits.
+- Tile-click context menu track executes after deploy safety hardening
+  (builds on completed tile-first UI overhaul).
+- Final release gate reruns after tile-click context menu track exits.
 
 ## Phase Status Dashboard
 
@@ -189,9 +201,9 @@ practicality upgrade exit (or after Pages if practicality is deferred).
 - ProgressPercent: `100`
 - ActivePhase: `none`
 - Focus:
-  - `All tracked HLM roadmap items in this master plan are completed.`
-  - `Release hardening safeguards are integrated and validated.`
-  - `No active execution track remains in this plan.`
+  - `All tracked HLM roadmap items completed.`
+  - `Tile-click context menu track delivered.`
+  - `Release hardening safeguards integrated and validated.`
 - ExitGateCheck:
   - Unit: `pass`
   - Integration: `pass`
@@ -205,8 +217,8 @@ practicality upgrade exit (or after Pages if practicality is deferred).
 - RisksAndBlockers:
   - `No blocker.`
 - NextActions:
-  - `Maintain completed state; open a new track only for net-new scope.`
-  - `Keep regression/test/complexity guardrails enforced on future changes.`
+  - `Maintain completed state; keep regression/test/complexity guardrails
+    enforced on future changes.`
 - ValidationEvidence:
   - `Added dist artifact builder and workflow publish path switched to dist/.`
   - `Added security scan workflow: .github/workflows/security-scan.yml.`
@@ -220,6 +232,8 @@ practicality upgrade exit (or after Pages if practicality is deferred).
   - `Current rerun evidence: test:unit/integration/regression/full, complexity, cloc, and lints all pass.`
   - `Deploy hardening delivered: doctor mode, dry-run mode, protocol mismatch warning, auth-aware preflight hints, and README/runbook updates.`
   - `Deploy safety matrix workflow added for Ubuntu/macOS/Windows deploy-focused checks.`
+  - `Tile-click context menu track delivered: pickTileWithAction, dynamic
+    menu, pattern-actions removed; all phases 1-5 complete.`
 - LastUpdated: `2026-03-18`
 
 ## Security and Privacy Hardening Track

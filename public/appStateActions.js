@@ -47,7 +47,6 @@ export function createStateActions(store, deps) {
     contextPresets,
     addTilesToPicker,
     resolvePatternAction,
-    renderPatternActionButtons,
     selectPickerSlot,
     deleteSelectedSlot,
     clearTilePicker,
@@ -65,7 +64,6 @@ export function createStateActions(store, deps) {
       byId,
       refs,
       renderTilePreview,
-      renderPatternActionButtons,
       canCalculate
     });
   }

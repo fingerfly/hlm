@@ -13,10 +13,13 @@ import { setModalOpen } from "./modalUi.js";
  *
  * @param {{uiState: object}} store - Shared app store.
  * @param {object} modalRefs - Modal DOM references.
+ * @param {{onBeforeClosePicker?: Function}} [opts] - Optional callbacks.
  * @returns {{updateModalUi: Function, openModalByKey: Function,
  *   closeModalByKey: Function}}
  */
-export function createModalActions(store, modalRefs) {
+export function createModalActions(store, modalRefs, opts = {}) {
+  const { onBeforeClosePicker } = opts;
+
   function updateModalUi() {
     setModalOpen(modalRefs.picker, store.uiState.modal.picker);
     setModalOpen(modalRefs.context, store.uiState.modal.context);
@@ -30,6 +33,7 @@ export function createModalActions(store, modalRefs) {
   }
 
   function closeModalByKey(modalKey) {
+    if (modalKey === "picker") onBeforeClosePicker?.();
     store.uiState = closeModal(store.uiState, modalKey);
     updateModalUi();
   }

@@ -55,15 +55,26 @@
           <button data-tab="B" class="tab-btn">筒</button>
           <button data-tab="Z" class="tab-btn">字牌</button>
         </div>
-        <div class="pattern-actions">
-          <button data-pattern-action="single" class="ghost-btn active">单张</button>
-          <button data-pattern-action="pair" class="ghost-btn">对子</button>
-          <button data-pattern-action="pung" class="ghost-btn">刻子</button>
-          <button data-pattern-action="chow_front" class="ghost-btn">顺子前位</button>
-          <button data-pattern-action="chow_middle" class="ghost-btn">顺子中位</button>
-          <button data-pattern-action="chow_back" class="ghost-btn">顺子后位</button>
+        <div id="tileContextMenu" class="tile-context-menu" hidden
+          role="menu" aria-label="选择添加方式">
+          <button type="button" data-context-action="single" class="ghost-btn">
+            单张
+          </button>
+          <button type="button" data-context-action="pair" class="ghost-btn">
+            对子
+          </button>
+          <button type="button" data-context-action="pung" class="ghost-btn">
+            刻子
+          </button>
+          <div class="context-chow-submenu">
+            <button type="button" data-context-action="chow_front"
+              class="ghost-btn">顺子前位</button>
+            <button type="button" data-context-action="chow_middle"
+              class="ghost-btn">顺子中位</button>
+            <button type="button" data-context-action="chow_back"
+              class="ghost-btn">顺子后位</button>
+          </div>
         </div>
-        <p id="pickerActionHint" class="summary-text">当前快捷动作：单张</p>
         <div id="tilePickerGrid" class="tile-picker-grid"></div>
         <div class="sheet-footer">
           <span id="pickerCount">已选 0/14</span>

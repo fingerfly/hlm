@@ -6,15 +6,6 @@
  */
 import { pickerToTiles } from "../src/app/tilePickerState.js";
 
-const ACTION_NAMES = Object.freeze({
-  single: "单张",
-  pair: "对子",
-  pung: "刻子",
-  chow_front: "顺子前位",
-  chow_middle: "顺子中位",
-  chow_back: "顺子后位"
-});
-
 function getContextSummary(byId) {
   const winTypeText = byId("winType").value === "zimo" ? "自摸" : "点和";
   const handStateText = byId("handState").value === "menqian"
@@ -53,17 +44,6 @@ function wizardBackLabel(step) {
   return "上一步";
 }
 
-function getPatternActionHint(store) {
-  const label = ACTION_NAMES[store.pickerAction] || "单张";
-  if (store.pickerActionLock) {
-    return `当前快捷动作：${label}（已锁定）`;
-  }
-  if (store.pickerActionOnce) {
-    return `当前快捷动作：${label}（下一次生效）`;
-  }
-  return `当前快捷动作：${label}`;
-}
-
 /**
  * Render home widgets from current app state.
  *
@@ -76,7 +56,6 @@ export function syncHomeStateView(input) {
     byId,
     refs,
     renderTilePreview,
-    renderPatternActionButtons,
     canCalculate
   } = input;
   store.uiState = {
@@ -102,10 +81,6 @@ export function syncHomeStateView(input) {
     refs.pickerDeleteBtn.hidden = !hasSelection;
     refs.pickerDeleteBtn.disabled = !hasSelection;
   }
-  if (refs.pickerActionHintEl) {
-    refs.pickerActionHintEl.textContent = getPatternActionHint(store);
-  }
-  renderPatternActionButtons(store.pickerAction, store.pickerActionLock);
   if (refs.contextSummaryEl) {
     refs.contextSummaryEl.textContent =
       wizardStep === 1 ? "—" : getContextSummary(byId);
