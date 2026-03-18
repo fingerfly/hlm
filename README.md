@@ -20,6 +20,13 @@ Blueprint implementation for `和了么 - 国标麻将计番助手` (`Huleme - G
   - Safety gate: release/build modes now run `npm test` first and require `--confirm` before writing files
   - Remote preflight: deploy checks remote access with
     `git ls-remote` before version or changelog writes
+  - Deploy doctor (non-mutating diagnostics):
+    - `npm run release:doctor`
+    - reports origin remote, expected repo, resolved deploy remote,
+      mismatch warning (if detected), and preflight result
+  - Dry-run release (non-mutating):
+    - `npm run deploy -- minor --dry-run`
+    - runs preflight and prints version summary without file writes/push
   - Local deploy clone dir:
     - `path.join(TMPDIR|TEMP|TMP|"/tmp", "hlm-deploy")`
     - Example on macOS: `/var/folders/.../T/hlm-deploy`
@@ -30,11 +37,14 @@ Blueprint implementation for `和了么 - 国标麻将计番助手` (`Huleme - G
     - clone or refresh temp deploy repo
     - sync source tree into temp clone
     - commit and push to GitHub `main`
-  - Remote defaults by OS:
+  - Remote defaults and protocol policy:
     - Auto-detected from local `git remote origin` when available
-    - Fallback: `owner/repo` template when origin is unavailable
-    - Windows format: `https://github.com/<owner>/<repo>.git`
-    - macOS/Linux format: `git@github.com:<owner>/<repo>.git`
+    - If origin transport is detectable, deploy follows origin protocol:
+      HTTPS origin -> HTTPS deploy remote, SSH origin -> SSH deploy remote
+    - Fallback when origin is unavailable: Windows defaults to HTTPS,
+      macOS/Linux defaults to SSH
+    - Transport mismatch prints warning; you can override explicitly with
+      `HLM_DEPLOY_REMOTE`
   - Override expected repo template:
     - `HLM_DEPLOY_REPO=<owner>/<repo>`
   - Override remote per shell: `HLM_DEPLOY_REMOTE=<remote-url>`
@@ -48,6 +58,7 @@ Blueprint implementation for `和了么 - 国标麻将计番助手` (`Huleme - G
   - `npm run release:patch`
   - `npm run release:minor`
   - `npm run release:major`
+  - `npm run release:doctor` (non-mutating diagnostics)
   - Detailed runbook:
     - `RELEASE_AND_PUBLISH.md`
 - Changelog prompt templates (for AI-assisted update workflow):
@@ -59,12 +70,20 @@ Blueprint implementation for `和了么 - 国标麻将计番助手` (`Huleme - G
   - Shortcut aliases: `npm run prompt:update`, `npm run prompt:release`, `npm run prompt:all`
   - Agent aliases: `npm run prompt:update:agent`, `npm run prompt:release:agent`
   - Run agent directly: `npm run prompt:update:agent:run`, `npm run prompt:release:agent:run`
-- Deploy CLI integration coverage (`tests/unit/deployCli.test.js`):
+- Deploy CLI/runtime coverage:
   - invalid mode: prints normalized usage
   - `build`: only increments build number
   - `patch`: bumps patch and resets build to `1`
   - `minor`: bumps minor and resets build to `1`
   - `major`: bumps major and resets build to `1`
+  - `doctor`: prints diagnostics without file mutation
+  - `--dry-run`: prints release summary without writes/push
+  - transport mismatch warnings and protocol-specific preflight hints
+  - Test suites:
+    - `tests/unit/deployCli.release.core.test.js`
+    - `tests/unit/deployCli.release.bump.test.js`
+    - `tests/unit/deployCli.prompts.test.js`
+    - `tests/unit/deployRuntime.test.js`
 
 ## Scope in this iteration
 
