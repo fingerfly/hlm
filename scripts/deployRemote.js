@@ -21,7 +21,7 @@ export function getDefaultDeployRemoteForPlatform(
   cwd = process.cwd()
 ) {
   const expectedRepo = resolveExpectedDeployRepo(env, runSync, cwd);
-  const transport = detectGithubTransportFromOrigin(runSync, cwd);
+  const transport = detectOriginTransport(env, runSync, cwd, platform);
   if (transport === "https") {
     return `https://github.com/${expectedRepo}.git`;
   }
@@ -34,14 +34,20 @@ export function getDefaultDeployRemoteForPlatform(
   return `git@github.com:${expectedRepo}.git`;
 }
 
-function detectOriginRemote(
+export function resolveOriginRemote(
+  env = process.env,
   runSync = spawnSync,
-  cwd = process.cwd()
+  cwd = process.cwd(),
+  platform = process.platform
 ) {
+  const override = String(env.HLM_ORIGIN_REMOTE ?? "").trim();
+  if (override) {
+    return override;
+  }
   const result = runSync(
     "git",
     ["config", "--get", "remote.origin.url"],
-    { cwd, encoding: "utf8", shell: process.platform === "win32" }
+    { cwd, encoding: "utf8", shell: platform === "win32" }
   );
   if (result.status !== 0) {
     return null;
@@ -49,13 +55,33 @@ function detectOriginRemote(
   return String(result.stdout || "").trim();
 }
 
-function detectGithubTransportFromOrigin(
+export function detectRemoteTransport(remoteUrl) {
+  const text = String(remoteUrl ?? "").trim();
+  if (!text) {
+    return null;
+  }
+  if (/^https?:\/\//i.test(text)) {
+    return "https";
+  }
+  if (/^(git@|ssh:\/\/git@)/i.test(text)) {
+    return "ssh";
+  }
+  return null;
+}
+
+function detectOriginTransport(
+  env = process.env,
   runSync = spawnSync,
-  cwd = process.cwd()
+  cwd = process.cwd(),
+  platform = process.platform
 ) {
-  const remote = detectOriginRemote(runSync, cwd);
+  const remote = resolveOriginRemote(env, runSync, cwd, platform);
   if (!remote) {
     return null;
+  }
+  const genericTransport = detectRemoteTransport(remote);
+  if (genericTransport) {
+    return genericTransport;
   }
   if (GITHUB_HTTPS_RE.test(remote)) {
     return "https";
@@ -67,10 +93,12 @@ function detectGithubTransportFromOrigin(
 }
 
 function detectRepoFromOriginRemote(
+  env = process.env,
   runSync = spawnSync,
-  cwd = process.cwd()
+  cwd = process.cwd(),
+  platform = process.platform
 ) {
-  const remoteText = detectOriginRemote(runSync, cwd);
+  const remoteText = resolveOriginRemote(env, runSync, cwd, platform);
   if (!remoteText) {
     return null;
   }
@@ -80,7 +108,8 @@ function detectRepoFromOriginRemote(
 export function resolveExpectedDeployRepo(
   env = process.env,
   runSync = spawnSync,
-  cwd = process.cwd()
+  cwd = process.cwd(),
+  platform = process.platform
 ) {
   const override = String(env.HLM_DEPLOY_REPO ?? "").trim().toLowerCase();
   if (override) {
@@ -91,7 +120,7 @@ export function resolveExpectedDeployRepo(
       return normalized;
     }
   }
-  const detected = detectRepoFromOriginRemote(runSync, cwd);
+  const detected = detectRepoFromOriginRemote(env, runSync, cwd, platform);
   if (detected) {
     const packageName = String(env.npm_package_name ?? "")
       .trim()
@@ -117,6 +146,39 @@ export function resolveDeployRemote(
     return override;
   }
   return getDefaultDeployRemoteForPlatform(platform, env, runSync, cwd);
+}
+
+export function getDeployTransportMismatchWarning(originRemote, deployRemote) {
+  const originTransport = detectRemoteTransport(originRemote);
+  const deployTransport = detectRemoteTransport(deployRemote);
+  if (!originTransport || !deployTransport) {
+    return null;
+  }
+  if (originTransport === deployTransport) {
+    return null;
+  }
+  return (
+    "Deploy transport mismatch: origin uses " +
+    `${originTransport.toUpperCase()} while deploy remote uses ` +
+    `${deployTransport.toUpperCase()}.`
+  );
+}
+
+function buildPreflightAuthHint(remoteUrl) {
+  const transport = detectRemoteTransport(remoteUrl);
+  if (transport === "ssh") {
+    return (
+      "Hint: SSH auth failed. Ensure your SSH key is loaded, or set " +
+      "HLM_DEPLOY_REMOTE=https://github.com/<owner>/<repo>.git"
+    );
+  }
+  if (transport === "https") {
+    return (
+      "Hint: HTTPS auth failed. Verify repository access and credentials, " +
+      "for GitHub use a Personal Access Token (PAT) when prompted."
+    );
+  }
+  return "Hint: verify deploy remote URL and repository access permissions.";
 }
 
 export function normalizeRemoteRepo(remoteUrl) {
@@ -163,10 +225,11 @@ export function preflightRemoteAccess(
   });
   if (result.status !== 0) {
     const detail = (result.stderr || result.stdout || "").trim();
+    const hint = buildPreflightAuthHint(remoteUrl);
     throw new Error(
       `Deploy preflight failed: cannot access remote "${remoteUrl}". ` +
       `Tip: set HLM_DEPLOY_REMOTE or HLM_DEPLOY_REPO in this shell. ` +
-      `${detail}`
+      `${detail} ${hint}`
     );
   }
 }

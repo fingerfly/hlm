@@ -4,6 +4,31 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [4.3.0] - 2026-03-18
+
+### Changed
+- Updated deploy-remote resolution to follow detected `origin` transport
+  first (HTTPS origin -> HTTPS deploy remote, SSH origin -> SSH deploy
+  remote), with platform defaults only as fallback
+  (`scripts/deployRemote.js`).
+- Updated deploy runtime unit coverage for transport-follow behavior and
+  deterministic fallback mocking (`tests/unit/deployRuntime.test.js`).
+- Updated release runbook troubleshooting to document macOS HTTPS fallback
+  guidance for shells without SSH keys (`RELEASE_AND_PUBLISH.md`).
+- Added deploy `doctor` mode and `release:doctor` command for non-mutating
+  remote diagnostics and preflight checks (`scripts/deploy.js`, `package.json`).
+- Added release `--dry-run` mode to preview version summary and preflight
+  without file writes or remote push (`scripts/deploy.js`).
+- Added deploy transport mismatch warning and auth-aware preflight hints for
+  SSH/HTTPS failure modes (`scripts/deployRemote.js`, `scripts/deployRuntime.js`).
+- Extended deploy CLI/runtime tests for doctor mode, dry-run behavior,
+  mismatch warnings, and protocol-specific preflight guidance
+  (`tests/unit/deployCli.release.core.test.js`,
+  `tests/unit/deployCli.prompts.test.js`,
+  `tests/unit/deployRuntime.test.js`).
+- Added cross-platform deploy safety CI matrix for Linux/macOS/Windows
+  deploy-focused checks (`.github/workflows/deploy-safety-matrix.yml`).
+
 ## [4.2.2] - 2026-03-18
 
 ## [4.2.1] - 2026-03-18

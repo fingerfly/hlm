@@ -23,7 +23,10 @@ test("deploy CLI prints normalized usage for invalid mode", () => {
     encoding: "utf8"
   });
   assert.equal(run.status, 1);
-  assert.match(run.stderr, /npm run deploy -- major\|minor\|patch\|build/);
+  assert.match(
+    run.stderr,
+    /npm run deploy -- major\|minor\|patch\|build\|release\|doctor/
+  );
 });
 
 test("deploy CLI prints embedded changelog update prompt template", () => {

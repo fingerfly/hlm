@@ -49,6 +49,7 @@ npm run release:build
 npm run release:patch
 npm run release:minor
 npm run release:major
+npm run release:doctor
 ```
 
 ## Interactive command
@@ -74,7 +75,24 @@ npm run deploy -- patch --confirm
 npm run deploy -- minor --confirm
 npm run deploy -- major --confirm
 npm run deploy -- minor --confirm --skip-tests
+npm run deploy -- minor --dry-run
 ```
+
+## Doctor mode (non-mutating)
+
+```bash
+npm run release:doctor
+```
+
+Doctor mode reports:
+
+- detected `origin` remote,
+- resolved deploy remote,
+- expected deploy repo,
+- transport mismatch warning (when detected),
+- remote preflight result.
+
+It does not change files or push commits.
 
 ## What changes on successful release
 
@@ -82,6 +100,15 @@ npm run deploy -- minor --confirm --skip-tests
 - `package.json` version is updated for patch/minor/major.
 - `CHANGELOG.md` archives `[Unreleased]` for patch/minor/major.
 - Release commit is pushed to deploy repo.
+
+## Dry-run release (non-mutating)
+
+Use `--dry-run` to validate resolved mode, remote checks, and release summary
+without changing files or pushing:
+
+```bash
+npm run deploy -- minor --dry-run
+```
 
 ## Post-release verification checklist
 
@@ -104,8 +131,12 @@ npm run deploy -- minor --confirm --skip-tests
   - set `HLM_DEPLOY_REMOTE` or `HLM_DEPLOY_REPO` in your shell.
   - default remote now follows your `origin` transport when detectable
     (HTTPS origin -> HTTPS deploy remote, SSH origin -> SSH deploy remote).
+  - if doctor/release prints transport mismatch, align protocols or set
+    `HLM_DEPLOY_REMOTE` explicitly.
   - for macOS shells without SSH keys, keep origin as HTTPS or set:
     `export HLM_DEPLOY_REMOTE=https://github.com/<owner>/<repo>.git`
+  - for HTTPS auth failures, verify repository access and use a GitHub
+    Personal Access Token (PAT) when prompted.
 - Tests fail:
   - fix failures locally, rerun `npm test`, then retry release.
 - Skip tests explicitly:

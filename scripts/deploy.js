@@ -10,9 +10,12 @@ import {
   updateAppVersionSource
 } from "../src/config/deployWorkflow.js";
 import {
+  printDeployTransportWarning,
   preflightRemoteAccess,
   pushReleaseToRemote,
+  resolveOriginRemote,
   resolveDeployRemote,
+  runDeployDoctorOrExit,
   runProjectTestsOrExit
 } from "./deployRuntime.js";
 import {
@@ -31,7 +34,12 @@ async function main() {
   const inputMode = rawArgs[0];
   const extraArgs = rawArgs.slice(1);
   const flags = new Set(rawArgs.filter((arg) => arg.startsWith("--")));
+  const isDryRun = flags.has("--dry-run");
   if (handlePromptMode(inputMode, flags.has("--run-agent"), rootDir)) {
+    return;
+  }
+  if (inputMode === "doctor") {
+    runDeployDoctorOrExit(rootDir);
     return;
   }
 
@@ -42,11 +50,13 @@ async function main() {
   );
   assertModeOrExit(resolved.mode);
   const deployRemote = resolveDeployRemote();
+  const originRemote = resolveOriginRemote();
+  printDeployTransportWarning(originRemote, deployRemote);
   preflightRemoteAccess(deployRemote);
   if (!flags.has("--skip-tests")) {
     runProjectTestsOrExit(rootDir);
   }
-  if (!resolved.shouldConfirm) {
+  if (!resolved.shouldConfirm && !isDryRun) {
     console.error("Missing required flag: --confirm");
     process.exit(1);
   }
@@ -57,6 +67,12 @@ async function main() {
   const appVersionSource = readFileSync(appVersionPath, "utf8");
   const current = parseAppVersionState(appVersionSource);
   const next = nextVersionState(current, resolved.mode);
+  const summary = formatDeploySummary({ mode: resolved.mode, previous: current, next });
+  if (isDryRun) {
+    console.log(summary);
+    console.log("Dry run: no files changed and no remote push performed.");
+    return;
+  }
   const updatedSource = updateAppVersionSource(appVersionSource, next);
   writeFileSync(appVersionPath, updatedSource, "utf8");
   writeReleaseState(resolved.mode, next, packageJsonPath, changelogPath);
@@ -65,9 +81,7 @@ async function main() {
     remoteUrl: deployRemote,
     releaseLabel: `v${next.appVersion} (${next.appBuild})`
   });
-  console.log(
-    formatDeploySummary({ mode: resolved.mode, previous: current, next })
-  );
+  console.log(summary);
 }
 
 await main();

@@ -1,11 +1,14 @@
 import { spawnSync } from "node:child_process";
 import { createInterface } from "node:readline/promises";
 import {
+  detectRemoteTransport,
   getDefaultDeployRemoteForPlatform,
+  getDeployTransportMismatchWarning,
   isExpectedDeployRepo,
   normalizeRemoteRepo,
   preflightRemoteAccess,
   resolveDeployDir,
+  resolveOriginRemote,
   resolveExpectedDeployRepo,
   resolveDeployRemote,
   shouldSyncOriginRemote
@@ -13,12 +16,15 @@ import {
 import { pushReleaseToRemote } from "./deployPublish.js";
 
 export {
+  detectRemoteTransport,
   getDefaultDeployRemoteForPlatform,
+  getDeployTransportMismatchWarning,
   isExpectedDeployRepo,
   normalizeRemoteRepo,
   preflightRemoteAccess,
   pushReleaseToRemote,
   resolveDeployDir,
+  resolveOriginRemote,
   resolveExpectedDeployRepo,
   resolveDeployRemote,
   shouldSyncOriginRemote
@@ -32,6 +38,37 @@ export function runProjectTestsOrExit(rootDir) {
   });
   if (result.status !== 0) {
     process.exit(result.status || 1);
+  }
+}
+
+export function printDeployTransportWarning(originRemote, deployRemote) {
+  const warning = getDeployTransportMismatchWarning(originRemote, deployRemote);
+  if (warning) {
+    console.error(`Warning: ${warning}`);
+  }
+  return warning;
+}
+
+export function runDeployDoctorOrExit(
+  rootDir,
+  platform = process.platform,
+  env = process.env,
+  runSync = spawnSync
+) {
+  const originRemote = resolveOriginRemote(env, runSync, rootDir, platform);
+  const expectedRepo = resolveExpectedDeployRepo(env, runSync, rootDir, platform);
+  const deployRemote = resolveDeployRemote(platform, env, runSync, rootDir);
+  console.log("Deploy doctor");
+  console.log(`Origin remote: ${originRemote || "(none)"}`);
+  console.log(`Expected repo: ${expectedRepo}`);
+  console.log(`Resolved deploy remote: ${deployRemote}`);
+  printDeployTransportWarning(originRemote, deployRemote);
+  try {
+    preflightRemoteAccess(deployRemote, platform, runSync);
+    console.log("Preflight: OK");
+  } catch (error) {
+    console.error(error.message);
+    process.exit(1);
   }
 }
 

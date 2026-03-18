@@ -2,6 +2,8 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { sep } from "node:path";
 import {
+  detectRemoteTransport,
+  getDeployTransportMismatchWarning,
   getDefaultDeployRemoteForPlatform,
   isExpectedDeployRepo,
   normalizeRemoteRepo,
@@ -213,5 +215,65 @@ test("shouldSyncOriginRemote syncs HTTPS/SSH for same repo", () => {
       "git@github.com:my-org/my-app.git"
     ),
     false
+  );
+});
+
+test("detectRemoteTransport resolves HTTPS and SSH remotes", () => {
+  assert.equal(
+    detectRemoteTransport("https://github.com/my-org/my-app.git"),
+    "https"
+  );
+  assert.equal(
+    detectRemoteTransport("git@github.com:my-org/my-app.git"),
+    "ssh"
+  );
+  assert.equal(detectRemoteTransport("C:/tmp/remote.git"), null);
+});
+
+test("getDeployTransportMismatchWarning reports protocol mismatch", () => {
+  const warning = getDeployTransportMismatchWarning(
+    "https://github.com/my-org/my-app.git",
+    "git@github.com:my-org/my-app.git"
+  );
+  assert.match(warning || "", /transport mismatch/i);
+  assert.match(warning || "", /origin uses https/i);
+  assert.equal(
+    getDeployTransportMismatchWarning(
+      "https://github.com/my-org/my-app.git",
+      "https://github.com/my-org/my-app.git"
+    ),
+    null
+  );
+});
+
+test("preflightRemoteAccess includes SSH hint on auth failure", () => {
+  const fakeSpawn = () => ({
+    status: 128,
+    stderr: "Permission denied (publickey)"
+  });
+  assert.throws(
+    () =>
+      preflightRemoteAccess(
+        "git@github.com:my-org/my-app.git",
+        "darwin",
+        fakeSpawn
+      ),
+    /HLM_DEPLOY_REMOTE=https:\/\/github\.com\/<owner>\/<repo>\.git/
+  );
+});
+
+test("preflightRemoteAccess includes HTTPS token hint on auth failure", () => {
+  const fakeSpawn = () => ({
+    status: 128,
+    stderr: "Repository not found"
+  });
+  assert.throws(
+    () =>
+      preflightRemoteAccess(
+        "https://github.com/my-org/my-app.git",
+        "darwin",
+        fakeSpawn
+      ),
+    /Personal Access Token|PAT/i
   );
 });
