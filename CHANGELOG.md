@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [4.3.2] - 2026-03-18
+
+### Fixed
+- Step 2 "下一步：计算番数" now directly shows result modal instead of
+  advancing to step 3 UI (`public/appEventWiring.js`).
+
+### Changed
+- Wizard simplified to 2 steps; removed step 3 and calculateBtn
+  (`public/homeStateView.js`, `public/appEventWiring.js`, `public/appRefs.js`,
+  `public/index.html`, `src/app/uiFlowState.js`).
+
 ## [4.3.1] - 2026-03-18
 
 ## [4.3.0] - 2026-03-18

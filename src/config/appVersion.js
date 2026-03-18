@@ -4,7 +4,7 @@
  * - Stores semantic app version and build number.
  * - Exposes formatted display string for version badge.
  */
-export const APP_VERSION = "4.3.1";
+export const APP_VERSION = "4.3.2";
 export const APP_BUILD = 1;
 
 /**

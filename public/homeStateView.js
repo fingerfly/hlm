@@ -39,20 +39,17 @@ function updatePickerPrimaryCta(openPickerBtn, pickedCount) {
 }
 
 function wizardStepHint(step) {
-  if (step === 1) return "步骤 1/3：选择 14 张手牌";
-  if (step === 2) return "步骤 2/3：确认和牌条件";
-  return "步骤 3/3：计算番数";
+  if (step === 1) return "步骤 1/2：选择 14 张手牌";
+  return "步骤 2/2：确认和牌条件";
 }
 
 function wizardNextLabel(step) {
   if (step === 1) return "下一步：条件设置";
-  if (step === 2) return "下一步：计算番数";
-  return "下一步";
+  return "下一步：计算番数";
 }
 
 function wizardBackLabel(step) {
   if (step === 2) return "上一步：手牌输入";
-  if (step === 3) return "上一步：和牌条件";
   return "上一步";
 }
 
@@ -121,26 +118,17 @@ export function syncHomeStateView(input) {
     refs.wizardBackBtn.textContent = wizardBackLabel(wizardStep);
   }
   if (refs.wizardNextBtn) {
-    refs.wizardNextBtn.hidden = wizardStep === 3;
     refs.wizardNextBtn.textContent = wizardNextLabel(wizardStep);
   }
   if (refs.openPickerBtn) refs.openPickerBtn.hidden = wizardStep !== 1;
   if (refs.clearHandBtn) {
     refs.clearHandBtn.hidden = wizardStep !== 1 || pickedCount === 0;
   }
-  refs.calculateBtn.hidden = wizardStep !== 3;
-  refs.calculateBtn.disabled = !canScore;
   if (wizardStep === 1) {
     refs.readyHintEl.textContent = canScore
       ? "手牌已满，可进入下一步"
       : `再选 ${14 - pickedCount} 张即可进入下一步`;
     return;
   }
-  if (wizardStep === 2) {
-    refs.readyHintEl.textContent = "确认和牌条件后进入计算";
-    return;
-  }
-  refs.readyHintEl.textContent = canScore
-    ? "可计算，点按下方按钮"
-    : `手牌不足，返回上一步补齐 ${14 - pickedCount} 张`;
+  refs.readyHintEl.textContent = "确认和牌条件后进入计算";
 }

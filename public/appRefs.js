@@ -26,7 +26,6 @@ export function createAppRefs(byId) {
     wizardBackBtn: byId("wizardBackBtn"),
     wizardNextBtn: byId("wizardNextBtn"),
     readyHintEl: byId("readyHint"),
-    calculateBtn: byId("calculateBtn"),
     resultRefs: {
       total: byId("resultTotalFan"),
       status: byId("resultStatus"),

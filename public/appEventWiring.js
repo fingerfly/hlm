@@ -28,6 +28,33 @@ import {
 export { getPickerTilesByMode, renderPickerByTab };
 
 /**
+ * Handle wizard "next" button: from step 2, directly calculate and show result
+ * modal; otherwise advance wizard step.
+ *
+ * @param {object} store - App store with uiState.
+ * @param {object} stateActions - calculate, goWizardNext.
+ * @param {object} modalActions - closeModalByKey, updateModalUi.
+ * @param {Function} syncWizardModalsFn - syncWizardModals.
+ * @returns {void}
+ */
+export function handleWizardNextClick(
+  store,
+  stateActions,
+  modalActions,
+  syncWizardModalsFn
+) {
+  const step = store.uiState.wizard?.step || 1;
+  if (step === 2) {
+    modalActions.closeModalByKey("picker");
+    modalActions.closeModalByKey("context");
+    if (stateActions.calculate()) modalActions.updateModalUi();
+    return;
+  }
+  const result = stateActions.goWizardNext();
+  syncWizardModalsFn(result, modalActions);
+}
+
+/**
  * Keep modal stack aligned with wizard step.
  *
  * @param {{ok:boolean, needs?:string, step?:number}} result - Step result.
@@ -48,11 +75,6 @@ export function syncWizardModals(result, modalActions) {
   if (result.step === 2) {
     modalActions.closeModalByKey("picker");
     modalActions.openModalByKey("context");
-    return;
-  }
-  if (result.step === 3) {
-    modalActions.closeModalByKey("picker");
-    modalActions.closeModalByKey("context");
   }
 }
 
@@ -114,10 +136,9 @@ export function wireAppEvents(params) {
     modalActions.openModalByKey("picker");
   });
   bindClick("clearHandBtn", stateActions.clearHand);
-  bindClick("wizardNextBtn", () => {
-    const result = stateActions.goWizardNext();
-    syncWizardModals(result, modalActions);
-  });
+  bindClick("wizardNextBtn", () =>
+    handleWizardNextClick(store, stateActions, modalActions, syncWizardModals)
+  );
   bindClick("wizardBackBtn", () => {
     const result = stateActions.goWizardPrev();
     syncWizardModals(result, modalActions);
@@ -136,9 +157,6 @@ export function wireAppEvents(params) {
     stateActions.undoHand();
   });
   bindClick("pickerClearBtn", stateActions.clearHand);
-  bindClick("calculateBtn", () => {
-    if (stateActions.calculate()) modalActions.updateModalUi();
-  });
   bindClick("playAgainBtn", () => {
     stateActions.clearHand();
     stateActions.jumpWizardStep(1);

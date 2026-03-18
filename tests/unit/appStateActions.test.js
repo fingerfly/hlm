@@ -44,7 +44,6 @@ function createRefs() {
     wizardBackBtn: { textContent: "", hidden: false },
     wizardNextBtn: { textContent: "", hidden: false },
     readyHintEl: { textContent: "" },
-    calculateBtn: { disabled: true },
     resultRefs: {},
     infoRefs: {}
   };
@@ -362,9 +361,6 @@ test("wizard buttons show dynamic next and back labels", () => {
   actions.goWizardNext();
   assert.equal(refs.wizardBackBtn.textContent, "上一步：手牌输入");
   assert.equal(refs.wizardNextBtn.textContent, "下一步：计算番数");
-  actions.goWizardNext();
-  assert.equal(refs.wizardBackBtn.textContent, "上一步：和牌条件");
-  assert.equal(refs.wizardNextBtn.hidden, true);
 });
 
 test("tap action applies once then falls back to single", () => {

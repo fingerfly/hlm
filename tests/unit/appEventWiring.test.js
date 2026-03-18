@@ -2,7 +2,8 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import {
   getPickerTilesByMode,
-  syncWizardModals
+  syncWizardModals,
+  handleWizardNextClick
 } from "../../public/appEventWiring.js";
 import { shouldOpenPickerForContextButton } from "../../public/appEventBindings.js";
 
@@ -75,12 +76,52 @@ test("syncWizardModals switches from picker to context at step 2", () => {
   assert.deepEqual(calls, ["close:picker", "open:context"]);
 });
 
-test("syncWizardModals closes setup modals at step 3", () => {
-  const calls = [];
-  const modalActions = {
-    openModalByKey: (key) => calls.push(`open:${key}`),
-    closeModalByKey: (key) => calls.push(`close:${key}`)
+test("handleWizardNextClick from step 2 directly calculates and shows result", () => {
+  const modalCalls = [];
+  const store = {
+    uiState: {
+      wizard: { step: 2 },
+      hand: { tiles: new Array(14).fill("1W") }
+    }
   };
-  syncWizardModals({ ok: true, step: 3 }, modalActions);
-  assert.deepEqual(calls, ["close:picker", "close:context"]);
+  const stateActions = {
+    calculate: () => true,
+    goWizardNext: () => {
+      throw new Error("goWizardNext should not be called from step 2");
+    }
+  };
+  const modalActions = {
+    closeModalByKey: (key) => modalCalls.push(`close:${key}`),
+    updateModalUi: () => modalCalls.push("updateModalUi")
+  };
+  const syncWizardModalsFn = () => modalCalls.push("syncWizardModals");
+  handleWizardNextClick(store, stateActions, modalActions, syncWizardModalsFn);
+  assert.deepEqual(modalCalls, [
+    "close:picker",
+    "close:context",
+    "updateModalUi"
+  ]);
+});
+
+test("handleWizardNextClick from step 1 advances wizard via goWizardNext", () => {
+  const modalCalls = [];
+  const store = {
+    uiState: {
+      wizard: { step: 1 },
+      hand: { tiles: new Array(14).fill("1W") }
+    }
+  };
+  const stateActions = {
+    calculate: () => {
+      throw new Error("calculate should not be called from step 1");
+    },
+    goWizardNext: () => ({ ok: true, step: 2 })
+  };
+  const modalActions = {
+    closeModalByKey: (key) => modalCalls.push(`close:${key}`),
+    updateModalUi: () => modalCalls.push("updateModalUi"),
+    openModalByKey: (key) => modalCalls.push(`open:${key}`)
+  };
+  handleWizardNextClick(store, stateActions, modalActions, syncWizardModals);
+  assert.deepEqual(modalCalls, ["close:picker", "open:context"]);
 });

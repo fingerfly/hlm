@@ -42,7 +42,7 @@ test("wizard step starts at tile input and clamps", () => {
   const state = createUiFlowState();
   assert.equal(state.wizard.step, 1);
   assert.equal(setWizardStep(state, 2).wizard.step, 2);
-  assert.equal(setWizardStep(state, 8).wizard.step, 3);
+  assert.equal(setWizardStep(state, 8).wizard.step, 2);
   assert.equal(setWizardStep(state, -2).wizard.step, 1);
 });
 
@@ -51,10 +51,6 @@ test("wizard next and prev step stay in bounds", () => {
   state = nextWizardStep(state);
   assert.equal(state.wizard.step, 2);
   state = nextWizardStep(state);
-  assert.equal(state.wizard.step, 3);
-  state = nextWizardStep(state);
-  assert.equal(state.wizard.step, 3);
-  state = prevWizardStep(state);
   assert.equal(state.wizard.step, 2);
   state = prevWizardStep(state);
   assert.equal(state.wizard.step, 1);
