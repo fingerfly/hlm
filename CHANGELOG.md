@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [4.2.1] - 2026-03-18
+
 ### Changed
 - UI cleanup and step 1 fix: flattened pattern row (1–2 clicks per group),
   removed slot context menu, picker-mode toggle, and 更多 dropdown
