@@ -102,6 +102,10 @@ npm run deploy -- minor --confirm --skip-tests
   - rerun with `--confirm`.
 - Remote preflight failure:
   - set `HLM_DEPLOY_REMOTE` or `HLM_DEPLOY_REPO` in your shell.
+  - default remote now follows your `origin` transport when detectable
+    (HTTPS origin -> HTTPS deploy remote, SSH origin -> SSH deploy remote).
+  - for macOS shells without SSH keys, keep origin as HTTPS or set:
+    `export HLM_DEPLOY_REMOTE=https://github.com/<owner>/<repo>.git`
 - Tests fail:
   - fix failures locally, rerun `npm test`, then retry release.
 - Skip tests explicitly:

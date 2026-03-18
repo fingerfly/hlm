@@ -3,6 +3,8 @@ import { join } from "node:path";
 
 const DEFAULT_EXPECTED_REPO = "owner/repo";
 const DEPLOY_DIR_NAME = "hlm-deploy";
+const GITHUB_HTTPS_RE = /^https?:\/\/github\.com\//i;
+const GITHUB_SSH_RE = /^(git@github\.com:|ssh:\/\/git@github\.com\/)/i;
 
 /**
  * Purpose: Provide remote/path helpers for deploy runtime.
@@ -19,13 +21,20 @@ export function getDefaultDeployRemoteForPlatform(
   cwd = process.cwd()
 ) {
   const expectedRepo = resolveExpectedDeployRepo(env, runSync, cwd);
+  const transport = detectGithubTransportFromOrigin(runSync, cwd);
+  if (transport === "https") {
+    return `https://github.com/${expectedRepo}.git`;
+  }
+  if (transport === "ssh") {
+    return `git@github.com:${expectedRepo}.git`;
+  }
   if (platform === "win32") {
     return `https://github.com/${expectedRepo}.git`;
   }
   return `git@github.com:${expectedRepo}.git`;
 }
 
-function detectRepoFromOriginRemote(
+function detectOriginRemote(
   runSync = spawnSync,
   cwd = process.cwd()
 ) {
@@ -37,7 +46,34 @@ function detectRepoFromOriginRemote(
   if (result.status !== 0) {
     return null;
   }
-  const remoteText = String(result.stdout || "").trim();
+  return String(result.stdout || "").trim();
+}
+
+function detectGithubTransportFromOrigin(
+  runSync = spawnSync,
+  cwd = process.cwd()
+) {
+  const remote = detectOriginRemote(runSync, cwd);
+  if (!remote) {
+    return null;
+  }
+  if (GITHUB_HTTPS_RE.test(remote)) {
+    return "https";
+  }
+  if (GITHUB_SSH_RE.test(remote)) {
+    return "ssh";
+  }
+  return null;
+}
+
+function detectRepoFromOriginRemote(
+  runSync = spawnSync,
+  cwd = process.cwd()
+) {
+  const remoteText = detectOriginRemote(runSync, cwd);
+  if (!remoteText) {
+    return null;
+  }
   return normalizeRemoteRepo(remoteText);
 }
 

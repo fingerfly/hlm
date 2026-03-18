@@ -37,13 +37,14 @@ test("resolveDeployRemote uses OS-aware defaults", () => {
 });
 
 test("resolveDeployRemote supports HLM_DEPLOY_REPO custom default", () => {
+  const fakeSpawn = () => ({ status: 1, stdout: "", stderr: "" });
   const env = { HLM_DEPLOY_REPO: "my-org/my-app" };
   assert.equal(
-    resolveDeployRemote("win32", env),
+    resolveDeployRemote("win32", env, fakeSpawn),
     "https://github.com/my-org/my-app.git"
   );
   assert.equal(
-    resolveDeployRemote("darwin", env),
+    resolveDeployRemote("darwin", env, fakeSpawn),
     "git@github.com:my-org/my-app.git"
   );
 });
@@ -86,6 +87,26 @@ test("resolveDeployRemote uses detected origin repo defaults", () => {
   assert.equal(
     resolveDeployRemote("win32", {}, fakeSpawn),
     "https://github.com/my-org/my-app.git"
+  );
+  assert.equal(
+    resolveDeployRemote("darwin", {}, fakeSpawn),
+    "https://github.com/my-org/my-app.git"
+  );
+  assert.equal(
+    resolveDeployRemote("linux", {}, fakeSpawn),
+    "https://github.com/my-org/my-app.git"
+  );
+});
+
+test("resolveDeployRemote keeps SSH transport when origin uses SSH", () => {
+  const fakeSpawn = () => ({
+    status: 0,
+    stdout: "git@github.com:my-org/my-app.git\n",
+    stderr: ""
+  });
+  assert.equal(
+    resolveDeployRemote("win32", {}, fakeSpawn),
+    "git@github.com:my-org/my-app.git"
   );
   assert.equal(
     resolveDeployRemote("darwin", {}, fakeSpawn),
