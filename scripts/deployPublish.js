@@ -69,10 +69,14 @@ function syncTree(sourceDir, targetDir) {
 }
 
 function runGitOrThrow(args, options = {}) {
+  const inherit = options.stdio === "inherit";
+  const baseEnv = options.env || process.env;
+  const env = inherit ? { ...baseEnv, GIT_ASKPASS: undefined } : baseEnv;
   const result = spawnSync("git", args, {
     cwd: options.cwd,
     encoding: "utf8",
-    env: options.env
+    env,
+    ...(inherit ? { stdio: "inherit" } : {})
   });
   if (result.status === 0) {
     return String(result.stdout || "").trim();
@@ -109,7 +113,8 @@ function ensureDeployCheckout(deployDir, remoteUrl, platform, env) {
         runGitOrThrow(["pull", "--ff-only", "origin", "main"], {
           cwd: deployDir,
           platform,
-          env
+          env,
+          stdio: "inherit"
         });
       }
     } catch {
@@ -118,7 +123,11 @@ function ensureDeployCheckout(deployDir, remoteUrl, platform, env) {
   }
   if (shouldClone) {
     rmSync(deployDir, { recursive: true, force: true });
-    runGitOrThrow(["clone", remoteUrl, deployDir], { platform, env });
+    runGitOrThrow(["clone", remoteUrl, deployDir], {
+      platform,
+      env,
+      stdio: "inherit"
+    });
   }
   const hasCommits = spawnSync("git", ["rev-parse", "HEAD"], {
     cwd: deployDir,
@@ -161,7 +170,8 @@ function commitAndPushDeploy(deployDir, releaseLabel, platform, env) {
   runGitOrThrow(["push", "origin", "HEAD:main"], {
     cwd: deployDir,
     platform,
-    env
+    env,
+    stdio: "inherit"
   });
 }
 
