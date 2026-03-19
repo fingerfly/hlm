@@ -5,8 +5,10 @@
  * - Positions menu; wires option clicks to pickTileWithAction.
  * - Closes on Escape or click-outside.
  */
-import { getContextActionAvailability } from "../src/app/tilePatternActions.js";
+import { getContextActionAvailability } from
+  "../src/app/tilePatternActions.js";
 import { applyContextMenuAvailability } from "./contextMenuView.js";
+import { computeContextMenuPosition } from "./contextMenuPosition.js";
 
 /**
  * Create tile context menu handlers bound to deps.
@@ -39,7 +41,41 @@ export function createOpenTileContextMenu(deps) {
     }
   }
 
-  function openTileContextMenu(baseTile) {
+  function positionMenuNearAnchor(menu, event) {
+    const anchor = event?.target?.closest?.("button") ?? event?.currentTarget;
+    if (!anchor) return false;
+    const rect = anchor.getBoundingClientRect();
+    const targetRect = {
+      left: rect.left,
+      right: rect.right,
+      top: rect.top,
+      bottom: rect.bottom
+    };
+    const menuBox = {
+      width: menu.offsetWidth,
+      height: menu.offsetHeight
+    };
+    const viewport = {
+      width: window.innerWidth,
+      height: window.innerHeight
+    };
+    const pos = computeContextMenuPosition(targetRect, menuBox, viewport);
+    menu.style.bottom = "";
+    menu.style.top = `${pos.top}px`;
+    menu.style.left = `${pos.left}px`;
+    menu.style.transform = "";
+    menu.style.visibility = "";
+    return true;
+  }
+
+  function applyFallbackPosition(menu) {
+    menu.style.top = "";
+    menu.style.bottom = "100px";
+    menu.style.left = "50%";
+    menu.style.transform = "translateX(-50%)";
+  }
+
+  function openTileContextMenu(baseTile, event) {
     closeTileContextMenu();
     const menu = byId("tileContextMenu");
     if (!menu) return;
@@ -48,7 +84,17 @@ export function createOpenTileContextMenu(deps) {
       baseTile
     );
     applyContextMenuAvailability(menu, map);
-    menu.hidden = false;
+    if (event?.target) {
+      menu.style.visibility = "hidden";
+      menu.hidden = false;
+      if (!positionMenuNearAnchor(menu, event)) {
+        applyFallbackPosition(menu);
+        menu.style.visibility = "";
+      }
+    } else {
+      menu.hidden = false;
+      applyFallbackPosition(menu);
+    }
 
     menuClickHandler = (e) => {
       const btn = e.target.closest("[data-context-action]");

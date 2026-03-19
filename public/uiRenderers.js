@@ -100,7 +100,7 @@ export function renderTilePickerGrid({ tilePickerGridEl, tiles, onPick }) {
     button.type = "button";
     button.setAttribute("aria-label", `添加${getTileLabel(tile)}`);
     button.appendChild(makeTileFace(tile, tile));
-    button.addEventListener("click", () => onPick(tile));
+    button.addEventListener("click", (e) => onPick(tile, e));
     tilePickerGridEl.appendChild(button);
   }
 }

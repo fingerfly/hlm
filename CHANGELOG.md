@@ -4,6 +4,24 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Fixed
+- Deploy on macOS: always use HTTPS for deploy remote (avoids SSH hangs)
+  (`scripts/deployRemote.js`).
+- Deploy to empty repo: use `checkout -b main` when remote has no commits
+  (`scripts/deployPublish.js`).
+
+## [4.4.1] - 2026-03-19
+
+### Changed
+- Context menu visual and layout: vertical single-column layout, Material
+  elevation 8dp shadow, positioned near clicked tile
+  (`public/styles-components.css`, `public/tileContextMenuController.js`,
+  `public/uiRenderers.js`, `public/pickerRenderFlow.js`).
+
+### Added
+- Unit tests for openTileContextMenu(tile, event) and event fallback
+  (`tests/unit/tileContextMenuController.test.js`).
+
 ## [4.4.0] - 2026-03-18
 
 ### Changed

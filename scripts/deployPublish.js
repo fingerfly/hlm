@@ -120,11 +120,14 @@ function ensureDeployCheckout(deployDir, remoteUrl, platform, env) {
     rmSync(deployDir, { recursive: true, force: true });
     runGitOrThrow(["clone", remoteUrl, deployDir], { platform, env });
   }
-  runGitOrThrow(["checkout", "-B", "main"], {
+  const hasCommits = spawnSync("git", ["rev-parse", "HEAD"], {
     cwd: deployDir,
-    platform,
-    env
-  });
+    encoding: "utf8"
+  }).status === 0;
+  runGitOrThrow(
+    hasCommits ? ["checkout", "-B", "main"] : ["checkout", "-b", "main"],
+    { cwd: deployDir, platform, env }
+  );
 }
 
 function commitAndPushDeploy(deployDir, releaseLabel, platform, env) {

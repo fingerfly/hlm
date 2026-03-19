@@ -129,12 +129,10 @@ npm run deploy -- minor --dry-run
   - rerun with `--confirm`.
 - Remote preflight failure:
   - set `HLM_DEPLOY_REMOTE` or `HLM_DEPLOY_REPO` in your shell.
-  - default remote now follows your `origin` transport when detectable
-    (HTTPS origin -> HTTPS deploy remote, SSH origin -> SSH deploy remote).
+  - macOS and Windows always use HTTPS for deploy (avoids SSH hangs).
+  - Linux follows origin transport when detectable.
   - if doctor/release prints transport mismatch, align protocols or set
     `HLM_DEPLOY_REMOTE` explicitly.
-  - for macOS shells without SSH keys, keep origin as HTTPS or set:
-    `export HLM_DEPLOY_REMOTE=https://github.com/<owner>/<repo>.git`
   - for HTTPS auth failures, verify repository access and use a GitHub
     Personal Access Token (PAT) when prompted.
 - Tests fail:

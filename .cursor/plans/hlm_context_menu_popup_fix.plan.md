@@ -31,6 +31,11 @@ isProject: false
 - **关闭时**：该区域完全不占空间，牌类型下方直接是牌库
 - **打开时**：菜单以浮动 overlay 形式出现，不挤占布局
 
+## 后续扩展（见 hlm_context_menu_visual.plan.md）— 已完成
+
+- **竖式布局**：菜单改为单列竖排 ✓
+- **锚点定位**：菜单靠近点击的牌，由 JS 根据锚点计算 top/left ✓
+
 ---
 
 ## 实现方案
@@ -78,15 +83,11 @@ isProject: false
 
 ### 3. 涉及文件
 
-
-| 文件                                                                         | 修改                                                                                                                   |
-| -------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
-| [public/styles-components.css](public/styles-components.css)               | 添加 `[hidden]` 规则；`.tile-context-menu` 增加 fixed 定位、z-index、max-width、box-shadow；可移除 `margin-bottom`（fixed 元素不再参与流式布局） |
-| [public/tileContextMenuController.js](public/tileContextMenuController.js) | 改为返回 `{ openTileContextMenu, closeTileContextMenu }`，内部 `closeMenu` 作为 `closeTileContextMenu` 暴露                     |
-| [public/handStateActions.js](public/handStateActions.js)                   | 解构 `{ openTileContextMenu, closeTileContextMenu }`，在返回对象中同时暴露两者                                                      |
-| [public/appModalActions.js](public/appModalActions.js)                     | `createModalActions` 增加可选第三参数 `{ onBeforeClosePicker }`，在 `closeModalByKey("picker")` 内先执行                           |
-| [public/app.js](public/app.js)                                             | 创建 modalActions 时传入 `onBeforeClosePicker: () => stateActions.closeTileContextMenu?.()`                               |
-
+- [public/styles-components.css](public/styles-components.css)：添加 `[hidden]` 规则；`.tile-context-menu` 增加 fixed 定位、z-index、max-width、box-shadow；可移除 `margin-bottom`（fixed 元素不再参与流式布局）
+- [public/tileContextMenuController.js](public/tileContextMenuController.js)：改为返回 `{ openTileContextMenu, closeTileContextMenu }`，内部 `closeMenu` 作为 `closeTileContextMenu` 暴露
+- [public/handStateActions.js](public/handStateActions.js)：解构 `{ openTileContextMenu, closeTileContextMenu }`，在返回对象中同时暴露两者
+- [public/appModalActions.js](public/appModalActions.js)：`createModalActions` 增加可选第三参数 `{ onBeforeClosePicker }`，在 `closeModalByKey("picker")` 内先执行
+- [public/app.js](public/app.js)：创建 modalActions 时传入 `onBeforeClosePicker: () => stateActions.closeTileContextMenu?.()`
 
 ---
 
@@ -101,14 +102,10 @@ isProject: false
 
 ### 风险与缓解
 
-
-| 风险                 | 缓解                                                   |
-| ------------------ | ---------------------------------------------------- |
-| 程序关闭 picker 时监听器泄漏 | 在 closeModalByKey("picker") 时调用 closeTileContextMenu |
-| 小屏菜单溢出             | max-width: min(320px, calc(100vw - 28px))            |
-| 菜单被 sheet 裁剪       | position: fixed 相对于视口，不受 sheet overflow 影响           |
-| 横屏/桌面 bottom 定位不适  | 可后续增加媒体查询微调，当前 100px 为保守值                            |
-
+- **程序关闭 picker 时监听器泄漏**：在 closeModalByKey("picker") 时调用 closeTileContextMenu
+- **小屏菜单溢出**：max-width: min(320px, calc(100vw - 28px))
+- **菜单被 sheet 裁剪**：position: fixed 相对于视口，不受 sheet overflow 影响
+- **横屏/桌面 bottom 定位不适**：可后续增加媒体查询微调，当前 100px 为保守值
 
 ### 不修改项
 

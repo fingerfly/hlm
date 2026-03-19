@@ -70,6 +70,7 @@ isProject: false
   - `UI cleanup and step 1 fix`
   - `Deploy safety hardening`
   - `Tile-click context menu`
+  - `Context menu visual and layout`
   - `Final release gate`
 - ValidationBaseline:
   - `npm test` pass
@@ -86,6 +87,7 @@ isProject: false
   file not present in current workspace)
   - [hlm_deploy_hardening_b0d19373.plan.md](hlm_deploy_hardening_b0d19373.plan.md)
   - [hlm_tile_click_context_menu_998eab78.plan.md](hlm_tile_click_context_menu_998eab78.plan.md)
+  - [hlm_context_menu_visual.plan.md](hlm_context_menu_visual.plan.md)
 - ReopenDate: `2026-03-17`
 - ReopenIntent:
   - `Implement tile-first hand input UI and workflow overhaul.`
@@ -124,6 +126,8 @@ not present in current workspace)
 [hlm_deploy_hardening_b0d19373.plan.md](hlm_deploy_hardening_b0d19373.plan.md)
 - Tile-click context menu track (completed):
 [hlm_tile_click_context_menu_998eab78.plan.md](hlm_tile_click_context_menu_998eab78.plan.md)
+- Context menu visual and layout (vertical menu, anchor positioning) (completed):
+[hlm_context_menu_visual.plan.md](hlm_context_menu_visual.plan.md)
 - Historical supporting plans (traceability only):
   - [hlm_版本升级工具与中文术语统一_35161103.plan.md](hlm_版本升级工具与中文术语统一_35161103.plan.md)
   - `spike_full_automation_6a79ecff.plan.md` (historical reference; file
@@ -203,6 +207,7 @@ practicality upgrade exit (or after Pages if practicality is deferred).
 - Focus:
   - `All tracked HLM roadmap items completed.`
   - `Tile-click context menu track delivered.`
+  - `Context menu visual and layout (vertical menu, anchor positioning) delivered.`
   - `Release hardening safeguards integrated and validated.`
 - ExitGateCheck:
   - Unit: `pass`
@@ -220,6 +225,8 @@ practicality upgrade exit (or after Pages if practicality is deferred).
   - `Maintain completed state; keep regression/test/complexity guardrails
     enforced on future changes.`
 - ValidationEvidence:
+  - `Context menu visual: vertical layout, Material elevation, near-tile positioning.
+    Tests passed; tileContextMenuController.test.js added.`
   - `Added dist artifact builder and workflow publish path switched to dist/.`
   - `Added security scan workflow: .github/workflows/security-scan.yml.`
   - `Sanitized deploy runtime test owner fixtures to example-owner placeholders.`

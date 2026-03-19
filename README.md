@@ -39,10 +39,8 @@ Blueprint implementation for `和了么 - 国标麻将计番助手` (`Huleme - G
     - commit and push to GitHub `main`
   - Remote defaults and protocol policy:
     - Auto-detected from local `git remote origin` when available
-    - If origin transport is detectable, deploy follows origin protocol:
-      HTTPS origin -> HTTPS deploy remote, SSH origin -> SSH deploy remote
-    - Fallback when origin is unavailable: Windows defaults to HTTPS,
-      macOS/Linux defaults to SSH
+    - macOS and Windows always use HTTPS for deploy (avoids SSH hangs).
+    - Linux follows origin transport when detectable.
     - Transport mismatch prints warning; you can override explicitly with
       `HLM_DEPLOY_REMOTE`
   - Override expected repo template:

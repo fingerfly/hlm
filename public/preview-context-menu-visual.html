@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>上下文菜单视觉预览 - 方案 A / B 对比</title>
+  <style>
+    :root { --border: #e5e5ea; --primary: #007aff; }
+    body { margin: 0; font-family: system-ui; background: #f2f2f7; }
+    .sheet {
+      max-width: 400px; margin: 20px auto; background: #fff;
+      border-radius: 18px 18px 0 0; padding: 14px;
+      border: 1px solid var(--border); box-shadow: 0 -2px 10px rgba(0,0,0,0.08);
+    }
+    .picker-tabs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin: 10px 0; }
+    .tab-btn { padding: 10px; border: 1px solid var(--border); border-radius: 12px; background: #fff; }
+    .tab-btn.active { border-color: var(--primary); color: var(--primary); }
+    .tile-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; margin: 16px 0; }
+    .tile-grid button { min-height: 40px; border: 1px solid var(--border); border-radius: 12px; background: #f8f8f8; }
+    .sheet-footer { display: flex; justify-content: space-between; padding-top: 12px; border-top: 1px solid var(--border); }
+    .menu-current {
+      position: fixed; bottom: 100px; left: 50%; transform: translateX(calc(-50% - 150px));
+      z-index: 110; max-width: 120px; padding: 8px; display: grid; grid-template-columns: repeat(2, 1fr);
+      gap: 6px; background: #fff; border-radius: 10px; border: 1px solid var(--border);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    }
+    .menu-a, .menu-b {
+      position: fixed; bottom: 100px; left: 50%; z-index: 110; padding: 8px;
+      display: grid; gap: 6px; background: #ffffff; border-radius: 10px;
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      box-shadow: 0 5px 5px -3px rgba(0,0,0,0.2), 0 8px 10px 1px rgba(0,0,0,0.14),
+        0 3px 14px 2px rgba(0,0,0,0.12);
+    }
+    .menu-a { transform: translateX(calc(-50% - 0px)); max-width: 120px; }
+    .menu-b { transform: translateX(calc(-50% + 150px)); max-width: 120px; }
+    .layout-grid2 .menu-a, .layout-grid2 .menu-b {
+      grid-template-columns: repeat(2, 1fr); max-width: 120px;
+    }
+    .layout-horizontal .menu-a, .layout-horizontal .menu-b {
+      grid-template-columns: repeat(4, 1fr); max-width: 280px;
+    }
+    .layout-vertical .menu-a, .layout-vertical .menu-b {
+      grid-template-columns: 1fr; max-width: 100px;
+    }
+    .backdrop {
+      position: fixed; inset: 0; z-index: 109; background: rgba(0, 0, 0, 0.12);
+      pointer-events: none;
+    }
+    .backdrop.hidden { display: none; }
+    .menu-current button, .menu-a button, .menu-b button {
+      padding: 10px; border: 1px solid var(--border); border-radius: 8px; background: #fff;
+    }
+    .label { position: fixed; bottom: 220px; font-size: 12px; color: #666; }
+    .label-current { left: 50%; transform: translateX(calc(-50% - 150px)); }
+    .label-a { left: 50%; transform: translateX(calc(-50% - 0px)); }
+    .label-b { left: 50%; transform: translateX(calc(-50% + 150px)); }
+    .toggle-wrap { position: fixed; top: 12px; left: 50%; transform: translateX(-50%);
+      z-index: 120; background: #fff; padding: 8px 12px; border-radius: 8px;
+      border: 1px solid var(--border); box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    .toggle-wrap label { font-size: 14px; cursor: pointer; }
+  </style>
+</head>
+<body class="layout-grid2">
+  <div class="toggle-wrap">
+    <label><input type="checkbox" id="backdropToggle" /> 显示 Backdrop（方案 B）</label>
+    <p style="margin: 6px 0 4px; font-size: 11px; color: #666;">勾选后 sheet 变暗，菜单更突出</p>
+    <p style="margin: 4px 0 0; font-size: 12px;">布局：</p>
+    <label style="margin-right: 12px;"><input type="radio" name="layout" value="grid2" checked /> 当前（2列）</label>
+    <label style="margin-right: 12px;"><input type="radio" name="layout" value="horizontal" /> 纯横</label>
+    <label><input type="radio" name="layout" value="vertical" /> 纯竖</label>
+  </div>
+  <div class="sheet">
+    <h3>选择手牌</h3>
+    <div class="picker-tabs">
+      <button class="tab-btn active">万</button>
+      <button class="tab-btn">条</button>
+      <button class="tab-btn">筒</button>
+      <button class="tab-btn">字牌</button>
+    </div>
+    <div class="tile-grid">
+      <button>一</button><button>二</button><button>三</button><button>四</button><button>五</button><button>六</button>
+      <button>七</button><button>八</button><button>九</button><button>一</button><button>二</button><button>三</button>
+    </div>
+    <div class="sheet-footer">
+      <span>已选 0/14</span>
+      <div><button>清空</button> <button>撤销</button> <button>删除选中</button></div>
+    </div>
+  </div>
+  <div id="backdrop" class="backdrop hidden"></div>
+  <div class="label label-current">当前样式</div>
+  <div class="menu-current">
+    <button>单张</button><button>对子</button><button>刻子</button><button>顺子前位</button>
+  </div>
+  <div class="label label-a">方案 A（Material）</div>
+  <div class="menu-a">
+    <button>单张</button><button>对子</button><button>刻子</button><button>顺子前位</button>
+  </div>
+  <div class="label label-b">方案 B（+ Backdrop）</div>
+  <div class="menu-b">
+    <button>单张</button><button>对子</button><button>刻子</button><button>顺子前位</button>
+  </div>
+  <script>
+    document.getElementById("backdropToggle").addEventListener("change", function (e) {
+      document.getElementById("backdrop").classList.toggle("hidden", !e.target.checked);
+    });
+    document.querySelectorAll("input[name=layout]").forEach(function (radio) {
+      radio.addEventListener("change", function () {
+        document.body.className = "layout-" + this.value;
+      });
+    });
+  </script>
+</body>
+</html>
