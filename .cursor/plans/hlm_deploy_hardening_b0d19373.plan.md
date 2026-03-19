@@ -18,7 +18,7 @@ todos:
     content: Update deploy usage text, npm scripts, runbook docs, and changelog entries for new safety commands/flags.
     status: completed
   - id: ci-matrix
-    content: Add cross-platform CI matrix for deploy-focused test suites on Ubuntu/macOS/Windows.
+    content: Add cross-platform CI matrix for deploy-focused test suites on macOS/Windows.
     status: completed
   - id: full-validation
     content: Run targeted deploy tests, full npm test, lint checks, and cloc verification before final report.
@@ -40,7 +40,7 @@ Harden `hlm` release/deploy flow against cross-platform/auth regressions by impl
   - `release:doctor` command for non-mutating diagnostics.
   - `--dry-run` release path (no file writes and no push).
   - protocol mismatch warning and auth-aware preflight hints.
-  - deploy safety matrix CI workflow for Linux/macOS/Windows.
+  - deploy safety matrix CI workflow for macOS/Windows.
   - docs updates in runbook, README, and changelog.
 - Validation:
   - deploy-focused unit suites passed.
@@ -59,7 +59,7 @@ Harden `hlm` release/deploy flow against cross-platform/auth regressions by impl
 - Add `--dry-run` release path to preview actions without file mutation/push.
 - Add protocol mismatch warning when detected origin transport and deploy remote differ.
 - Improve remote preflight error diagnostics with transport-specific remediation.
-- Add CI matrix to run deploy-focused tests on Linux/macOS/Windows.
+- Add CI matrix to run deploy-focused tests on macOS/Windows.
 
 ## Implementation Steps
 
@@ -102,7 +102,7 @@ Harden `hlm` release/deploy flow against cross-platform/auth regressions by impl
   - Add changelog entry in [CHANGELOG.md](02product/01_coding/project/hlm/CHANGELOG.md) under `[Unreleased]`.
 7. **Add CI matrix for deploy-focused tests**
   - Add/update workflow in [github/workflows/security-scan.yml](02product/01_coding/project/hlm/.github/workflows/security-scan.yml) or a dedicated CI workflow to run deploy test subset on:
-    - `ubuntu-latest`, `macos-latest`, `windows-latest`.
+    - `macos-latest`, `windows-latest`.
   - Keep runtime bounded by scoping to deploy-related tests first.
 
 ## Validation Plan

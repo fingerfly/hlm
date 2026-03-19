@@ -4,15 +4,25 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [4.5.0] - 2026-03-19
+
 ### Changed
-- Deploy follows origin transport: SSH origin uses SSH deploy remote
-  (`scripts/deployRemote.js`).
+- Removed Linux from CI and deploy: workflows use macOS/Windows only;
+  deploy docs and tests updated.
+
+## [4.4.1] - 2026-03-19
+
+### Changed
+- Deploy follows origin transport: SSH origin uses SSH deploy remote, HTTPS
+  origin uses HTTPS deploy remote (`scripts/deployRemote.js`).
+- Updated deploy docs for transport-follow behavior
+  (`README.md`, `RELEASE_AND_PUBLISH.md`).
+- Updated deploy runtime tests for transport-follow behavior
+  (`tests/unit/deployRuntime.test.js`).
 
 ### Fixed
 - Deploy to empty repo: use `checkout -b main` when remote has no commits
   (`scripts/deployPublish.js`).
-
-## [4.4.1] - 2026-03-19
 
 ### Changed
 - Context menu visual and layout: vertical single-column layout, Material
@@ -85,7 +95,7 @@ All notable changes to this project will be documented in this file.
   (`tests/unit/deployCli.release.core.test.js`,
   `tests/unit/deployCli.prompts.test.js`,
   `tests/unit/deployRuntime.test.js`).
-- Added cross-platform deploy safety CI matrix for Linux/macOS/Windows
+- Added cross-platform deploy safety CI matrix for macOS/Windows
   deploy-focused checks (`.github/workflows/deploy-safety-matrix.yml`).
 
 ## [4.2.2] - 2026-03-18

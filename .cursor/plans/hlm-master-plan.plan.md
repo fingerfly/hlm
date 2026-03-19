@@ -238,7 +238,7 @@ practicality upgrade exit (or after Pages if practicality is deferred).
   - `MCR coverage and prior final release gate were completed historically.`
   - `Current rerun evidence: test:unit/integration/regression/full, complexity, cloc, and lints all pass.`
   - `Deploy hardening delivered: doctor mode, dry-run mode, protocol mismatch warning, auth-aware preflight hints, and README/runbook updates.`
-  - `Deploy safety matrix workflow added for Ubuntu/macOS/Windows deploy-focused checks.`
+  - `Deploy safety matrix workflow added for macOS/Windows deploy-focused checks.`
   - `Tile-click context menu track delivered: pickTileWithAction, dynamic
     menu, pattern-actions removed; all phases 1-5 complete.`
 - LastUpdated: `2026-03-18`

@@ -41,8 +41,7 @@ Blueprint implementation for `和了么 - 国标麻将计番助手` (`Huleme - G
     - Auto-detected from local `git remote origin` when available
     - Deploy follows origin transport when detectable (SSH origin -> SSH
       deploy remote, HTTPS origin -> HTTPS deploy remote).
-    - Fallback when origin unavailable: Windows uses HTTPS, macOS/Linux
-      use SSH.
+    - Fallback when origin unavailable: Windows uses HTTPS, macOS uses SSH.
     - Transport mismatch prints warning; you can override explicitly with
       `HLM_DEPLOY_REMOTE`
   - Override expected repo template:
