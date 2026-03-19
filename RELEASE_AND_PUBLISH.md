@@ -129,8 +129,8 @@ npm run deploy -- minor --dry-run
   - rerun with `--confirm`.
 - Remote preflight failure:
   - set `HLM_DEPLOY_REMOTE` or `HLM_DEPLOY_REPO` in your shell.
-  - macOS and Windows always use HTTPS for deploy (avoids SSH hangs).
-  - Linux follows origin transport when detectable.
+  - Deploy follows origin transport (SSH origin -> SSH deploy, HTTPS ->
+    HTTPS).
   - if doctor/release prints transport mismatch, align protocols or set
     `HLM_DEPLOY_REMOTE` explicitly.
   - for HTTPS auth failures, verify repository access and use a GitHub

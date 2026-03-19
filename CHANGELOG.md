@@ -4,9 +4,11 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
-### Fixed
-- Deploy on macOS: always use HTTPS for deploy remote (avoids SSH hangs)
+### Changed
+- Deploy follows origin transport: SSH origin uses SSH deploy remote
   (`scripts/deployRemote.js`).
+
+### Fixed
 - Deploy to empty repo: use `checkout -b main` when remote has no commits
   (`scripts/deployPublish.js`).
 

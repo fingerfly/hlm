@@ -21,15 +21,15 @@ export function getDefaultDeployRemoteForPlatform(
   cwd = process.cwd()
 ) {
   const expectedRepo = resolveExpectedDeployRepo(env, runSync, cwd);
-  if (platform === "darwin" || platform === "win32") {
-    return `https://github.com/${expectedRepo}.git`;
-  }
   const transport = detectOriginTransport(env, runSync, cwd, platform);
   if (transport === "https") {
     return `https://github.com/${expectedRepo}.git`;
   }
   if (transport === "ssh") {
     return `git@github.com:${expectedRepo}.git`;
+  }
+  if (platform === "win32") {
+    return `https://github.com/${expectedRepo}.git`;
   }
   return `git@github.com:${expectedRepo}.git`;
 }
