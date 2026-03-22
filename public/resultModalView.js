@@ -8,24 +8,63 @@ import { getTileLabel, getTileUnicode } from "./tileAssets.js";
  * - Renders fan lists with empty-state fallback.
  * - Splits compact preview view and detailed info view rendering.
  */
+
 /**
  * Render one fan list into target ul element.
  *
  * @param {HTMLElement} target - List container.
- * @param {{name: string, fan: number}[]} fans - Fan list.
+ * @param {{name: string, fan: number, id?: string,
+ *   detailText?: string}[]} fans - Fan list.
+ * @param {{expandable?: boolean}} [options] - Render options.
  * @returns {void}
  */
-function renderFanList(target, fans) {
-  target.innerHTML = "";
+function renderFanList(target, fans, options = {}) {
+  const { expandable = false } = options;
+  target.replaceChildren();
   if (!fans.length) {
     const li = document.createElement("li");
     li.textContent = "无";
     target.appendChild(li);
     return;
   }
-  for (const fan of fans) {
+  for (let i = 0; i < fans.length; i += 1) {
+    const fan = fans[i];
     const li = document.createElement("li");
-    li.textContent = `${fan.name}（${fan.fan}番）`;
+    li.className = "fan-row";
+    const row = document.createElement("div");
+    row.className = "fan-row-main";
+    const label = document.createElement("span");
+    label.className = "fan-row-label";
+    label.textContent = `${fan.name}（${fan.fan}番）`;
+    row.appendChild(label);
+    if (expandable && fan.detailText) {
+      const infoId = `fan-detail-${i}-${fan.id || "x"}`;
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "fan-info-btn";
+      btn.textContent = "ℹ️";
+      btn.setAttribute(
+        "aria-label",
+        `${fan.name}番种释义`
+      );
+      btn.setAttribute("aria-expanded", "false");
+      btn.setAttribute("aria-controls", infoId);
+      const detail = document.createElement("div");
+      detail.id = infoId;
+      detail.className = "fan-detail-panel";
+      detail.hidden = true;
+      detail.textContent = fan.detailText;
+      btn.addEventListener("click", () => {
+        const open = detail.hidden;
+        detail.hidden = !open;
+        btn.setAttribute("aria-expanded", open ? "true" : "false");
+      });
+      row.appendChild(btn);
+      li.appendChild(row);
+      li.appendChild(detail);
+    } else {
+      li.appendChild(row);
+    }
     target.appendChild(li);
   }
 }
@@ -54,7 +93,7 @@ function tileDisplay(tile) {
  */
 function renderMeldRows(target, groups) {
   if (!target) return;
-  target.innerHTML = "";
+  target.replaceChildren();
   if (!Array.isArray(groups) || groups.length === 0) {
     target.textContent = "无";
     return;
@@ -86,7 +125,7 @@ export function renderResultModal(result, refs) {
   refs.total.textContent = `${vm.totalFan} 番`;
   refs.status.textContent = vm.winText;
   renderMeldRows(refs.meldRows, vm.meldGroups);
-  renderFanList(refs.hitPreview, vm.matchedFans);
+  renderFanList(refs.hitPreview, vm.matchedFans, { expandable: true });
   if (refs.explanation) {
     refs.explanation.textContent = vm.explanation || "";
   }
@@ -101,7 +140,7 @@ export function renderResultModal(result, refs) {
  * @returns {void}
  */
 export function renderInfoTip(vm, refs) {
-  renderFanList(refs.hitAll, vm.matchedFans);
-  renderFanList(refs.excludedAll, vm.excludedFans);
+  renderFanList(refs.hitAll, vm.matchedFans, { expandable: true });
+  renderFanList(refs.excludedAll, vm.excludedFans, { expandable: true });
   refs.explanation.textContent = vm.explanation || "无";
 }

@@ -28,6 +28,11 @@ test("buildResultViewModel maps fan IDs and keeps unknown IDs", () => {
   });
   assert.equal(vm.matchedFans[0].name, "门前清");
   assert.equal(vm.matchedFans[1].name, "X_UNKNOWN");
+  assert.equal(
+    typeof vm.matchedFans[0].detailText,
+    "string"
+  );
+  assert.equal(vm.matchedFans[0].detailText.length > 0, true);
 });
 
 test("buildResultViewModel handles invalid/manual error states", () => {

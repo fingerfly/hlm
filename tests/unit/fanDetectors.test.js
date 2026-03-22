@@ -897,4 +897,26 @@ test("detectFans supports structured context detectors", () => {
   for (const id of expected) {
     assert.equal(result.some((fan) => fan.id === id), true);
   }
+  const hua = result.find((fan) => fan.id === "HUA_PAI");
+  assert.equal(hua?.fan, 2);
+});
+
+test("detectFans sets HUA_PAI fan equal to flowerCount", () => {
+  const tiles = [
+    "1W", "1W", "1W",
+    "2W", "3W", "4W",
+    "5W", "6W", "7W",
+    "2T", "3T", "4T",
+    "9B", "9B"
+  ];
+  const win = { pattern: "standard", meldGroups: [] };
+  const base = {
+    tiles,
+    winType: "zimo",
+    handState: "menqian",
+    kongType: "none",
+    timingEvent: "none"
+  };
+  const r5 = detectFans({ ...base, flowerCount: 5 }, win);
+  assert.equal(r5.find((f) => f.id === "HUA_PAI")?.fan, 5);
 });

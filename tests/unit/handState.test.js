@@ -90,3 +90,21 @@ test("validateHandInput accepts valid structured context payload", () => {
   assert.equal(result.ok, true);
   assert.equal(result.code, null);
 });
+
+test("validateHandInput rejects flowerCount above 8", () => {
+  const result = validateHandInput({
+    ...base,
+    flowerCount: 9
+  });
+  assert.equal(result.ok, false);
+  assert.equal(result.problems.some((p) => p.includes("flowerCount")), true);
+});
+
+test("validateHandInput rejects kongSummary over 4 total", () => {
+  const result = validateHandInput({
+    ...base,
+    kongSummary: { an: 3, ming: 2 }
+  });
+  assert.equal(result.ok, false);
+  assert.equal(result.problems.some((p) => p.includes("an+ming")), true);
+});

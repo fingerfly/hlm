@@ -11,9 +11,15 @@ function getContextSummary(byId) {
   const handStateText = byId("handState").value === "menqian"
     ? "门前清"
     : "副露";
-  const kongMap = { none: "无杠", an: "暗杠", ming: "明杠", bu: "补杠" };
-  const kongText = kongMap[byId("kongType").value];
-  return `${winTypeText} · ${handStateText} · ${kongText}`;
+  const flowers = Number.parseInt(
+    byId("flowerCount")?.value ?? "0",
+    10
+  ) || 0;
+  const an = Number.parseInt(byId("kongAnCount")?.value ?? "0", 10) || 0;
+  const ming = Number.parseInt(byId("kongMingCount")?.value ?? "0", 10) || 0;
+  const kongText = an + ming === 0 ? "无杠" : `暗${an}·明${ming}`;
+  const flowerSuffix = flowers > 0 ? ` · 花${flowers}` : "";
+  return `${winTypeText} · ${handStateText} · ${kongText}${flowerSuffix}`;
 }
 
 function updatePickerPrimaryCta(openPickerBtn, pickedCount) {

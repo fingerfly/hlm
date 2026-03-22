@@ -22,7 +22,10 @@ function createByIdMap() {
     winType: { value: "zimo" },
     handState: { value: "menqian" },
     kongType: { value: "none" },
-    timingEvent: { value: "none" }
+    timingEvent: { value: "none" },
+    flowerCount: { value: "0" },
+    kongAnCount: { value: "0" },
+    kongMingCount: { value: "0" }
   };
   return {
     byId: (id) => controls[id],
@@ -230,9 +233,20 @@ test("syncHomeState shows actual context summary at step 2", () => {
   actions.syncHomeState();
   assert.equal(refs.contextSummaryEl.textContent, "自摸 · 门前清 · 无杠");
 
-  byIdState.controls.kongType.value = "an";
+  byIdState.controls.kongAnCount.value = "1";
   actions.syncHomeState();
-  assert.equal(refs.contextSummaryEl.textContent, "自摸 · 门前清 · 暗杠");
+  assert.equal(refs.contextSummaryEl.textContent, "自摸 · 门前清 · 暗1·明0");
+
+  byIdState.controls.kongMingCount.value = "2";
+  actions.syncHomeState();
+  assert.equal(refs.contextSummaryEl.textContent, "自摸 · 门前清 · 暗1·明2");
+
+  byIdState.controls.flowerCount.value = "3";
+  actions.syncHomeState();
+  assert.equal(
+    refs.contextSummaryEl.textContent,
+    "自摸 · 门前清 · 暗1·明2 · 花3"
+  );
 });
 
 test("undoHand rolls back last pattern action (e.g. pung)", () => {

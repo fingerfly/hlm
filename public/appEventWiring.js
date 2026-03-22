@@ -13,6 +13,7 @@ import {
 } from "./appEventBindings.js";
 import {
   wireContextSegmentedControls,
+  wireContextSteppers,
   wireSlotClickToPicker
 } from "./contextWiring.js";
 
@@ -27,8 +28,8 @@ import {
 export { getPickerTilesByMode, renderPickerByTab };
 
 /**
- * Handle wizard "next" button: from step 2, directly calculate and show result
- * modal; otherwise advance wizard step.
+ * Handle wizard "next": from step 2, calculate and show result modal;
+ * else advance wizard step.
  *
  * @param {object} store - App store with uiState.
  * @param {object} stateActions - calculate, goWizardNext.
@@ -167,6 +168,7 @@ export function wireAppEvents(params) {
   });
 
   wireContextSegmentedControls(byId, stateActions);
+  wireContextSteppers(byId, stateActions);
   bindClick("moreBtn", () => {
     resetContext(byId);
     stateActions.syncHomeState();

@@ -5,28 +5,79 @@
  * - Connects click/change handlers to action modules.
  * - Keeps event glue separate from state mutations.
  */
+import { getPickerTilesByMode } from "./pickerModeView.js";
+import { renderPickerByTab } from "./pickerRenderFlow.js";
+import {
+  createBindClick,
+  bindModalCloseButtons
+} from "./appEventBindings.js";
+import {
+  wireContextSegmentedControls,
+  wireContextSteppers,
+  wireSlotClickToPicker
+} from "./contextWiring.js";
+
 /**
- * Render current tab buttons and tile picker grid.
+ * Resolve tile list by picker mode and active tab.
  *
- * @param {object} params - Rendering and state dependencies.
+ * @param {Record<string, string[]>} tabTiles - Tile groups by tab.
+ * @param {"twoLayer"|"flat"} pickerMode - Picker layout mode.
+ * @param {string} activeTab - Active tab key.
+ * @returns {string[]}
+ */
+export { getPickerTilesByMode, renderPickerByTab };
+
+/**
+ * Handle wizard "next": from step 2, calculate and show result modal;
+ * else advance wizard step.
+ *
+ * @param {object} store - App store with uiState.
+ * @param {object} stateActions - calculate, goWizardNext.
+ * @param {object} modalActions - closeModalByKey, updateModalUi.
+ * @param {Function} syncWizardModalsFn - syncWizardModals.
  * @returns {void}
  */
-export function renderPickerByTab(params) {
-  const {
-    store,
-    tabTiles,
-    tilePickerGridEl,
-    renderPickerTabButtons,
-    renderTilePickerGrid,
-    stateActions
-  } = params;
-  renderPickerTabButtons(store.uiState.hand.activeTab);
-  renderTilePickerGrid({
-    tilePickerGridEl,
-    tiles: tabTiles[store.uiState.hand.activeTab],
-    onPick: (tile) => stateActions.pickTile(tile)
-  });
+export function handleWizardNextClick(
+  store,
+  stateActions,
+  modalActions,
+  syncWizardModalsFn
+) {
+  const step = store.uiState.wizard?.step || 1;
+  if (step === 2) {
+    modalActions.closeModalByKey("picker");
+    modalActions.closeModalByKey("context");
+    if (stateActions.calculate()) modalActions.updateModalUi();
+    return;
+  }
+  const result = stateActions.goWizardNext();
+  syncWizardModalsFn(result, modalActions);
 }
+
+/**
+ * Keep modal stack aligned with wizard step.
+ *
+ * @param {{ok:boolean, needs?:string, step?:number}} result - Step result.
+ * @param {{openModalByKey:Function, closeModalByKey:Function}} modalActions
+ * @returns {void}
+ */
+export function syncWizardModals(result, modalActions) {
+  if (!result.ok && result.needs === "tiles") {
+    modalActions.closeModalByKey("context");
+    modalActions.openModalByKey("picker");
+    return;
+  }
+  if (result.step === 1) {
+    modalActions.closeModalByKey("context");
+    modalActions.openModalByKey("picker");
+    return;
+  }
+  if (result.step === 2) {
+    modalActions.closeModalByKey("picker");
+    modalActions.openModalByKey("context");
+  }
+}
+
 
 /**
  * Attach all app-level event listeners.
@@ -49,10 +100,16 @@ export function wireAppEvents(params) {
     renderTilePickerGrid,
     resetContext
   } = params;
-  const bindClick = (id, onClick) => {
-    const element = byId(id);
-    if (!element) return;
-    element.addEventListener("click", onClick);
+  const bindClick = createBindClick(byId);
+  const renderPicker = () => {
+    renderPickerByTab({
+      store,
+      tabTiles,
+      tilePickerGridEl,
+      renderPickerTabButtons,
+      renderTilePickerGrid,
+      stateActions
+    });
   };
 
   bindTabButtons((tab) => {
@@ -71,32 +128,26 @@ export function wireAppEvents(params) {
   });
 
   bindPresetButtons(stateActions.applyPreset);
-  const closeMap = ["picker", "context", "result", "info"];
-  for (const modalKey of closeMap) {
-    bindCloseButtons(`[data-close='${modalKey}']`, () => {
-      modalActions.closeModalByKey(modalKey);
-    });
-  }
+  bindModalCloseButtons(bindCloseButtons, modalActions);
 
   bindClick("openPickerBtn", () => {
+    stateActions.jumpWizardStep(1);
+    modalActions.closeModalByKey("context");
     modalActions.openModalByKey("picker");
   });
-  bindClick("openContextBtn", () => {
-    modalActions.openModalByKey("context");
+  bindClick("clearHandBtn", stateActions.clearHand);
+  bindClick("wizardNextBtn", () =>
+    handleWizardNextClick(store, stateActions, modalActions, syncWizardModals)
+  );
+  bindClick("wizardBackBtn", () => {
+    const result = stateActions.goWizardPrev();
+    syncWizardModals(result, modalActions);
   });
-  for (const button of document.querySelectorAll("[data-pattern-action]")) {
-    button.addEventListener("click", () => {
-      stateActions.setPatternAction(button.dataset.patternAction);
-    });
-  }
-  bindClick("undoBtn", () => stateActions.undoHand());
-  byId("tilePreview").addEventListener("click", (event) => {
-    const target = event.target.closest("[data-slot-index]");
-    if (!target) return;
-    const index = Number.parseInt(target.dataset.slotIndex || "", 10);
-    if (!Number.isInteger(index)) return;
-    stateActions.selectSlot(index);
-    modalActions.openModalByKey("picker");
+  wireSlotClickToPicker({
+    byId,
+    stateActions,
+    modalActions,
+    renderPicker
   });
   bindClick("pickerDeleteBtn", () => {
     stateActions.deleteSelected();
@@ -104,13 +155,10 @@ export function wireAppEvents(params) {
   bindClick("pickerUndoBtn", () => {
     stateActions.undoHand();
   });
-  bindClick("clearBtn", stateActions.clearHand);
   bindClick("pickerClearBtn", stateActions.clearHand);
-  bindClick("calculateBtn", () => {
-    if (stateActions.calculate()) modalActions.updateModalUi();
-  });
   bindClick("playAgainBtn", () => {
     stateActions.clearHand();
+    stateActions.jumpWizardStep(1);
     modalActions.closeModalByKey("result");
     modalActions.closeModalByKey("info");
   });
@@ -119,9 +167,8 @@ export function wireAppEvents(params) {
     modalActions.openModalByKey("info");
   });
 
-  for (const id of ["winType", "handState", "kongType", "timingEvent"]) {
-    byId(id).addEventListener("change", stateActions.syncHomeState);
-  }
+  wireContextSegmentedControls(byId, stateActions);
+  wireContextSteppers(byId, stateActions);
   bindClick("moreBtn", () => {
     resetContext(byId);
     stateActions.syncHomeState();

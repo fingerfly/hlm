@@ -1,4 +1,5 @@
 import { buildResultViewModel } from "../src/app/resultViewModel.js";
+import { getTileLabel, getTileUnicode } from "./tileAssets.js";
 
 /**
  * Purpose: Render result and info modal view content.
@@ -7,30 +8,113 @@ import { buildResultViewModel } from "../src/app/resultViewModel.js";
  * - Renders fan lists with empty-state fallback.
  * - Splits compact preview view and detailed info view rendering.
  */
+
 /**
  * Render one fan list into target ul element.
  *
  * @param {HTMLElement} target - List container.
- * @param {{name: string, fan: number}[]} fans - Fan list.
+ * @param {{name: string, fan: number, id?: string,
+ *   detailText?: string}[]} fans - Fan list.
+ * @param {{expandable?: boolean}} [options] - Render options.
  * @returns {void}
  */
-function renderFanList(target, fans) {
-  target.innerHTML = "";
+function renderFanList(target, fans, options = {}) {
+  const { expandable = false } = options;
+  target.replaceChildren();
   if (!fans.length) {
     const li = document.createElement("li");
     li.textContent = "无";
     target.appendChild(li);
     return;
   }
-  for (const fan of fans) {
+  for (let i = 0; i < fans.length; i += 1) {
+    const fan = fans[i];
     const li = document.createElement("li");
-    li.textContent = `${fan.name}（${fan.fan}番）`;
+    li.className = "fan-row";
+    const row = document.createElement("div");
+    row.className = "fan-row-main";
+    const label = document.createElement("span");
+    label.className = "fan-row-label";
+    label.textContent = `${fan.name}（${fan.fan}番）`;
+    row.appendChild(label);
+    if (expandable && fan.detailText) {
+      const infoId = `fan-detail-${i}-${fan.id || "x"}`;
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "fan-info-btn";
+      btn.textContent = "ℹ️";
+      btn.setAttribute(
+        "aria-label",
+        `${fan.name}番种释义`
+      );
+      btn.setAttribute("aria-expanded", "false");
+      btn.setAttribute("aria-controls", infoId);
+      const detail = document.createElement("div");
+      detail.id = infoId;
+      detail.className = "fan-detail-panel";
+      detail.hidden = true;
+      detail.textContent = fan.detailText;
+      btn.addEventListener("click", () => {
+        const open = detail.hidden;
+        detail.hidden = !open;
+        btn.setAttribute("aria-expanded", open ? "true" : "false");
+      });
+      row.appendChild(btn);
+      li.appendChild(row);
+      li.appendChild(detail);
+    } else {
+      li.appendChild(row);
+    }
     target.appendChild(li);
   }
 }
 
+function groupTypeLabel(type) {
+  const labels = {
+    chow: "顺子",
+    pung: "刻子",
+    pair: "对子",
+    orphans: "十三幺"
+  };
+  return labels[type] || "牌组";
+}
+
+function tileDisplay(tile) {
+  const u = getTileUnicode(tile);
+  return u || getTileLabel(tile);
+}
+
 /**
- * Render result modal summary and return generated view model.
+ * Render grouped meld rows for result readability.
+ *
+ * @param {HTMLElement} target - Group rows container.
+ * @param {{type: string, tiles: string[]}[]} groups - Grouped hand rows.
+ * @returns {void}
+ */
+function renderMeldRows(target, groups) {
+  if (!target) return;
+  target.replaceChildren();
+  if (!Array.isArray(groups) || groups.length === 0) {
+    target.textContent = "无";
+    return;
+  }
+  for (const group of groups) {
+    const row = document.createElement("div");
+    row.className = "meld-row";
+    const type = document.createElement("span");
+    type.className = "meld-type";
+    type.textContent = `${groupTypeLabel(group.type)}：`;
+    const tiles = document.createElement("span");
+    tiles.className = "meld-tiles";
+    tiles.textContent = group.tiles.map(tileDisplay).join(" ");
+    row.appendChild(type);
+    row.appendChild(tiles);
+    target.appendChild(row);
+  }
+}
+
+/**
+ * Render result modal: total, full breakdown, explanation inline.
  *
  * @param {object} result - Raw evaluation payload.
  * @param {object} refs - Result modal node references.
@@ -40,8 +124,11 @@ export function renderResultModal(result, refs) {
   const vm = buildResultViewModel(result);
   refs.total.textContent = `${vm.totalFan} 番`;
   refs.status.textContent = vm.winText;
-  const preview = vm.matchedFans.slice(0, 3);
-  renderFanList(refs.hitPreview, preview);
+  renderMeldRows(refs.meldRows, vm.meldGroups);
+  renderFanList(refs.hitPreview, vm.matchedFans, { expandable: true });
+  if (refs.explanation) {
+    refs.explanation.textContent = vm.explanation || "";
+  }
   return vm;
 }
 
@@ -53,7 +140,7 @@ export function renderResultModal(result, refs) {
  * @returns {void}
  */
 export function renderInfoTip(vm, refs) {
-  renderFanList(refs.hitAll, vm.matchedFans);
-  renderFanList(refs.excludedAll, vm.excludedFans);
+  renderFanList(refs.hitAll, vm.matchedFans, { expandable: true });
+  renderFanList(refs.excludedAll, vm.excludedFans, { expandable: true });
   refs.explanation.textContent = vm.explanation || "无";
 }

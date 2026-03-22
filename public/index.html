@@ -12,11 +12,24 @@
     <link rel="stylesheet" href="./styles-responsive.css" />
   </head>
   <body>
+    <div id="appSplash" class="app-splash" aria-live="polite"
+      aria-label="应用启动画面">
+      <div class="app-splash-card">
+        <h1 class="app-splash-title">和了么</h1>
+        <p class="app-splash-subtitle">国标麻将计番</p>
+        <ul class="app-splash-values">
+          <li>手牌录入</li>
+          <li>番种拆解</li>
+          <li>条件与规则说明</li>
+        </ul>
+        <p id="splashVersion" class="app-splash-version"></p>
+      </div>
+    </div>
     <!-- Home screen keeps primary actions always visible on mobile. -->
     <main class="container">
       <header class="nav-bar">
         <span></span>
-        <button id="moreBtn" class="icon-btn" aria-label="更多">...</button>
+        <button id="moreBtn" class="icon-btn" aria-label="重置会话条件">...</button>
       </header>
       <p id="versionBadge" class="version-badge">版本信息加载中...</p>
 
@@ -87,90 +100,157 @@
       </div>
     </section>
 
-    <!-- Context settings are isolated to avoid accidental edits. -->
+    <!-- Context settings: grouped form (HIG-oriented). -->
     <section id="contextModal" class="modal">
-      <div class="sheet">
-        <div class="sheet-header">
+      <div class="sheet context-sheet">
+        <div class="sheet-header context-sheet-header">
           <h3>和牌条件</h3>
-          <button data-close="context" class="ghost-btn">应用</button>
+          <button type="button" data-close="context" class="primary-btn">
+            应用
+          </button>
         </div>
-        <div class="preset-cards">
-          <button data-preset="zimo-menqian" class="preset-card">自摸 + 门前清</button>
-          <button data-preset="dianhe-menqian" class="preset-card">点和 + 门前清</button>
-          <button data-preset="dianhe-fulu" class="preset-card">点和 + 副露</button>
-        </div>
-        <p class="context-section-label">自定义</p>
-        <div class="context-segmented">
-          <span class="context-label">和牌方式</span>
-          <div class="segmented-row" role="radiogroup" aria-label="和牌方式">
-            <input type="radio" id="winTypeZimo" name="winType" value="zimo" checked />
-            <label for="winTypeZimo">自摸</label>
-            <input type="radio" id="winTypeDianhe" name="winType" value="dianhe" />
-            <label for="winTypeDianhe">点和</label>
+        <div class="context-sheet-body">
+          <div class="preset-cards">
+            <button type="button" data-preset="zimo-menqian" class="preset-card">
+              自摸 + 门前清
+            </button>
+            <button type="button" data-preset="dianhe-menqian" class="preset-card">
+              点和 + 门前清
+            </button>
+            <button type="button" data-preset="dianhe-fulu" class="preset-card">
+              点和 + 副露
+            </button>
           </div>
-        </div>
-        <input type="hidden" id="winType" value="zimo" />
-        <div class="context-segmented">
-          <span class="context-label">门前/副露</span>
-          <div class="segmented-row" role="radiogroup" aria-label="门前副露">
-            <input type="radio" id="handStateMenqian" name="handState" value="menqian" checked />
-            <label for="handStateMenqian">门前清</label>
-            <input type="radio" id="handStateFulu" name="handState" value="fulu" />
-            <label for="handStateFulu">副露</label>
-          </div>
-        </div>
-        <input type="hidden" id="handState" value="menqian" />
-        <details class="context-advanced">
-          <summary>高级条件</summary>
-          <div class="context-segmented">
-            <span class="context-label">杠类型</span>
-            <div class="segmented-row" role="radiogroup" aria-label="杠类型">
-              <input type="radio" id="kongNone" name="kongType" value="none" checked />
-              <label for="kongNone">无杠</label>
-              <input type="radio" id="kongAn" name="kongType" value="an" />
-              <label for="kongAn">暗杠</label>
-              <input type="radio" id="kongMing" name="kongType" value="ming" />
-              <label for="kongMing">明杠</label>
-              <input type="radio" id="kongBu" name="kongType" value="bu" />
-              <label for="kongBu">补杠</label>
+          <section class="context-group" aria-labelledby="ctxWinHandTitle">
+            <h4 id="ctxWinHandTitle" class="context-group-title">和牌方式与门前状态</h4>
+            <div class="context-segmented">
+              <span class="context-label">和牌方式</span>
+              <div class="segmented-row" role="radiogroup" aria-label="和牌方式">
+                <input type="radio" id="winTypeZimo" name="winType" value="zimo"
+                  checked />
+                <label for="winTypeZimo">自摸</label>
+                <input type="radio" id="winTypeDianhe" name="winType"
+                  value="dianhe" />
+                <label for="winTypeDianhe">点和</label>
+              </div>
             </div>
-          </div>
-          <input type="hidden" id="kongType" value="none" />
-          <div class="context-segmented">
-            <span class="context-label">时机事件</span>
-            <div class="segmented-row" role="radiogroup" aria-label="时机事件">
-              <input type="radio" id="timingNone" name="timingEvent" value="none" checked />
-              <label for="timingNone">无</label>
-              <input type="radio" id="timingHaidi" name="timingEvent" value="haidi" />
-              <label for="timingHaidi">海底捞月</label>
-              <input type="radio" id="timingHedi" name="timingEvent" value="hedi" />
-              <label for="timingHedi">河底捞鱼</label>
-              <input type="radio" id="timingGangshang" name="timingEvent" value="gangshang" />
-              <label for="timingGangshang">杠上开花</label>
+            <input type="hidden" id="winType" value="zimo" />
+            <div class="context-segmented">
+              <span class="context-label">门前/副露</span>
+              <div class="segmented-row" role="radiogroup" aria-label="门前副露">
+                <input type="radio" id="handStateMenqian" name="handState"
+                  value="menqian" checked />
+                <label for="handStateMenqian">门前清</label>
+                <input type="radio" id="handStateFulu" name="handState"
+                  value="fulu" />
+                <label for="handStateFulu">副露</label>
+              </div>
             </div>
-          </div>
-          <input type="hidden" id="timingEvent" value="none" />
-        </details>
+            <input type="hidden" id="handState" value="menqian" />
+          </section>
+          <section class="context-group" aria-labelledby="ctxFlowerTitle">
+            <h4 id="ctxFlowerTitle" class="context-group-title">花牌</h4>
+            <p class="context-hint">花牌张数不计入 14 张手牌（每花 1 番）。</p>
+            <div class="stepper-row">
+              <button type="button" id="flowerDec" class="stepper-btn"
+                aria-label="减少花牌张数">−</button>
+              <span id="flowerCountLabel" class="stepper-value"
+                aria-live="polite">0</span>
+              <input type="hidden" id="flowerCount" value="0" />
+              <button type="button" id="flowerInc" class="stepper-btn"
+                aria-label="增加花牌张数">+</button>
+            </div>
+          </section>
+          <section class="context-group" aria-labelledby="ctxKongTitle">
+            <h4 id="ctxKongTitle" class="context-group-title">杠（组数）</h4>
+            <p class="context-hint">暗杠与明杠组数合计不超过 4。</p>
+            <div class="stepper-field">
+              <span class="stepper-field-label">暗杠</span>
+              <div class="stepper-row">
+                <button type="button" id="kongAnDec" class="stepper-btn"
+                  aria-label="减少暗杠组数">−</button>
+                <span id="kongAnLabel" class="stepper-value"
+                  aria-live="polite">0</span>
+                <input type="hidden" id="kongAnCount" value="0" />
+                <button type="button" id="kongAnInc" class="stepper-btn"
+                  aria-label="增加暗杠组数">+</button>
+              </div>
+            </div>
+            <div class="stepper-field">
+              <span class="stepper-field-label">明杠</span>
+              <div class="stepper-row">
+                <button type="button" id="kongMingDec" class="stepper-btn"
+                  aria-label="减少明杠组数">−</button>
+                <span id="kongMingLabel" class="stepper-value"
+                  aria-live="polite">0</span>
+                <input type="hidden" id="kongMingCount" value="0" />
+                <button type="button" id="kongMingInc" class="stepper-btn"
+                  aria-label="增加明杠组数">+</button>
+              </div>
+            </div>
+            <input type="hidden" id="kongType" value="none" />
+          </section>
+          <section class="context-group" aria-labelledby="ctxTimingTitle">
+            <h4 id="ctxTimingTitle" class="context-group-title">时机事件</h4>
+            <div class="radio-list" role="radiogroup" aria-label="时机事件">
+              <label class="radio-list-item">
+                <input type="radio" name="timingEvent" value="none" checked />
+                <span>无</span>
+              </label>
+              <label class="radio-list-item">
+                <input type="radio" name="timingEvent" value="haidi" />
+                <span>海底捞月</span>
+              </label>
+              <label class="radio-list-item">
+                <input type="radio" name="timingEvent" value="hedi" />
+                <span>河底捞鱼</span>
+              </label>
+              <label class="radio-list-item">
+                <input type="radio" name="timingEvent" value="gangshang" />
+                <span>杠上开花</span>
+              </label>
+              <label class="radio-list-item">
+                <input type="radio" name="timingEvent" value="qianggang" />
+                <span>抢杠和</span>
+              </label>
+            </div>
+            <input type="hidden" id="timingEvent" value="none" />
+          </section>
+        </div>
       </div>
     </section>
 
-    <!-- Result modal: total, breakdown, explanation inline. -->
+    <!-- Result modal: sticky summary + scrollable breakdown. -->
     <section id="resultModal" class="modal">
-      <div class="sheet">
-        <div class="sheet-header">
-          <h3>结果</h3>
-          <button data-close="result" class="ghost-btn">关闭</button>
+      <div class="sheet result-sheet">
+        <div class="result-sticky-top">
+          <div class="sheet-header result-sheet-header">
+            <h3>结果</h3>
+            <button type="button" data-close="result" class="ghost-btn">
+              关闭
+            </button>
+          </div>
+          <p id="resultStatus" class="status-pill">未和牌</p>
+          <p id="resultTotalFan" class="total-fan">0 番</p>
         </div>
-        <p id="resultStatus" class="status-pill">未和牌</p>
-        <p id="resultTotalFan" class="total-fan">0 番</p>
-        <h4>和牌分组</h4>
-        <div id="resultMeldRows" class="meld-rows"></div>
-        <h4>番种明细</h4>
-        <ul id="hitPreview" class="fan-list fan-breakdown"></ul>
-        <p id="resultExplanation" class="result-explanation summary-text"></p>
-        <div class="inline-actions">
-          <button id="openInfoBtn" class="ghost-btn">详细解释</button>
-          <button id="playAgainBtn" class="ghost-btn">再来一手</button>
+        <div class="result-scroll">
+          <section class="result-section" aria-labelledby="resultMeldHeading">
+            <h4 id="resultMeldHeading" class="result-section-title">和牌分组</h4>
+            <div id="resultMeldRows" class="meld-rows"></div>
+          </section>
+          <section class="result-section" aria-labelledby="resultFanHeading">
+            <h4 id="resultFanHeading" class="result-section-title">番种明细</h4>
+            <ul id="hitPreview" class="fan-list fan-breakdown"></ul>
+          </section>
+          <p id="resultExplanation" class="result-explanation summary-text"></p>
+          <div class="inline-actions">
+            <button type="button" id="openInfoBtn" class="ghost-btn">
+              详细解释
+            </button>
+            <button type="button" id="playAgainBtn" class="ghost-btn">
+              再来一手
+            </button>
+          </div>
         </div>
       </div>
     </section>

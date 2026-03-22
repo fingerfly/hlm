@@ -1,4 +1,5 @@
 import { syncContextRadios } from "./uiBindings.js";
+import { syncContextStepperDisplays } from "./contextWiring.js";
 import {
   detectIsMobileViewport,
   writeStoredPickerMode,
@@ -18,7 +19,18 @@ export function createHandContextActions(input) {
     if (!preset) return;
     byId("winType").value = preset.winType;
     byId("handState").value = preset.handState;
+    const te = byId("timingEvent");
+    if (te) te.value = "none";
+    const kt = byId("kongType");
+    if (kt) kt.value = "none";
+    const fc = byId("flowerCount");
+    if (fc) fc.value = "0";
+    const ka = byId("kongAnCount");
+    if (ka) ka.value = "0";
+    const km = byId("kongMingCount");
+    if (km) km.value = "0";
     syncContextRadios(byId);
+    syncContextStepperDisplays(byId);
     syncHomeState();
   }
   function setPickerMode(mode) {

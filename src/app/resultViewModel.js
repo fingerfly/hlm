@@ -1,4 +1,5 @@
 import { getFanDisplayName } from "../rules/fanRegistry.js";
+import { getFanLexiconText } from "../config/fanLexicon.js";
 
 /**
  * Purpose: Translate scoring payload into UI-friendly result view model.
@@ -22,12 +23,13 @@ const WIN_PATTERN_TEXT = Object.freeze({
  * Map one fan item into localized display fields.
  *
  * @param {{id: string, fan: number}} item - Raw fan item.
- * @returns {{id: string, fan: number, name: string}}
+ * @returns {{id: string, fan: number, name: string, detailText: string}}
  */
 function mapFanItem(item) {
   return {
     ...item,
-    name: getFanDisplayName(item.id)
+    name: getFanDisplayName(item.id),
+    detailText: getFanLexiconText(item.id)
   };
 }
 

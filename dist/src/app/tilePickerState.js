@@ -6,6 +6,7 @@
  * - Preserves immutable updates for UI state synchronization.
  */
 const TILE_SLOTS = 14;
+const MAX_HISTORY = 50;
 
 /**
  * Create picker state from optional initial tiles.
@@ -22,7 +23,8 @@ export function createTilePickerState(initialTiles = []) {
   return {
     slots,
     cursor: tiles.length,
-    editingIndex: null
+    editingIndex: null,
+    actionHistory: []
   };
 }
 
@@ -59,6 +61,46 @@ export function addTileToPicker(state, tileCode) {
   }
   next.slots[TILE_SLOTS - 1] = tileCode;
   next.editingIndex = null;
+  return next;
+}
+
+/**
+ * Add multiple tiles as one action and record for undo.
+ *
+ * @param {{slots: string[], cursor: number, editingIndex: number|null,
+ *   actionHistory: object[]}} state - Picker state.
+ * @param {string[]} tiles - Tile codes to add.
+ * @returns {{slots: string[], cursor: number, editingIndex: number|null,
+ *   actionHistory: object[]}}
+ */
+export function addTilesToPicker(state, tiles) {
+  if (!tiles.length) return state;
+  const next = {
+    slots: [...state.slots],
+    cursor: state.cursor,
+    editingIndex: state.editingIndex ?? null,
+    actionHistory: [...(state.actionHistory || [])]
+  };
+  const slotIndices = [];
+  let writeIdx = next.editingIndex;
+  if (Number.isInteger(writeIdx) && writeIdx >= 0 && writeIdx < TILE_SLOTS) {
+    next.editingIndex = null;
+  } else {
+    writeIdx = next.cursor;
+  }
+  for (const tileCode of tiles) {
+    if (writeIdx >= TILE_SLOTS) break;
+    next.slots[writeIdx] = tileCode;
+    slotIndices.push(writeIdx);
+    writeIdx += 1;
+  }
+  next.cursor = Math.max(next.cursor, writeIdx);
+  if (next.cursor >= TILE_SLOTS) {
+    next.cursor = pickerToTiles({ slots: next.slots }).length;
+  }
+  const entry = { slotIndices, tiles: tiles.slice(0, slotIndices.length) };
+  next.actionHistory = next.actionHistory.slice(-(MAX_HISTORY - 1));
+  next.actionHistory.push(entry);
   return next;
 }
 
@@ -134,6 +176,72 @@ export function undoLastTile(state) {
 }
 
 /**
+ * Undo the last recorded action (whole group).
+ *
+ * @param {{slots: string[], actionHistory: object[]}} state - Picker state.
+ * @returns {{slots: string[], cursor: number, actionHistory: object[]}}
+ */
+export function undoLastAction(state) {
+  const history = state.actionHistory || [];
+  if (!history.length) return state;
+  const entry = history[history.length - 1];
+  const slotIndices = new Set(entry.slotIndices || []);
+  const remaining = [];
+  for (let i = 0; i < TILE_SLOTS; i += 1) {
+    if (!slotIndices.has(i) && state.slots[i]) {
+      remaining.push(state.slots[i]);
+    }
+  }
+  const pad = TILE_SLOTS - remaining.length;
+  const nextSlots = [...remaining, ...new Array(pad).fill("")];
+  return {
+    ...state,
+    slots: nextSlots,
+    cursor: remaining.length,
+    editingIndex: null,
+    actionHistory: history.slice(0, -1)
+  };
+}
+
+/**
+ * Undo the last action affecting the given slot.
+ *
+ * @param {{slots: string[], actionHistory: object[]}} state - Picker state.
+ * @param {number} slotIndex - Slot to undo for.
+ * @returns {{slots: string[], cursor: number, actionHistory: object[]}}
+ */
+export function undoBySlot(state, slotIndex) {
+  const history = state.actionHistory || [];
+  const invalid =
+    !Number.isInteger(slotIndex) || slotIndex < 0 || slotIndex >= TILE_SLOTS;
+  if (invalid) return state;
+  let idx = history.length - 1;
+  for (; idx >= 0; idx -= 1) {
+    const entry = history[idx];
+    if ((entry.slotIndices || []).includes(slotIndex)) break;
+  }
+  if (idx < 0) return state;
+  const entry = history[idx];
+  const slotIndices = new Set(entry.slotIndices || []);
+  const remaining = [];
+  for (let i = 0; i < TILE_SLOTS; i += 1) {
+    if (!slotIndices.has(i) && state.slots[i]) {
+      remaining.push(state.slots[i]);
+    }
+  }
+  const pad = TILE_SLOTS - remaining.length;
+  const nextSlots = [...remaining, ...new Array(pad).fill("")];
+  const newHistory = [...history.slice(0, idx), ...history.slice(idx + 1)];
+  return {
+    ...state,
+    slots: nextSlots,
+    cursor: remaining.length,
+    editingIndex: null,
+    actionHistory: newHistory
+  };
+}
+
+/**
  * Clear all picker slots and reset cursor to zero.
  *
  * @param {{selectedTab?: string}} state - Picker state.
@@ -144,7 +252,8 @@ export function clearTilePicker(state) {
     slots: new Array(TILE_SLOTS).fill(""),
     cursor: 0,
     selectedTab: state.selectedTab || "W",
-    editingIndex: null
+    editingIndex: null,
+    actionHistory: []
   };
 }
 

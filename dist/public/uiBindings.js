@@ -5,6 +5,30 @@
  * - Attaches tab and preset click handlers.
  */
 
+import { syncContextStepperDisplays } from "./contextWiring.js";
+
+/**
+ * Sync hidden context inputs to their radio buttons.
+ *
+ * @param {(id: string) => HTMLElement} byId - Id lookup helper.
+ * @returns {void}
+ */
+export function syncContextRadios(byId) {
+  const map = [
+    ["winType", "winType"],
+    ["handState", "handState"],
+    ["timingEvent", "timingEvent"]
+  ];
+  for (const [hiddenId, radioName] of map) {
+    const hidden = byId(hiddenId);
+    if (!hidden) continue;
+    const radio = document.querySelector(
+      `input[name="${radioName}"][value="${hidden.value}"]`
+    );
+    if (radio) radio.checked = true;
+  }
+}
+
 /**
  * Reset context selectors to app default values.
  *
@@ -14,8 +38,18 @@
 export function resetContext(byId) {
   byId("winType").value = "zimo";
   byId("handState").value = "menqian";
-  byId("kongType").value = "none";
-  byId("timingEvent").value = "none";
+  const kt = byId("kongType");
+  if (kt) kt.value = "none";
+  const te = byId("timingEvent");
+  if (te) te.value = "none";
+  const fc = byId("flowerCount");
+  if (fc) fc.value = "0";
+  const ka = byId("kongAnCount");
+  if (ka) ka.value = "0";
+  const km = byId("kongMingCount");
+  if (km) km.value = "0";
+  syncContextStepperDisplays(byId);
+  syncContextRadios(byId);
   const autoCalculate = byId("autoCalculate");
   if (autoCalculate) autoCalculate.checked = true;
 }

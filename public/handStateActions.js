@@ -31,6 +31,7 @@ export function createHandStateActions(input) {
     store,
     byId,
     contextPresets,
+    afterPickerSync,
     syncHomeState
   } = input;
   const contextActions = createHandContextActions({
@@ -39,7 +40,10 @@ export function createHandStateActions(input) {
     contextPresets,
     syncHomeState
   });
-  const pickerActions = createHandPickerActions(input);
+  const pickerActions = createHandPickerActions({
+    ...input,
+    afterPickerSync
+  });
   const {
     openTileContextMenu,
     closeTileContextMenu

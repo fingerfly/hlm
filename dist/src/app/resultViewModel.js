@@ -1,3 +1,6 @@
+import { getFanDisplayName } from "../rules/fanRegistry.js";
+import { getFanLexiconText } from "../config/fanLexicon.js";
+
 /**
  * Purpose: Translate scoring payload into UI-friendly result view model.
  * Description:
@@ -16,29 +19,17 @@ const WIN_PATTERN_TEXT = Object.freeze({
   thirteen_orphans: "十三幺"
 });
 
-const FAN_ID_TEXT = Object.freeze({
-  MEN_QIAN_QING: "门前清",
-  ZI_MO: "自摸",
-  QI_DUI: "七对",
-  SHI_SAN_YAO: "十三幺",
-  GANG_SHANG_HUA: "杠上开花",
-  HAI_DI_LAO_YUE: "海底捞月",
-  HE_DI_LAO_YU: "河底捞鱼",
-  QING_YI_SE: "清一色",
-  HUN_YI_SE: "混一色",
-  DUAN_YAO: "断幺"
-});
-
 /**
  * Map one fan item into localized display fields.
  *
  * @param {{id: string, fan: number}} item - Raw fan item.
- * @returns {{id: string, fan: number, name: string}}
+ * @returns {{id: string, fan: number, name: string, detailText: string}}
  */
 function mapFanItem(item) {
   return {
     ...item,
-    name: FAN_ID_TEXT[item.id] || item.id
+    name: getFanDisplayName(item.id),
+    detailText: getFanLexiconText(item.id)
   };
 }
 
@@ -59,6 +50,7 @@ export function buildResultViewModel(result) {
     minWinningFan: Number(scoring.minWinningFan || 0),
     winPatternText: WIN_PATTERN_TEXT[pattern] || "未成和",
     explanation: result?.explanation || "",
+    meldGroups: scoring.meldGroups || [],
     matchedFans: (scoring.matchedFans || []).map(mapFanItem),
     excludedFans: (scoring.excludedFans || []).map(mapFanItem),
     raw: result

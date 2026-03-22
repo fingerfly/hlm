@@ -334,3 +334,103 @@ select {
   font-size: 20px;
   line-height: 1;
 }
+
+/* Cold-start splash: brand + value props + version (dismissed from app.js). */
+.app-splash {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: linear-gradient(165deg, #0f172a 0%, #1e293b 55%, #0f172a 100%);
+  color: #f8fafc;
+  transition: opacity 0.35s ease, visibility 0.35s ease;
+}
+
+.app-splash.splash-dismissed {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-splash {
+    transition: none;
+  }
+}
+
+.app-splash-card {
+  max-width: 320px;
+  text-align: center;
+}
+
+.app-splash-title {
+  margin: 0 0 6px;
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.app-splash-subtitle {
+  margin: 0 0 20px;
+  font-size: 15px;
+  color: #cbd5e1;
+}
+
+.app-splash-values {
+  margin: 0 0 20px;
+  padding-left: 1.2em;
+  text-align: left;
+  font-size: 14px;
+  line-height: 1.65;
+  color: #e2e8f0;
+}
+
+.app-splash-version {
+  margin: 0;
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+/* Result fan rows: ℹ️ only expands detail (not whole row). */
+.fan-breakdown .fan-row {
+  display: block;
+  list-style: disc;
+  margin-bottom: 6px;
+}
+
+.fan-row-main {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.fan-row-label {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.fan-info-btn {
+  flex: 0 0 auto;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0 10px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: #fff;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.fan-detail-panel {
+  margin: 6px 0 4px 0;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: #f4f6fb;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #1f2328;
+}

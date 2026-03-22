@@ -4,17 +4,37 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [4.6.0] - 2026-03-22
+
+### Added
+- Cold-start splash with brand, value props, and version
+  (`public/index.html`, `public/styles-components.css`, `public/app.js`).
+- Static fan lexicon and per-fan detail text on the result view model
+  (`src/config/fanLexicon.js`, `src/app/resultViewModel.js`).
+- Row-level ℹ️ control on result and info fan lists with ≥44px hit target
+  (`public/resultModalView.js`, `public/styles-components.css`).
+
+### Changed
+- **花牌 / 杠**: `flowerCount` 0–8 and `kongSummary` (an+ming ≤ 4) validated;
+  `HUA_PAI` fan equals flower count; scoring requests send `kongType: "none"`
+  plus stepper values (`src/contracts/structuredContextValidator.js`,
+  `src/rules/fanDetectors.js`, `public/resultStateActions.js`).
+- 和牌条件 modal: grouped layout, flower and kong steppers, timing list
+  including 抢杠和, primary-style apply button (`public/index.html`,
+  `public/contextWiring.js`, `public/uiBindings.js`, `public/styles-modals.css`,
+  `public/handContextActions.js`, `public/homeStateView.js`).
+- Auto-advance wizard to step 2 when 14 tiles are filled (disable via
+  `localStorage` key `hlm_disableAutoWizardAdvance=1`)
+  (`public/handPickerActions.js`, `public/app.js`).
+- 「更多」button labeled as reset session context (`public/index.html`).
+- Result sheet: sticky summary header and scrollable body
+  (`public/index.html`, `public/styles-modals.css`).
+
 ## [4.5.6] - 2026-03-19
-
-## [4.5.5] - 2026-03-19
-
-## [4.5.4] - 2026-03-19
-
-## [4.5.3] - 2026-03-19
-
-## [4.5.2] - 2026-03-19
-
-## [4.5.1] - 2026-03-19
+### Fixed
+- Deploy script: use stdio inherit for git clone/pull/push so output and
+  prompts appear in terminal; unset GIT_ASKPASS for network operations to
+  avoid Cursor credential helper blocking (`scripts/deployPublish.js`).
 
 ## [4.5.0] - 2026-03-19
 

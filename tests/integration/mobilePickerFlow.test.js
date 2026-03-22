@@ -129,3 +129,38 @@ test("dynamic menu narrows actions from 12 to 14 tiles", () => {
 test("picker mode policy always returns twoLayer", () => {
   assert.equal(resolveInitialPickerMode(), "twoLayer");
 });
+
+test("evaluateCapturedHand adds HUA_PAI fan from flowerCount", () => {
+  const hand = [
+    "1W", "1W", "1W",
+    "2W", "3W", "4W",
+    "5W", "6W", "7W",
+    "2T", "3T", "4T",
+    "9B", "9B"
+  ];
+  let picker = createTilePickerState();
+  for (const tile of hand) {
+    picker = addTileToPicker(picker, tile);
+  }
+  const baseFan = evaluateCapturedHand({
+    tiles: pickerToTiles(picker),
+    context: {
+      winType: "zimo",
+      handState: "menqian",
+      kongType: "none",
+      timingEvent: "none",
+      flowerCount: 0
+    }
+  });
+  const withFlowers = evaluateCapturedHand({
+    tiles: pickerToTiles(picker),
+    context: {
+      winType: "zimo",
+      handState: "menqian",
+      kongType: "none",
+      timingEvent: "none",
+      flowerCount: 4
+    }
+  });
+  assert.equal(withFlowers.scoring.totalFan, baseFan.scoring.totalFan + 4);
+});

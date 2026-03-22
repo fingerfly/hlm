@@ -16,6 +16,7 @@ export function createHandPickerActions(input) {
   const {
     store,
     refs,
+    afterPickerSync,
     addTilesToPicker,
     resolvePatternAction,
     selectPickerSlot,
@@ -24,6 +25,9 @@ export function createHandPickerActions(input) {
     undoLastAction,
     syncHomeState
   } = input;
+  function notifyAfterPick() {
+    if (typeof afterPickerSync === "function") afterPickerSync();
+  }
   function effectiveActionId() {
     return store.pickerActionLock || store.pickerActionOnce || "single";
   }
@@ -88,6 +92,7 @@ export function createHandPickerActions(input) {
       clearOneShotAction();
     }
     syncHomeState();
+    notifyAfterPick();
     return true;
   }
 
@@ -113,6 +118,7 @@ export function createHandPickerActions(input) {
     }
     store.pickerState = addTilesToPicker(store.pickerState, result.tiles);
     syncHomeState();
+    notifyAfterPick();
     return true;
   }
   function selectSlot(index) {

@@ -48,3 +48,18 @@ test("addStructuredContextProblems handles undefined input safely", () => {
   addStructuredContextProblems(undefined, problems);
   assert.deepEqual(problems, []);
 });
+
+test("addStructuredContextProblems caps flowerCount at 8", () => {
+  const problems = [];
+  addStructuredContextProblems({ flowerCount: 9 }, problems);
+  assert.equal(problems.some((p) => p.includes("flowerCount")), true);
+});
+
+test("addStructuredContextProblems rejects kongSummary total over 4", () => {
+  const problems = [];
+  addStructuredContextProblems(
+    { kongSummary: { an: 3, ming: 2 } },
+    problems
+  );
+  assert.equal(problems.some((p) => p.includes("an+ming")), true);
+});

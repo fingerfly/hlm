@@ -48,6 +48,11 @@ function addKongSummaryProblems(input, problems) {
       problems.push(`kongSummary.${field} must be a non-negative integer`);
     }
   }
+  const anVal = isNonNegativeInteger(ks.an) ? ks.an : 0;
+  const mingVal = isNonNegativeInteger(ks.ming) ? ks.ming : 0;
+  if (anVal + mingVal > 4) {
+    problems.push("kongSummary an+ming cannot exceed 4");
+  }
 }
 
 /**
@@ -68,11 +73,12 @@ export function addStructuredContextProblems(input = {}, problems = []) {
     problems
   );
 
-  if (
-    isDefined(input.flowerCount)
-    && !isNonNegativeInteger(input.flowerCount)
-  ) {
-    problems.push("flowerCount must be a non-negative integer");
+  if (isDefined(input.flowerCount)) {
+    if (!isNonNegativeInteger(input.flowerCount)) {
+      problems.push("flowerCount must be a non-negative integer");
+    } else if (input.flowerCount > 8) {
+      problems.push("flowerCount cannot exceed 8");
+    }
   }
 
   if (

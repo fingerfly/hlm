@@ -46,6 +46,19 @@ todos:
       Replace persistent pattern-action buttons with tile-click-triggered
       dynamic context menu; hide impossible options by remaining slots.
     status: completed
+  - id: track-holistic-ux-scoring
+    content: >
+      Execute holistic UX and scoring plan: flower fans, splash, context
+      modal HIG redesign, click reduction, result modal + static fan lexicon
+      (row info button disclosure). Child: hlm_holistic_ux_scoring.plan.md
+    status: completed
+  - id: track-post-holistic-ui-polish
+    content: >
+      Post-holistic polish (7 child todos incl. gates): presets removal, HIG
+      timing list, bottom apply CTA, result layout + remove info modal, Guobiao
+      fanLexicon, splash visuals, master closeout. Child:
+      hlm_post_holistic_ui_polish.plan.md
+    status: pending
 isProject: false
 ---
 
@@ -128,6 +141,12 @@ not present in current workspace)
 [hlm_tile_click_context_menu_998eab78.plan.md](hlm_tile_click_context_menu_998eab78.plan.md)
 - Context menu visual and layout (vertical menu, anchor positioning) (completed):
 [hlm_context_menu_visual.plan.md](hlm_context_menu_visual.plan.md)
+- Holistic UX and scoring (completed 2026-03-22; flower tiles, splash,
+  context modal HIG, click reduction, result modal + fan lexicon + row info):
+[hlm_holistic_ux_scoring.plan.md](hlm_holistic_ux_scoring.plan.md)
+- Post-holistic UI polish (**pending**; presets removal, timing HIG, result
+  layout, Guobiao lexicon, splash refinement):
+[hlm_post_holistic_ui_polish.plan.md](hlm_post_holistic_ui_polish.plan.md)
 - Historical supporting plans (traceability only):
   - [hlm_版本升级工具与中文术语统一_35161103.plan.md](hlm_版本升级工具与中文术语统一_35161103.plan.md)
   - `spike_full_automation_6a79ecff.plan.md` (historical reference; file
@@ -195,8 +214,23 @@ practicality upgrade exit (or after Pages if practicality is deferred).
 - Tile-click context menu track executes after deploy safety hardening
   (builds on completed tile-first UI overhaul).
 - Final release gate reruns after tile-click context menu track exits.
+- Holistic UX and scoring track (**new**): runs after the historical baseline
+  above; does not invalidate prior `completed` milestones — see child plan
+  [hlm_holistic_ux_scoring.plan.md](hlm_holistic_ux_scoring.plan.md).
+- Post-holistic UI polish (**pending**): follows holistic completion; see
+  [hlm_post_holistic_ui_polish.plan.md](hlm_post_holistic_ui_polish.plan.md).
 
 ## Phase Status Dashboard
+
+### Current delivery queue (post-baseline)
+
+- TrackId: `track-post-holistic-ui-polish`
+- ChildPlan:
+  [hlm_post_holistic_ui_polish.plan.md](hlm_post_holistic_ui_polish.plan.md)
+- TrackTodoStatus: `pending` (set `in_progress` when execution starts)
+- Prior closed: `track-holistic-ux-scoring` →
+  [hlm_holistic_ux_scoring.plan.md](hlm_holistic_ux_scoring.plan.md)
+  (2026-03-22)
 
 ### Current Status
 
@@ -206,8 +240,12 @@ practicality upgrade exit (or after Pages if practicality is deferred).
 - ActivePhase: `none`
 - Focus:
   - `All tracked HLM roadmap items completed.`
+  - `Holistic UX/scoring track delivered (splash, context HIG, flowers/kong,
+    auto-advance, result lexicon + row ℹ️).`
+  - `Next: post-holistic UI polish — see Current delivery queue.`
   - `Tile-click context menu track delivered.`
-  - `Context menu visual and layout (vertical menu, anchor positioning) delivered.`
+  - `Context menu visual and layout (vertical menu, anchor positioning)
+    delivered.`
   - `Release hardening safeguards integrated and validated.`
 - ExitGateCheck:
   - Unit: `pass`
@@ -222,8 +260,10 @@ practicality upgrade exit (or after Pages if practicality is deferred).
 - RisksAndBlockers:
   - `No blocker.`
 - NextActions:
-  - `Maintain completed state; keep regression/test/complexity guardrails
-    enforced on future changes.`
+  - `Execute track-post-holistic-ui-polish
+    (hlm_post_holistic_ui_polish.plan.md); then mark todo completed and append
+    ValidationEvidence.`
+  - `Maintain regression/test/complexity guardrails on all changes.`
 - ValidationEvidence:
   - `Context menu visual: vertical layout, Material elevation, near-tile positioning.
     Tests passed; tileContextMenuController.test.js added.`
@@ -241,7 +281,12 @@ practicality upgrade exit (or after Pages if practicality is deferred).
   - `Deploy safety matrix workflow added for macOS/Windows deploy-focused checks.`
   - `Tile-click context menu track delivered: pickTileWithAction, dynamic
     menu, pattern-actions removed; all phases 1-5 complete.`
-- LastUpdated: `2026-03-18`
+  - `Holistic UX/scoring (2026-03-22): flowerCount 0–8 + kongSummary caps,
+    HUA_PAI dynamic fan, splash screen, context modal groups/steppers/timing
+    incl. 抢杠和, auto wizard advance at 14 tiles (opt-out localStorage),
+    result sticky header + fanLexicon + row ℹ️. Gates: npm test,
+    quality:complexity, build:dist. Version 4.6.0.`
+- LastUpdated: `2026-03-22` (holistic track completed; evidence above)
 
 ## Security and Privacy Hardening Track
 
@@ -413,6 +458,8 @@ except approved placeholders.
   - Historical MCR hardening remains baseline and is retained unchanged.
   - Master dependency model completed through UI cleanup, deploy hardening,
   and final release gate rerun.
+  - Child [hlm_holistic_ux_scoring.plan.md](hlm_holistic_ux_scoring.plan.md)
+    **implemented and closed** 2026-03-22 (see dashboard ValidationEvidence).
 - Security readiness:
   - pass-with-tracking; enforce deterministic scoring and safe rendering
   boundaries in child-plan gates.
@@ -420,12 +467,17 @@ except approved placeholders.
   - pass; quality commands and SLOC/complexity controls are explicitly
   required in child-plan gates.
 - Implementation readiness:
-  - pass; single-release strategy now includes internal execution slices for
-  controllable delivery while preserving one release boundary.
+  - pass for holistic child plan (closed); **pass** for
+    [hlm_post_holistic_ui_polish.plan.md](hlm_post_holistic_ui_polish.plan.md)
+    after 2026-03-22 review–fix: file anchors, locked UI decisions, mermaid
+    slice order, gates todo, infoModal removal scope, `uiFlowState` note.
 - Dependency readiness:
-  - pass; no remaining prerequisite in this closed cycle.
+  - pass; post-polish track depends only on holistic baseline in repo
+  (v4.6.0).
 - Remaining tracked prerequisite:
-  - `none`
+  - Execute `track-post-holistic-ui-polish` per
+    [hlm_post_holistic_ui_polish.plan.md](hlm_post_holistic_ui_polish.plan.md)
+    (no further plan-structure churn before coding).
 
 ## Implementation Go/No-Go (for future reopened tracks)
 
