@@ -31,7 +31,7 @@ function buildRequestFromState(store, byId) {
  * Create result and evaluation related actions.
  *
  * @param {object} input - Result action dependencies.
- * @returns {{calculate: Function, openInfo: Function}}
+ * @returns {{calculate: Function}}
  */
 export function createResultStateActions(input) {
   const {
@@ -39,8 +39,7 @@ export function createResultStateActions(input) {
     byId,
     refs,
     evaluateCapturedHand,
-    renderResultModal,
-    renderInfoTip
+    renderResultModal
   } = input;
   function calculate() {
     if (!canCalculate(store.uiState)) return false;
@@ -49,10 +48,5 @@ export function createResultStateActions(input) {
     store.resultVm = renderResultModal(result, refs.resultRefs);
     return true;
   }
-  function openInfo() {
-    if (!store.resultVm) return false;
-    renderInfoTip(store.resultVm, refs.infoRefs);
-    return true;
-  }
-  return { calculate, openInfo };
+  return { calculate };
 }

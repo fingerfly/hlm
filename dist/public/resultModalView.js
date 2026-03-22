@@ -2,11 +2,10 @@ import { buildResultViewModel } from "../src/app/resultViewModel.js";
 import { getTileLabel, getTileUnicode } from "./tileAssets.js";
 
 /**
- * Purpose: Render result and info modal view content.
+ * Purpose: Render result modal view content.
  * Description:
  * - Converts scoring payload to UI text through result view model.
- * - Renders fan lists with empty-state fallback.
- * - Splits compact preview view and detailed info view rendering.
+ * - Renders fan lists with empty-state fallback and row-level ℹ️ details.
  */
 
 /**
@@ -124,23 +123,13 @@ export function renderResultModal(result, refs) {
   const vm = buildResultViewModel(result);
   refs.total.textContent = `${vm.totalFan} 番`;
   refs.status.textContent = vm.winText;
+  if (refs.winPattern) {
+    refs.winPattern.textContent = vm.winPatternText || "—";
+  }
   renderMeldRows(refs.meldRows, vm.meldGroups);
   renderFanList(refs.hitPreview, vm.matchedFans, { expandable: true });
   if (refs.explanation) {
     refs.explanation.textContent = vm.explanation || "";
   }
   return vm;
-}
-
-/**
- * Render detailed info modal from prebuilt result view model.
- *
- * @param {object} vm - Result view model.
- * @param {object} refs - Info modal node references.
- * @returns {void}
- */
-export function renderInfoTip(vm, refs) {
-  renderFanList(refs.hitAll, vm.matchedFans, { expandable: true });
-  renderFanList(refs.excludedAll, vm.excludedFans, { expandable: true });
-  refs.explanation.textContent = vm.explanation || "无";
 }

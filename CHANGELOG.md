@@ -4,6 +4,38 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [4.7.0] - 2026-03-22
+
+### Changed
+- Result modal: removed the standalone **和牌型** line (`#resultWinPattern`) and
+  its divider; and牌类型 remains in the bottom summary text from `explanation`
+  (`public/index.html`, `public/appRefs.js`, `public/resultModalView.js`).
+
+## [4.6.1] - 2026-03-22
+
+### Added
+- Per-registry fan lexicon map
+  (`src/config/fanLexiconEntries.js`) with Guobiao-oriented summaries;
+  `getFanLexiconText` reads from it (`src/config/fanLexicon.js`).
+- Result summary line for win pattern (`#resultWinPattern`) with divider
+  before meld breakdown (`public/index.html`, `public/styles-modals.css`,
+  `public/resultModalView.js`).
+
+### Changed
+- Context modal: removed preset shortcut cards; timing rows use HIG-style
+  trailing checkmark; primary **应用** in sticky footer with scrollable body
+  (`public/index.html`, `public/styles-modals.css`).
+- Removed info modal, `modal.info`, and **详细解释** flow; row-level ℹ️ remains
+  the detail path (`public/index.html`, `public/appRefs.js`,
+  `public/appModalActions.js`, `public/appEventBindings.js`,
+  `public/appEventWiring.js`, `src/app/uiFlowState.js`,
+  `public/resultStateActions.js`).
+- Dropped `CONTEXT_PRESETS`, `bindPresetButtons`, and preset handlers from
+  wiring (`public/uiConfig.js`, `public/uiBindings.js`, `public/app.js`,
+  `public/handContextActions.js`).
+- Splash: refined gradient, glass card, decorative motif, typography
+  (`public/index.html`, `public/styles-components.css`).
+
 ## [4.6.0] - 2026-03-22
 
 ### Added

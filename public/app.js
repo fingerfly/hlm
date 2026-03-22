@@ -13,7 +13,7 @@ import {
 } from "../src/app/tilePickerState.js";
 import { resolvePatternAction } from "../src/app/tilePatternActions.js";
 import { createUiFlowState, canCalculate } from "../src/app/uiFlowState.js";
-import { TAB_TILES, CONTEXT_PRESETS } from "./uiConfig.js";
+import { TAB_TILES } from "./uiConfig.js";
 import {
   renderTilePreview,
   renderPickerTabButtons,
@@ -21,12 +21,11 @@ import {
 } from "./uiRenderers.js";
 import {
   resetContext,
-  bindTabButtons,
-  bindPresetButtons
+  bindTabButtons
 } from "./uiBindings.js";
 import { readStoredGestureTipDismissed } from "./pickerModeState.js";
 import { bindCloseButtons } from "./modalUi.js";
-import { renderResultModal, renderInfoTip } from "./resultModalView.js";
+import { renderResultModal } from "./resultModalView.js";
 import { createModalActions } from "./appModalActions.js";
 import { createStateActions } from "./appStateActions.js";
 import {
@@ -66,7 +65,6 @@ const wizardUi = { afterPickerSync: () => {} };
 const stateActions = createStateActions(store, {
   byId,
   refs,
-  contextPresets: CONTEXT_PRESETS,
   wizardUi,
   addTileToPicker,
   addTilesToPicker,
@@ -79,8 +77,7 @@ const stateActions = createStateActions(store, {
   undoBySlot,
   evaluateCapturedHand,
   renderTilePreview,
-  renderResultModal,
-  renderInfoTip
+  renderResultModal
 });
 const modalActions = createModalActions(store, modalRefs, {
   onBeforeClosePicker: () => stateActions.closeTileContextMenu?.()
@@ -109,7 +106,6 @@ globalThis.setTimeout(dismissSplash, splashMs);
 wireAppEvents({
   byId,
   bindTabButtons,
-  bindPresetButtons,
   bindCloseButtons,
   modalActions,
   stateActions,

@@ -31,18 +31,12 @@ export function createAppRefs(byId) {
       meldRows: byId("resultMeldRows"),
       hitPreview: byId("hitPreview"),
       explanation: byId("resultExplanation")
-    },
-    infoRefs: {
-      hitAll: byId("infoHitList"),
-      excludedAll: byId("infoExcludedList"),
-      explanation: byId("infoExplanation")
     }
   };
   const modalRefs = {
     picker: byId("pickerModal"),
     context: byId("contextModal"),
-    result: byId("resultModal"),
-    info: byId("infoModal")
+    result: byId("resultModal")
   };
   return { refs, modalRefs };
 }

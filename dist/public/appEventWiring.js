@@ -89,7 +89,6 @@ export function wireAppEvents(params) {
   const {
     byId,
     bindTabButtons,
-    bindPresetButtons,
     bindCloseButtons,
     modalActions,
     stateActions,
@@ -127,7 +126,6 @@ export function wireAppEvents(params) {
     });
   });
 
-  bindPresetButtons(stateActions.applyPreset);
   bindModalCloseButtons(bindCloseButtons, modalActions);
 
   bindClick("openPickerBtn", () => {
@@ -160,11 +158,6 @@ export function wireAppEvents(params) {
     stateActions.clearHand();
     stateActions.jumpWizardStep(1);
     modalActions.closeModalByKey("result");
-    modalActions.closeModalByKey("info");
-  });
-  bindClick("openInfoBtn", () => {
-    if (!stateActions.openInfo()) return;
-    modalActions.openModalByKey("info");
   });
 
   wireContextSegmentedControls(byId, stateActions);

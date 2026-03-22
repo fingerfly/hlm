@@ -8,6 +8,7 @@ test("getFanLexiconText returns non-empty string for every registry id", () => {
     const t = getFanLexiconText(id);
     assert.equal(typeof t, "string");
     assert.equal(t.length > 3, true);
+    assert.equal(t.includes("释义待补"), false);
   }
 });
 

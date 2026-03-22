@@ -27,7 +27,7 @@ export function createBindClick(byId) {
  * @returns {void}
  */
 export function bindModalCloseButtons(bindCloseButtons, modalActions) {
-  const closeMap = ["picker", "context", "result", "info"];
+  const closeMap = ["picker", "context", "result"];
   for (const modalKey of closeMap) {
     bindCloseButtons(`[data-close='${modalKey}']`, () => {
       modalActions.closeModalByKey(modalKey);

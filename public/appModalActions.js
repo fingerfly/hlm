@@ -24,7 +24,6 @@ export function createModalActions(store, modalRefs, opts = {}) {
     setModalOpen(modalRefs.picker, store.uiState.modal.picker);
     setModalOpen(modalRefs.context, store.uiState.modal.context);
     setModalOpen(modalRefs.result, store.uiState.modal.result);
-    setModalOpen(modalRefs.info, store.uiState.modal.info);
   }
 
   function openModalByKey(modalKey) {

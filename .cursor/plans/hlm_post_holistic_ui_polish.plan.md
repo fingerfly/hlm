@@ -2,45 +2,48 @@
 name: hlm-post-holistic-ui-polish
 overview: |
   Post-4.6.0 UX polish from user review: remove context presets, HIG-aligned
-  timing control, bottom primary CTA, result modal layout + remove info button,
-  Guobiao-sourced fan lexicon (researched), splash visual refinement.
+  timing control, bottom primary CTA, result modal (no info modal; no
+  standalone win-pattern row after follow-up), Guobiao-sourced fan lexicon,
+  splash visual refinement.
 todos:
   - id: ctx-remove-presets
     content: |
       Remove three preset cards from 和牌条件; strip bindPresetButtons wiring
       or no-op; clean uiConfig/handContextActions/tests referencing presets.
-    status: pending
+    status: completed
   - id: ctx-timing-hig
     content: |
       Replace timing radio list with HIG-oriented control (grouped list with
       selected checkmark / bottom sheet row height 44pt); a11y roles; CSS.
-    status: pending
+    status: completed
   - id: ctx-apply-footer
     content: |
       Move 应用 primary CTA to sticky bottom of context sheet; scroll body
       above footer; safe-area padding.
-    status: pending
+    status: completed
   - id: result-layout-info-btn
     content: |
-      Remove 详细解释 button + app wiring; reorder 和牌型 between total fan and
-      meld groups with divider; update resultModalView + index.html + tests.
-    status: pending
+      Remove 详细解释 button + app wiring; result modal layout updates
+      (renderResultModal, index.html, tests). Follow-up UX: standalone
+      #resultWinPattern shipped in 4.6.1 then removed — 和牌类型仅保留在
+      explanation 文案与和牌分组中。
+    status: completed
   - id: lexicon-guobiao
     content: |
       Research official MCR fan definitions; replace generic lexicon lines;
       cite source in module header; TDD coverage per FAN_REGISTRY id.
-    status: pending
+    status: completed
   - id: splash-visuals
     content: |
       Refine splash typography, gradient/mesh, spacing, optional local SVG
       motif; reduced-motion path.
-    status: pending
+    status: completed
   - id: gates-closeout-master
     content: |
       npm test + quality:complexity + cloc touched files + build:dist;
       CHANGELOG; track-post-holistic-ui-polish completed; dashboard evidence +
       LastUpdated; prune dead modal/tests.
-    status: pending
+    status: completed
 isProject: false
 ---
 
@@ -51,6 +54,18 @@ isProject: false
 **Master 链接**: [hlm-master-plan.plan.md](hlm-master-plan.plan.md) — 对应 todo
 `track-post-holistic-ui-polish`。
 
+## 交付后修订（与界面一致，2026-03-22）
+
+- v4.6.1 曾一度加入结果 sticky 区 **`#resultWinPattern`**（`vm.winPatternText`）及
+  分隔线；**用户验收后已去除**该独立「和牌型」行，避免与底部 `explanation` 中
+  「和牌类型：…」重复感。
+- **当前行为**：[`public/index.html`](../public/index.html) 无 `#resultWinPattern`；
+  [`renderResultModal`](../public/resultModalView.js) 不再写入和牌型节点；
+  [`src/app/resultViewModel.js`](../src/app/resultViewModel.js) 仍保留
+  `winPatternText`（单测与将来复用）；[`src/llm/explainer.js`](../src/llm/explainer.js)
+  生成的 **`explanation`** 仍含和牌类型与总番、命中番种摘要。
+- **CHANGELOG**：[`CHANGELOG.md`](../CHANGELOG.md) `[Unreleased]` 记录上述移除。
+
 ## 用户确认项（2026-03-22 验收）
 
 1. **去掉「默认和牌条件」** — 已确认为 **移除三张快捷预设卡片**（自摸+门前清 /
@@ -59,9 +74,9 @@ isProject: false
    在 Web/PWA 约束下选用更接近 **列表选择** 的呈现（见下文推荐）。
 3. **应用按钮** — 移至 **和牌条件 sheet 最底部**（建议 **sticky footer**，
    内容区可滚动）。
-4. **结果 Modal** — **移除「详细解释」按钮**及相关打开逻辑；**和牌型**（基本和型
-   / 七对 / 十三幺等）移到 **总番数** 与 **和牌分组** 之间，加 **清晰分隔**
-   （线或留白层级）。
+4. **结果 Modal** — **移除「详细解释」按钮**及相关打开逻辑；**独立和牌型行**
+   曾在 v4.6.1 实现后 **按用户反馈撤销**（无 `#resultWinPattern`）；和牌结构类型
+   由 **底部 `explanation`**（和牌类型…）与 **和牌分组** 共同体现。
 5. **番种释义** — 当前为通用句；需按 **麻将国标（中国麻将竞赛规则）** 建立
    **逐 id 可核对** 的条文式释义（允许 1～3 句压缩表述，须与规则表一致）。
    研究来源优先级（需交叉核对）:
@@ -84,27 +99,26 @@ isProject: false
   A 在极窄屏上仍显拥挤时采用。
 - **避免**：未样式原生 `<select>` 作为主交互。
 
-## 结果 Modal 信息顺序（目标）
+## 结果 Modal 信息顺序（**当前已实现**）
 
-自上而下（sticky 区内 / 滚动区内按产品定）:
+自上而下：
 
 1. 标题栏 + 关闭  
 2. 状态 pill（和牌/未和牌）  
-3. **总番**  
-4. **和牌型**：新增专用节点（建议 `#resultWinPattern`），由
-   [`renderResultModal`](../public/resultModalView.js) 写入 `vm.winPatternText`，
-   下加 **分隔线**（如 `hr.result-divider` 或 section border）。  
-5. 和牌分组  
-6. 番种明细（行内 ℹ️ 保留）  
-7. 解释段落（如有）  
-8. **仅保留「再来一手」**（移除「详细解释」）
+3. **总番**（sticky 顶区至此）  
+4. **和牌分组**（滚动区）  
+5. 番种明细（行内 ℹ️ 保留）  
+6. **`explanation` 段落**（含和牌类型、总番、命中番种等摘要文案）  
+7. **仅「再来一手」**（无「详细解释」、无 `#infoModal`）
+
+**说明**：曾规划在总番下增加独立「和牌型」行；已按「交付后修订」节撤销。
 
 **已锁定（减面）**：移除 `#openInfoBtn` 与 [`wireAppEvents`](../public/appEventWiring.js)
   中 `openInfo` 绑定；移除 [`public/index.html`](../public/index.html) 整段
   `#infoModal`；[`createAppRefs`](../public/appRefs.js) / [`appModalActions`](../public/appModalActions.js)
   去掉 `info` 键；[`playAgainBtn`](../public/appEventWiring.js)  handler 不再
   `closeModalByKey("info")`；[`resultStateActions.js`](../public/resultStateActions.js)
-  可保留 `openInfo` 供测试桩或删除若全无用。结果区 **ℹ️ 行内释义** 为主路径。
+  已无 `openInfo`。结果区 **ℹ️ 行内释义** 为主路径。
 
 ## 番种释义工程步骤
 
@@ -121,8 +135,8 @@ isProject: false
 4. **测试**：扩展 [`fanLexicon.test.js`](../tests/unit/fanLexicon.test.js) —
    全 id 非空、最小长度、**禁止**等于占位串「释义待补」；对高流量 id 增加
    关键词断言（如「花牌」含「花」）。
-5. **renderInfoTip**：若删除 info modal，[`resultModalView.js`](../public/resultModalView.js)
-   中 `renderInfoTip` 与引用方可删除或仅测试保留 — 在收尾 todo 统一清理。
+5. **`renderInfoTip`**：已随 info modal 删除（[`resultModalView.js`](../public/resultModalView.js)
+   无此导出）。
 
 ## 启动页美化方向
 
@@ -138,7 +152,8 @@ isProject: false
 - 预设卡片不可见；`bindPresetButtons` / `CONTEXT_PRESETS` / `applyPreset` 无残留
   死代码（或测试专用导出需注明）。  
 - 时机为列表式 HIG 取向控件；应用按钮在底部固定可见（小屏滚动不丢）。  
-- 结果区顺序与分隔符合上文；无「详细解释」按钮；**无孤立 `#infoModal`**。  
+- 结果区：sticky 为状态 + 总番，下接和牌分组与番种明细；无独立和牌型行、无
+  「详细解释」按钮；**无孤立 `#infoModal`**。  
 - `fanLexicon` 每条 id 为国标对齐释义；测试禁止占位句；`cloc` 合规或已拆分。  
 - 启动页视觉可验收；`npm test`、`npm run quality:complexity`、`npm run build:dist`、
   `CHANGELOG`、master **`track-post-holistic-ui-polish` → completed**。
@@ -187,7 +202,8 @@ flowchart LR
 
 ## 实施就绪清单（编码前核对）
 
-1. **无开放决策**：时机方案 A、infoModal 全删、和牌型插入位置、预设全删。  
+1. **无开放决策**：时机方案 A、infoModal 全删、和牌型**不**单独占行（仅
+   explanation）、预设全删。  
 2. **门禁命令**：`npm test`、`npm run quality:complexity`、改动文件 `cloc`、
    发布验证 `npm run build:dist`。  
 3. **Master**：开工将 `track-post-holistic-ui-polish` 标 `in_progress`；收尾

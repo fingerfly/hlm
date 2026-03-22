@@ -343,9 +343,37 @@ select {
   display: grid;
   place-items: center;
   padding: 24px;
-  background: linear-gradient(165deg, #0f172a 0%, #1e293b 55%, #0f172a 100%);
+  background: linear-gradient(155deg, #0c1222 0%, #1a2744 42%, #0f172a 100%);
   color: #f8fafc;
   transition: opacity 0.35s ease, visibility 0.35s ease;
+}
+
+.app-splash::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    90% 55% at 50% -10%,
+    rgba(56, 189, 248, 0.18),
+    transparent 58%
+  );
+  pointer-events: none;
+}
+
+.app-splash-motif {
+  position: absolute;
+  inset: auto 0 18% 0;
+  height: 120px;
+  margin: 0 auto;
+  max-width: 280px;
+  opacity: 0.12;
+  background: repeating-linear-gradient(
+    90deg,
+    #f8fafc 0 2px,
+    transparent 2px 22px
+  );
+  mask-image: radial-gradient(ellipse 70% 80% at 50% 50%, #000 35%, transparent 72%);
+  pointer-events: none;
 }
 
 .app-splash.splash-dismissed {
@@ -361,15 +389,22 @@ select {
 }
 
 .app-splash-card {
+  position: relative;
+  z-index: 1;
   max-width: 320px;
   text-align: center;
+  padding: 28px 26px;
+  border-radius: 22px;
+  border: 1px solid rgba(248, 250, 252, 0.1);
+  background: rgba(15, 23, 42, 0.42);
+  backdrop-filter: blur(10px);
 }
 
 .app-splash-title {
-  margin: 0 0 6px;
-  font-size: 28px;
+  margin: 0 0 8px;
+  font-size: 30px;
   font-weight: 700;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.04em;
 }
 
 .app-splash-subtitle {

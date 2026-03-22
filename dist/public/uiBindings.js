@@ -2,7 +2,7 @@
  * Purpose: Bind UI control actions and input-derived request data.
  * Description:
  * - Resets context controls to app defaults.
- * - Attaches tab and preset click handlers.
+ * - Attaches tab click handlers.
  */
 
 import { syncContextStepperDisplays } from "./contextWiring.js";
@@ -63,17 +63,5 @@ export function resetContext(byId) {
 export function bindTabButtons(onTab) {
   for (const button of document.querySelectorAll(".tab-btn")) {
     button.addEventListener("click", () => onTab(button.dataset.tab));
-  }
-}
-
-/**
- * Bind preset buttons and forward selected preset key.
- *
- * @param {(preset: string) => void} onPreset - Preset callback.
- * @returns {void}
- */
-export function bindPresetButtons(onPreset) {
-  for (const button of document.querySelectorAll("[data-preset]")) {
-    button.addEventListener("click", () => onPreset(button.dataset.preset));
   }
 }

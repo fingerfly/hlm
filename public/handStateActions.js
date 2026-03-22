@@ -30,14 +30,11 @@ export function createHandStateActions(input) {
   const {
     store,
     byId,
-    contextPresets,
     afterPickerSync,
     syncHomeState
   } = input;
   const contextActions = createHandContextActions({
     store,
-    byId,
-    contextPresets,
     syncHomeState
   });
   const pickerActions = createHandPickerActions({

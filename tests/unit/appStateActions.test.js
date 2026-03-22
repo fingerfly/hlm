@@ -46,8 +46,7 @@ function createRefs() {
     wizardBackBtn: { textContent: "", hidden: false },
     wizardNextBtn: { textContent: "", hidden: false },
     readyHintEl: { textContent: "" },
-    resultRefs: {},
-    infoRefs: {}
+    resultRefs: {}
   };
 }
 
@@ -63,7 +62,6 @@ test("syncHomeState toggles delete button visibility by editing state", () => {
   const actions = createStateActions(store, {
     byId: byIdState.byId,
     refs,
-    contextPresets: {},
     addTileToPicker,
     addTilesToPicker,
     resolvePatternAction: () => ({ ok: true, reason: null, tiles: ["1W"] }),
@@ -75,8 +73,7 @@ test("syncHomeState toggles delete button visibility by editing state", () => {
     undoBySlot,
     evaluateCapturedHand: () => ({ scoring: { isWin: false } }),
     renderTilePreview: () => {},
-    renderResultModal: () => ({}),
-    renderInfoTip: () => {}
+    renderResultModal: () => ({})
   });
 
   actions.syncHomeState();
@@ -101,7 +98,6 @@ test("syncHomeState updates primary picker CTA by tile count", () => {
   const actions = createStateActions(store, {
     byId: byIdState.byId,
     refs,
-    contextPresets: {},
     addTileToPicker,
     addTilesToPicker,
     resolvePatternAction: () => ({ ok: true, reason: null, tiles: ["1W"] }),
@@ -113,8 +109,7 @@ test("syncHomeState updates primary picker CTA by tile count", () => {
     undoBySlot,
     evaluateCapturedHand: () => ({ scoring: { isWin: false } }),
     renderTilePreview: () => {},
-    renderResultModal: () => ({}),
-    renderInfoTip: () => {}
+    renderResultModal: () => ({})
   });
 
   actions.syncHomeState();
@@ -141,7 +136,6 @@ test("syncHomeState shows placeholder for contextSummary at step 1", () => {
   const actions = createStateActions(store, {
     byId: byIdState.byId,
     refs,
-    contextPresets: {},
     addTileToPicker,
     addTilesToPicker,
     resolvePatternAction: () => ({ ok: true, reason: null, tiles: ["1W"] }),
@@ -153,8 +147,7 @@ test("syncHomeState shows placeholder for contextSummary at step 1", () => {
     undoBySlot,
     evaluateCapturedHand: () => ({ scoring: { isWin: false } }),
     renderTilePreview: () => {},
-    renderResultModal: () => ({}),
-    renderInfoTip: () => {}
+    renderResultModal: () => ({})
   });
 
   actions.syncHomeState();
@@ -174,7 +167,6 @@ test("syncHomeState toggles clearHandBtn visibility by step and tile count", () 
   const actions = createStateActions(store, {
     byId: byIdState.byId,
     refs,
-    contextPresets: {},
     addTileToPicker,
     addTilesToPicker,
     resolvePatternAction: () => ({ ok: true, reason: null, tiles: ["1W"] }),
@@ -186,8 +178,7 @@ test("syncHomeState toggles clearHandBtn visibility by step and tile count", () 
     undoBySlot,
     evaluateCapturedHand: () => ({ scoring: { isWin: false } }),
     renderTilePreview: () => {},
-    renderResultModal: () => ({}),
-    renderInfoTip: () => {}
+    renderResultModal: () => ({})
   });
 
   actions.syncHomeState();
@@ -214,7 +205,6 @@ test("syncHomeState shows actual context summary at step 2", () => {
   const actions = createStateActions(store, {
     byId: byIdState.byId,
     refs,
-    contextPresets: {},
     addTileToPicker,
     addTilesToPicker,
     resolvePatternAction: () => ({ ok: true, reason: null, tiles: ["1W"] }),
@@ -226,8 +216,7 @@ test("syncHomeState shows actual context summary at step 2", () => {
     undoBySlot,
     evaluateCapturedHand: () => ({ scoring: { isWin: false } }),
     renderTilePreview: () => {},
-    renderResultModal: () => ({}),
-    renderInfoTip: () => {}
+    renderResultModal: () => ({})
   });
 
   actions.syncHomeState();
@@ -261,7 +250,6 @@ test("undoHand rolls back last pattern action (e.g. pung)", () => {
   const actions = createStateActions(store, {
     byId: byIdState.byId,
     refs,
-    contextPresets: {},
     addTileToPicker,
     addTilesToPicker,
     resolvePatternAction: (s, baseTile, actionId) => {
@@ -278,8 +266,7 @@ test("undoHand rolls back last pattern action (e.g. pung)", () => {
     undoBySlot,
     evaluateCapturedHand: () => ({ scoring: { isWin: false } }),
     renderTilePreview: () => {},
-    renderResultModal: () => ({}),
-    renderInfoTip: () => {}
+    renderResultModal: () => ({})
   });
   actions.lockPatternAction("pung");
   actions.pickTile("1W");
@@ -307,7 +294,6 @@ test("setPickerMode keeps picker slots and cursor unchanged", () => {
   const actions = createStateActions(store, {
     byId: byIdState.byId,
     refs,
-    contextPresets: {},
     addTileToPicker,
     addTilesToPicker,
     resolvePatternAction: () => ({ ok: true, reason: null, tiles: ["1W"] }),
@@ -319,8 +305,7 @@ test("setPickerMode keeps picker slots and cursor unchanged", () => {
     undoBySlot,
     evaluateCapturedHand: () => ({ scoring: { isWin: false } }),
     renderTilePreview: () => {},
-    renderResultModal: () => ({}),
-    renderInfoTip: () => {}
+    renderResultModal: () => ({})
   });
   const before = {
     slots: [...store.pickerState.slots],
@@ -346,7 +331,6 @@ test("wizard buttons show dynamic next and back labels", () => {
   const actions = createStateActions(store, {
     byId: byIdState.byId,
     refs,
-    contextPresets: {},
     addTileToPicker,
     addTilesToPicker,
     resolvePatternAction: () => ({ ok: true, reason: null, tiles: ["1W"] }),
@@ -358,8 +342,7 @@ test("wizard buttons show dynamic next and back labels", () => {
     undoBySlot,
     evaluateCapturedHand: () => ({ scoring: { isWin: false } }),
     renderTilePreview: () => {},
-    renderResultModal: () => ({}),
-    renderInfoTip: () => {}
+    renderResultModal: () => ({})
   });
   actions.syncHomeState();
   assert.equal(refs.wizardNextBtn.textContent, "下一步：条件设置");
@@ -382,7 +365,6 @@ test("tap action applies once then falls back to single", () => {
   const actions = createStateActions(store, {
     byId: byIdState.byId,
     refs,
-    contextPresets: {},
     addTileToPicker,
     addTilesToPicker,
     resolvePatternAction: (s, baseTile, actionId) => {
@@ -397,8 +379,7 @@ test("tap action applies once then falls back to single", () => {
     undoBySlot,
     evaluateCapturedHand: () => ({ scoring: { isWin: false } }),
     renderTilePreview: () => {},
-    renderResultModal: () => ({}),
-    renderInfoTip: () => {}
+    renderResultModal: () => ({})
   });
   actions.tapPatternAction("pair");
   actions.pickTile("1W");
@@ -422,7 +403,6 @@ test("locked action keeps applying across picks", () => {
   const actions = createStateActions(store, {
     byId: byIdState.byId,
     refs,
-    contextPresets: {},
     addTileToPicker,
     addTilesToPicker,
     resolvePatternAction: (s, baseTile, actionId) => {
@@ -437,8 +417,7 @@ test("locked action keeps applying across picks", () => {
     undoBySlot,
     evaluateCapturedHand: () => ({ scoring: { isWin: false } }),
     renderTilePreview: () => {},
-    renderResultModal: () => ({}),
-    renderInfoTip: () => {}
+    renderResultModal: () => ({})
   });
   actions.lockPatternAction("pair");
   actions.pickTile("1W");
@@ -462,7 +441,6 @@ test("dismissPickerGestureTip sets store flag and persists", () => {
   const actions = createStateActions(store, {
     byId: byIdState.byId,
     refs,
-    contextPresets: {},
     addTileToPicker,
     addTilesToPicker,
     resolvePatternAction: () => ({ ok: true, reason: null, tiles: ["1W"] }),
@@ -474,8 +452,7 @@ test("dismissPickerGestureTip sets store flag and persists", () => {
     undoBySlot,
     evaluateCapturedHand: () => ({ scoring: { isWin: false } }),
     renderTilePreview: () => {},
-    renderResultModal: () => ({}),
-    renderInfoTip: () => {}
+    renderResultModal: () => ({})
   });
   assert.equal(store.pickerGestureTipDismissed, false);
   actions.dismissPickerGestureTip();

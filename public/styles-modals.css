@@ -29,24 +29,44 @@
   margin: 14px 0 8px;
 }
 
-/* Context sheet: grouped sections + steppers + timing list. */
+/* Context sheet: scroll body + sticky apply footer. */
 .context-sheet {
+  display: flex;
+  flex-direction: column;
   max-height: 90vh;
+  padding: 0;
+  overflow: hidden;
 }
 
 .context-sheet-header {
+  flex: 0 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
   flex-wrap: wrap;
+  padding: 14px 14px 8px;
 }
 
 .context-sheet-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: 16px;
-  padding-bottom: 8px;
+  padding: 0 14px 8px;
+}
+
+.context-sheet-footer {
+  flex: 0 0 auto;
+  padding: 12px 14px calc(14px + env(safe-area-inset-bottom, 0));
+  border-top: 1px solid var(--border);
+  background: var(--card);
+}
+
+.context-apply-btn {
+  width: 100%;
 }
 
 .context-group {
@@ -122,6 +142,34 @@
 
 .radio-list-item input {
   margin: 0;
+}
+
+/* Timing list: HIG-style row with trailing check when selected. */
+.timing-hig-row {
+  justify-content: flex-start;
+}
+
+.timing-hig-label {
+  flex: 1 1 auto;
+}
+
+.timing-hig-check {
+  flex: 0 0 auto;
+  margin-left: auto;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--accent, #2563eb);
+  opacity: 0;
+  transition: opacity 0.12s ease;
+}
+
+.timing-hig-row:has(input:checked) .timing-hig-check {
+  opacity: 1;
+}
+
+.timing-hig-row:has(input:checked) {
+  border-color: var(--border);
+  background: color-mix(in srgb, var(--accent, #2563eb) 10%, transparent);
 }
 
 /* Result sheet: sticky summary + scroll body. */

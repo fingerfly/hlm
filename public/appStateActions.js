@@ -27,24 +27,19 @@ export function resolveInitialPickerMode() {
  * Purpose: Provide stateful UI actions for hand workflow.
  * Description:
  * - Syncs picker and context state to home-screen widgets.
- * - Executes clear, undo, preset, and calculate actions.
+ * - Executes clear, undo, and calculate actions.
  * - Builds scoring request payload from current UI controls.
- */
-/**
- * Create state action handlers used by event wiring.
  *
  * @param {{uiState: object, pickerState: object,
  *   resultVm: object|null}} store
  * @param {object} deps - Rendering and domain dependencies.
- * @returns {{syncHomeState: Function, applyPreset: Function,
- *   clearHand: Function, undoHand: Function, calculate: Function,
- *   openInfo: Function}}
+ * @returns {object} Handlers including syncHomeState, clearHand, undoHand,
+ *   calculate, and picker actions spread from hand state.
  */
 export function createStateActions(store, deps) {
   const {
     byId,
     refs,
-    contextPresets,
     wizardUi,
     addTilesToPicker,
     resolvePatternAction,
@@ -55,8 +50,7 @@ export function createStateActions(store, deps) {
     undoBySlot,
     evaluateCapturedHand,
     renderTilePreview,
-    renderResultModal,
-    renderInfoTip
+    renderResultModal
   } = deps;
   initPickerMode(store);
   function syncHomeState() {
@@ -72,7 +66,6 @@ export function createStateActions(store, deps) {
     store,
     byId,
     refs,
-    contextPresets,
     afterPickerSync: () => wizardUi?.afterPickerSync?.(),
     addTilesToPicker,
     resolvePatternAction,
@@ -88,8 +81,7 @@ export function createStateActions(store, deps) {
     byId,
     refs,
     evaluateCapturedHand,
-    renderResultModal,
-    renderInfoTip
+    renderResultModal
   });
 
   function jumpWizardStep(step) {

@@ -34,7 +34,7 @@ function mapFanItem(item) {
 }
 
 /**
- * Build render model consumed by result and info modals.
+ * Build render model consumed by the result modal.
  *
  * @param {object} result - End-to-end evaluation result payload.
  * @returns {object}

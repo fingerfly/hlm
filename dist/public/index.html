@@ -14,6 +14,7 @@
   <body>
     <div id="appSplash" class="app-splash" aria-live="polite"
       aria-label="应用启动画面">
+      <div class="app-splash-motif" aria-hidden="true"></div>
       <div class="app-splash-card">
         <h1 class="app-splash-title">和了么</h1>
         <p class="app-splash-subtitle">国标麻将计番</p>
@@ -105,22 +106,8 @@
       <div class="sheet context-sheet">
         <div class="sheet-header context-sheet-header">
           <h3>和牌条件</h3>
-          <button type="button" data-close="context" class="primary-btn">
-            应用
-          </button>
         </div>
         <div class="context-sheet-body">
-          <div class="preset-cards">
-            <button type="button" data-preset="zimo-menqian" class="preset-card">
-              自摸 + 门前清
-            </button>
-            <button type="button" data-preset="dianhe-menqian" class="preset-card">
-              点和 + 门前清
-            </button>
-            <button type="button" data-preset="dianhe-fulu" class="preset-card">
-              点和 + 副露
-            </button>
-          </div>
           <section class="context-group" aria-labelledby="ctxWinHandTitle">
             <h4 id="ctxWinHandTitle" class="context-group-title">和牌方式与门前状态</h4>
             <div class="context-segmented">
@@ -192,30 +179,42 @@
           </section>
           <section class="context-group" aria-labelledby="ctxTimingTitle">
             <h4 id="ctxTimingTitle" class="context-group-title">时机事件</h4>
-            <div class="radio-list" role="radiogroup" aria-label="时机事件">
-              <label class="radio-list-item">
+            <div class="radio-list timing-hig-list" role="radiogroup"
+              aria-label="时机事件">
+              <label class="radio-list-item timing-hig-row">
                 <input type="radio" name="timingEvent" value="none" checked />
-                <span>无</span>
+                <span class="timing-hig-label">无</span>
+                <span class="timing-hig-check" aria-hidden="true">✓</span>
               </label>
-              <label class="radio-list-item">
+              <label class="radio-list-item timing-hig-row">
                 <input type="radio" name="timingEvent" value="haidi" />
-                <span>海底捞月</span>
+                <span class="timing-hig-label">海底捞月</span>
+                <span class="timing-hig-check" aria-hidden="true">✓</span>
               </label>
-              <label class="radio-list-item">
+              <label class="radio-list-item timing-hig-row">
                 <input type="radio" name="timingEvent" value="hedi" />
-                <span>河底捞鱼</span>
+                <span class="timing-hig-label">河底捞鱼</span>
+                <span class="timing-hig-check" aria-hidden="true">✓</span>
               </label>
-              <label class="radio-list-item">
+              <label class="radio-list-item timing-hig-row">
                 <input type="radio" name="timingEvent" value="gangshang" />
-                <span>杠上开花</span>
+                <span class="timing-hig-label">杠上开花</span>
+                <span class="timing-hig-check" aria-hidden="true">✓</span>
               </label>
-              <label class="radio-list-item">
+              <label class="radio-list-item timing-hig-row">
                 <input type="radio" name="timingEvent" value="qianggang" />
-                <span>抢杠和</span>
+                <span class="timing-hig-label">抢杠和</span>
+                <span class="timing-hig-check" aria-hidden="true">✓</span>
               </label>
             </div>
             <input type="hidden" id="timingEvent" value="none" />
           </section>
+        </div>
+        <div class="context-sheet-footer">
+          <button type="button" data-close="context"
+            class="primary-btn context-apply-btn">
+            应用
+          </button>
         </div>
       </div>
     </section>
@@ -232,6 +231,8 @@
           </div>
           <p id="resultStatus" class="status-pill">未和牌</p>
           <p id="resultTotalFan" class="total-fan">0 番</p>
+          <p id="resultWinPattern" class="result-win-pattern">—</p>
+          <hr class="result-divider" aria-hidden="true" />
         </div>
         <div class="result-scroll">
           <section class="result-section" aria-labelledby="resultMeldHeading">
@@ -244,30 +245,11 @@
           </section>
           <p id="resultExplanation" class="result-explanation summary-text"></p>
           <div class="inline-actions">
-            <button type="button" id="openInfoBtn" class="ghost-btn">
-              详细解释
-            </button>
             <button type="button" id="playAgainBtn" class="ghost-btn">
               再来一手
             </button>
           </div>
         </div>
-      </div>
-    </section>
-
-    <!-- Info modal shows full explanation lists for auditability. -->
-    <section id="infoModal" class="modal">
-      <div class="sheet">
-        <div class="sheet-header">
-          <h3>详细解释</h3>
-          <button data-close="info" class="ghost-btn">关闭</button>
-        </div>
-        <h4>命中番种</h4>
-        <ul id="infoHitList" class="fan-list"></ul>
-        <h4>排除番种</h4>
-        <ul id="infoExcludedList" class="fan-list"></ul>
-        <h4>解释</h4>
-        <p id="infoExplanation" class="summary-text"></p>
       </div>
     </section>
     <script type="module" src="./app.js"></script>

@@ -58,7 +58,7 @@ todos:
       timing list, bottom apply CTA, result layout + remove info modal, Guobiao
       fanLexicon, splash visuals, master closeout. Child:
       hlm_post_holistic_ui_polish.plan.md
-    status: pending
+    status: completed
 isProject: false
 ---
 
@@ -217,7 +217,7 @@ practicality upgrade exit (or after Pages if practicality is deferred).
 - Holistic UX and scoring track (**new**): runs after the historical baseline
   above; does not invalidate prior `completed` milestones — see child plan
   [hlm_holistic_ux_scoring.plan.md](hlm_holistic_ux_scoring.plan.md).
-- Post-holistic UI polish (**pending**): follows holistic completion; see
+- Post-holistic UI polish (**completed** 2026-03-22): see
   [hlm_post_holistic_ui_polish.plan.md](hlm_post_holistic_ui_polish.plan.md).
 
 ## Phase Status Dashboard
@@ -227,7 +227,7 @@ practicality upgrade exit (or after Pages if practicality is deferred).
 - TrackId: `track-post-holistic-ui-polish`
 - ChildPlan:
   [hlm_post_holistic_ui_polish.plan.md](hlm_post_holistic_ui_polish.plan.md)
-- TrackTodoStatus: `pending` (set `in_progress` when execution starts)
+- TrackTodoStatus: `completed` (2026-03-22)
 - Prior closed: `track-holistic-ux-scoring` →
   [hlm_holistic_ux_scoring.plan.md](hlm_holistic_ux_scoring.plan.md)
   (2026-03-22)
@@ -242,7 +242,9 @@ practicality upgrade exit (or after Pages if practicality is deferred).
   - `All tracked HLM roadmap items completed.`
   - `Holistic UX/scoring track delivered (splash, context HIG, flowers/kong,
     auto-advance, result lexicon + row ℹ️).`
-  - `Next: post-holistic UI polish — see Current delivery queue.`
+  - `Post-holistic UI polish delivered (v4.6.1 + follow-up): presets out, HIG
+    timing, footer apply, no info modal, fanLexiconEntries, splash polish;
+    standalone #resultWinPattern removed per UX (和牌类型 in explanation only).`
   - `Tile-click context menu track delivered.`
   - `Context menu visual and layout (vertical menu, anchor positioning)
     delivered.`
@@ -260,10 +262,8 @@ practicality upgrade exit (or after Pages if practicality is deferred).
 - RisksAndBlockers:
   - `No blocker.`
 - NextActions:
-  - `Execute track-post-holistic-ui-polish
-    (hlm_post_holistic_ui_polish.plan.md); then mark todo completed and append
-    ValidationEvidence.`
   - `Maintain regression/test/complexity guardrails on all changes.`
+  - `No open roadmap track; reopen master when new work is scoped.`
 - ValidationEvidence:
   - `Context menu visual: vertical layout, Material elevation, near-tile positioning.
     Tests passed; tileContextMenuController.test.js added.`
@@ -286,7 +286,12 @@ practicality upgrade exit (or after Pages if practicality is deferred).
     incl. 抢杠和, auto wizard advance at 14 tiles (opt-out localStorage),
     result sticky header + fanLexicon + row ℹ️. Gates: npm test,
     quality:complexity, build:dist. Version 4.6.0.`
-- LastUpdated: `2026-03-22` (holistic track completed; evidence above)
+  - `Post-holistic UI polish (2026-03-22): removed context presets and info
+    modal; HIG timing checkmarks; sticky context apply; FAN_LEXICON_ENTRIES
+    (81 ids); splash visual pass; result modal without dedicated win-pattern
+    row (CHANGELOG [Unreleased]). Gates: npm test, quality:complexity, cloc,
+    build:dist. Version 4.6.1.`
+- LastUpdated: `2026-03-22` (polish + result layout follow-up; plans synced)
 
 ## Security and Privacy Hardening Track
 
@@ -475,9 +480,7 @@ except approved placeholders.
   - pass; post-polish track depends only on holistic baseline in repo
   (v4.6.0).
 - Remaining tracked prerequisite:
-  - Execute `track-post-holistic-ui-polish` per
-    [hlm_post_holistic_ui_polish.plan.md](hlm_post_holistic_ui_polish.plan.md)
-    (no further plan-structure churn before coding).
+  - None; `track-post-holistic-ui-polish` closed 2026-03-22 (v4.6.1).
 
 ## Implementation Go/No-Go (for future reopened tracks)
 
