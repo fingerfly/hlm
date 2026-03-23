@@ -75,3 +75,25 @@ test("scoreHand detects quan da and excludes subfans", () => {
   assert.equal(result.matchedFans.some((fan) => fan.id === "DA_YU_WU"), false);
   assert.equal(result.matchedFans.some((fan) => fan.id === "WU_ZI"), false);
 });
+
+test("scoreHand applies one-time attachment when hua long is present", () => {
+  const result = scoreHand({
+    tiles: [
+      "1W", "2W", "3W",
+      "4T", "5T", "6T",
+      "7B", "8B", "9B",
+      "1T", "2T", "3T",
+      "5W", "5W"
+    ],
+    winType: "dianhe",
+    handState: "menqian",
+    kongType: "none",
+    timingEvent: "none"
+  });
+  assert.equal(result.matchedFans.some((fan) => fan.id === "HUA_LONG"), true);
+  const attachMatched = result.matchedFans.filter(
+    (fan) => fan.id === "XI_XIANG_FENG" || fan.id === "LIAN_LIU"
+  );
+  assert.equal(attachMatched.length, 1);
+  assert.equal(result.totalFan, 13);
+});

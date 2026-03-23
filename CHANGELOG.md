@@ -4,37 +4,49 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [4.8.0] - 2026-03-23
+
 ## [4.7.0] - 2026-03-22
 
-### Changed
-- Result modal: removed the standalone **和牌型** line (`#resultWinPattern`) and
-  its divider; and牌类型 remains in the bottom summary text from `explanation`
-  (`public/index.html`, `public/appRefs.js`, `public/resultModalView.js`).
-
-## [4.6.1] - 2026-03-22
+Post-holistic UI polish release: context sheet, result modal, fan lexicon data,
+splash, and test/deps alignment. **Does not** ship a standalone result
+**和牌型** row (`#resultWinPattern`); and牌类型 stays in `explanation` text
+(`src/llm/explainer.js`).
 
 ### Added
-- Per-registry fan lexicon map
-  (`src/config/fanLexiconEntries.js`) with Guobiao-oriented summaries;
-  `getFanLexiconText` reads from it (`src/config/fanLexicon.js`).
-- Result summary line for win pattern (`#resultWinPattern`) with divider
-  before meld breakdown (`public/index.html`, `public/styles-modals.css`,
-  `public/resultModalView.js`).
+- Per-registry fan lexicon map (`src/config/fanLexiconEntries.js`) with
+  Guobiao-oriented summaries; `getFanLexiconText` reads from it
+  (`src/config/fanLexicon.js`).
+- Stricter `fanLexicon` unit tests (`tests/unit/fanLexicon.test.js`): every
+  `FAN_REGISTRY` id returns non-placeholder copy (no `释义待补`).
 
 ### Changed
 - Context modal: removed preset shortcut cards; timing rows use HIG-style
   trailing checkmark; primary **应用** in sticky footer with scrollable body
   (`public/index.html`, `public/styles-modals.css`).
-- Removed info modal, `modal.info`, and **详细解释** flow; row-level ℹ️ remains
-  the detail path (`public/index.html`, `public/appRefs.js`,
+- Result modal: removed info modal, `modal.info`, and **详细解释** flow;
+  row-level ℹ️ remains the detail path (`public/index.html`, `public/appRefs.js`,
   `public/appModalActions.js`, `public/appEventBindings.js`,
   `public/appEventWiring.js`, `src/app/uiFlowState.js`,
-  `public/resultStateActions.js`).
+  `public/resultStateActions.js`, `public/resultModalView.js`).
 - Dropped `CONTEXT_PRESETS`, `bindPresetButtons`, and preset handlers from
   wiring (`public/uiConfig.js`, `public/uiBindings.js`, `public/app.js`,
   `public/handContextActions.js`).
 - Splash: refined gradient, glass card, decorative motif, typography
   (`public/index.html`, `public/styles-components.css`).
+- `src/app/resultViewModel.js`: view-model copy for result modal only (info
+  modal removed from JSDoc intent).
+- `package.json` / `src/config/appVersion.js`: version **4.7.0**.
+
+### Removed
+- Standalone **和牌型** UI (`#resultWinPattern`) and divider under total fan
+  (avoid duplication with bottom `explanation`; `winPatternText` kept on VM for
+  tests) (`public/index.html`, `public/appRefs.js`,
+  `public/resultModalView.js`).
+
+### Tests
+- `tests/unit/appStateActions.test.js`: `createStateActions` stubs without
+  `contextPresets` / `renderInfoTip` / `infoRefs`.
 
 ## [4.6.0] - 2026-03-22
 

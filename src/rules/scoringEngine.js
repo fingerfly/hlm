@@ -1,6 +1,9 @@
 import { RULE_BASELINE, ERROR_CODES } from "../config/ruleBaseline.js";
 import { validateHandInput } from "../contracts/handState.js";
-import { validateWin } from "./winValidator.js";
+import {
+  validateWin,
+  enumerateStandardWinGroups
+} from "./winValidator.js";
 import { detectFans } from "./fanDetectors.js";
 import { resolveFanConflicts } from "./conflictResolver.js";
 import { aggregateScore } from "./scoreAggregator.js";
@@ -49,22 +52,63 @@ export function scoreHand(input) {
     };
   }
 
-  const rawFans = detectFans(input, win);
-  const { matchedFans, excludedFans } = resolveFanConflicts(rawFans);
-  const { totalFan, reachesMinWinningFan } = aggregateScore(matchedFans);
+  const candidates = [];
+  if (win.pattern === "standard") {
+    const allGroups = enumerateStandardWinGroups(input.tiles);
+    for (const meldGroups of allGroups) {
+      const candidateWin = { ...win, meldGroups };
+      const rawFans = detectFans(input, candidateWin);
+      const { matchedFans, excludedFans } = resolveFanConflicts(rawFans);
+      const {
+        totalFan,
+        reachesMinWinningFan
+      } = aggregateScore(matchedFans);
+      candidates.push({
+        meldGroups,
+        matchedFans,
+        excludedFans,
+        totalFan,
+        reachesMinWinningFan
+      });
+    }
+  } else {
+    const rawFans = detectFans(input, win);
+    const { matchedFans, excludedFans } = resolveFanConflicts(rawFans);
+    const {
+      totalFan,
+      reachesMinWinningFan
+    } = aggregateScore(matchedFans);
+    candidates.push({
+      meldGroups: win.meldGroups || [],
+      matchedFans,
+      excludedFans,
+      totalFan,
+      reachesMinWinningFan
+    });
+  }
+
+  candidates.sort((a, b) => {
+    if (b.totalFan !== a.totalFan) return b.totalFan - a.totalFan;
+    const aIds = a.matchedFans.map((f) => f.id).sort().join(",");
+    const bIds = b.matchedFans.map((f) => f.id).sort().join(",");
+    return aIds.localeCompare(bIds);
+  });
+  const best = candidates[0];
 
   return {
-    isWin: reachesMinWinningFan,
+    isWin: best.reachesMinWinningFan,
     rawWin: true,
     winPattern: win.pattern,
-    meldGroups: win.meldGroups || [],
-    matchedFans,
-    excludedFans,
-    totalFan,
+    meldGroups: best.meldGroups,
+    matchedFans: best.matchedFans,
+    excludedFans: best.excludedFans,
+    totalFan: best.totalFan,
     minWinningFan: RULE_BASELINE.minWinningFan,
-    reachesMinWinningFan,
+    reachesMinWinningFan: best.reachesMinWinningFan,
     ruleVersion: RULE_BASELINE.ruleVersion,
-    errorCode: reachesMinWinningFan ? null : ERROR_CODES.NOT_A_WINNING_HAND,
+    errorCode: best.reachesMinWinningFan
+      ? null
+      : ERROR_CODES.NOT_A_WINNING_HAND,
     missingFields: [],
     problems: []
   };

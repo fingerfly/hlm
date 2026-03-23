@@ -92,3 +92,48 @@ test("resolveFanConflicts excludes wind/dragon and pung subfans", () => {
   assert.equal(result.matchedFans.some((f) => f.id === "SHUANG_TONG_KE"), false);
   assert.equal(result.matchedFans.some((f) => f.id === "SAN_TONG_KE"), true);
 });
+
+test("resolveFanConflicts allows only one attachable fan with hua long", () => {
+  const result = resolveFanConflicts([
+    { id: "HUA_LONG", fan: 8, evidence: "mixedStraight" },
+    { id: "XI_XIANG_FENG", fan: 1, evidence: "mixedDoubleChow" },
+    { id: "LIAN_LIU", fan: 1, evidence: "shortStraight" }
+  ]);
+  assert.equal(result.matchedFans.some((f) => f.id === "HUA_LONG"), true);
+  const attachMatched = result.matchedFans.filter(
+    (f) => f.id === "XI_XIANG_FENG" || f.id === "LIAN_LIU"
+  );
+  assert.equal(attachMatched.length, 1);
+  assert.equal(
+    result.excludedFans.some(
+      (f) => f.reason.startsWith("attached_once_with_HUA_LONG")
+    ),
+    true
+  );
+});
+
+test("resolveFanConflicts excludes all repeated target fan instances", () => {
+  const result = resolveFanConflicts([
+    { id: "QING_YI_SE", fan: 24, evidence: "fullFlush" },
+    { id: "WU_ZI", fan: 1, evidence: "noHonorsA" },
+    { id: "WU_ZI", fan: 1, evidence: "noHonorsB" }
+  ]);
+  assert.equal(result.matchedFans.some((f) => f.id === "QING_YI_SE"), true);
+  assert.equal(result.matchedFans.some((f) => f.id === "WU_ZI"), false);
+  const excludedWuZi = result.excludedFans.filter((f) => f.id === "WU_ZI");
+  assert.equal(excludedWuZi.length, 2);
+});
+
+test("resolveFanConflicts keeps only one instance for same fan id", () => {
+  const result = resolveFanConflicts([
+    { id: "WU_ZI", fan: 1, evidence: "noHonorsA" },
+    { id: "WU_ZI", fan: 1, evidence: "noHonorsB" },
+    { id: "QUE_YI_MEN", fan: 1, evidence: "oneVoidedSuit" }
+  ]);
+  const kept = result.matchedFans.filter((f) => f.id === "WU_ZI");
+  assert.equal(kept.length, 1);
+  assert.equal(
+    result.excludedFans.some((f) => f.reason.startsWith("same_fan_once_keep")),
+    true
+  );
+});

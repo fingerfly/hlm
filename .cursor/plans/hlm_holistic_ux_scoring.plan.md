@@ -331,7 +331,8 @@ historical 或删除重复项，避免双源。
 ## 后续精修（验收反馈 → 新子计划）
 
 v4.6.0 上线后用户验收项（去预设、时机 HIG、底栏应用、结果区改版、国标释义、
-启动页美化）已写入独立执行计划，请勿与本文件已关闭 todos 混跑：
+启动页美化）已由独立子计划落地，**合入产品版本 v4.7.0**；请勿与本文件已关闭
+todos 混跑：
 
 - [**hlm_post_holistic_ui_polish.plan.md**](hlm_post_holistic_ui_polish.plan.md)
-- Master todo：`track-post-holistic-ui-polish`（pending）
+- Master todo：`track-post-holistic-ui-polish`（**completed**；v4.7.0）

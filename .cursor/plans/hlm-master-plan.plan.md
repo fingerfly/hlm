@@ -59,6 +59,12 @@ todos:
       fanLexicon, splash visuals, master closeout. Child:
       hlm_post_holistic_ui_polish.plan.md
     status: completed
+  - id: track-five-principles-exact-scoring
+    content: >
+      Implement decomposition-aware exact scoring for five Guobiao counting
+      principles with comprehensive unit/regression/integration tests. Child:
+      hlm-five-principles-exact-engine_cf4e8446.plan.md
+    status: completed
 isProject: false
 ---
 
@@ -147,6 +153,9 @@ not present in current workspace)
 - Post-holistic UI polish (**pending**; presets removal, timing HIG, result
   layout, Guobiao lexicon, splash refinement):
 [hlm_post_holistic_ui_polish.plan.md](hlm_post_holistic_ui_polish.plan.md)
+- Five-principles exact scoring (**in_progress**; exact decomposition + five
+  counting-principles constraint engine and full test hardening):
+[hlm-five-principles-exact-engine_cf4e8446.plan.md](hlm-five-principles-exact-engine_cf4e8446.plan.md)
 - Historical supporting plans (traceability only):
   - [hlm_版本升级工具与中文术语统一_35161103.plan.md](hlm_版本升级工具与中文术语统一_35161103.plan.md)
   - `spike_full_automation_6a79ecff.plan.md` (historical reference; file
@@ -224,11 +233,14 @@ practicality upgrade exit (or after Pages if practicality is deferred).
 
 ### Current delivery queue (post-baseline)
 
-- TrackId: `track-post-holistic-ui-polish`
+- TrackId: `track-five-principles-exact-scoring`
 - ChildPlan:
+  [hlm-five-principles-exact-engine_cf4e8446.plan.md](hlm-five-principles-exact-engine_cf4e8446.plan.md)
+- TrackTodoStatus: `in_progress` (opened 2026-03-22)
+- Prior closed: `track-post-holistic-ui-polish` →
   [hlm_post_holistic_ui_polish.plan.md](hlm_post_holistic_ui_polish.plan.md)
-- TrackTodoStatus: `completed` (2026-03-22)
-- Prior closed: `track-holistic-ux-scoring` →
+  (2026-03-22)
+- Earlier closed: `track-holistic-ux-scoring` →
   [hlm_holistic_ux_scoring.plan.md](hlm_holistic_ux_scoring.plan.md)
   (2026-03-22)
 
@@ -239,16 +251,11 @@ practicality upgrade exit (or after Pages if practicality is deferred).
 - ProgressPercent: `100`
 - ActivePhase: `none`
 - Focus:
-  - `All tracked HLM roadmap items completed.`
-  - `Holistic UX/scoring track delivered (splash, context HIG, flowers/kong,
-    auto-advance, result lexicon + row ℹ️).`
-  - `Post-holistic UI polish delivered (v4.6.1 + follow-up): presets out, HIG
-    timing, footer apply, no info modal, fanLexiconEntries, splash polish;
-    standalone #resultWinPattern removed per UX (和牌类型 in explanation only).`
-  - `Tile-click context menu track delivered.`
-  - `Context menu visual and layout (vertical menu, anchor positioning)
-    delivered.`
-  - `Release hardening safeguards integrated and validated.`
+  - `Execute review-fix loop for exact five-principles scoring alignment.`
+  - `Keep existing stable tracks unchanged while replacing partial
+    conflict-table behavior with decomposition-aware exact selection.`
+  - `Require full unit/regression/integration plus complexity and cloc gates
+    before closure.`
 - ExitGateCheck:
   - Unit: `pass`
   - Integration: `pass`
@@ -260,10 +267,11 @@ practicality upgrade exit (or after Pages if practicality is deferred).
   - PublicArtifactScope: `pass`
   - PublishLayoutDecision: `pass`
 - RisksAndBlockers:
-  - `No blocker.`
+  - `No blocker; risk is scoring drift on ambiguous multi-decomposition hands
+    until exact engine + regression fixtures are in place.`
 - NextActions:
-  - `Maintain regression/test/complexity guardrails on all changes.`
-  - `No open roadmap track; reopen master when new work is scoped.`
+  - `Maintain regression/test/complexity guardrails on all scoring changes.`
+  - `Reopen master when next scoring-rule expansion is explicitly scoped.`
 - ValidationEvidence:
   - `Context menu visual: vertical layout, Material elevation, near-tile positioning.
     Tests passed; tileContextMenuController.test.js added.`
@@ -289,9 +297,36 @@ practicality upgrade exit (or after Pages if practicality is deferred).
   - `Post-holistic UI polish (2026-03-22): removed context presets and info
     modal; HIG timing checkmarks; sticky context apply; FAN_LEXICON_ENTRIES
     (81 ids); splash visual pass; result modal without dedicated win-pattern
-    row (CHANGELOG [Unreleased]). Gates: npm test, quality:complexity, cloc,
-    build:dist. Version 4.6.1.`
-- LastUpdated: `2026-03-22` (polish + result layout follow-up; plans synced)
+    row (CHANGELOG [4.7.0]). Gates: npm test, quality:complexity, cloc,
+    build:dist. Version 4.7.0.`
+  - `Five-principles exact scoring iteration 1 (2026-03-22): standard
+    decomposition enumeration, best-score selection in scoreHand, one-time
+    attach guard for HUA_LONG interactions, and new unit coverage. Gates:
+    quality:complexity + unit/regression/integration/full all pass.`
+  - `Five-principles exact scoring iteration 2 (2026-03-22): added regression
+    golden case for 花龙套算一次 behavior (hua_long_attach_once_hand). Re-ran
+    full gates: regression/unit/integration/complexity/full all pass.`
+  - `Five-principles exact scoring iteration 3 (2026-03-22): exclusion logic
+    now removes all repeated target-fan instances; unit test added for repeated
+    target exclusion consistency. Re-ran full gates:
+    unit/regression/integration/complexity/full all pass.`
+  - `Five-principles exact scoring iteration 4 (2026-03-22): introduced
+    principleConstraints module and same-fan-once constraint before conflict
+    resolution; unit test added for duplicate same-fan instances. Re-ran full
+    gates: unit/regression/integration/complexity/full all pass.`
+  - `Five-principles exact scoring iteration 5 (2026-03-22): moved
+    attach-once rule into principleConstraints and added dedicated principle
+    unit tests. Re-ran full gates:
+    unit/regression/integration/complexity/full all pass.`
+  - `Five-principles exact scoring iteration 6 (2026-03-22): moved
+    conflict-group and exclusion-map logic into principleConstraints; resolver
+    now orchestrates principle steps only. Added principle-layer unit tests for
+    these rules. Re-ran full gates:
+    unit/regression/integration/complexity/full all pass.`
+- LastUpdated: `2026-03-22` (five-principles exact scoring iteration 6
+  validated; plans and gates synced)
+- TrackCloseout:
+  - `track-five-principles-exact-scoring completed on 2026-03-22.`
 
 ## Security and Privacy Hardening Track
 
@@ -480,7 +515,7 @@ except approved placeholders.
   - pass; post-polish track depends only on holistic baseline in repo
   (v4.6.0).
 - Remaining tracked prerequisite:
-  - None; `track-post-holistic-ui-polish` closed 2026-03-22 (v4.6.1).
+  - None; `track-post-holistic-ui-polish` closed 2026-03-22 (v4.7.0).
 
 ## Implementation Go/No-Go (for future reopened tracks)
 

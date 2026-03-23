@@ -346,5 +346,26 @@
       "isWin": true,
       "totalFan": 22
     }
+  },
+  {
+    "id": "hua_long_attach_once_hand",
+    "input": {
+      "tiles": [
+        "1W", "2W", "3W",
+        "4T", "5T", "6T",
+        "7B", "8B", "9B",
+        "1T", "2T", "3T",
+        "5W", "5W"
+      ],
+      "winType": "dianhe",
+      "handState": "menqian",
+      "kongType": "none",
+      "timingEvent": "none"
+    },
+    "expect": {
+      "errorCode": null,
+      "isWin": true,
+      "totalFan": 13
+    }
   }
 ]

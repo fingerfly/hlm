@@ -1,10 +1,10 @@
 ---
 name: hlm-post-holistic-ui-polish
 overview: |
-  Post-4.6.0 UX polish from user review: remove context presets, HIG-aligned
-  timing control, bottom primary CTA, result modal (no info modal; no
-  standalone win-pattern row after follow-up), Guobiao-sourced fan lexicon,
-  splash visual refinement.
+  Post-4.6.0 UX polish from user review; **delivered as v4.7.0** (package.json /
+  appVersion / CHANGELOG). Scope: remove context presets, HIG-aligned timing,
+  bottom primary CTA, result modal (no info modal; no standalone win-pattern
+  row in 4.7.0), Guobiao-sourced fan lexicon, splash visual refinement.
 todos:
   - id: ctx-remove-presets
     content: |
@@ -25,8 +25,8 @@ todos:
     content: |
       Remove 详细解释 button + app wiring; result modal layout updates
       (renderResultModal, index.html, tests). Follow-up UX: standalone
-      #resultWinPattern shipped in 4.6.1 then removed — 和牌类型仅保留在
-      explanation 文案与和牌分组中。
+      #resultWinPattern briefly in pre-release changelog, removed before **v4.7.0**;
+      **v4.7.0** ships without it — 和牌类型仅保留在 explanation 与和牌分组中。
     status: completed
   - id: lexicon-guobiao
     content: |
@@ -41,8 +41,8 @@ todos:
   - id: gates-closeout-master
     content: |
       npm test + quality:complexity + cloc touched files + build:dist;
-      CHANGELOG; track-post-holistic-ui-polish completed; dashboard evidence +
-      LastUpdated; prune dead modal/tests.
+      CHANGELOG (release **4.7.0**); track-post-holistic-ui-polish completed;
+      dashboard evidence + LastUpdated; prune dead modal/tests.
     status: completed
 isProject: false
 ---
@@ -54,17 +54,18 @@ isProject: false
 **Master 链接**: [hlm-master-plan.plan.md](hlm-master-plan.plan.md) — 对应 todo
 `track-post-holistic-ui-polish`。
 
-## 交付后修订（与界面一致，2026-03-22）
+## 交付后修订（与界面一致；定稿 **v4.7.0**，2026-03-22）
 
-- v4.6.1 曾一度加入结果 sticky 区 **`#resultWinPattern`**（`vm.winPatternText`）及
-  分隔线；**用户验收后已去除**该独立「和牌型」行，避免与底部 `explanation` 中
-  「和牌类型：…」重复感。
+- **v4.7.0** 定稿前，变更日志草稿曾短暂列入 **`#resultWinPattern`**；用户验收后去除独立
+  「和牌型」行，**v4.7.0** 为当前产品版本（见 [`package.json`](../package.json)、
+  [`src/config/appVersion.js`](../src/config/appVersion.js)）。
 - **当前行为**：[`public/index.html`](../public/index.html) 无 `#resultWinPattern`；
   [`renderResultModal`](../public/resultModalView.js) 不再写入和牌型节点；
   [`src/app/resultViewModel.js`](../src/app/resultViewModel.js) 仍保留
   `winPatternText`（单测与将来复用）；[`src/llm/explainer.js`](../src/llm/explainer.js)
   生成的 **`explanation`** 仍含和牌类型与总番、命中番种摘要。
-- **CHANGELOG**：[`CHANGELOG.md`](../CHANGELOG.md) `[Unreleased]` 记录上述移除。
+- **CHANGELOG**：[`CHANGELOG.md`](../CHANGELOG.md) **`## [4.7.0]`** 汇总本轨交付
+  （Added / Changed / Removed / Tests），含移除独立和牌型行说明。
 
 ## 用户确认项（2026-03-22 验收）
 
@@ -75,7 +76,7 @@ isProject: false
 3. **应用按钮** — 移至 **和牌条件 sheet 最底部**（建议 **sticky footer**，
    内容区可滚动）。
 4. **结果 Modal** — **移除「详细解释」按钮**及相关打开逻辑；**独立和牌型行**
-   曾在 v4.6.1 实现后 **按用户反馈撤销**（无 `#resultWinPattern`）；和牌结构类型
+   未纳入 **v4.7.0** 定稿（定稿前变更日志曾含该行，发布前已撤销）；和牌结构类型
    由 **底部 `explanation`**（和牌类型…）与 **和牌分组** 共同体现。
 5. **番种释义** — 当前为通用句；需按 **麻将国标（中国麻将竞赛规则）** 建立
    **逐 id 可核对** 的条文式释义（允许 1～3 句压缩表述，须与规则表一致）。
@@ -156,7 +157,7 @@ isProject: false
   「详细解释」按钮；**无孤立 `#infoModal`**。  
 - `fanLexicon` 每条 id 为国标对齐释义；测试禁止占位句；`cloc` 合规或已拆分。  
 - 启动页视觉可验收；`npm test`、`npm run quality:complexity`、`npm run build:dist`、
-  `CHANGELOG`、master **`track-post-holistic-ui-polish` → completed**。
+  `CHANGELOG`（**v4.7.0**）、master **`track-post-holistic-ui-polish` → completed**。
 
 ## 实现落点（按文件，便于开工）
 

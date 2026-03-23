@@ -63,17 +63,75 @@ function findStandardMelds(counts) {
   return null;
 }
 
-function standardWinGroups(tiles) {
+function groupKey(groups) {
+  const parts = groups.map(
+    (group) => `${group.type}:${[...group.tiles].sort().join(",")}`
+  );
+  return parts.sort().join("|");
+}
+
+function findAllStandardMelds(counts) {
+  const keys = [...counts.keys()].filter((k) => counts.get(k) > 0).sort();
+  if (keys.length === 0) return [[]];
+
+  const first = keys[0];
+  const c = counts.get(first);
+  const all = [];
+
+  if (c >= 3) {
+    counts.set(first, c - 3);
+    const tails = findAllStandardMelds(counts);
+    for (const tail of tails) {
+      all.push([{ type: "pung", tiles: [first, first, first] }, ...tail]);
+    }
+    counts.set(first, c);
+  }
+
+  const suit = tileSuit(first);
+  const rank = tileRank(first);
+  if (suit !== "Z" && rank <= 7) {
+    const t2 = `${rank + 1}${suit}`;
+    const t3 = `${rank + 2}${suit}`;
+    if ((counts.get(t2) || 0) > 0 && (counts.get(t3) || 0) > 0) {
+      counts.set(first, c - 1);
+      counts.set(t2, (counts.get(t2) || 0) - 1);
+      counts.set(t3, (counts.get(t3) || 0) - 1);
+      const tails = findAllStandardMelds(counts);
+      for (const tail of tails) {
+        all.push([{ type: "chow", tiles: [first, t2, t3] }, ...tail]);
+      }
+      counts.set(first, c);
+      counts.set(t2, (counts.get(t2) || 0) + 1);
+      counts.set(t3, (counts.get(t3) || 0) + 1);
+    }
+  }
+  return all;
+}
+
+export function enumerateStandardWinGroups(tiles) {
   const counts = countTiles(tiles);
+  const all = [];
+  const seen = new Set();
   for (const [tile, n] of counts.entries()) {
     if (n < 2) continue;
     const nextCounts = cloneCounts(counts);
     nextCounts.set(tile, n - 2);
-    const melds = findStandardMelds(nextCounts);
-    if (!melds) continue;
-    return [...melds, { type: "pair", tiles: [tile, tile] }];
+    const meldOptions = findAllStandardMelds(nextCounts);
+    for (const melds of meldOptions) {
+      const groups = [...melds, { type: "pair", tiles: [tile, tile] }];
+      const key = groupKey(groups);
+      if (seen.has(key)) continue;
+      seen.add(key);
+      all.push(groups);
+    }
   }
-  return null;
+  return all;
+}
+
+function standardWinGroups(tiles) {
+  const all = enumerateStandardWinGroups(tiles);
+  if (all.length === 0) return null;
+  return all[0];
 }
 
 function isSevenPairs(tiles) {
