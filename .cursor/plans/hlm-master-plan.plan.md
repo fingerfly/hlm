@@ -297,6 +297,11 @@ practicality upgrade exit (or after Pages if practicality is deferred).
   - `After manual gates pass, mark track-desktop-web-ui-help completed`
     `and sync child gates-and-closeout todo.`
 - ValidationEvidence:
+  - `Desktop density iteration 3 (2026-03-27): adjusted shell split to`
+    `2.6fr + fixed-width right rail, tightened right-panel/context spacing,`
+    `and expanded desktop tile preview density to 10 columns.`
+  - `Updated responsive test assertions and re-ran full automated gates`
+    `(unit/integration/regression/full + complexity) with pass.`
   - `Desktop fix iteration 2 (2026-03-27): context sheet moved inline into`
     `desktop side panel host, syncWizardModals skips context modal on desktop,`
     `and createModalActions enforces one-modal-at-a-time behavior.`
@@ -373,7 +378,7 @@ practicality upgrade exit (or after Pages if practicality is deferred).
     these rules. Re-ran full gates:
     unit/regression/integration/complexity/full all pass.`
 - LastUpdated: `2026-03-27` (desktop-web-ui-help implementation checkpoint:
-  automated gates passed; iteration 2 desktop overlap/space fix applied;
+  automated gates passed; iteration 3 desktop density rebalance applied;
   awaiting user visual confirmation + browser-matrix closeout)
 - TrackCloseout:
   - `track-five-principles-exact-scoring completed on 2026-03-22.`

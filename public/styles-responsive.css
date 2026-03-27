@@ -23,10 +23,10 @@
 
 @media (min-width: 1024px) {
   .container.app-shell {
-    max-width: 1180px;
+    max-width: 1440px;
     display: grid;
-    grid-template-columns: minmax(0, 1.8fr) minmax(320px, 1fr);
-    gap: 14px;
+    grid-template-columns: minmax(0, 2.6fr) minmax(360px, 430px);
+    gap: 18px;
     align-items: start;
   }
 
@@ -50,7 +50,7 @@
     border-radius: 16px;
     background: var(--card);
     backdrop-filter: none;
-    padding: 12px;
+    padding: 10px;
   }
 
   .desktop-context-host {
@@ -74,14 +74,33 @@
   }
 
   .desktop-context-host .context-sheet-header {
+    padding: 10px 12px 6px;
+  }
+
+  .desktop-context-host .context-sheet-body {
+    gap: 12px;
+    padding: 0 12px 6px;
+  }
+
+  .desktop-context-host .context-group {
     padding-top: 10px;
   }
 
   .desktop-context-host .context-sheet-footer {
-    padding-bottom: 10px;
+    padding: 8px 12px 10px;
+  }
+
+  .desktop-context-host .context-sheet-footer {
+    border-top-width: 1px;
   }
 
   .container.app-shell .tile-preview {
-    grid-template-columns: repeat(7, minmax(0, 1fr));
+    grid-template-columns: repeat(10, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .container.app-shell .tile-chip {
+    min-height: 86px;
+    min-width: 72px;
   }
 }

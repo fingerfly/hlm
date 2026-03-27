@@ -79,7 +79,7 @@ test("styles-responsive includes desktop two-pane shell rules", () => {
   const css = readFileSync(responsiveCssPath, "utf8");
   assert.match(css, /@media\s*\(min-width:\s*1024px\)/);
   assert.match(css, /\.container\.app-shell/);
-  assert.match(css, /grid-template-columns:\s*minmax\(0,\s*1\.8fr\)/);
+  assert.match(css, /grid-template-columns:\s*minmax\(0,\s*2\.6fr\)/);
   assert.match(css, /\.desktop-side-panel/);
 });
 

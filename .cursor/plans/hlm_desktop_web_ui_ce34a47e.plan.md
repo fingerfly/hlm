@@ -187,3 +187,6 @@ flowchart LR
   - Fix iteration (2026-03-27): desktop context sheet mounted inline into side
     panel and modal policy switched to one-modal-at-a-time; full automated
     gates re-run pass. Awaiting user visual confirmation for final closure.
+  - Density iteration (2026-03-27): desktop split changed to wider left pane
+    (2.6fr/360-430px), context spacing tightened, tile preview expanded to
+    10 columns on desktop; full automated gates re-run pass.
