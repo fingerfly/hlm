@@ -202,3 +202,14 @@
   margin: 12px 0 8px;
   font-size: 15px;
 }
+
+.help-modal {
+  align-items: center;
+  justify-content: center;
+}
+
+.help-sheet {
+  width: min(520px, calc(100vw - 24px));
+  max-height: min(72vh, 560px);
+  border-radius: 16px;
+}

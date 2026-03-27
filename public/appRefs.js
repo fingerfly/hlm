@@ -36,7 +36,8 @@ export function createAppRefs(byId) {
   const modalRefs = {
     picker: byId("pickerModal"),
     context: byId("contextModal"),
-    result: byId("resultModal")
+    result: byId("resultModal"),
+    help: byId("helpModal")
   };
   return { refs, modalRefs };
 }

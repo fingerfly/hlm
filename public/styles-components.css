@@ -58,6 +58,18 @@
   flex: 1 1 0;
 }
 
+#resetContextBtn {
+  width: 100%;
+}
+
+.help-content {
+  padding-top: 8px;
+}
+
+.help-content .summary-text {
+  margin: 0 0 10px;
+}
+
 .picker-mode-toggle {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));

@@ -28,6 +28,33 @@ import {
 export { getPickerTilesByMode, renderPickerByTab };
 
 /**
+ * Build open/close handlers for help modal with focus restore.
+ *
+ * @param {(id: string) => HTMLElement|null} byId - Id lookup helper.
+ * @param {{openModalByKey: Function, closeModalByKey: Function}} modalActions
+ * @returns {{openHelp: Function, closeHelp: Function}}
+ */
+export function createHelpHandlers(byId, modalActions) {
+  let returnFocusEl = null;
+
+  const closeHelp = () => {
+    modalActions.closeModalByKey("help");
+    if (returnFocusEl && typeof returnFocusEl.focus === "function") {
+      returnFocusEl.focus();
+    }
+  };
+
+  const openHelp = (event) => {
+    returnFocusEl = event?.currentTarget || byId("moreBtn");
+    modalActions.openModalByKey("help");
+    const closeBtn = byId("helpCloseBtn");
+    if (closeBtn && typeof closeBtn.focus === "function") closeBtn.focus();
+  };
+
+  return { openHelp, closeHelp };
+}
+
+/**
  * Handle wizard "next": from step 2, calculate and show result modal;
  * else advance wizard step.
  *
@@ -100,6 +127,7 @@ export function wireAppEvents(params) {
     resetContext
   } = params;
   const bindClick = createBindClick(byId);
+  const { openHelp, closeHelp } = createHelpHandlers(byId, modalActions);
   const renderPicker = () => {
     renderPickerByTab({
       store,
@@ -162,8 +190,18 @@ export function wireAppEvents(params) {
 
   wireContextSegmentedControls(byId, stateActions);
   wireContextSteppers(byId, stateActions);
-  bindClick("moreBtn", () => {
+  bindClick("moreBtn", openHelp);
+  bindClick("resetContextBtn", () => {
     resetContext(byId);
     stateActions.syncHomeState();
   });
+  bindClick("helpCloseBtn", closeHelp);
+  const helpModal = byId("helpModal");
+  if (helpModal) {
+    helpModal.addEventListener("keydown", (event) => {
+      if (event.key !== "Escape") return;
+      event.preventDefault();
+      closeHelp();
+    });
+  }
 }

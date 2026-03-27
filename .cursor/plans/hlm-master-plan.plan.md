@@ -65,6 +65,12 @@ todos:
       principles with comprehensive unit/regression/integration tests. Child:
       hlm-five-principles-exact-engine_cf4e8446.plan.md
     status: completed
+  - id: track-desktop-web-ui-help
+    content: >
+      Desktop/macOS web UI uplift with two-pane layout and explicit help entry;
+      replace ambiguous top-right action and keep mobile flow stable. Child:
+      hlm_desktop_web_ui_ce34a47e.plan.md
+    status: in_progress
 isProject: false
 ---
 
@@ -156,6 +162,9 @@ not present in current workspace)
 - Five-principles exact scoring (**in_progress**; exact decomposition + five
   counting-principles constraint engine and full test hardening):
 [hlm-five-principles-exact-engine_cf4e8446.plan.md](hlm-five-principles-exact-engine_cf4e8446.plan.md)
+- Desktop web UI + help entry (**pending**; desktop two-pane layout, help
+  action repurpose, explicit reset path):
+[hlm_desktop_web_ui_ce34a47e.plan.md](hlm_desktop_web_ui_ce34a47e.plan.md)
 - Historical supporting plans (traceability only):
   - [hlm_版本升级工具与中文术语统一_35161103.plan.md](hlm_版本升级工具与中文术语统一_35161103.plan.md)
   - `spike_full_automation_6a79ecff.plan.md` (historical reference; file
@@ -233,29 +242,32 @@ practicality upgrade exit (or after Pages if practicality is deferred).
 
 ### Current delivery queue (post-baseline)
 
-- TrackId: `track-five-principles-exact-scoring`
+- TrackId: `track-desktop-web-ui-help`
 - ChildPlan:
+  [hlm_desktop_web_ui_ce34a47e.plan.md](hlm_desktop_web_ui_ce34a47e.plan.md)
+- TrackTodoStatus: `in_progress` (implementation checkpoint 2026-03-27)
+- Prior closed: `track-five-principles-exact-scoring` →
   [hlm-five-principles-exact-engine_cf4e8446.plan.md](hlm-five-principles-exact-engine_cf4e8446.plan.md)
-- TrackTodoStatus: `in_progress` (opened 2026-03-22)
-- Prior closed: `track-post-holistic-ui-polish` →
+  (2026-03-22)
+- Earlier closed: `track-post-holistic-ui-polish` →
   [hlm_post_holistic_ui_polish.plan.md](hlm_post_holistic_ui_polish.plan.md)
   (2026-03-22)
-- Earlier closed: `track-holistic-ux-scoring` →
+- Historical closed: `track-holistic-ux-scoring` →
   [hlm_holistic_ux_scoring.plan.md](hlm_holistic_ux_scoring.plan.md)
   (2026-03-22)
 
 ### Current Status
 
 - Owner: `project-owner`
-- OverallStatus: `completed`
-- ProgressPercent: `100`
-- ActivePhase: `none`
+- OverallStatus: `in_progress`
+- ProgressPercent: `80` (implementation + automated gates complete)
+- ActivePhase: `desktop-web-ui-help-manual-gates`
 - Focus:
-  - `Execute review-fix loop for exact five-principles scoring alignment.`
-  - `Keep existing stable tracks unchanged while replacing partial
-    conflict-table behavior with decomposition-aware exact selection.`
-  - `Require full unit/regression/integration plus complexity and cloc gates
-    before closure.`
+  - `Execute desktop/macOS UI uplift with two-pane layout and stronger`
+    `information hierarchy while preserving current mobile flow.`
+  - `Repurpose top-right action into explicit help entry and move reset`
+    `to a clearly labeled, non-ambiguous control.`
+  - `Apply full TDD + test/complexity/cloc gates before marking track done.`
 - ExitGateCheck:
   - Unit: `pass`
   - Integration: `pass`
@@ -263,16 +275,44 @@ practicality upgrade exit (or after Pages if practicality is deferred).
   - FullSuite: `pass`
   - Complexity: `pass`
   - SLOCReview: `pass`
-  - SecurityScan: `pass`
-  - PublicArtifactScope: `pass`
-  - PublishLayoutDecision: `pass`
+  - AccessibilityKeyboardFlow: `pass`
+  - DesktopBrowserMatrix: `pending`
+  - SecurityScan: `carry-forward pass`
+  - PublicArtifactScope: `carry-forward pass`
+  - PublishLayoutDecision: `carry-forward pass`
 - RisksAndBlockers:
-  - `No blocker; risk is scoring drift on ambiguous multi-decomposition hands
-    until exact engine + regression fixtures are in place.`
+  - `No blocker; primary risk is desktop CSS regressions on tablet/mobile`
+    `breakpoints without tight responsive scoping and test coverage.`
+  - `Potential risk: help overlay focus handling and reset-action clarity`
+    `can regress keyboard UX or cause accidental context loss.`
+  - `Manual desktop browser matrix remains pending; automated browser-use`
+    `validation was blocked by regional model availability.`
 - NextActions:
-  - `Maintain regression/test/complexity guardrails on all scoring changes.`
-  - `Reopen master when next scoring-rule expansion is explicitly scoped.`
+  - `Keep child plan at hlm_desktop_web_ui_ce34a47e.plan.md as execution`
+    `source of truth.`
+  - `Complete manual keyboard accessibility checks for help/reset flow`
+    `and focus return behavior.`
+  - `Complete desktop browser matrix (Chrome + Safari) visual/flow`
+    `verification for two-pane layout and modal interactions.`
+  - `After manual gates pass, mark track-desktop-web-ui-help completed`
+    `and sync child gates-and-closeout todo.`
 - ValidationEvidence:
+  - `Desktop/help implementation checkpoint (2026-03-27): moreBtn now opens`
+    `help modal, explicit resetContextBtn added, desktop two-pane CSS`
+    `rules added, and help focus-return/escape handling wired.`
+  - `New/updated tests passed: appEventBindings.test.js,`
+    `appEventWiring.test.js, indexStylesheetLinks.test.js.`
+  - `Automated gates rerun pass: npm run test:unit,`
+    `npm run test:integration, npm run test:regression, npm test,`
+    `npm run quality:complexity.`
+  - `Per-file cloc captured for all touched files via`
+    `cloc --by-file --csv ...`
+  - `Added assertions for help dialog ARIA markers and desktop media-query`
+    `rules in indexStylesheetLinks.test.js.`
+  - `Keyboard a11y behavior verified by unit tests in`
+    `appEventWiring.test.js (focus return + Escape close handlers).`
+  - `Attempted browser automation manual-gate run; blocked by model`
+    `availability in current region.`
   - `Context menu visual: vertical layout, Material elevation, near-tile positioning.
     Tests passed; tileContextMenuController.test.js added.`
   - `Added dist artifact builder and workflow publish path switched to dist/.`
@@ -323,8 +363,8 @@ practicality upgrade exit (or after Pages if practicality is deferred).
     now orchestrates principle steps only. Added principle-layer unit tests for
     these rules. Re-ran full gates:
     unit/regression/integration/complexity/full all pass.`
-- LastUpdated: `2026-03-22` (five-principles exact scoring iteration 6
-  validated; plans and gates synced)
+- LastUpdated: `2026-03-27` (desktop-web-ui-help implementation checkpoint:
+  automated gates passed; keyboard gate passed; browser-matrix pending)
 - TrackCloseout:
   - `track-five-principles-exact-scoring completed on 2026-03-22.`
 

@@ -27,14 +27,14 @@
       </div>
     </div>
     <!-- Home screen keeps primary actions always visible on mobile. -->
-    <main class="container">
+    <main class="container app-shell">
       <header class="nav-bar">
         <span></span>
-        <button id="moreBtn" class="icon-btn" aria-label="重置会话条件">...</button>
+        <button id="moreBtn" class="icon-btn" aria-label="打开帮助">帮助</button>
       </header>
       <p id="versionBadge" class="version-badge">版本信息加载中...</p>
 
-      <section class="card">
+      <section class="card hand-card">
         <div class="card-top">
           <h2>当前手牌 <span id="tileCount">0/14</span></h2>
         </div>
@@ -45,7 +45,7 @@
         </div>
       </section>
 
-      <footer class="sticky-footer">
+      <footer class="sticky-footer desktop-side-panel">
         <p id="wizardStepHint" class="hint">步骤 1/2：选择 14 张手牌</p>
         <p id="contextSummary" class="hint">自摸 · 门前清 · 无杠</p>
         <p id="readyHint" class="hint">请先选满 14 张牌</p>
@@ -53,6 +53,7 @@
           <button id="wizardBackBtn" class="ghost-btn">上一步</button>
           <button id="wizardNextBtn" class="ghost-btn">下一步</button>
         </div>
+        <button id="resetContextBtn" class="ghost-btn">重置条件</button>
       </footer>
     </main>
 
@@ -247,6 +248,23 @@
               再来一手
             </button>
           </div>
+        </div>
+      </div>
+    </section>
+    <section id="helpModal" class="modal help-modal">
+      <div class="sheet help-sheet" role="dialog" aria-modal="true"
+        aria-label="使用帮助">
+        <div class="sheet-header">
+          <h3>使用帮助</h3>
+          <button id="helpCloseBtn" data-close="help" class="ghost-btn">
+            关闭
+          </button>
+        </div>
+        <div class="help-content">
+          <p class="summary-text">1）先选满 14 张手牌，再进入条件设置。</p>
+          <p class="summary-text">2）在条件页设置自摸/点和、门前/副露、杠与时机。</p>
+          <p class="summary-text">3）点击计算后查看番种明细与总番。</p>
+          <p class="summary-text">提示：重置条件只清空条件，不会删除已选手牌。</p>
         </div>
       </div>
     </section>

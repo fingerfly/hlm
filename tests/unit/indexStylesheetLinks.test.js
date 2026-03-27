@@ -4,6 +4,10 @@ import { existsSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
 
 const indexPath = resolve(import.meta.dirname, "../../public/index.html");
+const responsiveCssPath = resolve(
+  import.meta.dirname,
+  "../../public/styles-responsive.css"
+);
 const iconPath = resolve(import.meta.dirname, "../../public/favicon.svg");
 const appIconPath = resolve(import.meta.dirname, "../../public/icon-app.svg");
 const iconTraditionalPath = resolve(
@@ -57,6 +61,25 @@ test("index.html loads modular stylesheets", () => {
   assert.match(html, /href="\.\/styles-components\.css"/);
   assert.match(html, /href="\.\/styles-modals\.css"/);
   assert.match(html, /href="\.\/styles-responsive\.css"/);
+});
+
+test("index.html exposes help modal and explicit reset button", () => {
+  const html = readFileSync(indexPath, "utf8");
+  assert.match(html, /id="moreBtn"[^>]*>帮助<\/button>/);
+  assert.match(html, /id="helpModal"/);
+  assert.match(html, /role="dialog"/);
+  assert.match(html, /aria-modal="true"/);
+  assert.match(html, /data-close="help"/);
+  assert.match(html, /id="resetContextBtn"/);
+  assert.doesNotMatch(html, /id="moreBtn"[^>]*>\.\.\.<\/button>/);
+});
+
+test("styles-responsive includes desktop two-pane shell rules", () => {
+  const css = readFileSync(responsiveCssPath, "utf8");
+  assert.match(css, /@media\s*\(min-width:\s*1024px\)/);
+  assert.match(css, /\.container\.app-shell/);
+  assert.match(css, /grid-template-columns:\s*minmax\(0,\s*1\.8fr\)/);
+  assert.match(css, /\.desktop-side-panel/);
 });
 
 test("index.html links app icon assets", () => {

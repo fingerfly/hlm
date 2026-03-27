@@ -20,3 +20,40 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
+
+@media (min-width: 1024px) {
+  .container.app-shell {
+    max-width: 1180px;
+    display: grid;
+    grid-template-columns: minmax(0, 1.8fr) minmax(320px, 1fr);
+    gap: 14px;
+    align-items: start;
+  }
+
+  .container.app-shell .nav-bar,
+  .container.app-shell .version-badge {
+    grid-column: 1 / -1;
+  }
+
+  .container.app-shell .hand-card {
+    grid-column: 1 / 2;
+    margin-bottom: 0;
+  }
+
+  .container.app-shell .desktop-side-panel {
+    grid-column: 2 / 3;
+    position: sticky;
+    top: 12px;
+    bottom: auto;
+    margin-top: 0;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    background: var(--card);
+    backdrop-filter: none;
+    padding: 12px;
+  }
+
+  .container.app-shell .tile-preview {
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+  }
+}

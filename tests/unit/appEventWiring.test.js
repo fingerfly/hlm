@@ -3,7 +3,8 @@ import assert from "node:assert/strict";
 import {
   getPickerTilesByMode,
   syncWizardModals,
-  handleWizardNextClick
+  handleWizardNextClick,
+  createHelpHandlers
 } from "../../public/appEventWiring.js";
 import { shouldOpenPickerForContextButton } from "../../public/appEventBindings.js";
 
@@ -124,4 +125,36 @@ test("handleWizardNextClick from step 1 advances wizard via goWizardNext", () =>
   };
   handleWizardNextClick(store, stateActions, modalActions, syncWizardModals);
   assert.deepEqual(modalCalls, ["close:picker", "open:context"]);
+});
+
+test("createHelpHandlers opens help and focuses close button", () => {
+  const calls = [];
+  const moreBtn = { focus: () => calls.push("focus:moreBtn") };
+  const helpCloseBtn = { focus: () => calls.push("focus:helpCloseBtn") };
+  const byId = (id) => {
+    if (id === "moreBtn") return moreBtn;
+    if (id === "helpCloseBtn") return helpCloseBtn;
+    return null;
+  };
+  const modalActions = {
+    openModalByKey: (key) => calls.push(`open:${key}`),
+    closeModalByKey: () => {}
+  };
+  const { openHelp } = createHelpHandlers(byId, modalActions);
+  openHelp({ currentTarget: moreBtn });
+  assert.deepEqual(calls, ["open:help", "focus:helpCloseBtn"]);
+});
+
+test("createHelpHandlers restores focus to trigger when closing", () => {
+  const calls = [];
+  const moreBtn = { focus: () => calls.push("focus:moreBtn") };
+  const byId = (id) => (id === "moreBtn" ? moreBtn : null);
+  const modalActions = {
+    openModalByKey: () => {},
+    closeModalByKey: (key) => calls.push(`close:${key}`)
+  };
+  const { openHelp, closeHelp } = createHelpHandlers(byId, modalActions);
+  openHelp({ currentTarget: moreBtn });
+  closeHelp();
+  assert.deepEqual(calls, ["close:help", "focus:moreBtn"]);
 });
