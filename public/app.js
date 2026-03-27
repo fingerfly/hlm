@@ -103,6 +103,19 @@ const reduceMotion = globalThis.matchMedia?.(
 const splashMs = reduceMotion ? 400 : 900;
 globalThis.setTimeout(dismissSplash, splashMs);
 
+function mountDesktopContextInline() {
+  const isDesktop = globalThis.matchMedia?.("(min-width: 1024px)")?.matches;
+  if (!isDesktop) return;
+  const host = byId("desktopContextHost");
+  const contextModal = byId("contextModal");
+  const contextSheet = contextModal?.querySelector(".context-sheet");
+  if (!host || !contextModal || !contextSheet) return;
+  if (!host.contains(contextSheet)) host.appendChild(contextSheet);
+  contextModal.classList.add("desktop-inline-context");
+  host.dataset.mode = "inline";
+}
+mountDesktopContextInline();
+
 wireAppEvents({
   byId,
   bindTabButtons,

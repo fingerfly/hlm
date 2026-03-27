@@ -127,6 +127,19 @@ test("handleWizardNextClick from step 1 advances wizard via goWizardNext", () =>
   assert.deepEqual(modalCalls, ["close:picker", "open:context"]);
 });
 
+test("syncWizardModals avoids context modal in desktop inline mode", () => {
+  const prev = globalThis.matchMedia;
+  globalThis.matchMedia = () => ({ matches: true });
+  const calls = [];
+  const modalActions = {
+    openModalByKey: (key) => calls.push(`open:${key}`),
+    closeModalByKey: (key) => calls.push(`close:${key}`)
+  };
+  syncWizardModals({ ok: true, step: 2 }, modalActions);
+  globalThis.matchMedia = prev;
+  assert.deepEqual(calls, ["close:context", "close:picker"]);
+});
+
 test("createHelpHandlers opens help and focuses close button", () => {
   const calls = [];
   const moreBtn = { focus: () => calls.push("focus:moreBtn") };

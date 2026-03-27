@@ -53,6 +53,34 @@
     padding: 12px;
   }
 
+  .desktop-context-host {
+    margin-bottom: 10px;
+  }
+
+  #contextModal.desktop-inline-context {
+    position: static;
+    inset: auto;
+    background: transparent;
+    z-index: 0;
+    display: block;
+    pointer-events: none;
+  }
+
+  .desktop-context-host .context-sheet {
+    max-height: none;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+  }
+
+  .desktop-context-host .context-sheet-header {
+    padding-top: 10px;
+  }
+
+  .desktop-context-host .context-sheet-footer {
+    padding-bottom: 10px;
+  }
+
   .container.app-shell .tile-preview {
     grid-template-columns: repeat(7, minmax(0, 1fr));
   }

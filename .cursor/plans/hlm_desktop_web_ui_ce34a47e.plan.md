@@ -184,3 +184,6 @@ flowchart LR
     verification before final track closure.
   - Gate update (2026-03-27): keyboard UX verification covered by unit tests;
     desktop browser matrix still pending due environment-limited automation.
+  - Fix iteration (2026-03-27): desktop context sheet mounted inline into side
+    panel and modal policy switched to one-modal-at-a-time; full automated
+    gates re-run pass. Awaiting user visual confirmation for final closure.

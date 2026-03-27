@@ -70,6 +70,7 @@ test("index.html exposes help modal and explicit reset button", () => {
   assert.match(html, /role="dialog"/);
   assert.match(html, /aria-modal="true"/);
   assert.match(html, /data-close="help"/);
+  assert.match(html, /id="desktopContextHost"/);
   assert.match(html, /id="resetContextBtn"/);
   assert.doesNotMatch(html, /id="moreBtn"[^>]*>\.\.\.<\/button>/);
 });

@@ -27,6 +27,10 @@ import {
  */
 export { getPickerTilesByMode, renderPickerByTab };
 
+function isDesktopInlineContext() {
+  return globalThis.matchMedia?.("(min-width: 1024px)")?.matches === true;
+}
+
 /**
  * Build open/close handlers for help modal with focus restore.
  *
@@ -89,6 +93,21 @@ export function handleWizardNextClick(
  * @returns {void}
  */
 export function syncWizardModals(result, modalActions) {
+  if (isDesktopInlineContext()) {
+    modalActions.closeModalByKey("context");
+    if (!result.ok && result.needs === "tiles") {
+      modalActions.openModalByKey("picker");
+      return;
+    }
+    if (result.step === 1) {
+      modalActions.openModalByKey("picker");
+      return;
+    }
+    if (result.step === 2) {
+      modalActions.closeModalByKey("picker");
+    }
+    return;
+  }
   if (!result.ok && result.needs === "tiles") {
     modalActions.closeModalByKey("context");
     modalActions.openModalByKey("picker");

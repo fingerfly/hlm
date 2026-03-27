@@ -20,6 +20,8 @@ import { setModalOpen } from "./modalUi.js";
 export function createModalActions(store, modalRefs, opts = {}) {
   const { onBeforeClosePicker } = opts;
 
+  const allModalKeys = Object.keys(modalRefs);
+
   function updateModalUi() {
     setModalOpen(modalRefs.picker, store.uiState.modal.picker);
     setModalOpen(modalRefs.context, store.uiState.modal.context);
@@ -28,7 +30,9 @@ export function createModalActions(store, modalRefs, opts = {}) {
   }
 
   function openModalByKey(modalKey) {
-    store.uiState = openModal(store.uiState, modalKey);
+    let nextState = { ...store.uiState, modal: { ...store.uiState.modal } };
+    for (const key of allModalKeys) nextState = closeModal(nextState, key);
+    store.uiState = openModal(nextState, modalKey);
     updateModalUi();
   }
 

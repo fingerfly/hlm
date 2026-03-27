@@ -297,6 +297,15 @@ practicality upgrade exit (or after Pages if practicality is deferred).
   - `After manual gates pass, mark track-desktop-web-ui-help completed`
     `and sync child gates-and-closeout todo.`
 - ValidationEvidence:
+  - `Desktop fix iteration 2 (2026-03-27): context sheet moved inline into`
+    `desktop side panel host, syncWizardModals skips context modal on desktop,`
+    `and createModalActions enforces one-modal-at-a-time behavior.`
+  - `Added/updated tests for desktop inline behavior and modal policy:`
+    `appModalActions.test.js, appEventWiring.test.js,`
+    `indexStylesheetLinks.test.js.`
+  - `Re-ran full automated gates after iteration 2:`
+    `test:unit/integration/regression/full + quality:complexity all pass.`
+  - `Updated per-file cloc evidence captured for latest touched files.`
   - `Desktop/help implementation checkpoint (2026-03-27): moreBtn now opens`
     `help modal, explicit resetContextBtn added, desktop two-pane CSS`
     `rules added, and help focus-return/escape handling wired.`
@@ -364,7 +373,8 @@ practicality upgrade exit (or after Pages if practicality is deferred).
     these rules. Re-ran full gates:
     unit/regression/integration/complexity/full all pass.`
 - LastUpdated: `2026-03-27` (desktop-web-ui-help implementation checkpoint:
-  automated gates passed; keyboard gate passed; browser-matrix pending)
+  automated gates passed; iteration 2 desktop overlap/space fix applied;
+  awaiting user visual confirmation + browser-matrix closeout)
 - TrackCloseout:
   - `track-five-principles-exact-scoring completed on 2026-03-22.`
 
