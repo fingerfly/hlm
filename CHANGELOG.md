@@ -4,6 +4,19 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [4.9.3] - 2026-03-28
+
+### Changed
+- Desktop snapshot UX: step 1 hides inline 和牌条件 rail (`desktop-step-1`) and
+  **重置条件** until step 2; help at ≥1024px uses anchored `#helpPopover`
+  instead of full-screen `#helpModal`; help copy clarifies that conditions can
+  be adjusted before scoring (`public/index.html`, `public/styles-responsive.css`,
+  `public/homeStateView.js`, `public/appRefs.js`, `public/appEventWiring.js`,
+  `public/appModalActions.js`, `public/app.js`).
+- `openModalByKey` runs optional `onBeforeOpenModal` so opening picker/result
+  dismisses the desktop help popover and resets `aria-expanded` on **帮助**
+  (`public/appModalActions.js`, `public/app.js`).
+
 ## [4.9.2] - 2026-03-27
 
 ## [4.9.1] - 2026-03-27

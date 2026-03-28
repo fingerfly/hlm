@@ -21,7 +21,7 @@ test("createBindClick binds click handler when element exists", () => {
   assert.equal(called, 1);
 });
 
-test("bindModalCloseButtons wires picker/context/result/help", () => {
+test("bindModalCloseButtons wires picker/context/result", () => {
   const selectors = [];
   const closed = [];
   bindModalCloseButtons(
@@ -36,8 +36,7 @@ test("bindModalCloseButtons wires picker/context/result/help", () => {
   assert.deepEqual(selectors, [
     "[data-close='picker']",
     "[data-close='context']",
-    "[data-close='result']",
-    "[data-close='help']"
+    "[data-close='result']"
   ]);
-  assert.deepEqual(closed, ["picker", "context", "result", "help"]);
+  assert.deepEqual(closed, ["picker", "context", "result"]);
 });

@@ -24,6 +24,7 @@ export function createAppRefs(byId) {
     wizardStepHintEl: byId("wizardStepHint"),
     wizardBackBtn: byId("wizardBackBtn"),
     wizardNextBtn: byId("wizardNextBtn"),
+    desktopSidePanelEl: byId("desktopSidePanel"),
     readyHintEl: byId("readyHint"),
     resultRefs: {
       total: byId("resultTotalFan"),

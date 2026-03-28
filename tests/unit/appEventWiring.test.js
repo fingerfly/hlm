@@ -4,7 +4,8 @@ import {
   getPickerTilesByMode,
   syncWizardModals,
   handleWizardNextClick,
-  createHelpHandlers
+  createHelpHandlers,
+  isDesktopHelpPopover
 } from "../../public/appEventWiring.js";
 import { shouldOpenPickerForContextButton } from "../../public/appEventBindings.js";
 
@@ -140,7 +141,9 @@ test("syncWizardModals avoids context modal in desktop inline mode", () => {
   assert.deepEqual(calls, ["close:context", "close:picker"]);
 });
 
-test("createHelpHandlers opens help and focuses close button", () => {
+test("createHelpHandlers opens help modal when not desktop popover", () => {
+  const prev = globalThis.matchMedia;
+  globalThis.matchMedia = () => ({ matches: false });
   const calls = [];
   const moreBtn = { focus: () => calls.push("focus:moreBtn") };
   const helpCloseBtn = { focus: () => calls.push("focus:helpCloseBtn") };
@@ -155,10 +158,43 @@ test("createHelpHandlers opens help and focuses close button", () => {
   };
   const { openHelp } = createHelpHandlers(byId, modalActions);
   openHelp({ currentTarget: moreBtn });
+  globalThis.matchMedia = prev;
   assert.deepEqual(calls, ["open:help", "focus:helpCloseBtn"]);
 });
 
-test("createHelpHandlers restores focus to trigger when closing", () => {
+test("createHelpHandlers uses popover on desktop without opening help modal", () => {
+  const prev = globalThis.matchMedia;
+  globalThis.matchMedia = () => ({ matches: true });
+  const calls = [];
+  const popover = { hidden: true };
+  const moreBtn = {
+    focus: () => calls.push("focus:moreBtn"),
+    setAttribute: (name, v) => calls.push(`attr:${name}=${v}`)
+  };
+  const popClose = { focus: () => calls.push("focus:helpPopoverCloseBtn") };
+  const byId = (id) => {
+    if (id === "moreBtn") return moreBtn;
+    if (id === "helpPopover") return popover;
+    if (id === "helpPopoverCloseBtn") return popClose;
+    return null;
+  };
+  const modalActions = {
+    openModalByKey: (key) => calls.push(`open:${key}`),
+    closeModalByKey: () => {}
+  };
+  const { openHelp } = createHelpHandlers(byId, modalActions);
+  openHelp({ currentTarget: moreBtn });
+  globalThis.matchMedia = prev;
+  assert.equal(popover.hidden, false);
+  assert.deepEqual(calls, [
+    "attr:aria-expanded=true",
+    "focus:helpPopoverCloseBtn"
+  ]);
+});
+
+test("createHelpHandlers restores focus to trigger when closing modal help", () => {
+  const prev = globalThis.matchMedia;
+  globalThis.matchMedia = () => ({ matches: false });
   const calls = [];
   const moreBtn = { focus: () => calls.push("focus:moreBtn") };
   const byId = (id) => (id === "moreBtn" ? moreBtn : null);
@@ -169,5 +205,46 @@ test("createHelpHandlers restores focus to trigger when closing", () => {
   const { openHelp, closeHelp } = createHelpHandlers(byId, modalActions);
   openHelp({ currentTarget: moreBtn });
   closeHelp();
+  globalThis.matchMedia = prev;
   assert.deepEqual(calls, ["close:help", "focus:moreBtn"]);
+});
+
+test("createHelpHandlers closes desktop popover without modal close", () => {
+  const prev = globalThis.matchMedia;
+  globalThis.matchMedia = () => ({ matches: true });
+  const calls = [];
+  const popover = { hidden: false };
+  const moreBtn = {
+    focus: () => calls.push("focus:moreBtn"),
+    setAttribute: (name, v) => calls.push(`attr:${name}=${v}`)
+  };
+  const byId = (id) => {
+    if (id === "moreBtn") return moreBtn;
+    if (id === "helpPopover") return popover;
+    return null;
+  };
+  const modalActions = {
+    openModalByKey: () => {},
+    closeModalByKey: (key) => calls.push(`close:${key}`)
+  };
+  const { openHelp, closeHelp } = createHelpHandlers(byId, modalActions);
+  openHelp({ currentTarget: moreBtn });
+  closeHelp();
+  globalThis.matchMedia = prev;
+  assert.equal(popover.hidden, true);
+  assert.deepEqual(calls, [
+    "attr:aria-expanded=true",
+    "focus:helpPopoverCloseBtn",
+    "attr:aria-expanded=false",
+    "focus:moreBtn"
+  ]);
+});
+
+test("isDesktopHelpPopover follows min-width 1024px media query", () => {
+  const prev = globalThis.matchMedia;
+  globalThis.matchMedia = () => ({ matches: true });
+  assert.equal(isDesktopHelpPopover(), true);
+  globalThis.matchMedia = () => ({ matches: false });
+  assert.equal(isDesktopHelpPopover(), false);
+  globalThis.matchMedia = prev;
 });

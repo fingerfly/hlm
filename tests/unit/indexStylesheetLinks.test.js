@@ -67,9 +67,11 @@ test("index.html exposes help modal and explicit reset button", () => {
   const html = readFileSync(indexPath, "utf8");
   assert.match(html, /id="moreBtn"[^>]*>帮助<\/button>/);
   assert.match(html, /id="helpModal"/);
+  assert.match(html, /id="helpPopover"/);
+  assert.match(html, /id="desktopSidePanel"/);
   assert.match(html, /role="dialog"/);
   assert.match(html, /aria-modal="true"/);
-  assert.match(html, /data-close="help"/);
+  assert.match(html, /id="helpCloseBtn"/);
   assert.match(html, /id="desktopContextHost"/);
   assert.match(html, /id="resetContextBtn"/);
   assert.doesNotMatch(html, /id="moreBtn"[^>]*>\.\.\.<\/button>/);
@@ -81,6 +83,8 @@ test("styles-responsive includes desktop two-pane shell rules", () => {
   assert.match(css, /\.container\.app-shell/);
   assert.match(css, /grid-template-columns:\s*minmax\(0,\s*2\.6fr\)/);
   assert.match(css, /\.desktop-side-panel/);
+  assert.match(css, /\.help-popover/);
+  assert.match(css, /\.desktop-step-1/);
 });
 
 test("index.html links app icon assets", () => {

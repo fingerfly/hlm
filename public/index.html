@@ -30,7 +30,31 @@
     <main class="container app-shell">
       <header class="nav-bar">
         <span></span>
-        <button id="moreBtn" class="icon-btn" aria-label="打开帮助">帮助</button>
+        <div class="nav-help-cluster">
+          <button id="moreBtn" type="button" class="icon-btn"
+            aria-label="打开帮助" aria-expanded="false" aria-haspopup="dialog">
+            帮助
+          </button>
+          <div id="helpPopover" class="help-popover" hidden>
+            <div class="help-popover-panel" role="dialog" aria-modal="true"
+              aria-label="使用帮助">
+              <div class="sheet-header help-popover-header">
+                <h3>使用帮助</h3>
+                <button type="button" id="helpPopoverCloseBtn"
+                  class="ghost-btn">关闭</button>
+              </div>
+              <div class="help-content">
+                <p class="summary-text">1）条件可随时调整；选满 14 张后点「下一步」
+                  进入条件编辑，计算前确认即可。</p>
+                <p class="summary-text">2）在条件页设置自摸/点和、门前/副露、杠与
+                  时机。</p>
+                <p class="summary-text">3）点击计算后查看番种明细与总番。</p>
+                <p class="summary-text">提示：重置条件只清空条件，不会删除已选手牌。
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
       </header>
       <p id="versionBadge" class="version-badge">版本信息加载中...</p>
 
@@ -45,7 +69,7 @@
         </div>
       </section>
 
-      <footer class="sticky-footer desktop-side-panel">
+      <footer id="desktopSidePanel" class="sticky-footer desktop-side-panel">
         <div id="desktopContextHost" class="desktop-context-host"></div>
         <p id="wizardStepHint" class="hint">步骤 1/2：选择 14 张手牌</p>
         <p id="contextSummary" class="hint">自摸 · 门前清 · 无杠</p>
@@ -257,13 +281,15 @@
         aria-label="使用帮助">
         <div class="sheet-header">
           <h3>使用帮助</h3>
-          <button id="helpCloseBtn" data-close="help" class="ghost-btn">
+          <button id="helpCloseBtn" type="button" class="ghost-btn">
             关闭
           </button>
         </div>
         <div class="help-content">
-          <p class="summary-text">1）先选满 14 张手牌，再进入条件设置。</p>
-          <p class="summary-text">2）在条件页设置自摸/点和、门前/副露、杠与时机。</p>
+          <p class="summary-text">1）条件可随时调整；选满 14 张后点「下一步」
+            进入条件编辑，计算前确认即可。</p>
+          <p class="summary-text">2）在条件页设置自摸/点和、门前/副露、杠与
+            时机。</p>
           <p class="summary-text">3）点击计算后查看番种明细与总番。</p>
           <p class="summary-text">提示：重置条件只清空条件，不会删除已选手牌。</p>
         </div>

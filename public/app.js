@@ -80,7 +80,13 @@ const stateActions = createStateActions(store, {
   renderResultModal
 });
 const modalActions = createModalActions(store, modalRefs, {
-  onBeforeClosePicker: () => stateActions.closeTileContextMenu?.()
+  onBeforeClosePicker: () => stateActions.closeTileContextMenu?.(),
+  onBeforeOpenModal: () => {
+    const pop = byId("helpPopover");
+    if (pop) pop.hidden = true;
+    const moreBtn = byId("moreBtn");
+    if (moreBtn) moreBtn.setAttribute("aria-expanded", "false");
+  }
 });
 
 wizardUi.afterPickerSync = () => {

@@ -13,6 +13,7 @@ import {
 
 test("ui flow opens and closes modal states", () => {
   let state = createUiFlowState();
+  assert.equal(state.modal.help, false);
   assert.equal(state.modal.picker, false);
   state = openModal(state, "picker");
   assert.equal(state.modal.picker, true);

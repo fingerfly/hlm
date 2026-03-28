@@ -36,3 +36,20 @@ test("openModalByKey keeps only one modal open at a time", () => {
   assert.equal(store.uiState.modal.result, false);
   assert.equal(store.uiState.modal.help, true);
 });
+
+test("openModalByKey invokes onBeforeOpenModal before state change", () => {
+  const store = { uiState: createUiFlowState() };
+  const modalRefs = {
+    picker: createModalEl(),
+    context: createModalEl(),
+    result: createModalEl(),
+    help: createModalEl()
+  };
+  const order = [];
+  const actions = createModalActions(store, modalRefs, {
+    onBeforeOpenModal: () => order.push("before")
+  });
+  actions.openModalByKey("picker");
+  assert.deepEqual(order, ["before"]);
+  assert.equal(store.uiState.modal.picker, true);
+});

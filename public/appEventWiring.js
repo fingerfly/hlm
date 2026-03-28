@@ -32,7 +32,28 @@ function isDesktopInlineContext() {
 }
 
 /**
- * Build open/close handlers for help modal with focus restore.
+ * True when help should use the anchored popover instead of `#helpModal`.
+ *
+ * @returns {boolean}
+ */
+export function isDesktopHelpPopover() {
+  return isDesktopInlineContext();
+}
+
+function setHelpPopoverVisible(byId, visible) {
+  const pop = byId("helpPopover");
+  if (!pop) return;
+  pop.hidden = !visible;
+}
+
+function syncMoreBtnExpanded(byId, expanded) {
+  const moreBtn = byId("moreBtn");
+  if (!moreBtn) return;
+  moreBtn.setAttribute("aria-expanded", expanded ? "true" : "false");
+}
+
+/**
+ * Build open/close handlers for help (popover on desktop, modal on narrow).
  *
  * @param {(id: string) => HTMLElement|null} byId - Id lookup helper.
  * @param {{openModalByKey: Function, closeModalByKey: Function}} modalActions
@@ -42,7 +63,12 @@ export function createHelpHandlers(byId, modalActions) {
   let returnFocusEl = null;
 
   const closeHelp = () => {
-    modalActions.closeModalByKey("help");
+    if (isDesktopHelpPopover()) {
+      setHelpPopoverVisible(byId, false);
+      syncMoreBtnExpanded(byId, false);
+    } else {
+      modalActions.closeModalByKey("help");
+    }
     if (returnFocusEl && typeof returnFocusEl.focus === "function") {
       returnFocusEl.focus();
     }
@@ -50,6 +76,13 @@ export function createHelpHandlers(byId, modalActions) {
 
   const openHelp = (event) => {
     returnFocusEl = event?.currentTarget || byId("moreBtn");
+    if (isDesktopHelpPopover()) {
+      setHelpPopoverVisible(byId, true);
+      syncMoreBtnExpanded(byId, true);
+      const btn = byId("helpPopoverCloseBtn");
+      if (btn && typeof btn.focus === "function") btn.focus();
+      return;
+    }
     modalActions.openModalByKey("help");
     const closeBtn = byId("helpCloseBtn");
     if (closeBtn && typeof closeBtn.focus === "function") closeBtn.focus();
@@ -215,9 +248,18 @@ export function wireAppEvents(params) {
     stateActions.syncHomeState();
   });
   bindClick("helpCloseBtn", closeHelp);
+  bindClick("helpPopoverCloseBtn", closeHelp);
   const helpModal = byId("helpModal");
   if (helpModal) {
     helpModal.addEventListener("keydown", (event) => {
+      if (event.key !== "Escape") return;
+      event.preventDefault();
+      closeHelp();
+    });
+  }
+  const helpPopover = byId("helpPopover");
+  if (helpPopover) {
+    helpPopover.addEventListener("keydown", (event) => {
       if (event.key !== "Escape") return;
       event.preventDefault();
       closeHelp();

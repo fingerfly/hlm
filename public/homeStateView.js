@@ -101,6 +101,18 @@ export function syncHomeStateView(input) {
   if (refs.wizardNextBtn) {
     refs.wizardNextBtn.textContent = wizardNextLabel(wizardStep);
   }
+  if (refs.desktopSidePanelEl) {
+    const desktop =
+      globalThis.matchMedia?.("(min-width: 1024px)")?.matches === true;
+    refs.desktopSidePanelEl.classList.toggle(
+      "desktop-step-1",
+      desktop && wizardStep === 1
+    );
+    refs.desktopSidePanelEl.classList.toggle(
+      "desktop-step-2",
+      desktop && wizardStep === 2
+    );
+  }
   if (refs.openPickerBtn) refs.openPickerBtn.hidden = wizardStep !== 1;
   if (refs.clearHandBtn) {
     refs.clearHandBtn.hidden = wizardStep !== 1 || pickedCount === 0;

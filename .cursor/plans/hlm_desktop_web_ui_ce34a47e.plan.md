@@ -190,3 +190,62 @@ flowchart LR
   - Density iteration (2026-03-27): desktop split changed to wider left pane
     (2.6fr/360-430px), context spacing tightened, tile preview expanded to
     10 columns on desktop; full automated gates re-run pass.
+
+## Snapshot feedback (initial page, v4.9.2)
+
+User-reported issues (from desktop screenshot):
+
+1. **Stacked surfaces (help over conditions)**
+   - "使用帮助" modal sits on top of "和牌条件" while both read as blocking
+     overlays. That breaks the one-surface-at-a-time mental model and hides
+     the condition form.
+   - **Corrective actions (planned):**
+     - When opening help, ensure no second layer reads as a full-screen modal:
+       either use a compact popover anchored to 帮助, or temporarily hide
+       inline context / dim only the main pane, not a second card stack.
+     - Audit `#contextModal`: if inline host moved the sheet, confirm the
+       empty modal root never paints backdrop or stacks with `#helpModal`.
+     - Optional: help as right-rail or `dialog` without full-viewport dim
+       when desktop inline context is visible.
+
+2. **Wasted viewport (right and bottom)**
+   - Content stays left-heavy; large grey areas remain.
+   - **Corrective actions (planned):**
+     - Consider `min-height` on `.app-shell` or vertical centering for
+       desktop so the block does not hug the top.
+     - Optional third band: e.g. tips, keyboard shortcuts, or version in a
+       footer row that uses horizontal space without clutter.
+
+3. **Wizard copy vs visible UI (step 1)**
+   - Help says "先选满 14 张再进条件" but 和牌条件 is visible on first paint
+     (0/14), which feels contradictory.
+   - **Corrective actions (planned):**
+     - On step 1 desktop: show only hand + nav; keep conditions collapsed or
+       behind "下一步" until step 2, **or** change help copy to match
+       "条件可随时调整，计算前确认即可".
+     - Align inline context visibility with `wizard.step` in DOM/CSS.
+
+4. **Primary task obscured**
+   - Modals draw focus away from 当前手牌.
+   - **Corrective actions (planned):** Reduce modal use on first paint;
+     reserve help for explicit user action and single layer.
+
+**Next execution slice:** Implement items 1 and 3 first (stacking + step-1
+visibility/copy), then re-check layout density (item 2).
+
+## Snapshot fix slice (2026-03-28)
+
+- Status: `done` — implemented and gated.
+- Scope (delivered):
+  1. Desktop step 1: hide inline `desktopContextHost` (and reset CTA) via
+     `desktop-step-1` / `desktop-step-2` on `#desktopSidePanel`; aligned with
+     wizard step (`public/homeStateView.js`, `public/styles-responsive.css`).
+  2. Desktop help: `#helpPopover` anchored under **帮助** (≥1024px); narrow
+     viewports keep `#helpModal` (`public/index.html`, `public/appEventWiring.js`,
+     `public/app.js` + `onBeforeOpenModal` in `public/appModalActions.js`).
+  3. Help copy updated in modal + popover (`public/index.html`).
+  4. Desktop shell `min-height` + padding (`public/styles-responsive.css`).
+- Gates: `npm test` + `npm run quality:complexity` pass (2026-03-28);
+  `cloc` on `appEventWiring.js` ~201 code lines (wiring module; split deferred).
+- Remaining (manual): desktop browser matrix + a11y spot-checks per master
+  **NextActions**; user visual confirmation for snapshot items 1–3.

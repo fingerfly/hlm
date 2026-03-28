@@ -302,6 +302,12 @@ practicality upgrade exit (or after Pages if practicality is deferred).
     `and expanded desktop tile preview density to 10 columns.`
   - `Updated responsive test assertions and re-ran full automated gates`
     `(unit/integration/regression/full + complexity) with pass.`
+  - `User snapshot v4.9.2 (initial page): documented issues and corrective`
+    `actions in child plan section "Snapshot feedback (initial page, v4.9.2)".`
+  - `2026-03-28: snapshot fix slice completed — popover help (desktop),`
+    `step-1 hides inline context + reset CTA, help copy + shell min-height;`
+    `tests: appEventWiring, appEventBindings, appModalActions, uiFlowState,`
+    `indexStylesheetLinks; npm test + quality:complexity pass.`
   - `Desktop fix iteration 2 (2026-03-27): context sheet moved inline into`
     `desktop side panel host, syncWizardModals skips context modal on desktop,`
     `and createModalActions enforces one-modal-at-a-time behavior.`

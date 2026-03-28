@@ -9,7 +9,8 @@ function initialModalState() {
   return {
     picker: false,
     context: false,
-    result: false
+    result: false,
+    help: false
   };
 }
 
@@ -28,7 +29,8 @@ function clampWizardStep(step) {
  * Build a fresh UI flow state object.
  *
  * @returns {{hand: {tiles: string[], activeTab: string},
- *   modal: {picker: boolean, context: boolean, result: boolean},
+ *   modal: {picker: boolean, context: boolean, result: boolean,
+ *     help: boolean},
  *   result: unknown}}
  */
 export function createUiFlowState() {

@@ -28,6 +28,47 @@
     grid-template-columns: minmax(0, 2.6fr) minmax(360px, 430px);
     gap: 18px;
     align-items: start;
+    min-height: calc(100vh - 24px);
+    padding-bottom: 24px;
+    box-sizing: border-box;
+  }
+
+  .nav-help-cluster {
+    position: relative;
+  }
+
+  .help-popover {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    z-index: 60;
+    width: min(380px, calc(100vw - 32px));
+  }
+
+  .help-popover-panel {
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: var(--card);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.18);
+    overflow: hidden;
+  }
+
+  .help-popover-header {
+    padding: 12px 14px 8px;
+  }
+
+  .help-popover .help-content {
+    padding: 0 14px 14px;
+    max-height: min(70vh, 420px);
+    overflow-y: auto;
+  }
+
+  .desktop-side-panel.desktop-step-1 .desktop-context-host {
+    display: none;
+  }
+
+  .desktop-side-panel.desktop-step-1 #resetContextBtn {
+    display: none;
   }
 
   .container.app-shell .nav-bar,
