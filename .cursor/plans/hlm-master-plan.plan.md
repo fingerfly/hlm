@@ -67,10 +67,11 @@ todos:
     status: completed
   - id: track-desktop-web-ui-help
     content: >
-      Desktop/macOS web UI uplift with two-pane layout and explicit help entry;
-      replace ambiguous top-right action and keep mobile flow stable. Child:
-      hlm_desktop_web_ui_ce34a47e.plan.md
-    status: in_progress
+      Desktop/macOS web UI: baseline hlm_desktop_web_ui_ce34a47e.plan.md;
+      workspace slice desktop_workspace_ui_76498db2.plan.md (implemented);
+      hlm_desktop_context_controls_dual_ui.plan.md (和牌条件桌面双套 UI:
+      implemented; regression/manual follow-up optional).
+    status: completed
 isProject: false
 ---
 
@@ -162,9 +163,12 @@ not present in current workspace)
 - Five-principles exact scoring (**in_progress**; exact decomposition + five
   counting-principles constraint engine and full test hardening):
 [hlm-five-principles-exact-engine_cf4e8446.plan.md](hlm-five-principles-exact-engine_cf4e8446.plan.md)
-- Desktop web UI + help entry (**pending**; desktop two-pane layout, help
-  action repurpose, explicit reset path):
-[hlm_desktop_web_ui_ce34a47e.plan.md](hlm_desktop_web_ui_ce34a47e.plan.md)
+- Desktop web UI + help (**in_progress**; baseline:
+  [hlm_desktop_web_ui_ce34a47e.plan.md](hlm_desktop_web_ui_ce34a47e.plan.md);
+  workspace (implemented):
+  [desktop_workspace_ui_76498db2.plan.md](desktop_workspace_ui_76498db2.plan.md);
+  **next slice** 和牌条件桌面双套 UI:
+  [hlm_desktop_context_controls_dual_ui.plan.md](hlm_desktop_context_controls_dual_ui.plan.md))
 - Historical supporting plans (traceability only):
   - [hlm_版本升级工具与中文术语统一_35161103.plan.md](hlm_版本升级工具与中文术语统一_35161103.plan.md)
   - `spike_full_automation_6a79ecff.plan.md` (historical reference; file
@@ -243,9 +247,14 @@ practicality upgrade exit (or after Pages if practicality is deferred).
 ### Current delivery queue (post-baseline)
 
 - TrackId: `track-desktop-web-ui-help`
-- ChildPlan:
-  [hlm_desktop_web_ui_ce34a47e.plan.md](hlm_desktop_web_ui_ce34a47e.plan.md)
-- TrackTodoStatus: `in_progress` (implementation checkpoint 2026-03-27)
+- ChildPlans (ordered):
+  - Baseline / history:
+    [hlm_desktop_web_ui_ce34a47e.plan.md](hlm_desktop_web_ui_ce34a47e.plan.md)
+  - Workspace (implemented):
+    [desktop_workspace_ui_76498db2.plan.md](desktop_workspace_ui_76498db2.plan.md)
+  - **Active slice (execute next):**
+    [hlm_desktop_context_controls_dual_ui.plan.md](hlm_desktop_context_controls_dual_ui.plan.md)
+- TrackTodoStatus: `in_progress` (context desktop dual UI queued)
 - Prior closed: `track-five-principles-exact-scoring` →
   [hlm-five-principles-exact-engine_cf4e8446.plan.md](hlm-five-principles-exact-engine_cf4e8446.plan.md)
   (2026-03-22)
@@ -260,14 +269,16 @@ practicality upgrade exit (or after Pages if practicality is deferred).
 
 - Owner: `project-owner`
 - OverallStatus: `in_progress`
-- ProgressPercent: `80` (implementation + automated gates complete)
-- ActivePhase: `desktop-web-ui-help-manual-gates`
+- ProgressPercent: `92` (workspace + dual UI + desktop shell vertical pack fix)
+- ActivePhase: `desktop-post-dual-ui-hardening`
 - Focus:
-  - `Execute desktop/macOS UI uplift with two-pane layout and stronger`
-    `information hierarchy while preserving current mobile flow.`
-  - `Repurpose top-right action into explicit help entry and move reset`
-    `to a clearly labeled, non-ambiguous control.`
-  - `Apply full TDD + test/complexity/cloc gates before marking track done.`
+  - `Regression: inline picker + context form + reset after dual-UI; manual`
+    `keyboard through select/number on desktop host.`
+  - `Desktop shell: align-content:start drift fix shipped in v4.9.4; user`
+    `confirmed homepage layout resolved.`
+  - `Preserve hlm_desktop_web_ui baseline: inline context host, help popover,`
+    `two-pane shell.`
+  - `TDD + npm test + quality:complexity + cloc per slice gates.`
 - ExitGateCheck:
   - Unit: `pass`
   - Integration: `pass`
@@ -283,19 +294,22 @@ practicality upgrade exit (or after Pages if practicality is deferred).
 - RisksAndBlockers:
   - `No blocker; primary risk is desktop CSS regressions on tablet/mobile`
     `breakpoints without tight responsive scoping and test coverage.`
+  - `Workspace slice: moving picker .sheet across breakpoint requires`
+    `resize-safe remount and setModalOpen/host sync to avoid orphaned DOM`
+    `or duplicate sheets.`
+  - `Context dual UI: duplicate controls risk desync from hidden fields;`
+    `centralize sync and cover resetContext + resize in tests.`
   - `Potential risk: help overlay focus handling and reset-action clarity`
     `can regress keyboard UX or cause accidental context loss.`
   - `Manual desktop browser matrix remains pending; automated browser-use`
     `validation was blocked by regional model availability.`
 - NextActions:
-  - `Keep child plan at hlm_desktop_web_ui_ce34a47e.plan.md as execution`
-    `source of truth.`
-  - `Complete manual keyboard accessibility checks for help/reset flow`
-    `and focus return behavior.`
-  - `Complete desktop browser matrix (Chrome + Safari) visual/flow`
-    `verification for two-pane layout and modal interactions.`
-  - `After manual gates pass, mark track-desktop-web-ui-help completed`
-    `and sync child gates-and-closeout todo.`
+  - `Regression pass: inline picker + context form + reset after dual-UI.`
+  - `Manual: keyboard through select/number + mobile matrix unchanged.`
+  - `Desktop browser matrix (Chrome + Safari): two-pane, inline picker, context`
+    `controls (pending historical item).`
+  - `After context dual-UI gates pass, update plan status + consider track`
+    `closeout if no further desktop slices.`
 - ValidationEvidence:
   - `Desktop density iteration 3 (2026-03-27): adjusted shell split to`
     `2.6fr + fixed-width right rail, tightened right-panel/context spacing,`
@@ -308,6 +322,30 @@ practicality upgrade exit (or after Pages if practicality is deferred).
     `step-1 hides inline context + reset CTA, help copy + shell min-height;`
     `tests: appEventWiring, appEventBindings, appModalActions, uiFlowState,`
     `indexStylesheetLinks; npm test + quality:complexity pass.`
+  - `2026-03-28: desktop workspace UI plan created and linked —`
+    `desktop_workspace_ui_76498db2.plan.md (hand-first, inline picker,`
+    `compact rail); master + desktop child plan cross-links updated;`
+    `status ready_for_execution pending implementation.`
+  - `2026-03-28: desktop workspace UI implemented — #desktopPickerHost,`
+    `desktopPickerMount.js, setModalOpen host sync, responsive CSS (inline`
+    `picker + compact rail + larger hand); tests: modalUi, desktopPickerMount,`
+    `indexStylesheetLinks; npm test + quality:complexity pass.`
+  - `2026-03-28: hlm_desktop_context_controls_dual_ui.plan.md added — desktop`
+    `dual UI for 和牌条件 (select + number on desktop, mobile UI retained;`
+    `hidden sync); linked from master + hlm_desktop_web_ui follow-on; status`
+    `ready_for_execution.`
+  - `2026-03-28: context dual UI implemented — index.html mobile/desktop`
+    `wrappers; styles-modals + styles-responsive .desktop-context-host toggles;`
+    `syncContextDesktopMirrors + wireDesktopContextControls (contextWiring.js);`
+    `resetContext mirrors (uiBindings.js); wireAppEvents initial sync;`
+    `tests: syncContextDesktopMirrors.test.js, indexStylesheetLinks;`
+    `npm test + quality:complexity pass; cloc public/contextWiring.js`
+    `(181 code lines; cohesion kept vs split). Line-wrap fixes:`
+    `desktopPickerMount.js, modalUi.js.`
+  - `2026-03-28: desktop shell vertical layout — align-content:start on`
+    `.container.app-shell (min-height + default grid row stretch had pushed`
+    `version / hand / rail mid-viewport). CHANGELOG [4.9.4]; version bump`
+    `4.9.4 / build 2; user confirmed resolved.`
   - `Desktop fix iteration 2 (2026-03-27): context sheet moved inline into`
     `desktop side panel host, syncWizardModals skips context modal on desktop,`
     `and createModalActions enforces one-modal-at-a-time behavior.`
@@ -383,9 +421,8 @@ practicality upgrade exit (or after Pages if practicality is deferred).
     now orchestrates principle steps only. Added principle-layer unit tests for
     these rules. Re-ran full gates:
     unit/regression/integration/complexity/full all pass.`
-- LastUpdated: `2026-03-27` (desktop-web-ui-help implementation checkpoint:
-  automated gates passed; iteration 3 desktop density rebalance applied;
-  awaiting user visual confirmation + browser-matrix closeout)
+- LastUpdated: `2026-03-28` (workspace implemented; context dual-UI child plan
+    linked; implementation of that slice pending)`
 - TrackCloseout:
   - `track-five-principles-exact-scoring completed on 2026-03-22.`
 

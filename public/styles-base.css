@@ -27,6 +27,12 @@ body {
   align-items: center;
 }
 
+.nav-app-title {
+  font-size: 18px;
+  font-weight: 650;
+  margin: 0;
+}
+
 .nav-bar h1 {
   margin: 0;
   font-size: 24px;

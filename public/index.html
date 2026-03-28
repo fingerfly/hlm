@@ -29,7 +29,7 @@
     <!-- Home screen keeps primary actions always visible on mobile. -->
     <main class="container app-shell">
       <header class="nav-bar">
-        <span></span>
+        <strong class="nav-app-title">和了么</strong>
         <div class="nav-help-cluster">
           <button id="moreBtn" type="button" class="icon-btn"
             aria-label="打开帮助" aria-expanded="false" aria-haspopup="dialog">
@@ -68,6 +68,9 @@
           <button id="clearHandBtn" class="ghost-btn">清空</button>
         </div>
       </section>
+
+      <!-- Desktop ≥1024px: picker .sheet moves here (see desktopPickerMount.js). -->
+      <div id="desktopPickerHost" class="desktop-picker-host" hidden></div>
 
       <footer id="desktopSidePanel" class="sticky-footer desktop-side-panel">
         <div id="desktopContextHost" class="desktop-context-host"></div>
@@ -164,74 +167,115 @@
           <section class="context-group" aria-labelledby="ctxFlowerTitle">
             <h4 id="ctxFlowerTitle" class="context-group-title">花牌</h4>
             <p class="context-hint">花牌张数不计入 14 张手牌（每花 1 番）。</p>
-            <div class="stepper-row">
-              <button type="button" id="flowerDec" class="stepper-btn"
-                aria-label="减少花牌张数">−</button>
-              <span id="flowerCountLabel" class="stepper-value"
-                aria-live="polite">0</span>
-              <input type="hidden" id="flowerCount" value="0" />
-              <button type="button" id="flowerInc" class="stepper-btn"
-                aria-label="增加花牌张数">+</button>
+            <div class="context-control-mobile">
+              <div class="stepper-row">
+                <button type="button" id="flowerDec" class="stepper-btn"
+                  aria-label="减少花牌张数">−</button>
+                <span id="flowerCountLabel" class="stepper-value"
+                  aria-live="polite">0</span>
+                <input type="hidden" id="flowerCount" value="0" />
+                <button type="button" id="flowerInc" class="stepper-btn"
+                  aria-label="增加花牌张数">+</button>
+              </div>
+            </div>
+            <div class="context-control-desktop">
+              <div class="context-desktop-field">
+                <label for="flowerCountInput" class="context-label">花牌张数</label>
+                <input type="number" id="flowerCountInput" class="context-number-input"
+                  min="0" max="8" step="1" value="0"
+                  aria-label="花牌张数" />
+              </div>
             </div>
           </section>
           <section class="context-group" aria-labelledby="ctxKongTitle">
             <h4 id="ctxKongTitle" class="context-group-title">杠（组数）</h4>
             <p class="context-hint">暗杠与明杠组数合计不超过 4。</p>
-            <div class="stepper-field">
-              <span class="stepper-field-label">暗杠</span>
-              <div class="stepper-row">
-                <button type="button" id="kongAnDec" class="stepper-btn"
-                  aria-label="减少暗杠组数">−</button>
-                <span id="kongAnLabel" class="stepper-value"
-                  aria-live="polite">0</span>
-                <input type="hidden" id="kongAnCount" value="0" />
-                <button type="button" id="kongAnInc" class="stepper-btn"
-                  aria-label="增加暗杠组数">+</button>
+            <div class="context-control-mobile">
+              <div class="stepper-field">
+                <span class="stepper-field-label">暗杠</span>
+                <div class="stepper-row">
+                  <button type="button" id="kongAnDec" class="stepper-btn"
+                    aria-label="减少暗杠组数">−</button>
+                  <span id="kongAnLabel" class="stepper-value"
+                    aria-live="polite">0</span>
+                  <input type="hidden" id="kongAnCount" value="0" />
+                  <button type="button" id="kongAnInc" class="stepper-btn"
+                    aria-label="增加暗杠组数">+</button>
+                </div>
+              </div>
+              <div class="stepper-field">
+                <span class="stepper-field-label">明杠</span>
+                <div class="stepper-row">
+                  <button type="button" id="kongMingDec" class="stepper-btn"
+                    aria-label="减少明杠组数">−</button>
+                  <span id="kongMingLabel" class="stepper-value"
+                    aria-live="polite">0</span>
+                  <input type="hidden" id="kongMingCount" value="0" />
+                  <button type="button" id="kongMingInc" class="stepper-btn"
+                    aria-label="增加明杠组数">+</button>
+                </div>
               </div>
             </div>
-            <div class="stepper-field">
-              <span class="stepper-field-label">明杠</span>
-              <div class="stepper-row">
-                <button type="button" id="kongMingDec" class="stepper-btn"
-                  aria-label="减少明杠组数">−</button>
-                <span id="kongMingLabel" class="stepper-value"
-                  aria-live="polite">0</span>
-                <input type="hidden" id="kongMingCount" value="0" />
-                <button type="button" id="kongMingInc" class="stepper-btn"
-                  aria-label="增加明杠组数">+</button>
+            <div class="context-control-desktop">
+              <div class="context-desktop-kong-row">
+                <div class="context-desktop-field">
+                  <label for="kongAnCountInput" class="context-label">暗杠</label>
+                  <input type="number" id="kongAnCountInput"
+                    class="context-number-input" min="0" max="4" step="1"
+                    value="0" aria-label="暗杠组数" />
+                </div>
+                <div class="context-desktop-field">
+                  <label for="kongMingCountInput" class="context-label">明杠</label>
+                  <input type="number" id="kongMingCountInput"
+                    class="context-number-input" min="0" max="4" step="1"
+                    value="0" aria-label="明杠组数" />
+                </div>
               </div>
             </div>
             <input type="hidden" id="kongType" value="none" />
           </section>
           <section class="context-group" aria-labelledby="ctxTimingTitle">
             <h4 id="ctxTimingTitle" class="context-group-title">时机事件</h4>
-            <div class="radio-list timing-hig-list" role="radiogroup"
-              aria-label="时机事件">
-              <label class="radio-list-item timing-hig-row">
-                <input type="radio" name="timingEvent" value="none" checked />
-                <span class="timing-hig-label">无</span>
-                <span class="timing-hig-check" aria-hidden="true">✓</span>
-              </label>
-              <label class="radio-list-item timing-hig-row">
-                <input type="radio" name="timingEvent" value="haidi" />
-                <span class="timing-hig-label">海底捞月</span>
-                <span class="timing-hig-check" aria-hidden="true">✓</span>
-              </label>
-              <label class="radio-list-item timing-hig-row">
-                <input type="radio" name="timingEvent" value="hedi" />
-                <span class="timing-hig-label">河底捞鱼</span>
-                <span class="timing-hig-check" aria-hidden="true">✓</span>
-              </label>
-              <label class="radio-list-item timing-hig-row">
-                <input type="radio" name="timingEvent" value="gangshang" />
-                <span class="timing-hig-label">杠上开花</span>
-                <span class="timing-hig-check" aria-hidden="true">✓</span>
-              </label>
-              <label class="radio-list-item timing-hig-row">
-                <input type="radio" name="timingEvent" value="qianggang" />
-                <span class="timing-hig-label">抢杠和</span>
-                <span class="timing-hig-check" aria-hidden="true">✓</span>
-              </label>
+            <div class="context-control-mobile">
+              <div class="radio-list timing-hig-list" role="radiogroup"
+                aria-label="时机事件">
+                <label class="radio-list-item timing-hig-row">
+                  <input type="radio" name="timingEvent" value="none" checked />
+                  <span class="timing-hig-label">无</span>
+                  <span class="timing-hig-check" aria-hidden="true">✓</span>
+                </label>
+                <label class="radio-list-item timing-hig-row">
+                  <input type="radio" name="timingEvent" value="haidi" />
+                  <span class="timing-hig-label">海底捞月</span>
+                  <span class="timing-hig-check" aria-hidden="true">✓</span>
+                </label>
+                <label class="radio-list-item timing-hig-row">
+                  <input type="radio" name="timingEvent" value="hedi" />
+                  <span class="timing-hig-label">河底捞鱼</span>
+                  <span class="timing-hig-check" aria-hidden="true">✓</span>
+                </label>
+                <label class="radio-list-item timing-hig-row">
+                  <input type="radio" name="timingEvent" value="gangshang" />
+                  <span class="timing-hig-label">杠上开花</span>
+                  <span class="timing-hig-check" aria-hidden="true">✓</span>
+                </label>
+                <label class="radio-list-item timing-hig-row">
+                  <input type="radio" name="timingEvent" value="qianggang" />
+                  <span class="timing-hig-label">抢杠和</span>
+                  <span class="timing-hig-check" aria-hidden="true">✓</span>
+                </label>
+              </div>
+            </div>
+            <div class="context-control-desktop">
+              <label for="timingEventSelect" class="context-label">时机</label>
+              <select id="timingEventSelect" class="context-select-input"
+                aria-label="时机事件">
+                <option value="none">无</option>
+                <option value="haidi">海底捞月</option>
+                <option value="hedi">河底捞鱼</option>
+                <option value="gangshang">杠上开花</option>
+                <option value="qianggang">抢杠和</option>
+              </select>
             </div>
             <input type="hidden" id="timingEvent" value="none" />
           </section>

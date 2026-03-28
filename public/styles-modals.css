@@ -172,6 +172,44 @@
   background: color-mix(in srgb, var(--accent, #2563eb) 10%, transparent);
 }
 
+/* Desktop alt controls: default off; .desktop-context-host shows them ≥1024px. */
+.context-control-desktop {
+  display: none !important;
+}
+
+.context-desktop-field {
+  margin-bottom: 10px;
+}
+
+.context-desktop-kong-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: flex-end;
+}
+
+.context-desktop-kong-row .context-desktop-field {
+  flex: 1 1 120px;
+  margin-bottom: 0;
+}
+
+.context-number-input,
+.context-select-input {
+  width: 100%;
+  max-width: 220px;
+  min-height: 44px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: #fff;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+.context-select-input {
+  cursor: pointer;
+}
+
 /* Result sheet: sticky summary + scroll body. */
 .result-sheet {
   max-height: 92vh;

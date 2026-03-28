@@ -16,7 +16,7 @@ todos:
     status: completed
   - id: gates-and-closeout
     content: Run full tests/complexity/cloc, then sync child and master plan statuses with consistency re-check.
-    status: in_progress
+    status: completed
 isProject: false
 ---
 
@@ -35,15 +35,36 @@ isProject: false
 
 ## Master Plan Linkage
 
-- Child plan target:
-  [hlm_desktop_web_ui_ce34a47e.plan.md](hlm_desktop_web_ui_ce34a47e.plan.md)
-- Master plan to update:
-  [hlm-master-plan.plan.md](hlm-master-plan.plan.md).
-- Add a new master track item with:
-  - Track id for desktop UI uplift + help action.
-  - Child plan link to this plan file.
-  - Status set to `in_progress` during execution; synchronize to `completed`
-    only after all gates pass.
+- This file is the **baseline** desktop + help child plan.
+- Master:
+  [hlm-master-plan.plan.md](hlm-master-plan.plan.md) — track
+  `track-desktop-web-ui-help` references this plan and the **active slice**
+  below.
+- Master track `track-desktop-web-ui-help`: workspace + context dual UI **shipped**
+  in **v4.9.4** (2026-03-28); see master **ValidationEvidence**. Residual items:
+  manual desktop browser matrix + regression passes (master **NextActions**).
+
+## Follow-on: Desktop workspace UI (active slice)
+
+- **Implemented 2026-03-28** (hand-first layout, inline picker under hand,
+  compact rail; mobile unchanged):
+  [desktop_workspace_ui_76498db2.plan.md](desktop_workspace_ui_76498db2.plan.md)
+- **Follow-up same release:** shell `align-content: start` vertical pack fix
+  (user-confirmed); recorded in that plan’s Follow-up section.
+- Scope is **desktop ≥1024px only**; does not replace this plan’s mobile/tablet
+  contracts or help/reset behavior.
+
+## Follow-on: 和牌条件桌面双套 UI（已完成）
+
+- **用户决策：** **桌面双套 UI** — 窄屏/移动端 **不替换** 现有控件；桌面（≥1024px）
+  在侧栏内联 context 中增加 **第二套** 控件并与 **hidden 真源** 双向同步。
+- **控件范围（详见子计划）：**
+  - **时机事件** → 桌面 **`<select>`**；移动 **保留** HIG `radio` 列表。
+  - **花牌 / 杠** → 桌面 **`input type="number"`**（含暗明合计 ≤4）；移动 **保留** 步进器。
+  - **和牌方式、门前/副露** → **两套共用** 现有分段 `radio`（子计划列为低优先级再议）。
+- **权威执行说明、todos、门控：**
+  [hlm_desktop_context_controls_dual_ui.plan.md](hlm_desktop_context_controls_dual_ui.plan.md)
+  — **status `completed`**; shipped **v4.9.4**.
 
 ## Architecture Direction
 
@@ -230,8 +251,10 @@ User-reported issues (from desktop screenshot):
    - **Corrective actions (planned):** Reduce modal use on first paint;
      reserve help for explicit user action and single layer.
 
-**Next execution slice:** Implement items 1 and 3 first (stacking + step-1
-visibility/copy), then re-check layout density (item 2).
+**Next execution slice:** Baseline snapshot fixes are **done**. Proceed with
+[desktop_workspace_ui_76498db2.plan.md](desktop_workspace_ui_76498db2.plan.md)
+(inline picker + larger hand + compact rail). Optional later: revisit snapshot
+feedback item 2 (overall density / empty margin) after that slice lands.
 
 ## Snapshot fix slice (2026-03-28)
 
@@ -249,3 +272,14 @@ visibility/copy), then re-check layout density (item 2).
   `cloc` on `appEventWiring.js` ~201 code lines (wiring module; split deferred).
 - Remaining (manual): desktop browser matrix + a11y spot-checks per master
   **NextActions**; user visual confirmation for snapshot items 1–3.
+
+### Desktop layout hotfix (2026-03-28, overlap + grid)
+
+- **Cause:** `@media (min-width: 760px)` `.sticky-footer` used `left: 50%`,
+  `transform: translateX(-50%)`, and `max-width: 760px`. The 1024px block did
+  not override those, so the right rail stayed viewport-centered and drew on top
+  of the hand card (looked like “missing” slots 8–10 and broken two-pane).
+- **Fix:** In the 1024px `.container.app-shell .desktop-side-panel` rule, set
+  `left/right: auto`, `transform: none`, `max-width: none`, `width: 100%`;
+  `min-width: 0` on `.hand-card`; seven-column tile preview; nav title
+  **和了么**; shell `max-width: min(1440px, 100vw - 24px)`.

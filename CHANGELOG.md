@@ -4,7 +4,42 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [4.10.0] - 2026-03-28
+
+## [4.9.4] - 2026-03-28
+
+### Fixed
+- Desktop ≥1024px: `align-content: start` on `.container.app-shell` so
+  `min-height: 100vh` no longer stretches implicit grid rows — version line,
+  **当前手牌**, and the step rail stay packed under the header instead of
+  drifting mid-viewport (`public/styles-responsive.css`;
+  `tests/unit/indexStylesheetLinks.test.js`). User-confirmed resolved.
+
+### Added
+- Desktop workspace (≥1024px): `#desktopPickerHost` holds the tile picker
+  sheet under **当前手牌** (no bottom-sheet picker); `desktopPickerMount.js`
+  relocates DOM at breakpoint; `setModalOpen` toggles host visibility
+  (`public/index.html`, `public/app.js`, `public/modalUi.js`,
+  `public/styles-responsive.css`, `tests/unit/modalUi.test.js`,
+  `tests/unit/desktopPickerMount.test.js`).
+- Desktop inline 和牌条件 (inside `.desktop-context-host`, ≥1024px): alternate
+  **时机** `<select>`, 花牌 / 杠 `type="number"` inputs; mobile keeps HIG radios
+  and steppers. Hidden fields stay source of truth; `syncContextDesktopMirrors`
+  + `wireDesktopContextControls` in `public/contextWiring.js`;
+  `resetContext` syncs mirrors (`public/uiBindings.js`); CSS in
+  `public/styles-modals.css`, `public/styles-responsive.css`;
+  `tests/unit/syncContextDesktopMirrors.test.js`,
+  `tests/unit/indexStylesheetLinks.test.js`.
+
 ## [4.9.3] - 2026-03-28
+
+### Fixed
+- Desktop ≥1024px: clear `sticky-footer` centering from the 760px rules
+  (`left` / `transform` / `max-width`) so the right rail sits in the grid
+  column and no longer overlaps the hand card or covers tile slots
+  (`public/styles-responsive.css`).
+- Desktop hand preview: seven-column grid (two rows of seven slots) and
+  flexible chip sizing (`public/styles-responsive.css`).
 
 ### Changed
 - Desktop snapshot UX: step 1 hides inline 和牌条件 rail (`desktop-step-1`) and

@@ -14,6 +14,8 @@ import {
 import {
   wireContextSegmentedControls,
   wireContextSteppers,
+  wireDesktopContextControls,
+  syncContextDesktopMirrors,
   wireSlotClickToPicker
 } from "./contextWiring.js";
 
@@ -242,6 +244,8 @@ export function wireAppEvents(params) {
 
   wireContextSegmentedControls(byId, stateActions);
   wireContextSteppers(byId, stateActions);
+  wireDesktopContextControls(byId, stateActions);
+  syncContextDesktopMirrors(byId);
   bindClick("moreBtn", openHelp);
   bindClick("resetContextBtn", () => {
     resetContext(byId);

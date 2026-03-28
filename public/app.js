@@ -34,6 +34,10 @@ import {
   syncWizardModals
 } from "./appEventWiring.js";
 import { createAppRefs } from "./appRefs.js";
+import {
+  syncDesktopPickerSheet,
+  installDesktopPickerLayoutListener
+} from "./desktopPickerMount.js";
 
 /**
  * Purpose: Bootstrap HLM web UI and connect app modules.
@@ -88,6 +92,9 @@ const modalActions = createModalActions(store, modalRefs, {
     if (moreBtn) moreBtn.setAttribute("aria-expanded", "false");
   }
 });
+
+syncDesktopPickerSheet(byId);
+installDesktopPickerLayoutListener(byId, () => modalActions.updateModalUi());
 
 wizardUi.afterPickerSync = () => {
   if (localStorage.getItem("hlm_disableAutoWizardAdvance") === "1") {

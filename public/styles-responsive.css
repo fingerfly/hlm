@@ -22,15 +22,32 @@
 }
 
 @media (min-width: 1024px) {
+  /*
+   * Desktop shell: true two-column layout. Must override the 760px
+   * .sticky-footer rules (left: 50%, transform, max-width), or the
+   * side panel stays viewport-centered and overlaps the hand card.
+   */
   .container.app-shell {
-    max-width: 1440px;
+    max-width: min(1440px, calc(100vw - 24px));
+    width: 100%;
     display: grid;
-    grid-template-columns: minmax(0, 2.6fr) minmax(360px, 430px);
-    gap: 18px;
+    grid-template-columns: minmax(0, 1fr) minmax(320px, 400px);
+    gap: 20px;
+    column-gap: 24px;
     align-items: start;
+    /* Pack rows to the top; default stretch + min-height was inflating
+       implicit rows and leaving version / hand / rail visually mid-viewport. */
+    align-content: start;
     min-height: calc(100vh - 24px);
     padding-bottom: 24px;
     box-sizing: border-box;
+  }
+
+  .nav-app-title {
+    font-size: 22px;
+    font-weight: 650;
+    letter-spacing: -0.02em;
+    margin: 0;
   }
 
   .nav-help-cluster {
@@ -79,19 +96,75 @@
   .container.app-shell .hand-card {
     grid-column: 1 / 2;
     margin-bottom: 0;
+    min-width: 0;
+  }
+
+  /* Picker sheet lives in main column under hand (not bottom-sheet). */
+  .container.app-shell .desktop-picker-host {
+    grid-column: 1 / 2;
+    min-width: 0;
+  }
+
+  .container.app-shell .desktop-picker-host[hidden] {
+    display: none !important;
+  }
+
+  .desktop-picker-host .sheet {
+    width: 100%;
+    max-height: min(52vh, 540px);
+    margin: 0;
+    overflow: auto;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+    padding: 14px;
+    box-sizing: border-box;
+  }
+
+  .desktop-picker-host .tile-picker-grid {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+
+  #pickerModal.desktop-inline-picker {
+    position: static;
+    inset: auto;
+    background: transparent;
+    z-index: 0;
+    display: block;
+    pointer-events: none;
   }
 
   .container.app-shell .desktop-side-panel {
     grid-column: 2 / 3;
+    align-self: start;
     position: sticky;
     top: 12px;
     bottom: auto;
+    left: auto;
+    right: auto;
+    transform: none;
+    max-width: none;
+    width: 100%;
     margin-top: 0;
+    margin-left: 0;
+    margin-right: 0;
     border: 1px solid var(--border);
     border-radius: 16px;
     background: var(--card);
     backdrop-filter: none;
-    padding: 10px;
+    padding: 10px 12px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+    z-index: 1;
+  }
+
+  .container.app-shell .desktop-side-panel .hint {
+    font-size: 13px;
+    line-height: 1.35;
+    margin: 2px 0 6px;
+  }
+
+  .container.app-shell .desktop-side-panel .wizard-controls {
+    margin-bottom: 6px;
   }
 
   .desktop-context-host {
@@ -127,6 +200,14 @@
     padding-top: 10px;
   }
 
+  .desktop-context-host .context-control-desktop {
+    display: block !important;
+  }
+
+  .desktop-context-host .context-control-mobile {
+    display: none !important;
+  }
+
   .desktop-context-host .context-sheet-footer {
     padding: 8px 12px 10px;
   }
@@ -135,13 +216,16 @@
     border-top-width: 1px;
   }
 
+  /* Two rows of seven — full 14 slots visible without overlap. */
   .container.app-shell .tile-preview {
-    grid-template-columns: repeat(10, minmax(0, 1fr));
-    gap: 10px;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 12px;
+    min-height: 140px;
   }
 
   .container.app-shell .tile-chip {
-    min-height: 86px;
-    min-width: 72px;
+    min-height: 0;
+    min-width: 0;
+    aspect-ratio: 36 / 50;
   }
 }

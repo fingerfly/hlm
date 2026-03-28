@@ -5,7 +5,10 @@
  * - Attaches tab click handlers.
  */
 
-import { syncContextStepperDisplays } from "./contextWiring.js";
+import {
+  syncContextStepperDisplays,
+  syncContextDesktopMirrors
+} from "./contextWiring.js";
 
 /**
  * Sync hidden context inputs to their radio buttons.
@@ -50,6 +53,7 @@ export function resetContext(byId) {
   if (km) km.value = "0";
   syncContextStepperDisplays(byId);
   syncContextRadios(byId);
+  syncContextDesktopMirrors(byId);
   const autoCalculate = byId("autoCalculate");
   if (autoCalculate) autoCalculate.checked = true;
 }

@@ -8,6 +8,10 @@ const responsiveCssPath = resolve(
   import.meta.dirname,
   "../../public/styles-responsive.css"
 );
+const modalsCssPath = resolve(
+  import.meta.dirname,
+  "../../public/styles-modals.css"
+);
 const iconPath = resolve(import.meta.dirname, "../../public/favicon.svg");
 const appIconPath = resolve(import.meta.dirname, "../../public/icon-app.svg");
 const iconTraditionalPath = resolve(
@@ -65,6 +69,7 @@ test("index.html loads modular stylesheets", () => {
 
 test("index.html exposes help modal and explicit reset button", () => {
   const html = readFileSync(indexPath, "utf8");
+  assert.match(html, /class="nav-app-title"/);
   assert.match(html, /id="moreBtn"[^>]*>帮助<\/button>/);
   assert.match(html, /id="helpModal"/);
   assert.match(html, /id="helpPopover"/);
@@ -72,6 +77,7 @@ test("index.html exposes help modal and explicit reset button", () => {
   assert.match(html, /role="dialog"/);
   assert.match(html, /aria-modal="true"/);
   assert.match(html, /id="helpCloseBtn"/);
+  assert.match(html, /id="desktopPickerHost"/);
   assert.match(html, /id="desktopContextHost"/);
   assert.match(html, /id="resetContextBtn"/);
   assert.doesNotMatch(html, /id="moreBtn"[^>]*>\.\.\.<\/button>/);
@@ -81,10 +87,36 @@ test("styles-responsive includes desktop two-pane shell rules", () => {
   const css = readFileSync(responsiveCssPath, "utf8");
   assert.match(css, /@media\s*\(min-width:\s*1024px\)/);
   assert.match(css, /\.container\.app-shell/);
-  assert.match(css, /grid-template-columns:\s*minmax\(0,\s*2\.6fr\)/);
+  assert.match(css, /grid-template-columns:\s*minmax\(0,\s*1fr\)/);
+  assert.match(css, /transform:\s*none/);
   assert.match(css, /\.desktop-side-panel/);
   assert.match(css, /\.help-popover/);
   assert.match(css, /\.desktop-step-1/);
+  assert.match(css, /\.desktop-picker-host/);
+  assert.match(css, /#pickerModal\.desktop-inline-picker/);
+  assert.match(css, /\.desktop-context-host \.context-control-desktop/);
+  assert.match(css, /\.desktop-context-host \.context-control-mobile/);
+  assert.match(
+    css,
+    /\.container\.app-shell\s*\{[^}]*align-content:\s*start/s
+  );
+});
+
+test("styles-modals hides desktop context controls by default", () => {
+  const css = readFileSync(modalsCssPath, "utf8");
+  assert.match(css, /\.context-control-desktop/);
+  assert.match(css, /\.context-number-input/);
+  assert.match(css, /\.context-select-input/);
+});
+
+test("index.html includes desktop context dual-control ids", () => {
+  const html = readFileSync(indexPath, "utf8");
+  assert.match(html, /id="timingEventSelect"/);
+  assert.match(html, /id="flowerCountInput"/);
+  assert.match(html, /id="kongAnCountInput"/);
+  assert.match(html, /id="kongMingCountInput"/);
+  assert.match(html, /class="context-control-mobile"/);
+  assert.match(html, /class="context-control-desktop"/);
 });
 
 test("index.html links app icon assets", () => {
