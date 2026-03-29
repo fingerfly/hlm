@@ -130,14 +130,14 @@ flowchart TB
   `tests/unit/indexStylesheetLinks.test.js` updated.
 - Gates: `npm test`, `npm run quality:complexity` pass; `CHANGELOG.md` `[Unreleased]`.
 
-## Follow-up (2026-03-28, shipped v4.9.4)
+## Follow-up (2026-03-28, shipped v4.10.0)
 
 - **Shell vertical pack:** `.container.app-shell` gained `align-content: start`
   in `public/styles-responsive.css` so `min-height: 100vh` no longer stretched
   implicit grid rows (version / **当前手牌** / step rail drifting mid-viewport).
   Covered by `indexStylesheetLinks.test.js`; user confirmed resolved.
-- **Release notes:** `CHANGELOG.md` `[4.9.4]`; `package.json` / `appVersion.js`
-  `4.9.4` build `2`.
+- **Release notes:** `CHANGELOG.md` `[4.10.0]`; `package.json` /
+  `appVersion.js` **4.10.0** (build **1**).
 
 ## Related next slice
 

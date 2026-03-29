@@ -80,6 +80,8 @@ test("index.html exposes help modal and explicit reset button", () => {
   assert.match(html, /id="desktopPickerHost"/);
   assert.match(html, /id="desktopContextHost"/);
   assert.match(html, /id="resetContextBtn"/);
+  assert.match(html, /id="helpArticleTemplate"/);
+  assert.match(html, /id="helpFanLexiconRegion"/);
   assert.doesNotMatch(html, /id="moreBtn"[^>]*>\.\.\.<\/button>/);
 });
 

@@ -41,7 +41,7 @@ isProject: false
   `track-desktop-web-ui-help` references this plan and the **active slice**
   below.
 - Master track `track-desktop-web-ui-help`: workspace + context dual UI **shipped**
-  in **v4.9.4** (2026-03-28); see master **ValidationEvidence**. Residual items:
+  in **v4.10.0** (2026-03-28); see master **ValidationEvidence**. Residual items:
   manual desktop browser matrix + regression passes (master **NextActions**).
 
 ## Follow-on: Desktop workspace UI (active slice)
@@ -64,7 +64,16 @@ isProject: false
   - **和牌方式、门前/副露** → **两套共用** 现有分段 `radio`（子计划列为低优先级再议）。
 - **权威执行说明、todos、门控：**
   [hlm_desktop_context_controls_dual_ui.plan.md](hlm_desktop_context_controls_dual_ui.plan.md)
-  — **status `completed`**; shipped **v4.9.4**.
+  — **status `completed`**; shipped **v4.10.0**.
+
+## Follow-on: 中文帮助详版（已完成）
+
+- **Master 轨道：** `track-help-zh-expansion`（见
+  [hlm-master-plan.plan.md](hlm-master-plan.plan.md) 交付队列与 todos）。
+- **子计划：**
+  [hlm_help_zh_expansion_d3a197ba.plan.md](hlm_help_zh_expansion_d3a197ba.plan.md)
+  — 扩展 **帮助** 文案（目的、步骤、番种释义；popover / modal 单模板挂载）。
+- **计划状态：** `completed`（模板双端挂载、lexicon 折叠注入、测试与门禁通过）。
 
 ## Architecture Direction
 

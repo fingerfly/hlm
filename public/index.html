@@ -43,15 +43,7 @@
                 <button type="button" id="helpPopoverCloseBtn"
                   class="ghost-btn">关闭</button>
               </div>
-              <div class="help-content">
-                <p class="summary-text">1）条件可随时调整；选满 14 张后点「下一步」
-                  进入条件编辑，计算前确认即可。</p>
-                <p class="summary-text">2）在条件页设置自摸/点和、门前/副露、杠与
-                  时机。</p>
-                <p class="summary-text">3）点击计算后查看番种明细与总番。</p>
-                <p class="summary-text">提示：重置条件只清空条件，不会删除已选手牌。
-                </p>
-              </div>
+              <div class="help-content"></div>
             </div>
           </div>
         </div>
@@ -329,16 +321,43 @@
             关闭
           </button>
         </div>
-        <div class="help-content">
-          <p class="summary-text">1）条件可随时调整；选满 14 张后点「下一步」
-            进入条件编辑，计算前确认即可。</p>
-          <p class="summary-text">2）在条件页设置自摸/点和、门前/副露、杠与
-            时机。</p>
-          <p class="summary-text">3）点击计算后查看番种明细与总番。</p>
-          <p class="summary-text">提示：重置条件只清空条件，不会删除已选手牌。</p>
-        </div>
+        <div class="help-content"></div>
       </div>
     </section>
+    <template id="helpArticleTemplate">
+      <section class="help-section" aria-labelledby="helpPurposeTitle">
+        <h4 id="helpPurposeTitle" class="help-section-title">本应用是做什么的</h4>
+        <p class="summary-text">和了么用于国标麻将的计番与番种拆解。</p>
+        <p class="summary-text">在选满 14 张手牌并设置和牌条件后，应用输出番种
+          明细与总番，辅助核对。</p>
+        <p class="summary-text">说明文本不替代《中国麻将竞赛规则》原文；遇到规则
+          争议时，请以正式规则与裁判口径为准。</p>
+      </section>
+      <section class="help-section" aria-labelledby="helpStepsTitle">
+        <h4 id="helpStepsTitle" class="help-section-title">推荐使用步骤</h4>
+        <ol class="help-steps">
+          <li class="summary-text">录入 14 张手牌。桌面宽屏通常为内联选牌，手机/
+            窄屏通常为底部弹层选牌。</li>
+          <li class="summary-text">进入「和牌条件」，设置自摸/点和、门前/副露、
+            花牌、杠、时机等。</li>
+          <li class="summary-text">点击计算，查看和牌分组、番种明细与总番。</li>
+        </ol>
+        <p class="summary-text">提示：「重置条件」只清空条件；「清空」会清除
+          当前手牌。</p>
+      </section>
+      <section class="help-section" aria-labelledby="helpFanConceptTitle">
+        <h4 id="helpFanConceptTitle" class="help-section-title">番、起和与不计</h4>
+        <p class="summary-text">番是计分单位；番种能否叠加，受不计与互斥关系约束。
+        </p>
+        <p class="summary-text">本工具按内置规则与注册表做检测；是否满足赛事起和
+          门槛请以当场规程为准。</p>
+      </section>
+      <section id="helpFanLexiconRegion" class="help-section"
+        aria-label="番种释义列表" aria-labelledby="helpFanLexiconTitle">
+        <h4 id="helpFanLexiconTitle" class="help-section-title">番种释义</h4>
+        <p class="summary-text">下列释义为规则浓缩说明，点击条目可展开查看。</p>
+      </section>
+    </template>
     <script type="module" src="./app.js"></script>
   </body>
 </html>

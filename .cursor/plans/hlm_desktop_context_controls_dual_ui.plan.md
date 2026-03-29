@@ -96,7 +96,7 @@ isProject: false
    - 全量 `npm test`、`npm run quality:complexity`。
 
 5. **文档**  
-   - [`CHANGELOG.md`](../../CHANGELOG.md) 已记入 **`[4.9.4] - 2026-03-28`**（与本切片及桌面工作台一并发布）。  
+   - [`CHANGELOG.md`](../../CHANGELOG.md) 已记入 **`[4.10.0] - 2026-03-28`**（与本切片及桌面工作台一并发布）。  
    - 本文件与 master **ValidationEvidence** 已更新。
 
 ## 发布后跟进（2026-03-28）

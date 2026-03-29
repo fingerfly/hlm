@@ -38,6 +38,7 @@ import {
   syncDesktopPickerSheet,
   installDesktopPickerLayoutListener
 } from "./desktopPickerMount.js";
+import { mountHelpContent } from "./helpContentMount.js";
 
 /**
  * Purpose: Bootstrap HLM web UI and connect app modules.
@@ -142,6 +143,7 @@ wireAppEvents({
   renderTilePickerGrid,
   resetContext
 });
+mountHelpContent(byId);
 renderPickerByTab({
   store,
   tabTiles: TAB_TILES,

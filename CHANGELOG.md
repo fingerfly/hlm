@@ -4,32 +4,54 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [4.11.0] - 2026-03-29
+
+### Changed
+- 帮助内容升级为中文详版：新增程序目的、推荐步骤、番/起和/不计说明；
+  用单模板挂载到 `#helpPopover` 与 `#helpModal`，并从静态 lexicon
+  注入番种折叠释义列表，减少双端文案漂移
+  (`public/index.html`, `public/helpContentMount.js`, `public/app.js`,
+  `public/styles-components.css`, `tests/unit/indexStylesheetLinks.test.js`).
+
 ## [4.10.0] - 2026-03-28
 
-## [4.9.4] - 2026-03-28
-
-### Fixed
-- Desktop ≥1024px: `align-content: start` on `.container.app-shell` so
-  `min-height: 100vh` no longer stretches implicit grid rows — version line,
-  **当前手牌**, and the step rail stay packed under the header instead of
-  drifting mid-viewport (`public/styles-responsive.css`;
-  `tests/unit/indexStylesheetLinks.test.js`). User-confirmed resolved.
+Desktop ≥1024px: hand-first workspace with inline tile picker, compact wizard
+rail, and alternate 和牌条件 controls (select + number inputs). Mobile keeps
+bottom-sheet picker and existing radios/steppers. Includes shell grid fix so
+the version line, **当前手牌**, and step hints stay top-aligned under the header.
 
 ### Added
-- Desktop workspace (≥1024px): `#desktopPickerHost` holds the tile picker
-  sheet under **当前手牌** (no bottom-sheet picker); `desktopPickerMount.js`
-  relocates DOM at breakpoint; `setModalOpen` toggles host visibility
-  (`public/index.html`, `public/app.js`, `public/modalUi.js`,
-  `public/styles-responsive.css`, `tests/unit/modalUi.test.js`,
-  `tests/unit/desktopPickerMount.test.js`).
-- Desktop inline 和牌条件 (inside `.desktop-context-host`, ≥1024px): alternate
-  **时机** `<select>`, 花牌 / 杠 `type="number"` inputs; mobile keeps HIG radios
-  and steppers. Hidden fields stay source of truth; `syncContextDesktopMirrors`
-  + `wireDesktopContextControls` in `public/contextWiring.js`;
-  `resetContext` syncs mirrors (`public/uiBindings.js`); CSS in
-  `public/styles-modals.css`, `public/styles-responsive.css`;
-  `tests/unit/syncContextDesktopMirrors.test.js`,
-  `tests/unit/indexStylesheetLinks.test.js`.
+- **Inline tile picker (desktop):** `#desktopPickerHost` after **当前手牌**
+  holds the picker sheet (no bottom-sheet picker on wide viewports).
+  `desktopPickerMount.js` moves `#pickerModal > .sheet` at the `1024px`
+  breakpoint; `setModalOpen` syncs host `hidden` when
+  `#pickerModal.desktop-inline-picker` (`public/index.html`, `public/app.js`,
+  `public/modalUi.js`, `public/styles-responsive.css`).
+- **Desktop 和牌条件 dual UI:** Inside `.desktop-context-host`, **时机** uses
+  `<select>`; 花牌 / 暗杠·明杠 use `type="number"` (mobile keeps HIG timing
+  radios and steppers). Hidden inputs remain the source of truth;
+  `syncContextDesktopMirrors` + `wireDesktopContextControls` in
+  `public/contextWiring.js`; `resetContext` refreshes mirrors in
+  `public/uiBindings.js`; `wireAppEvents` runs desktop wiring and an initial
+  mirror sync (`public/appEventWiring.js`). Styles in `public/styles-modals.css`
+  and `public/styles-responsive.css` (`.context-control-desktop` vs
+  `.context-control-mobile` in the inline host).
+
+### Fixed
+- **Desktop shell vertical layout:** `align-content: start` on
+  `.container.app-shell` so `min-height: 100vh` no longer stretches implicit
+  grid rows (version badge, hand card, and right rail had appeared mid-viewport).
+  User-confirmed (`public/styles-responsive.css`;
+  `tests/unit/indexStylesheetLinks.test.js`).
+
+### Changed
+- **Version:** `package.json` / `src/config/appVersion.js` → **4.10.0** (build
+  **1**).
+
+### Tests
+- `tests/unit/modalUi.test.js`, `tests/unit/desktopPickerMount.test.js`,
+  `tests/unit/syncContextDesktopMirrors.test.js`, and
+  `tests/unit/indexStylesheetLinks.test.js` (desktop markup/CSS assertions).
 
 ## [4.9.3] - 2026-03-28
 
@@ -54,14 +76,27 @@ All notable changes to this project will be documented in this file.
 
 ## [4.9.2] - 2026-03-27
 
+### Notes
+- Tag recorded; no separate changelog entry (patch cadence).
+
 ## [4.9.1] - 2026-03-27
+
+### Notes
+- Tag recorded; no separate changelog entry (patch cadence).
 
 ## [4.9.0] - 2026-03-27
 
+### Notes
+- Tag recorded; no separate changelog entry (patch cadence).
+
 ## [4.8.0] - 2026-03-23
+
+### Notes
+- Tag recorded; no separate changelog entry.
 
 ## [4.7.0] - 2026-03-22
 
+### Summary
 Post-holistic UI polish release: context sheet, result modal, fan lexicon data,
 splash, and test/deps alignment. **Does not** ship a standalone result
 **和牌型** row (`#resultWinPattern`); and牌类型 stays in `explanation` text

@@ -72,6 +72,11 @@ todos:
       hlm_desktop_context_controls_dual_ui.plan.md (和牌条件桌面双套 UI:
       implemented; regression/manual follow-up optional).
     status: completed
+  - id: track-help-zh-expansion
+    content: >
+      中文帮助详版（程序目的、使用步骤、番种释义；复用 lexicon；单模板双端）。
+      Child: hlm_help_zh_expansion_d3a197ba.plan.md
+    status: completed
 isProject: false
 ---
 
@@ -157,18 +162,18 @@ not present in current workspace)
 - Holistic UX and scoring (completed 2026-03-22; flower tiles, splash,
   context modal HIG, click reduction, result modal + fan lexicon + row info):
 [hlm_holistic_ux_scoring.plan.md](hlm_holistic_ux_scoring.plan.md)
-- Post-holistic UI polish (**pending**; presets removal, timing HIG, result
-  layout, Guobiao lexicon, splash refinement):
+- Post-holistic UI polish (**completed** 2026-03-22; presets removal, timing
+  HIG, result layout, Guobiao lexicon, splash refinement):
 [hlm_post_holistic_ui_polish.plan.md](hlm_post_holistic_ui_polish.plan.md)
-- Five-principles exact scoring (**in_progress**; exact decomposition + five
-  counting-principles constraint engine and full test hardening):
+- Five-principles exact scoring (**completed**; decomposition-aware engine +
+  full test hardening):
 [hlm-five-principles-exact-engine_cf4e8446.plan.md](hlm-five-principles-exact-engine_cf4e8446.plan.md)
-- Desktop web UI + help (**in_progress**; baseline:
-  [hlm_desktop_web_ui_ce34a47e.plan.md](hlm_desktop_web_ui_ce34a47e.plan.md);
-  workspace (implemented):
-  [desktop_workspace_ui_76498db2.plan.md](desktop_workspace_ui_76498db2.plan.md);
-  **next slice** 和牌条件桌面双套 UI:
-  [hlm_desktop_context_controls_dual_ui.plan.md](hlm_desktop_context_controls_dual_ui.plan.md))
+- Desktop web UI + help入口 (**baseline / workspace / 双套条件** 已完成):
+  [hlm_desktop_web_ui_ce34a47e.plan.md](hlm_desktop_web_ui_ce34a47e.plan.md),
+  [desktop_workspace_ui_76498db2.plan.md](desktop_workspace_ui_76498db2.plan.md),
+  [hlm_desktop_context_controls_dual_ui.plan.md](hlm_desktop_context_controls_dual_ui.plan.md).
+- **中文帮助详版（执行队列下一项；**`pending`**）：**
+  [hlm_help_zh_expansion_d3a197ba.plan.md](hlm_help_zh_expansion_d3a197ba.plan.md)
 - Historical supporting plans (traceability only):
   - [hlm_版本升级工具与中文术语统一_35161103.plan.md](hlm_版本升级工具与中文术语统一_35161103.plan.md)
   - `spike_full_automation_6a79ecff.plan.md` (historical reference; file
@@ -246,15 +251,16 @@ practicality upgrade exit (or after Pages if practicality is deferred).
 
 ### Current delivery queue (post-baseline)
 
-- TrackId: `track-desktop-web-ui-help`
-- ChildPlans (ordered):
+- TrackId: `track-help-zh-expansion`（**completed**）
+- ChildPlans — 桌面 UI（已完成）:
   - Baseline / history:
     [hlm_desktop_web_ui_ce34a47e.plan.md](hlm_desktop_web_ui_ce34a47e.plan.md)
-  - Workspace (implemented):
+  - Workspace:
     [desktop_workspace_ui_76498db2.plan.md](desktop_workspace_ui_76498db2.plan.md)
-  - **Active slice (execute next):**
+  - 和牌条件桌面双套 UI:
     [hlm_desktop_context_controls_dual_ui.plan.md](hlm_desktop_context_controls_dual_ui.plan.md)
-- TrackTodoStatus: `in_progress` (context desktop dual UI queued)
+- **Active slice：** 无（help 中文扩展已完成）
+- TrackTodoStatus: `completed`（help 中文扩展）
 - Prior closed: `track-five-principles-exact-scoring` →
   [hlm-five-principles-exact-engine_cf4e8446.plan.md](hlm-five-principles-exact-engine_cf4e8446.plan.md)
   (2026-03-22)
@@ -269,14 +275,14 @@ practicality upgrade exit (or after Pages if practicality is deferred).
 
 - Owner: `project-owner`
 - OverallStatus: `in_progress`
-- ProgressPercent: `92` (workspace + dual UI + desktop shell vertical pack fix)
-- ActivePhase: `desktop-post-dual-ui-hardening`
+- ProgressPercent: `95` (help 中文扩展完成；等待桌面手工矩阵验证)
+- ActivePhase: `desktop-manual-validation`
 - Focus:
+  - `Primary: run manual desktop matrix (Chrome/Safari) after help expansion.`
   - `Regression: inline picker + context form + reset after dual-UI; manual`
     `keyboard through select/number on desktop host.`
-  - `Desktop shell: align-content:start drift fix shipped in v4.9.4; user`
-    `confirmed homepage layout resolved.`
-  - `Preserve hlm_desktop_web_ui baseline: inline context host, help popover,`
+  - `Desktop shell: align-content:start fix in v4.10.0; user confirmed.`
+  - `Preserve hlm_desktop_web_ui baseline: inline context host, help surfaces,`
     `two-pane shell.`
   - `TDD + npm test + quality:complexity + cloc per slice gates.`
 - ExitGateCheck:
@@ -301,16 +307,25 @@ practicality upgrade exit (or after Pages if practicality is deferred).
     `centralize sync and cover resetContext + resize in tests.`
   - `Potential risk: help overlay focus handling and reset-action clarity`
     `can regress keyboard UX or cause accidental context loss.`
+  - `Help 详版: 番种 <details> 列表变长时须验证窄屏 modal 与桌面 popover 滚动、`
+    ` tabindex 与 heading 层级，避免对话框内焦点陷阱回归.`
   - `Manual desktop browser matrix remains pending; automated browser-use`
     `validation was blocked by regional model availability.`
 - NextActions:
-  - `Regression pass: inline picker + context form + reset after dual-UI.`
+  - `Regression pass: inline picker + context form + reset after help expansion.`
   - `Manual: keyboard through select/number + mobile matrix unchanged.`
   - `Desktop browser matrix (Chrome + Safari): two-pane, inline picker, context`
     `controls (pending historical item).`
-  - `After context dual-UI gates pass, update plan status + consider track`
-    `closeout if no further desktop slices.`
 - ValidationEvidence:
+  - `2026-03-29: help-zh-expansion implemented — helpArticleTemplate +`
+    `helpContentMount (single-source dual mount), zh-Hans sorted fan details,`
+    `new help styles, indexStylesheetLinks assertions; npm test +`
+    `quality:complexity + cloc pass; child plan marked completed.`
+  - `Plan review-fix (pre-help-implementation): Consolidated Plan Index`
+    `aligned — post-holistic + five-principles marked completed (match`
+    `frontmatter); help-expansion child plan got implementation order,`
+    `acceptance criteria, gates, idempotency + sort rules; master Risks`
+    `help-scroll/focus note.`
   - `Desktop density iteration 3 (2026-03-27): adjusted shell split to`
     `2.6fr + fixed-width right rail, tightened right-panel/context spacing,`
     `and expanded desktop tile preview density to 10 columns.`
@@ -344,8 +359,8 @@ practicality upgrade exit (or after Pages if practicality is deferred).
     `desktopPickerMount.js, modalUi.js.`
   - `2026-03-28: desktop shell vertical layout — align-content:start on`
     `.container.app-shell (min-height + default grid row stretch had pushed`
-    `version / hand / rail mid-viewport). CHANGELOG [4.9.4]; version bump`
-    `4.9.4 / build 2; user confirmed resolved.`
+    `version / hand / rail mid-viewport). CHANGELOG [4.10.0]; version`
+    `identifiers consolidated to 4.10.0 (build 1); user confirmed resolved.`
   - `Desktop fix iteration 2 (2026-03-27): context sheet moved inline into`
     `desktop side panel host, syncWizardModals skips context modal on desktop,`
     `and createModalActions enforces one-modal-at-a-time behavior.`
