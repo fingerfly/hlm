@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [4.11.0] - 2026-03-30
+
 ### Changed
 - 帮助深链：地址栏 `#fan-<注册表ID>`（及既有 `-popover`/`-modal` 后缀）自动打开
   帮助、清空该侧搜索过滤、展开并滚动到对应释义；实现见 `installHelpFanHashNavigation`
