@@ -70,7 +70,10 @@ test("index.html loads modular stylesheets", () => {
 test("index.html exposes help modal and explicit reset button", () => {
   const html = readFileSync(indexPath, "utf8");
   assert.match(html, /class="nav-app-title"/);
-  assert.match(html, /id="moreBtn"[^>]*>帮助<\/button>/);
+  assert.match(
+    html,
+    /id="moreBtn"[\s\S]*?>\s*帮助\s*<\/button>/
+  );
   assert.match(html, /id="helpModal"/);
   assert.match(html, /id="helpPopover"/);
   assert.match(html, /id="desktopSidePanel"/);
@@ -82,6 +85,8 @@ test("index.html exposes help modal and explicit reset button", () => {
   assert.match(html, /id="resetContextBtn"/);
   assert.match(html, /id="helpArticleTemplate"/);
   assert.match(html, /id="helpFanLexiconRegion"/);
+  assert.match(html, /class="help-fan-search"/);
+  assert.match(html, /class="help-fan-empty\s/);
   assert.doesNotMatch(html, /id="moreBtn"[^>]*>\.\.\.<\/button>/);
 });
 

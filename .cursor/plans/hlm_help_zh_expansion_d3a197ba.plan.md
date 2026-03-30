@@ -108,6 +108,17 @@ flowchart LR
 
 - 列表变长：**滚动** 与 **焦点**须在实机复验（尤以 iOS Safari modal 为甚）。
 
+## 跟进（2026-03-30，已实施）
+
+- **番种释义 UX：** 模板内 `.help-fan-search`、`.help-fan-empty`；
+  `helpContentMount.js` 按 summary 过滤、`id="fan-<REGISTRY_ID>-popover|modal"`、
+  `data-fan-registry-id`、`matchesFanSearchQuery` 单测；`package.json` 测试 glob
+  加引号以跑全单元/回归/集成；相关断言与 mock 已校正。
+- **深链：** `#fan-<REGISTRY_ID>`（及 `-popover`/`-modal` 后缀）经
+  `helpFanHash.js` 打开帮助并定位条目；`wireAppEvents` 返回 `openHelp`。
+- **门禁：** `npm test`、`npm run quality:complexity` pass；
+  `cloc`：`helpContentMount.js` 80 code 行、`helpFanHash.js` 64 code 行。
+
 ## 实施记录（2026-03-29）
 
 - `public/index.html`：删除两处重复短文案，新增

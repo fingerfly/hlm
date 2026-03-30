@@ -4,9 +4,26 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
-## [4.11.0] - 2026-03-29
-
 ### Changed
+- 帮助深链：地址栏 `#fan-<注册表ID>`（及既有 `-popover`/`-modal` 后缀）自动打开
+  帮助、清空该侧搜索过滤、展开并滚动到对应释义；实现见 `installHelpFanHashNavigation`
+  (`public/helpFanHash.js`, `public/app.js`, `public/appEventWiring.js`,
+  `tests/unit/helpContentMountFilter.test.js`).
+
+- 番种释义：增加名称搜索过滤；每条释义 `details` 带稳定锚点
+  `id="fan-<注册表ID>-popover|modal"`（双端各一份，避免重复 id），并
+  `data-fan-registry-id`
+  (`public/index.html`, `public/helpContentMount.js`,
+  `public/styles-components.css`, `tests/unit/helpContentMountFilter.test.js`,
+  `tests/unit/indexStylesheetLinks.test.js`).
+
+- `package.json`：`test:unit` / `test:regression` / `test:integration` 的 glob
+  加引号交由 Node 解析，修复 POSIX `sh` 下未跑全各层测试文件的问题；同步修正
+  `indexStylesheetLinks` 多行「帮助」按钮断言与 `appEventWiring` 桌面帮助
+  关闭用例中缺失的 `helpPopoverCloseBtn` mock
+  (`package.json`, `tests/unit/indexStylesheetLinks.test.js`,
+  `tests/unit/appEventWiring.test.js`).
+
 - 帮助内容升级为中文详版：新增程序目的、推荐步骤、番/起和/不计说明；
   用单模板挂载到 `#helpPopover` 与 `#helpModal`，并从静态 lexicon
   注入番种折叠释义列表，减少双端文案漂移

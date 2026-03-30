@@ -164,7 +164,7 @@ export function syncWizardModals(result, modalActions) {
  * Attach all app-level event listeners.
  *
  * @param {object} params - DOM and action dependencies.
- * @returns {void}
+ * @returns {{openHelp: Function, closeHelp: Function}}
  */
 export function wireAppEvents(params) {
   const {
@@ -269,4 +269,5 @@ export function wireAppEvents(params) {
       closeHelp();
     });
   }
+  return { openHelp, closeHelp };
 }

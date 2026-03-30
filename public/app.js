@@ -39,6 +39,7 @@ import {
   installDesktopPickerLayoutListener
 } from "./desktopPickerMount.js";
 import { mountHelpContent } from "./helpContentMount.js";
+import { installHelpFanHashNavigation } from "./helpFanHash.js";
 
 /**
  * Purpose: Bootstrap HLM web UI and connect app modules.
@@ -130,7 +131,7 @@ function mountDesktopContextInline() {
 }
 mountDesktopContextInline();
 
-wireAppEvents({
+const { openHelp } = wireAppEvents({
   byId,
   bindTabButtons,
   bindCloseButtons,
@@ -144,6 +145,7 @@ wireAppEvents({
   resetContext
 });
 mountHelpContent(byId);
+installHelpFanHashNavigation({ byId, openHelp });
 renderPickerByTab({
   store,
   tabTiles: TAB_TILES,

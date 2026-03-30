@@ -3,15 +3,33 @@
  * Description:
  * - Clones one static template into popover and modal help bodies.
  * - Appends fan lexicon details from shared static entries.
+ * - Search filters by summary display name; stable per-host anchor ids.
  * - Uses idempotent data flag to avoid duplicate mounts.
  */
 import { FAN_LEXICON_ENTRIES } from "../src/config/fanLexiconEntries.js";
 import { getFanDisplayName } from "../src/rules/fanRegistry.js";
 
+/**
+ * @param {string} displayName - Summary line (localized fan name).
+ * @param {string} rawQuery - User search string.
+ * @returns {boolean}
+ */
+export function matchesFanSearchQuery(displayName, rawQuery) {
+  const q = rawQuery.trim().toLowerCase();
+  if (!q) return true;
+  return displayName.toLowerCase().includes(q);
+}
+
 function getHelpHosts() {
   const pop = document.querySelector("#helpPopover .help-content");
   const modal = document.querySelector("#helpModal .help-content");
   return [pop, modal].filter(Boolean);
+}
+
+/** @param {HTMLElement} helpContentHost */
+function fanAnchorSuffixForHost(helpContentHost) {
+  const root = helpContentHost.closest("#helpPopover, #helpModal");
+  return root?.id === "helpModal" ? "modal" : "popover";
 }
 
 function sortFanEntries(entries) {
@@ -24,12 +42,18 @@ function sortFanEntries(entries) {
   });
 }
 
-function appendFanDetails(region) {
+/**
+ * @param {HTMLElement} region
+ * @param {"popover"|"modal"} anchorSuffix
+ */
+function appendFanDetails(region, anchorSuffix) {
   const frag = document.createDocumentFragment();
   const entries = sortFanEntries(Object.entries(FAN_LEXICON_ENTRIES));
   for (const [id, text] of entries) {
     const details = document.createElement("details");
     details.className = "help-fan-entry";
+    details.id = `fan-${id}-${anchorSuffix}`;
+    details.dataset.fanRegistryId = id;
     const summary = document.createElement("summary");
     summary.textContent = getFanDisplayName(id) || id;
     const para = document.createElement("p");
@@ -39,6 +63,30 @@ function appendFanDetails(region) {
     frag.append(details);
   }
   region.append(frag);
+}
+
+/** @param {HTMLElement} helpContentHost */
+function wireFanSearch(helpContentHost) {
+  const input = helpContentHost.querySelector(".help-fan-search");
+  const region = helpContentHost.querySelector("#helpFanLexiconRegion");
+  if (!input || !region) return;
+  const empty = region.querySelector(".help-fan-empty");
+  const apply = () => {
+    const q = input.value;
+    const fanRows = region.querySelectorAll(".help-fan-entry");
+    let visible = 0;
+    for (const el of fanRows) {
+      const sum = el.querySelector("summary");
+      const name = sum ? sum.textContent : "";
+      const ok = matchesFanSearchQuery(name, q);
+      el.hidden = !ok;
+      if (ok) visible += 1;
+    }
+    if (empty) {
+      empty.hidden = !(q.trim() && visible === 0);
+    }
+  };
+  input.addEventListener("input", apply);
 }
 
 /**
@@ -56,7 +104,9 @@ export function mountHelpContent(byId) {
   for (const host of hosts) {
     host.replaceChildren(document.importNode(tpl.content, true));
     const region = host.querySelector("#helpFanLexiconRegion");
-    if (region) appendFanDetails(region);
+    const suffix = fanAnchorSuffixForHost(host);
+    if (region) appendFanDetails(region, suffix);
+    wireFanSearch(host);
     host.dataset.helpMounted = "1";
   }
 }

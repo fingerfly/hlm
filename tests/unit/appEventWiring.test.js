@@ -218,9 +218,11 @@ test("createHelpHandlers closes desktop popover without modal close", () => {
     focus: () => calls.push("focus:moreBtn"),
     setAttribute: (name, v) => calls.push(`attr:${name}=${v}`)
   };
+  const popClose = { focus: () => calls.push("focus:helpPopoverCloseBtn") };
   const byId = (id) => {
     if (id === "moreBtn") return moreBtn;
     if (id === "helpPopover") return popover;
+    if (id === "helpPopoverCloseBtn") return popClose;
     return null;
   };
   const modalActions = {
