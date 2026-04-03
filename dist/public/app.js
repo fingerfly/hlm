@@ -3,36 +3,30 @@ import { getDisplayVersion } from "../src/config/appVersion.js";
 import {
   createTilePickerState,
   addTileToPicker,
-  addTilesToPicker,
   selectPickerSlot,
   deleteSelectedSlot,
   clearTilePicker,
-  undoLastTile,
-  undoLastAction,
-  undoBySlot
+  undoLastTile
 } from "../src/app/tilePickerState.js";
 import { resolvePatternAction } from "../src/app/tilePatternActions.js";
-import { createUiFlowState, canCalculate } from "../src/app/uiFlowState.js";
-import { TAB_TILES } from "./uiConfig.js";
+import { createUiFlowState } from "../src/app/uiFlowState.js";
+import { TAB_TILES, CONTEXT_PRESETS } from "./uiConfig.js";
 import {
   renderTilePreview,
   renderPickerTabButtons,
-  renderTilePickerGrid
+  renderTilePickerGrid,
+  renderPatternActionButtons
 } from "./uiRenderers.js";
 import {
   resetContext,
-  bindTabButtons
+  bindTabButtons,
+  bindPresetButtons
 } from "./uiBindings.js";
-import { readStoredGestureTipDismissed } from "./pickerModeState.js";
 import { bindCloseButtons } from "./modalUi.js";
-import { renderResultModal } from "./resultModalView.js";
+import { renderResultModal, renderInfoTip } from "./resultModalView.js";
 import { createModalActions } from "./appModalActions.js";
 import { createStateActions } from "./appStateActions.js";
-import {
-  wireAppEvents,
-  renderPickerByTab,
-  syncWizardModals
-} from "./appEventWiring.js";
+import { wireAppEvents, renderPickerByTab } from "./appEventWiring.js";
 import { createAppRefs } from "./appRefs.js";
 
 /**
@@ -45,67 +39,36 @@ import { createAppRefs } from "./appRefs.js";
 const versionLabel = getDisplayVersion();
 const byId = (id) => document.getElementById(id);
 byId("versionBadge").textContent = `当前版本: ${versionLabel}`;
-const splashEl = byId("appSplash");
-const splashVersionEl = byId("splashVersion");
-if (splashVersionEl) {
-  splashVersionEl.textContent = `版本 ${versionLabel}`;
-}
 const { refs, modalRefs } = createAppRefs(byId);
 
 const store = {
   uiState: createUiFlowState(),
   pickerState: createTilePickerState([]),
   pickerAction: "single",
-  pickerActionOnce: null,
-  pickerActionLock: null,
-  pickerGestureTipDismissed: readStoredGestureTipDismissed(),
   resultVm: null
 };
-const wizardUi = { afterPickerSync: () => {} };
 const stateActions = createStateActions(store, {
   byId,
   refs,
-  wizardUi,
+  contextPresets: CONTEXT_PRESETS,
   addTileToPicker,
-  addTilesToPicker,
   resolvePatternAction,
+  renderPatternActionButtons,
   selectPickerSlot,
   deleteSelectedSlot,
   clearTilePicker,
   undoLastTile,
-  undoLastAction,
-  undoBySlot,
   evaluateCapturedHand,
   renderTilePreview,
-  renderResultModal
+  renderResultModal,
+  renderInfoTip
 });
-const modalActions = createModalActions(store, modalRefs, {
-  onBeforeClosePicker: () => stateActions.closeTileContextMenu?.()
-});
-
-wizardUi.afterPickerSync = () => {
-  if (localStorage.getItem("hlm_disableAutoWizardAdvance") === "1") {
-    return;
-  }
-  const step = store.uiState.wizard?.step || 1;
-  if (step !== 1) return;
-  if (!canCalculate(store.uiState)) return;
-  const result = stateActions.goWizardNext();
-  syncWizardModals(result, modalActions);
-};
-
-function dismissSplash() {
-  if (splashEl) splashEl.classList.add("splash-dismissed");
-}
-const reduceMotion = globalThis.matchMedia?.(
-  "(prefers-reduced-motion: reduce)"
-)?.matches;
-const splashMs = reduceMotion ? 400 : 900;
-globalThis.setTimeout(dismissSplash, splashMs);
+const modalActions = createModalActions(store, modalRefs);
 
 wireAppEvents({
   byId,
   bindTabButtons,
+  bindPresetButtons,
   bindCloseButtons,
   modalActions,
   stateActions,
@@ -114,6 +77,7 @@ wireAppEvents({
   tilePickerGridEl: refs.tilePickerGridEl,
   renderPickerTabButtons,
   renderTilePickerGrid,
+  addTileToPicker,
   resetContext
 });
 renderPickerByTab({
@@ -122,6 +86,7 @@ renderPickerByTab({
   tilePickerGridEl: refs.tilePickerGridEl,
   renderPickerTabButtons,
   renderTilePickerGrid,
+  addTileToPicker,
   stateActions
 });
 stateActions.syncHomeState();

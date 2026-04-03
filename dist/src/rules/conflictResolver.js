@@ -7,34 +7,8 @@
  */
 const CONFLICT_GROUPS = Object.freeze([
   new Set(["GANG_SHANG_HUA", "HAI_DI_LAO_YUE", "HE_DI_LAO_YU"]),
-  new Set(["QING_YI_SE", "HUN_YI_SE"]),
-  new Set(["DA_SI_XI", "XIAO_SI_XI"]),
-  new Set(["DA_SAN_YUAN", "XIAO_SAN_YUAN"])
+  new Set(["QING_YI_SE", "HUN_YI_SE"])
 ]);
-
-const EXCLUSION_MAP = Object.freeze({
-  DA_SI_XI: Object.freeze([
-    "MEN_FENG_KE",
-    "QUAN_FENG_KE",
-    "ZI_YI_SE",
-    "PENG_PENG_HU",
-    "DA_SAN_FENG"
-  ]),
-  XIAO_SI_XI: Object.freeze(["MEN_FENG_KE", "QUAN_FENG_KE", "DA_SAN_FENG"]),
-  DA_SAN_YUAN: Object.freeze(["XIAO_SAN_YUAN", "SHUANG_JIAN_KE"]),
-  XIAO_SAN_YUAN: Object.freeze(["SHUANG_JIAN_KE"]),
-  QING_YI_SE: Object.freeze(["QUE_YI_MEN", "WU_ZI"]),
-  HUN_YI_SE: Object.freeze(["QUE_YI_MEN"]),
-  PING_HU: Object.freeze(["WU_ZI"]),
-  SAN_SE_SAN_TONG_SHUN: Object.freeze(["XI_XIANG_FENG"]),
-  QING_LONG: Object.freeze(["LIAN_LIU", "LAO_SHAO_FU"]),
-  DA_YU_WU: Object.freeze(["WU_ZI"]),
-  XIAO_YU_WU: Object.freeze(["WU_ZI"]),
-  QUAN_DA: Object.freeze(["DA_YU_WU", "WU_ZI"]),
-  QUAN_XIAO: Object.freeze(["XIAO_YU_WU", "WU_ZI"]),
-  QUAN_ZHONG: Object.freeze(["DUAN_YAO", "WU_ZI"]),
-  SAN_TONG_KE: Object.freeze(["SHUANG_TONG_KE"])
-});
 
 /**
  * Resolve raw fan matches against conflict definitions.
@@ -61,22 +35,6 @@ export function resolveFanConflicts(rawFans) {
         id: loser.id,
         fan: loser.fan,
         reason: `conflict_with_${keep.id}`
-      });
-    }
-  }
-
-  for (const winner of [...matched]) {
-    const targets = EXCLUSION_MAP[winner.id];
-    if (!targets) continue;
-    for (const targetId of targets) {
-      const idx = matched.findIndex((f) => f.id === targetId);
-      if (idx < 0) continue;
-      const loser = matched[idx];
-      matched.splice(idx, 1);
-      excluded.push({
-        id: loser.id,
-        fan: loser.fan,
-        reason: `excluded_by_${winner.id}`
       });
     }
   }

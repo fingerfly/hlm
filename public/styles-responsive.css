@@ -21,6 +21,31 @@
   }
 }
 
+@media (max-width: 520px) {
+  .round-setup-card {
+    padding: 12px;
+  }
+
+  .round-setup-grid {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+
+  .settlement-head,
+  .settlement-row {
+    grid-template-columns: minmax(0, 1.6fr) repeat(3, minmax(0, 1fr));
+    gap: 6px;
+  }
+
+  .settlement-head {
+    font-size: 11px;
+  }
+
+  .settlement-row {
+    font-size: 13px;
+  }
+}
+
 @media (min-width: 1024px) {
   /*
    * Desktop shell: true two-column layout. Must override the 760px

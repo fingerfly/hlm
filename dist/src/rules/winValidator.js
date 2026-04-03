@@ -28,19 +28,15 @@ function cloneCounts(map) {
   return new Map(map);
 }
 
-function findStandardMelds(counts) {
+function tryRemoveMelds(counts) {
   const keys = [...counts.keys()].filter((k) => counts.get(k) > 0).sort();
-  if (keys.length === 0) return [];
+  if (keys.length === 0) return true;
 
   const first = keys[0];
   const c = counts.get(first);
-
   if (c >= 3) {
     counts.set(first, c - 3);
-    const tail = findStandardMelds(counts);
-    if (tail) {
-      return [{ type: "pung", tiles: [first, first, first] }, ...tail];
-    }
+    if (tryRemoveMelds(counts)) return true;
     counts.set(first, c);
   }
 
@@ -53,27 +49,28 @@ function findStandardMelds(counts) {
       counts.set(first, c - 1);
       counts.set(t2, (counts.get(t2) || 0) - 1);
       counts.set(t3, (counts.get(t3) || 0) - 1);
-      const tail = findStandardMelds(counts);
-      if (tail) return [{ type: "chow", tiles: [first, t2, t3] }, ...tail];
+      if (tryRemoveMelds(counts)) return true;
       counts.set(first, c);
       counts.set(t2, (counts.get(t2) || 0) + 1);
       counts.set(t3, (counts.get(t3) || 0) + 1);
     }
   }
-  return null;
+
+  return false;
 }
 
-function standardWinGroups(tiles) {
+function isStandardWin(tiles) {
   const counts = countTiles(tiles);
   for (const [tile, n] of counts.entries()) {
-    if (n < 2) continue;
-    const nextCounts = cloneCounts(counts);
-    nextCounts.set(tile, n - 2);
-    const melds = findStandardMelds(nextCounts);
-    if (!melds) continue;
-    return [...melds, { type: "pair", tiles: [tile, tile] }];
+    if (n >= 2) {
+      const c = cloneCounts(counts);
+      c.set(tile, n - 2);
+      if (tryRemoveMelds(c)) {
+        return true;
+      }
+    }
   }
-  return null;
+  return false;
 }
 
 function isSevenPairs(tiles) {
@@ -106,16 +103,6 @@ function isThirteenOrphans(tiles) {
   return pairFound;
 }
 
-function sevenPairsGroups(tiles) {
-  const counts = countTiles(tiles);
-  const groups = [];
-  for (const [tile, n] of [...counts.entries()].sort()) {
-    if (n !== 2) continue;
-    groups.push({ type: "pair", tiles: [tile, tile] });
-  }
-  return groups;
-}
-
 /**
  * Validate win pattern for one 14-tile hand.
  *
@@ -124,30 +111,13 @@ function sevenPairsGroups(tiles) {
  */
 export function validateWin(tiles) {
   if (!Array.isArray(tiles) || tiles.length !== 14) {
-    return { isWin: false, pattern: null, meldGroups: [] };
+    return { isWin: false, pattern: null };
   }
 
   if (isThirteenOrphans(tiles)) {
-    return {
-      isWin: true,
-      pattern: "thirteen_orphans",
-      meldGroups: [{ type: "orphans", tiles: [...tiles].sort() }]
-    };
+    return { isWin: true, pattern: "thirteen_orphans" };
   }
-  if (isSevenPairs(tiles)) {
-    return {
-      isWin: true,
-      pattern: "seven_pairs",
-      meldGroups: sevenPairsGroups(tiles)
-    };
-  }
-  const standardGroups = standardWinGroups(tiles);
-  if (standardGroups) {
-    return {
-      isWin: true,
-      pattern: "standard",
-      meldGroups: standardGroups
-    };
-  }
-  return { isWin: false, pattern: null, meldGroups: [] };
+  if (isSevenPairs(tiles)) return { isWin: true, pattern: "seven_pairs" };
+  if (isStandardWin(tiles)) return { isWin: true, pattern: "standard" };
+  return { isWin: false, pattern: null };
 }

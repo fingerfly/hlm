@@ -34,6 +34,7 @@ import {
   syncWizardModals
 } from "./appEventWiring.js";
 import { createAppRefs } from "./appRefs.js";
+import { createDefaultRoundPlayers } from "../src/app/roundSettlement.js";
 import {
   syncDesktopPickerSheet,
   installDesktopPickerLayoutListener
@@ -60,6 +61,11 @@ const { refs, modalRefs } = createAppRefs(byId);
 
 const store = {
   uiState: createUiFlowState(),
+  roundState: {
+    initialized: false,
+    dealerSeat: "E",
+    players: createDefaultRoundPlayers()
+  },
   pickerState: createTilePickerState([]),
   pickerAction: "single",
   pickerActionOnce: null,
@@ -131,6 +137,84 @@ function mountDesktopContextInline() {
 }
 mountDesktopContextInline();
 
+function collectRoundPlayers() {
+  return [
+    {
+      seat: "E",
+      name: byId("playerNameE")?.value || "东家",
+      score: Number.parseInt(byId("playerScoreE")?.value || "0", 10) || 0
+    },
+    {
+      seat: "S",
+      name: byId("playerNameS")?.value || "南家",
+      score: Number.parseInt(byId("playerScoreS")?.value || "0", 10) || 0
+    },
+    {
+      seat: "W",
+      name: byId("playerNameW")?.value || "西家",
+      score: Number.parseInt(byId("playerScoreW")?.value || "0", 10) || 0
+    },
+    {
+      seat: "N",
+      name: byId("playerNameN")?.value || "北家",
+      score: Number.parseInt(byId("playerScoreN")?.value || "0", 10) || 0
+    }
+  ];
+}
+
+function setRoundGateVisible(visible) {
+  const gate = byId("roundSetupGate");
+  const shell = document.querySelector("main.container.app-shell");
+  if (gate) {
+    gate.hidden = !visible;
+    gate.style.display = visible ? "" : "none";
+  }
+  if (shell) {
+    shell.hidden = visible;
+    shell.style.display = visible ? "none" : "";
+  }
+}
+
+function hideRoundGateWithTransition() {
+  const gate = byId("roundSetupGate");
+  const reduceMotion = globalThis.matchMedia?.(
+    "(prefers-reduced-motion: reduce)"
+  )?.matches;
+  if (!gate || reduceMotion) {
+    setRoundGateVisible(false);
+    return;
+  }
+  gate.classList.add("is-exiting");
+  globalThis.setTimeout(() => {
+    gate.classList.remove("is-exiting");
+    setRoundGateVisible(false);
+  }, 220);
+}
+
+function syncDiscarderVisibility() {
+  const winType = byId("winType")?.value;
+  const discarder = byId("discarderSeat");
+  if (!discarder) return;
+  const wrap = discarder.closest(".context-desktop-field");
+  const shouldShow = winType === "dianhe";
+  if (wrap) wrap.hidden = !shouldShow;
+  if (!shouldShow) discarder.value = "";
+}
+
+setRoundGateVisible(true);
+const startRoundBtn = byId("startRoundBtn");
+if (startRoundBtn) {
+  startRoundBtn.addEventListener("click", () => {
+    store.roundState = {
+      initialized: true,
+      dealerSeat: byId("dealerSeat")?.value || "E",
+      players: collectRoundPlayers()
+    };
+    hideRoundGateWithTransition();
+    dismissSplash();
+  });
+}
+
 const { openHelp } = wireAppEvents({
   byId,
   bindTabButtons,
@@ -156,3 +240,8 @@ renderPickerByTab({
 });
 stateActions.syncHomeState();
 modalActions.updateModalUi();
+syncDiscarderVisibility();
+const winTypeEl = byId("winType");
+if (winTypeEl) {
+  winTypeEl.addEventListener("change", syncDiscarderVisibility);
+}

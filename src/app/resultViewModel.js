@@ -53,6 +53,7 @@ export function buildResultViewModel(result) {
     meldGroups: scoring.meldGroups || [],
     matchedFans: (scoring.matchedFans || []).map(mapFanItem),
     excludedFans: (scoring.excludedFans || []).map(mapFanItem),
+    settlement: result?.settlement || null,
     raw: result
   };
 }

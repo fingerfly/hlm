@@ -74,3 +74,25 @@ test("buildResultViewModel keeps meld groups for row rendering", () => {
   assert.equal(vm.meldGroups[0].type, "chow");
   assert.equal(vm.meldGroups[1].type, "pair");
 });
+
+test("buildResultViewModel keeps settlement payload for rendering", () => {
+  const vm = buildResultViewModel({
+    recognition: { status: "manual_ready" },
+    scoring: {
+      isWin: true,
+      totalFan: 2,
+      minWinningFan: 1,
+      winPattern: "standard",
+      matchedFans: [],
+      excludedFans: []
+    },
+    settlement: {
+      rows: [
+        { seat: "E", name: "东家", scoreBefore: 0, delta: 2, scoreAfter: 2 }
+      ]
+    },
+    explanation: "ok"
+  });
+  assert.equal(Array.isArray(vm.settlement.rows), true);
+  assert.equal(vm.settlement.rows[0].seat, "E");
+});

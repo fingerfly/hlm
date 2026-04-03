@@ -31,6 +31,7 @@ export function createAppRefs(byId) {
       status: byId("resultStatus"),
       meldRows: byId("resultMeldRows"),
       hitPreview: byId("hitPreview"),
+      settlementRows: byId("resultSettlementRows"),
       explanation: byId("resultExplanation")
     }
   };

@@ -211,6 +211,7 @@ export function wireContextSegmentedControls(byId, stateActions) {
     for (const radio of document.querySelectorAll(selector)) {
       radio.addEventListener("change", () => {
         hidden.value = radio.value;
+        hidden.dispatchEvent(new Event("change"));
         syncContextDesktopMirrors(byId);
         stateActions.syncHomeState();
       });

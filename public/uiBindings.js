@@ -51,6 +51,10 @@ export function resetContext(byId) {
   if (ka) ka.value = "0";
   const km = byId("kongMingCount");
   if (km) km.value = "0";
+  const ws = byId("winnerSeat");
+  if (ws) ws.value = "E";
+  const ds = byId("discarderSeat");
+  if (ds) ds.value = "S";
   syncContextStepperDisplays(byId);
   syncContextRadios(byId);
   syncContextDesktopMirrors(byId);

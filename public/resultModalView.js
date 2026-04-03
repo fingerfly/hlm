@@ -112,6 +112,42 @@ function renderMeldRows(target, groups) {
   }
 }
 
+function renderSettlementRows(target, settlement) {
+  if (!target) return;
+  target.replaceChildren();
+  if (
+    !settlement ||
+    !Array.isArray(settlement.rows) ||
+    !settlement.rows.length
+  ) {
+    target.textContent = "无";
+    return;
+  }
+  for (const rowData of settlement.rows) {
+    const row = document.createElement("div");
+    row.className = "settlement-row";
+    const name = document.createElement("span");
+    name.className = "settlement-name";
+    name.textContent = `${rowData.name}（${rowData.seat}）`;
+    const before = document.createElement("span");
+    before.className = "settlement-score";
+    before.textContent = String(rowData.scoreBefore);
+    const delta = document.createElement("span");
+    delta.className = "settlement-score";
+    delta.textContent = rowData.delta > 0
+      ? `+${rowData.delta}`
+      : String(rowData.delta);
+    const after = document.createElement("span");
+    after.className = "settlement-score";
+    after.textContent = String(rowData.scoreAfter);
+    row.appendChild(name);
+    row.appendChild(before);
+    row.appendChild(delta);
+    row.appendChild(after);
+    target.appendChild(row);
+  }
+}
+
 /**
  * Render result modal: total, full breakdown, explanation inline.
  *
@@ -125,6 +161,7 @@ export function renderResultModal(result, refs) {
   refs.status.textContent = vm.winText;
   renderMeldRows(refs.meldRows, vm.meldGroups);
   renderFanList(refs.hitPreview, vm.matchedFans, { expandable: true });
+  renderSettlementRows(refs.settlementRows, vm.settlement);
   if (refs.explanation) {
     refs.explanation.textContent = vm.explanation || "";
   }

@@ -1,4 +1,5 @@
 import { setResultPayload, canCalculate } from "../src/app/uiFlowState.js";
+import { computeRoundSettlement } from "../src/app/roundSettlement.js";
 
 function parseBoundedInt(el, fallback) {
   if (!el) return fallback;
@@ -19,6 +20,8 @@ function buildRequestFromState(store, byId) {
     context: {
       winType: byId("winType").value,
       handState: byId("handState").value,
+      winnerSeat: byId("winnerSeat").value,
+      discarderSeat: byId("discarderSeat").value,
       kongType: "none",
       timingEvent: byId("timingEvent").value,
       flowerCount,
@@ -43,7 +46,23 @@ export function createResultStateActions(input) {
   } = input;
   function calculate() {
     if (!canCalculate(store.uiState)) return false;
-    const result = evaluateCapturedHand(buildRequestFromState(store, byId));
+    const request = buildRequestFromState(store, byId);
+    const result = evaluateCapturedHand(request);
+    const settlement = computeRoundSettlement({
+      players: store.roundState?.players || [],
+      isWin: result?.scoring?.isWin === true,
+      totalFan: result?.scoring?.totalFan || 0,
+      winType: request.context.winType,
+      winnerSeat: request.context.winnerSeat,
+      discarderSeat: request.context.discarderSeat
+    });
+    result.settlement = settlement;
+    if (settlement.ok && Array.isArray(settlement.nextPlayers)) {
+      store.roundState = {
+        ...(store.roundState || {}),
+        players: settlement.nextPlayers
+      };
+    }
     store.uiState = setResultPayload(store.uiState, result);
     store.resultVm = renderResultModal(result, refs.resultRefs);
     return true;

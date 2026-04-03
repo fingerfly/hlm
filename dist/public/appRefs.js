@@ -14,30 +14,32 @@
 export function createAppRefs(byId) {
   const refs = {
     openPickerBtn: byId("openPickerBtn"),
-    clearHandBtn: byId("clearHandBtn"),
+    openContextBtn: byId("openContextBtn"),
     tilePickerGridEl: byId("tilePickerGrid"),
     tilePreviewEl: byId("tilePreview"),
     tileCountEl: byId("tileCount"),
     pickerCountEl: byId("pickerCount"),
+    pickerActionHintEl: byId("pickerActionHint"),
     pickerDeleteBtn: byId("pickerDeleteBtn"),
     contextSummaryEl: byId("contextSummary"),
-    wizardStepHintEl: byId("wizardStepHint"),
-    wizardBackBtn: byId("wizardBackBtn"),
-    wizardNextBtn: byId("wizardNextBtn"),
     readyHintEl: byId("readyHint"),
+    calculateBtn: byId("calculateBtn"),
     resultRefs: {
       total: byId("resultTotalFan"),
       status: byId("resultStatus"),
-      winPattern: byId("resultWinPattern"),
-      meldRows: byId("resultMeldRows"),
-      hitPreview: byId("hitPreview"),
-      explanation: byId("resultExplanation")
+      hitPreview: byId("hitPreview")
+    },
+    infoRefs: {
+      hitAll: byId("infoHitList"),
+      excludedAll: byId("infoExcludedList"),
+      explanation: byId("infoExplanation")
     }
   };
   const modalRefs = {
     picker: byId("pickerModal"),
     context: byId("contextModal"),
-    result: byId("resultModal")
+    result: byId("resultModal"),
+    info: byId("infoModal")
   };
   return { refs, modalRefs };
 }

@@ -1,9 +1,5 @@
 import { pickerToTiles } from "../src/app/tilePickerState.js";
-import {
-  getTileImageDataUrl,
-  getTileLabel,
-  getTileUnicode
-} from "./tileAssets.js";
+import { getTileImageDataUrl, getTileLabel } from "./tileAssets.js";
 
 function makeTileFace(tileCode, fallbackText) {
   const wrap = document.createElement("span");
@@ -13,15 +9,6 @@ function makeTileFace(tileCode, fallbackText) {
     text.className = "tile-face-text";
     text.textContent = fallbackText;
     wrap.appendChild(text);
-    return wrap;
-  }
-  const unicode = getTileUnicode(tileCode);
-  if (unicode) {
-    const span = document.createElement("span");
-    span.className = "tile-face-unicode";
-    span.textContent = unicode;
-    span.setAttribute("aria-label", getTileLabel(tileCode));
-    wrap.appendChild(span);
     return wrap;
   }
   const imageUrl = getTileImageDataUrl(tileCode);
@@ -100,8 +87,20 @@ export function renderTilePickerGrid({ tilePickerGridEl, tiles, onPick }) {
     button.type = "button";
     button.setAttribute("aria-label", `添加${getTileLabel(tile)}`);
     button.appendChild(makeTileFace(tile, tile));
-    button.addEventListener("click", (e) => onPick(tile, e));
+    button.addEventListener("click", () => onPick(tile));
     tilePickerGridEl.appendChild(button);
   }
 }
 
+/**
+ * Render active quick-action button state.
+ *
+ * @param {string} actionId - Current quick action id.
+ * @returns {void}
+ */
+export function renderPatternActionButtons(actionId) {
+  for (const button of document.querySelectorAll("[data-pattern-action]")) {
+    const isActive = button.dataset.patternAction === actionId;
+    button.classList.toggle("active", isActive);
+  }
+}

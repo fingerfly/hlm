@@ -18,7 +18,6 @@ export const QUICK_ACTIONS = Object.freeze([
   "chow_middle",
   "chow_back"
 ]);
-const QUICK_ADD_ACTIONS = QUICK_ACTIONS;
 
 function tileSuit(tileCode) {
   const suit = tileCode.slice(-1);
@@ -141,38 +140,4 @@ export function resolvePatternAction(state, baseTile, actionId) {
     }
   }
   return built;
-}
-
-function hidden(reason) {
-  return { visible: false, reason };
-}
-
-function visible() {
-  return { visible: true, reason: null };
-}
-
-/**
- * Build visibility map for context-menu add actions.
- *
- * @param {{slots: string[]}} state - Picker state.
- * @param {string|null} baseTile - Selected slot tile if available.
- * @returns {Record<string, {visible: boolean, reason: string|null}>}
- */
-export function getContextActionAvailability(state, baseTile = null) {
-  const result = {};
-  const selected = (typeof baseTile === "string" && baseTile) || null;
-  for (const actionId of QUICK_ADD_ACTIONS) {
-    if (selected) {
-      const resolved = resolvePatternAction(state, selected, actionId);
-      result[actionId] = resolved.ok ? visible() : hidden(resolved.reason);
-      continue;
-    }
-    const needs = actionId === "single" ? 1 : actionId === "pair" ? 2 : 3;
-    if (needs > remainingSlots(state)) {
-      result[actionId] = hidden("insufficient_slots");
-      continue;
-    }
-    result[actionId] = visible();
-  }
-  return result;
 }

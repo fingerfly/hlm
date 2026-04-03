@@ -1,7 +1,4 @@
 import { ERROR_CODES } from "../config/ruleBaseline.js";
-import {
-  addStructuredContextProblems
-} from "./structuredContextValidator.js";
 
 /**
  * Purpose: Validate hand input contract before scoring starts.
@@ -17,8 +14,7 @@ export const TIMING_EVENTS = Object.freeze([
   "none",
   "haidi",
   "hedi",
-  "gangshang",
-  "qianggang"
+  "gangshang"
 ]);
 export const WINDS = Object.freeze(["E", "S", "Wn", "N"]);
 
@@ -83,9 +79,6 @@ export function validateHandInput(input = {}) {
   if (input.prevalentWind && !WINDS.includes(input.prevalentWind)) {
     problems.push("prevalentWind must be one of E/S/Wn/N");
   }
-
-  addStructuredContextProblems(input, problems);
-
   if (problems.length > 0) {
     return {
       ok: false,

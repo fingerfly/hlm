@@ -1,32 +1,27 @@
 /**
  * Purpose: Bind UI control actions and input-derived request data.
  * Description:
+ * - Builds request payload from tile/context controls.
  * - Resets context controls to app defaults.
- * - Attaches tab click handlers.
+ * - Attaches tab and preset click handlers.
  */
-
-import { syncContextStepperDisplays } from "./contextWiring.js";
-
 /**
- * Sync hidden context inputs to their radio buttons.
+ * Build scoring request from current tile and context inputs.
  *
+ * @param {HTMLInputElement[]} tileInputs - Tile input fields.
  * @param {(id: string) => HTMLElement} byId - Id lookup helper.
- * @returns {void}
+ * @returns {{tiles: string[], context: object}}
  */
-export function syncContextRadios(byId) {
-  const map = [
-    ["winType", "winType"],
-    ["handState", "handState"],
-    ["timingEvent", "timingEvent"]
-  ];
-  for (const [hiddenId, radioName] of map) {
-    const hidden = byId(hiddenId);
-    if (!hidden) continue;
-    const radio = document.querySelector(
-      `input[name="${radioName}"][value="${hidden.value}"]`
-    );
-    if (radio) radio.checked = true;
-  }
+export function buildRequest(tileInputs, byId) {
+  return {
+    tiles: tileInputs.map((input) => input.value.trim()),
+    context: {
+      winType: byId("winType").value,
+      handState: byId("handState").value,
+      kongType: byId("kongType").value,
+      timingEvent: byId("timingEvent").value
+    }
+  };
 }
 
 /**
@@ -38,18 +33,8 @@ export function syncContextRadios(byId) {
 export function resetContext(byId) {
   byId("winType").value = "zimo";
   byId("handState").value = "menqian";
-  const kt = byId("kongType");
-  if (kt) kt.value = "none";
-  const te = byId("timingEvent");
-  if (te) te.value = "none";
-  const fc = byId("flowerCount");
-  if (fc) fc.value = "0";
-  const ka = byId("kongAnCount");
-  if (ka) ka.value = "0";
-  const km = byId("kongMingCount");
-  if (km) km.value = "0";
-  syncContextStepperDisplays(byId);
-  syncContextRadios(byId);
+  byId("kongType").value = "none";
+  byId("timingEvent").value = "none";
   const autoCalculate = byId("autoCalculate");
   if (autoCalculate) autoCalculate.checked = true;
 }
@@ -63,5 +48,17 @@ export function resetContext(byId) {
 export function bindTabButtons(onTab) {
   for (const button of document.querySelectorAll(".tab-btn")) {
     button.addEventListener("click", () => onTab(button.dataset.tab));
+  }
+}
+
+/**
+ * Bind preset buttons and forward selected preset key.
+ *
+ * @param {(preset: string) => void} onPreset - Preset callback.
+ * @returns {void}
+ */
+export function bindPresetButtons(onPreset) {
+  for (const button of document.querySelectorAll("[data-preset]")) {
+    button.addEventListener("click", () => onPreset(button.dataset.preset));
   }
 }

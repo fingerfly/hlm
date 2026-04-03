@@ -4,6 +4,24 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [4.12.0] - 2026-04-03
+
+### Added
+- 启动新增「开始对局」入口：先定义四家（东南西北）名称/起始分与庄家后，再进入手牌流程
+  (`public/index.html`, `public/app.js`, `public/styles-components.css`).
+- 新增四家结算核心模块，按 `zimo`/`dianhe` 计算四家 `局前/增减/局后`，并提供
+  守恒校验 (`src/app/roundSettlement.js`,
+  `tests/unit/roundSettlement.test.js`).
+
+### Changed
+- 和牌条件新增结算角色输入（和牌者、放铳者），并将其纳入结果计算请求；
+  `zimo` 时隐藏并清空放铳者输入 (`public/index.html`,
+  `public/resultStateActions.js`, `public/app.js`, `public/contextWiring.js`,
+  `public/uiBindings.js`).
+- 结果窗体新增「四家结算」区块，展示四家行级明细并复用 view model 输出
+  (`public/resultModalView.js`, `public/appRefs.js`,
+  `src/app/resultViewModel.js`, `tests/unit/resultViewModel.test.js`).
+
 ## [4.11.0] - 2026-03-30
 
 ### Changed

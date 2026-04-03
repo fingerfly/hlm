@@ -12,6 +12,31 @@
     <link rel="stylesheet" href="./styles-responsive.css" />
   </head>
   <body>
+    <section id="roundSetupGate" class="round-setup-gate">
+      <div class="round-setup-card">
+        <h2>设定玩家</h2>
+        <p class="summary-text">先设定四家信息，再进入每手计番与结算。</p>
+        <div class="round-setup-grid">
+          <label>东家名称 <input id="playerNameE" name="playerNameE" value="东家" /></label>
+          <label>东家分数 <input id="playerScoreE" name="playerScoreE" type="number" value="0" /></label>
+          <label>南家名称 <input id="playerNameS" name="playerNameS" value="南家" /></label>
+          <label>南家分数 <input id="playerScoreS" name="playerScoreS" type="number" value="0" /></label>
+          <label>西家名称 <input id="playerNameW" name="playerNameW" value="西家" /></label>
+          <label>西家分数 <input id="playerScoreW" name="playerScoreW" type="number" value="0" /></label>
+          <label>北家名称 <input id="playerNameN" name="playerNameN" value="北家" /></label>
+          <label>北家分数 <input id="playerScoreN" name="playerScoreN" type="number" value="0" /></label>
+        </div>
+        <label class="round-dealer-row">庄家
+          <select id="dealerSeat" name="dealerSeat">
+            <option value="E">东</option>
+            <option value="S">南</option>
+            <option value="W">西</option>
+            <option value="N">北</option>
+          </select>
+        </label>
+        <button id="startRoundBtn" class="primary-btn">开始对局</button>
+      </div>
+    </section>
     <div id="appSplash" class="app-splash" aria-live="polite"
       aria-label="应用启动画面">
       <div class="app-splash-motif" aria-hidden="true"></div>
@@ -271,6 +296,29 @@
             </div>
             <input type="hidden" id="timingEvent" value="none" />
           </section>
+          <section class="context-group" aria-labelledby="ctxRoleTitle">
+            <h4 id="ctxRoleTitle" class="context-group-title">结算角色</h4>
+            <div class="context-control-desktop">
+              <div class="context-desktop-field">
+                <label for="winnerSeat" class="context-label">和牌者</label>
+                <select id="winnerSeat" name="winnerSeat" class="context-select-input">
+                  <option value="E">东</option>
+                  <option value="S">南</option>
+                  <option value="W">西</option>
+                  <option value="N">北</option>
+                </select>
+              </div>
+              <div class="context-desktop-field">
+                <label for="discarderSeat" class="context-label">放铳者</label>
+                <select id="discarderSeat" name="discarderSeat" class="context-select-input">
+                  <option value="S">南</option>
+                  <option value="E">东</option>
+                  <option value="W">西</option>
+                  <option value="N">北</option>
+                </select>
+              </div>
+            </div>
+          </section>
         </div>
         <div class="context-sheet-footer">
           <button type="button" data-close="context"
@@ -302,6 +350,13 @@
           <section class="result-section" aria-labelledby="resultFanHeading">
             <h4 id="resultFanHeading" class="result-section-title">番种明细</h4>
             <ul id="hitPreview" class="fan-list fan-breakdown"></ul>
+          </section>
+          <section class="result-section" aria-labelledby="resultSettleHeading">
+            <h4 id="resultSettleHeading" class="result-section-title">四家结算</h4>
+            <div class="settlement-head">
+              <span>玩家</span><span>局前</span><span>增减</span><span>局后</span>
+            </div>
+            <div id="resultSettlementRows" class="settlement-rows"></div>
           </section>
           <p id="resultExplanation" class="result-explanation summary-text"></p>
           <div class="inline-actions">

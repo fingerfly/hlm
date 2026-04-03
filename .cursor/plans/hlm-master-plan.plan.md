@@ -77,6 +77,12 @@ todos:
       中文帮助详版（程序目的、使用步骤、番种释义；复用 lexicon；单模板双端）。
       Child: hlm_help_zh_expansion_d3a197ba.plan.md
     status: completed
+  - id: track-round-setup-four-player-settlement
+    content: >
+      启动先定义四家（座位/起始分/庄家）并在结果窗体展示四家结算
+      （局前/增减/局后）；按和牌方式区分荣和与自摸。Child:
+      hlm_round_setup_four_player_settlement_c30c89d1.plan.md
+    status: completed
 isProject: false
 ---
 
@@ -174,6 +180,8 @@ not present in current workspace)
   [hlm_desktop_context_controls_dual_ui.plan.md](hlm_desktop_context_controls_dual_ui.plan.md).
 - **中文帮助详版（执行队列下一项；**`pending`**）：**
   [hlm_help_zh_expansion_d3a197ba.plan.md](hlm_help_zh_expansion_d3a197ba.plan.md)
+- 四家对局初始化与结果结算（**new / pending**）:
+  [hlm_round_setup_four_player_settlement_c30c89d1.plan.md](hlm_round_setup_four_player_settlement_c30c89d1.plan.md)
 - Historical supporting plans (traceability only):
   - [hlm_版本升级工具与中文术语统一_35161103.plan.md](hlm_版本升级工具与中文术语统一_35161103.plan.md)
   - `spike_full_automation_6a79ecff.plan.md` (historical reference; file
@@ -251,7 +259,7 @@ practicality upgrade exit (or after Pages if practicality is deferred).
 
 ### Current delivery queue (post-baseline)
 
-- TrackId: `track-help-zh-expansion`（**completed**）
+- TrackId: `track-round-setup-four-player-settlement`（**completed**）
 - ChildPlans — 桌面 UI（已完成）:
   - Baseline / history:
     [hlm_desktop_web_ui_ce34a47e.plan.md](hlm_desktop_web_ui_ce34a47e.plan.md)
@@ -259,8 +267,10 @@ practicality upgrade exit (or after Pages if practicality is deferred).
     [desktop_workspace_ui_76498db2.plan.md](desktop_workspace_ui_76498db2.plan.md)
   - 和牌条件桌面双套 UI:
     [hlm_desktop_context_controls_dual_ui.plan.md](hlm_desktop_context_controls_dual_ui.plan.md)
-- **Active slice：** 无（help 中文扩展已完成）
-- TrackTodoStatus: `completed`（help 中文扩展）
+- ChildPlans — 当前新轨道:
+  - [hlm_round_setup_four_player_settlement_c30c89d1.plan.md](hlm_round_setup_four_player_settlement_c30c89d1.plan.md)
+- **Active slice：** 无（round setup + 四家结算已完成）
+- TrackTodoStatus: `completed`
 - Prior closed: `track-five-principles-exact-scoring` →
   [hlm-five-principles-exact-engine_cf4e8446.plan.md](hlm-five-principles-exact-engine_cf4e8446.plan.md)
   (2026-03-22)
@@ -312,11 +322,17 @@ practicality upgrade exit (or after Pages if practicality is deferred).
   - `Manual desktop browser matrix remains pending; automated browser-use`
     `validation was blocked by regional model availability.`
 - NextActions:
-  - `Regression pass: inline picker + context form + reset after help expansion.`
-  - `Manual: keyboard through select/number + mobile matrix unchanged.`
-  - `Desktop browser matrix (Chrome + Safari): two-pane, inline picker, context`
-    `controls (pending historical item).`
+  - `Run manual UI verification for round-setup gate and result settlement`
+    `rendering on desktop/mobile breakpoints.`
+  - `Keep track in monitoring mode; no open blocker.`
 - ValidationEvidence:
+  - `2026-04-02: implemented round setup + four-player settlement. Added`
+    `src/app/roundSettlement.js + tests/unit/roundSettlement.test.js; wired`
+    `startup gate in app/index; added winner/discarder inputs; rendered`
+    `result settlement rows. Gates pass: npm test, quality:complexity, cloc.`
+  - `2026-04-02: review-fix iteration completed for new track; child plan moved`
+    `to workspace .cursor/plans and linked in master frontmatter/index/queue;`
+    `readiness verdict ready_for_execution.`
   - `2026-03-29: help-zh-expansion implemented — helpArticleTemplate +`
     `helpContentMount (single-source dual mount), zh-Hans sorted fan details,`
     `new help styles, indexStylesheetLinks assertions; npm test +`
@@ -436,8 +452,8 @@ practicality upgrade exit (or after Pages if practicality is deferred).
     now orchestrates principle steps only. Added principle-layer unit tests for
     these rules. Re-ran full gates:
     unit/regression/integration/complexity/full all pass.`
-- LastUpdated: `2026-03-28` (workspace implemented; context dual-UI child plan
-    linked; implementation of that slice pending)`
+- LastUpdated: `2026-04-02` (new track implemented:
+    round setup + four-player settlement implemented and closed)`
 - TrackCloseout:
   - `track-five-principles-exact-scoring completed on 2026-03-22.`
 
