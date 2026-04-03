@@ -66,3 +66,16 @@ test("computeRoundSettlement rejects invalid dianhe roles", () => {
   assert.equal(result.ok, false);
   assert.equal(result.problems.length > 0, true);
 });
+
+test("computeRoundSettlement rejects empty dianhe discarderSeat", () => {
+  const result = computeRoundSettlement({
+    players: createDefaultRoundPlayers(),
+    isWin: true,
+    totalFan: 2,
+    winType: "dianhe",
+    winnerSeat: "E",
+    discarderSeat: ""
+  });
+  assert.equal(result.ok, false);
+  assert.equal(result.problems.length > 0, true);
+});

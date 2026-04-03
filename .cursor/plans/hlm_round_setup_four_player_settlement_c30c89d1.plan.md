@@ -42,6 +42,15 @@ isProject: false
 - This child plan path:
   `hlm_round_setup_four_player_settlement_c30c89d1.plan.md`
 
+## Follow-on UI (separate track)
+
+- Startup gate **table metaphor** (N/E/S/W layout + center dealer; same DOM
+  ids): [hlm_round_setup_table_ui_525519a5.plan.md](hlm_round_setup_table_ui_525519a5.plan.md)
+  (`track-round-setup-table-ui` on master plan).
+- Settlement roles visibility + manual discarder enforcement:
+  [hlm_round_settlement_roles_visible_01c13181.plan.md](hlm_round_settlement_roles_visible_01c13181.plan.md)
+  (`track-round-settlement-roles-visible` on master plan).
+
 ## Goal
 
 Introduce a startup gate where users define four players and starting scores

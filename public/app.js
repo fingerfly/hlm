@@ -196,9 +196,26 @@ function syncDiscarderVisibility() {
   const discarder = byId("discarderSeat");
   if (!discarder) return;
   const wrap = discarder.closest(".context-desktop-field");
+  const hint = byId("roleValidationError");
   const shouldShow = winType === "dianhe";
   if (wrap) wrap.hidden = !shouldShow;
-  if (!shouldShow) discarder.value = "";
+  discarder.disabled = !shouldShow;
+  discarder.required = shouldShow;
+  if (!shouldShow) {
+    discarder.value = "";
+    if (hint) {
+      hint.textContent = "";
+      hint.hidden = true;
+    }
+  }
+}
+
+/** Marks the seat panel matching dealerSeat with .is-dealer (visual only). */
+function syncRoundSetupDealerHighlight() {
+  const dealer = byId("dealerSeat")?.value || "E";
+  document.querySelectorAll(".round-setup-seat[data-seat]").forEach((el) => {
+    el.classList.toggle("is-dealer", el.dataset.seat === dealer);
+  });
 }
 
 setRoundGateVisible(true);
@@ -213,6 +230,11 @@ if (startRoundBtn) {
     hideRoundGateWithTransition();
     dismissSplash();
   });
+}
+const dealerSeatEl = byId("dealerSeat");
+if (dealerSeatEl) {
+  dealerSeatEl.addEventListener("change", syncRoundSetupDealerHighlight);
+  syncRoundSetupDealerHighlight();
 }
 
 const { openHelp } = wireAppEvents({

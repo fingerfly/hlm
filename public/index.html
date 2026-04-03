@@ -15,26 +15,74 @@
     <section id="roundSetupGate" class="round-setup-gate">
       <div class="round-setup-card">
         <h2>设定玩家</h2>
-        <p class="summary-text">先设定四家信息，再进入每手计番与结算。</p>
-        <div class="round-setup-grid">
-          <label>东家名称 <input id="playerNameE" name="playerNameE" value="东家" /></label>
-          <label>东家分数 <input id="playerScoreE" name="playerScoreE" type="number" value="0" /></label>
-          <label>南家名称 <input id="playerNameS" name="playerNameS" value="南家" /></label>
-          <label>南家分数 <input id="playerScoreS" name="playerScoreS" type="number" value="0" /></label>
-          <label>西家名称 <input id="playerNameW" name="playerNameW" value="西家" /></label>
-          <label>西家分数 <input id="playerScoreW" name="playerScoreW" type="number" value="0" /></label>
-          <label>北家名称 <input id="playerNameN" name="playerNameN" value="北家" /></label>
-          <label>北家分数 <input id="playerScoreN" name="playerScoreN" type="number" value="0" /></label>
+        <p class="summary-text">俯视牌桌设定四风位与起始分，再进入每手计番与结算。</p>
+        <div class="round-setup-table" role="group" aria-label="四家座位">
+          <div class="round-setup-seat round-setup-seat--e" data-seat="E">
+            <div class="round-setup-seat-head">
+              <span class="round-setup-wind">东</span>
+              <span class="round-setup-dealer-badge" aria-hidden="true">庄</span>
+            </div>
+            <label>名称
+              <input id="playerNameE" name="playerNameE" value="东家" />
+            </label>
+            <label>分数
+              <input id="playerScoreE" name="playerScoreE" type="number"
+                value="0" />
+            </label>
+          </div>
+          <div class="round-setup-seat round-setup-seat--s" data-seat="S">
+            <div class="round-setup-seat-head">
+              <span class="round-setup-wind">南</span>
+              <span class="round-setup-dealer-badge" aria-hidden="true">庄</span>
+            </div>
+            <label>名称
+              <input id="playerNameS" name="playerNameS" value="南家" />
+            </label>
+            <label>分数
+              <input id="playerScoreS" name="playerScoreS" type="number"
+                value="0" />
+            </label>
+          </div>
+          <div class="round-setup-seat round-setup-seat--w" data-seat="W">
+            <div class="round-setup-seat-head">
+              <span class="round-setup-wind">西</span>
+              <span class="round-setup-dealer-badge" aria-hidden="true">庄</span>
+            </div>
+            <label>名称
+              <input id="playerNameW" name="playerNameW" value="西家" />
+            </label>
+            <label>分数
+              <input id="playerScoreW" name="playerScoreW" type="number"
+                value="0" />
+            </label>
+          </div>
+          <div class="round-setup-seat round-setup-seat--n" data-seat="N">
+            <div class="round-setup-seat-head">
+              <span class="round-setup-wind">北</span>
+              <span class="round-setup-dealer-badge" aria-hidden="true">庄</span>
+            </div>
+            <label>名称
+              <input id="playerNameN" name="playerNameN" value="北家" />
+            </label>
+            <label>分数
+              <input id="playerScoreN" name="playerScoreN" type="number"
+                value="0" />
+            </label>
+          </div>
+          <div class="round-setup-table-center">
+            <label class="round-dealer-row">庄家
+              <select id="dealerSeat" name="dealerSeat">
+                <option value="E">东</option>
+                <option value="S">南</option>
+                <option value="W">西</option>
+                <option value="N">北</option>
+              </select>
+            </label>
+            <button id="startRoundBtn" class="primary-btn" type="button">
+              开始对局
+            </button>
+          </div>
         </div>
-        <label class="round-dealer-row">庄家
-          <select id="dealerSeat" name="dealerSeat">
-            <option value="E">东</option>
-            <option value="S">南</option>
-            <option value="W">西</option>
-            <option value="N">北</option>
-          </select>
-        </label>
-        <button id="startRoundBtn" class="primary-btn">开始对局</button>
       </div>
     </section>
     <div id="appSplash" class="app-splash" aria-live="polite"
@@ -298,7 +346,7 @@
           </section>
           <section class="context-group" aria-labelledby="ctxRoleTitle">
             <h4 id="ctxRoleTitle" class="context-group-title">结算角色</h4>
-            <div class="context-control-desktop">
+            <div class="context-role-controls">
               <div class="context-desktop-field">
                 <label for="winnerSeat" class="context-label">和牌者</label>
                 <select id="winnerSeat" name="winnerSeat" class="context-select-input">
@@ -318,6 +366,8 @@
                 </select>
               </div>
             </div>
+            <p id="roleValidationError" class="context-error-text summary-text"
+              hidden></p>
           </section>
         </div>
         <div class="context-sheet-footer">

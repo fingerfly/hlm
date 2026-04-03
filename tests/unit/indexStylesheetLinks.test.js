@@ -103,6 +103,9 @@ test("styles-responsive includes desktop two-pane shell rules", () => {
   assert.match(css, /#pickerModal\.desktop-inline-picker/);
   assert.match(css, /\.desktop-context-host \.context-control-desktop/);
   assert.match(css, /\.desktop-context-host \.context-control-mobile/);
+  assert.match(css, /\.desktop-context-host \.context-apply-btn/);
+  assert.match(css, /\.desktop-context-host \.context-sheet-footer/);
+  assert.match(css, /display:\s*none\s*!important/);
   assert.match(
     css,
     /\.container\.app-shell\s*\{[^}]*align-content:\s*start/s
@@ -122,6 +125,7 @@ test("index.html includes desktop context dual-control ids", () => {
   assert.match(html, /id="flowerCountInput"/);
   assert.match(html, /id="kongAnCountInput"/);
   assert.match(html, /id="kongMingCountInput"/);
+  assert.match(html, /id="roleValidationError"/);
   assert.match(html, /class="context-control-mobile"/);
   assert.match(html, /class="context-control-desktop"/);
 });

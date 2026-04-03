@@ -163,7 +163,15 @@ export function renderResultModal(result, refs) {
   renderFanList(refs.hitPreview, vm.matchedFans, { expandable: true });
   renderSettlementRows(refs.settlementRows, vm.settlement);
   if (refs.explanation) {
-    refs.explanation.textContent = vm.explanation || "";
+    const settlementError = vm.settlementErrorText || "";
+    if (settlementError) {
+      refs.status.textContent = `${vm.winText}（结算未完成）`;
+      refs.explanation.textContent = settlementError + (vm.explanation
+        ? `；${vm.explanation}`
+        : "");
+    } else {
+      refs.explanation.textContent = vm.explanation || "";
+    }
   }
   return vm;
 }

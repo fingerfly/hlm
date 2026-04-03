@@ -26,9 +26,20 @@
     padding: 12px;
   }
 
-  .round-setup-grid {
-    grid-template-columns: 1fr;
-    gap: 6px;
+  .round-setup-table {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto;
+    grid-template-areas:
+      "seat-n seat-n"
+      "seat-w seat-e"
+      "seat-s seat-s"
+      "table-c table-c";
+    gap: 8px;
+    padding: 10px;
+  }
+
+  .round-setup-wind {
+    font-size: 16px;
   }
 
   .settlement-head,
@@ -43,6 +54,10 @@
 
   .settlement-row {
     font-size: 13px;
+  }
+
+  .context-role-controls {
+    grid-template-columns: 1fr;
   }
 }
 
@@ -239,6 +254,12 @@
 
   .desktop-context-host .context-sheet-footer {
     border-top-width: 1px;
+  }
+
+  /* Desktop inline context applies changes immediately; hide apply CTA row. */
+  .desktop-context-host .context-apply-btn,
+  .desktop-context-host .context-sheet-footer {
+    display: none !important;
   }
 
   /* Two rows of seven — full 14 slots visible without overlap. */

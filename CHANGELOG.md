@@ -4,9 +4,13 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [5.0.0] - 2026-04-03
+
 ## [4.12.0] - 2026-04-03
 
 ### Added
+- 启动门 DOM 契约单测 `tests/unit/roundSetupGateDom.test.js`（四风位 `data-seat` 与
+  既有输入 id）。
 - 启动新增「开始对局」入口：先定义四家（东南西北）名称/起始分与庄家后，再进入手牌流程
   (`public/index.html`, `public/app.js`, `public/styles-components.css`).
 - 新增四家结算核心模块，按 `zimo`/`dianhe` 计算四家 `局前/增减/局后`，并提供
@@ -14,6 +18,9 @@ All notable changes to this project will be documented in this file.
   `tests/unit/roundSettlement.test.js`).
 
 ### Changed
+- 启动门「设定玩家」改为俯视牌桌布局（四风位面板 + 中心庄家与开始对局），保留既有
+  输入 id；庄家下拉变更时高亮当前座席 (`public/index.html`,
+  `public/styles-components.css`, `public/styles-responsive.css`, `public/app.js`).
 - 和牌条件新增结算角色输入（和牌者、放铳者），并将其纳入结果计算请求；
   `zimo` 时隐藏并清空放铳者输入 (`public/index.html`,
   `public/resultStateActions.js`, `public/app.js`, `public/contextWiring.js`,
@@ -21,6 +28,18 @@ All notable changes to this project will be documented in this file.
 - 结果窗体新增「四家结算」区块，展示四家行级明细并复用 view model 输出
   (`public/resultModalView.js`, `public/appRefs.js`,
   `src/app/resultViewModel.js`, `tests/unit/resultViewModel.test.js`).
+- 结算角色在移动端/桌面端均可设置；点和（`dianhe`）未手选放铳者时，
+  结果窗体显示结算校验失败原因，避免四家结算静默全 0
+  (`public/index.html`, `public/styles-modals.css`,
+  `public/styles-responsive.css`, `src/app/resultViewModel.js`,
+  `public/resultModalView.js`).
+- 桌面端（PC/Mac）和牌条件 inline context 隐藏「应用」按钮及其 footer 行；
+  移动端保留原有「应用」按钮行为不变
+  (`public/styles-responsive.css`, `tests/unit/indexStylesheetLinks.test.js`).
+- 和牌条件结算角色改为随和牌方式动态约束：自摸时放铳者不可选；点和时若未选
+  放铳者或与和牌者相同，前置阻断计算并给出提示
+  (`public/resultStateActions.js`, `public/app.js`, `public/index.html`,
+  `public/styles-modals.css`, `tests/unit/resultStateActions.test.js`).
 
 ## [4.11.0] - 2026-03-30
 

@@ -20,6 +20,22 @@ const WIN_PATTERN_TEXT = Object.freeze({
 });
 
 /**
+ * Purpose: Convert settlement validation problems into one UI string.
+ *
+ * @param {null|{ok?: boolean, problems?: string[]}} settlement
+ * @returns {string} Empty string means no settlement error.
+ */
+function buildSettlementErrorText(settlement) {
+  if (!settlement) return "";
+  if (settlement.ok === true) return "";
+  const problems = Array.isArray(settlement.problems)
+    ? settlement.problems.filter(Boolean)
+    : [];
+  if (problems.length === 0) return "";
+  return `结算校验失败：${problems.join("；")}`;
+}
+
+/**
  * Map one fan item into localized display fields.
  *
  * @param {{id: string, fan: number}} item - Raw fan item.
@@ -43,6 +59,7 @@ export function buildResultViewModel(result) {
   const status = result?.recognition?.status || "";
   const scoring = result?.scoring || {};
   const pattern = scoring.winPattern;
+  const settlementErrorText = buildSettlementErrorText(result?.settlement);
   return {
     statusText: STATUS_TEXT[status] || status || "未知状态",
     winText: scoring.isWin ? "和牌" : "未和牌",
@@ -54,6 +71,8 @@ export function buildResultViewModel(result) {
     matchedFans: (scoring.matchedFans || []).map(mapFanItem),
     excludedFans: (scoring.excludedFans || []).map(mapFanItem),
     settlement: result?.settlement || null,
+    settlementErrorText,
+    hasSettlementError: Boolean(settlementErrorText),
     raw: result
   };
 }

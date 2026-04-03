@@ -541,7 +541,7 @@ select {
 }
 
 .round-setup-card {
-  width: min(640px, 100%);
+  width: min(720px, 100%);
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: 16px;
@@ -554,17 +554,123 @@ select {
   }
 }
 
-.round-setup-grid {
+/* Bird's-eye table: N top, E right, S bottom, W left; center = dealer + CTA */
+.round-setup-table {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 8px;
-  margin-bottom: 10px;
+  grid-template-columns: minmax(0, 1fr) minmax(140px, 220px) minmax(0, 1fr);
+  grid-template-rows: auto minmax(100px, auto) auto;
+  grid-template-areas:
+    ". seat-n ."
+    "seat-w table-c seat-e"
+    ". seat-s .";
+  gap: 10px;
+  margin-bottom: 4px;
+  padding: 12px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: linear-gradient(
+    165deg,
+    #1e6b45 0%,
+    #165738 45%,
+    #134a30 100%
+  );
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.12);
 }
 
-.round-setup-grid label,
+.round-setup-seat {
+  display: grid;
+  gap: 6px;
+  align-content: start;
+  padding: 10px;
+  border-radius: 10px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  min-width: 0;
+}
+
+.round-setup-seat--n {
+  grid-area: seat-n;
+}
+
+.round-setup-seat--e {
+  grid-area: seat-e;
+}
+
+.round-setup-seat--s {
+  grid-area: seat-s;
+}
+
+.round-setup-seat--w {
+  grid-area: seat-w;
+}
+
+.round-setup-seat-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 2px;
+}
+
+.round-setup-wind {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: 0.02em;
+}
+
+.round-setup-dealer-badge {
+  display: none;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #0d3d26;
+  background: #f0d878;
+  border: 1px solid #c9a227;
+}
+
+.round-setup-seat.is-dealer .round-setup-dealer-badge {
+  display: inline-block;
+}
+
+.round-setup-seat.is-dealer {
+  box-shadow: 0 0 0 2px #f0d878;
+}
+
+.round-setup-seat label,
 .round-dealer-row {
   display: grid;
   gap: 6px;
+}
+
+.round-setup-table-center {
+  grid-area: table-c;
+  display: grid;
+  gap: 10px;
+  align-content: center;
+  justify-items: stretch;
+  padding: 10px;
+  border-radius: 10px;
+  background: rgb(0 0 0 / 0.18);
+  border: 1px solid rgb(255 255 255 / 0.15);
+}
+
+.round-setup-table-center .round-dealer-row {
+  color: #f2f7f3;
+}
+
+.round-setup-table-center select {
+  width: 100%;
+  min-height: 40px;
+  color: var(--text);
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+.round-setup-table-center .primary-btn {
+  width: 100%;
 }
 
 .settlement-head,

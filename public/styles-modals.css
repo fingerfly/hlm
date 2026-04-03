@@ -177,6 +177,24 @@
   display: none !important;
 }
 
+/* Settlement roles: visible on both mobile and desktop. */
+.context-role-controls {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  align-items: end;
+}
+
+.context-role-controls .context-desktop-field {
+  margin-bottom: 0;
+}
+
+.context-error-text {
+  margin: 8px 0 0;
+  color: #b42318;
+  font-size: 13px;
+}
+
 .context-desktop-field {
   margin-bottom: 10px;
 }

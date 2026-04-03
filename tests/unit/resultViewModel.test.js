@@ -96,3 +96,27 @@ test("buildResultViewModel keeps settlement payload for rendering", () => {
   assert.equal(Array.isArray(vm.settlement.rows), true);
   assert.equal(vm.settlement.rows[0].seat, "E");
 });
+
+test("buildResultViewModel exposes settlementErrorText when settlement is invalid", () => {
+  const vm = buildResultViewModel({
+    recognition: { status: "manual_ready" },
+    scoring: {
+      isWin: true,
+      totalFan: 2,
+      minWinningFan: 1,
+      winPattern: "standard",
+      matchedFans: [],
+      excludedFans: []
+    },
+    settlement: {
+      ok: false,
+      problems: ["discarderSeat must be one of E/S/W/N and not winnerSeat"],
+      rows: [
+        { seat: "E", name: "东家", scoreBefore: 0, delta: 0, scoreAfter: 0 }
+      ]
+    },
+    explanation: "ok"
+  });
+  assert.equal(vm.hasSettlementError, true);
+  assert.match(vm.settlementErrorText, /结算校验失败：/);
+});
