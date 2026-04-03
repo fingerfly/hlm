@@ -41,6 +41,12 @@ import {
 } from "./desktopPickerMount.js";
 import { mountHelpContent } from "./helpContentMount.js";
 import { installHelpFanHashNavigation } from "./helpFanHash.js";
+import {
+  readStoredScoreRuleSelection,
+  writeScoreRulePresetSelection,
+  writeCustomScoreRuleFromPreset
+} from "./scoreRuleState.js";
+import { SCORE_RULE_PRESET_IDS } from "../src/config/scoreRuleConfig.js";
 
 /**
  * Purpose: Bootstrap HLM web UI and connect app modules.
@@ -58,13 +64,16 @@ if (splashVersionEl) {
   splashVersionEl.textContent = `版本 ${versionLabel}`;
 }
 const { refs, modalRefs } = createAppRefs(byId);
+const initialRuleSelection = readStoredScoreRuleSelection();
 
 const store = {
   uiState: createUiFlowState(),
   roundState: {
     initialized: false,
     dealerSeat: "E",
-    players: createDefaultRoundPlayers()
+    players: createDefaultRoundPlayers(),
+    scoreRulePreset: initialRuleSelection.presetId,
+    scoreRuleConfig: initialRuleSelection.ruleConfig
   },
   pickerState: createTilePickerState([]),
   pickerAction: "single",
@@ -210,6 +219,20 @@ function syncDiscarderVisibility() {
   }
 }
 
+function syncScoreRuleStatus() {
+  const statusEl = refs.scoreRuleStatusEl;
+  const presetEl = byId("scoreRulePreset");
+  if (presetEl) {
+    presetEl.value = store.roundState?.scoreRulePreset
+      || SCORE_RULE_PRESET_IDS.MCR_OFFICIAL;
+  }
+  if (!statusEl) return;
+  const meta = store.roundState?.scoreRuleConfig?.meta || {};
+  const name = meta.name || store.roundState?.scoreRulePreset || "未知规则";
+  const version = meta.version || "n/a";
+  statusEl.textContent = `当前规则：${name}（${version}）`;
+}
+
 /** Marks the seat panel matching dealerSeat with .is-dealer (visual only). */
 function syncRoundSetupDealerHighlight() {
   const dealer = byId("dealerSeat")?.value || "E";
@@ -236,6 +259,36 @@ if (dealerSeatEl) {
   dealerSeatEl.addEventListener("change", syncRoundSetupDealerHighlight);
   syncRoundSetupDealerHighlight();
 }
+const scoreRulePresetEl = byId("scoreRulePreset");
+if (scoreRulePresetEl) {
+  scoreRulePresetEl.addEventListener("change", () => {
+    const id = scoreRulePresetEl.value || SCORE_RULE_PRESET_IDS.MCR_OFFICIAL;
+    writeScoreRulePresetSelection(id);
+    const next = readStoredScoreRuleSelection();
+    store.roundState = {
+      ...(store.roundState || {}),
+      scoreRulePreset: next.presetId,
+      scoreRuleConfig: next.ruleConfig
+    };
+    syncScoreRuleStatus();
+  });
+}
+const cloneScoreRuleBtn = byId("cloneScoreRuleBtn");
+if (cloneScoreRuleBtn) {
+  cloneScoreRuleBtn.addEventListener("click", () => {
+    const baseId = store.roundState?.scoreRulePreset
+      || SCORE_RULE_PRESET_IDS.MCR_OFFICIAL;
+    writeCustomScoreRuleFromPreset(baseId);
+    const next = readStoredScoreRuleSelection();
+    store.roundState = {
+      ...(store.roundState || {}),
+      scoreRulePreset: next.presetId,
+      scoreRuleConfig: next.ruleConfig
+    };
+    syncScoreRuleStatus();
+  });
+}
+syncScoreRuleStatus();
 
 const { openHelp } = wireAppEvents({
   byId,

@@ -369,6 +369,25 @@
             <p id="roleValidationError" class="context-error-text summary-text"
               hidden></p>
           </section>
+          <section class="context-group" aria-labelledby="ctxScoreRuleTitle">
+            <h4 id="ctxScoreRuleTitle" class="context-group-title">结算规则</h4>
+            <div class="context-role-controls">
+              <div class="context-desktop-field">
+                <label for="scoreRulePreset" class="context-label">规则预设</label>
+                <select id="scoreRulePreset" class="context-select-input">
+                  <option value="MCR_Official">国标预设</option>
+                  <option value="Current_Compat">当前兼容</option>
+                  <option value="Custom">自定义</option>
+                </select>
+              </div>
+              <div class="context-desktop-field">
+                <span class="context-label">自定义规则</span>
+                <button type="button" id="cloneScoreRuleBtn"
+                  class="ghost-btn">从当前预设克隆为自定义</button>
+              </div>
+            </div>
+            <p id="scoreRuleStatus" class="summary-text"></p>
+          </section>
         </div>
         <div class="context-sheet-footer">
           <button type="button" data-close="context"
@@ -390,6 +409,7 @@
             </button>
           </div>
           <p id="resultStatus" class="status-pill">未和牌</p>
+          <p id="resultRuleMeta" class="summary-text"></p>
           <p id="resultTotalFan" class="total-fan">0 番</p>
         </div>
         <div class="result-scroll">

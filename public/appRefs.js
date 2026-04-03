@@ -26,9 +26,11 @@ export function createAppRefs(byId) {
     wizardNextBtn: byId("wizardNextBtn"),
     desktopSidePanelEl: byId("desktopSidePanel"),
     readyHintEl: byId("readyHint"),
+    scoreRuleStatusEl: byId("scoreRuleStatus"),
     resultRefs: {
       total: byId("resultTotalFan"),
       status: byId("resultStatus"),
+      ruleMeta: byId("resultRuleMeta"),
       meldRows: byId("resultMeldRows"),
       hitPreview: byId("hitPreview"),
       settlementRows: byId("resultSettlementRows"),

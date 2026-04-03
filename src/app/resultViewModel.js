@@ -60,6 +60,12 @@ export function buildResultViewModel(result) {
   const scoring = result?.scoring || {};
   const pattern = scoring.winPattern;
   const settlementErrorText = buildSettlementErrorText(result?.settlement);
+  const ruleMeta = result?.ruleMeta || null;
+  const ruleMetaText = ruleMeta
+    ? `规则：${ruleMeta.name || ruleMeta.id || "未知"}`
+      + `（${ruleMeta.version || "n/a"}）`
+      + (ruleMeta.formulaNote ? ` · ${ruleMeta.formulaNote}` : "")
+    : "";
   return {
     statusText: STATUS_TEXT[status] || status || "未知状态",
     winText: scoring.isWin ? "和牌" : "未和牌",
@@ -73,6 +79,7 @@ export function buildResultViewModel(result) {
     settlement: result?.settlement || null,
     settlementErrorText,
     hasSettlementError: Boolean(settlementErrorText),
+    ruleMetaText,
     raw: result
   };
 }

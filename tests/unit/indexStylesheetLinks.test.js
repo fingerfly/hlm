@@ -126,6 +126,10 @@ test("index.html includes desktop context dual-control ids", () => {
   assert.match(html, /id="kongAnCountInput"/);
   assert.match(html, /id="kongMingCountInput"/);
   assert.match(html, /id="roleValidationError"/);
+  assert.match(html, /id="scoreRulePreset"/);
+  assert.match(html, /id="cloneScoreRuleBtn"/);
+  assert.match(html, /id="scoreRuleStatus"/);
+  assert.match(html, /id="resultRuleMeta"/);
   assert.match(html, /class="context-control-mobile"/);
   assert.match(html, /class="context-control-desktop"/);
 });

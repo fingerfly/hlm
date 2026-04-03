@@ -159,6 +159,7 @@ export function renderResultModal(result, refs) {
   const vm = buildResultViewModel(result);
   refs.total.textContent = `${vm.totalFan} 番`;
   refs.status.textContent = vm.winText;
+  if (refs.ruleMeta) refs.ruleMeta.textContent = vm.ruleMetaText || "";
   renderMeldRows(refs.meldRows, vm.meldGroups);
   renderFanList(refs.hitPreview, vm.matchedFans, { expandable: true });
   renderSettlementRows(refs.settlementRows, vm.settlement);

@@ -84,6 +84,7 @@ export function createResultStateActions(input) {
     const result = evaluateCapturedHand(request);
     const settlement = computeRoundSettlement({
       players: store.roundState?.players || [],
+      ruleConfig: store.roundState?.scoreRuleConfig || null,
       isWin: result?.scoring?.isWin === true,
       totalFan: result?.scoring?.totalFan || 0,
       winType: request.context.winType,
@@ -91,6 +92,7 @@ export function createResultStateActions(input) {
       discarderSeat: request.context.discarderSeat
     });
     result.settlement = settlement;
+    result.ruleMeta = store.roundState?.scoreRuleConfig?.meta || null;
     if (settlement.ok && Array.isArray(settlement.nextPlayers)) {
       store.roundState = {
         ...(store.roundState || {}),

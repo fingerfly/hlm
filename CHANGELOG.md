@@ -4,7 +4,32 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [5.1.0] - 2026-04-03
+
 ## [5.0.0] - 2026-04-03
+
+### Added
+- 启动门新增牌桌俯视布局（四风位 + 中心庄家/开始对局），并补充 DOM 契约测试，
+  确保既有输入 id 与风位标记稳定
+  (`public/index.html`, `public/app.js`, `public/styles-components.css`,
+  `public/styles-responsive.css`, `tests/unit/roundSetupGateDom.test.js`).
+- 和牌条件增加并强化结算角色可见性：移动端/桌面端均可设置和牌者与放铳者，
+  并新增角色约束单测覆盖 (`public/index.html`, `public/styles-modals.css`,
+  `public/styles-responsive.css`, `tests/unit/resultStateActions.test.js`).
+
+### Changed
+- 点和（`dianhe`）改为必须手选放铳者；未选或与和牌者相同会阻断计算并给出提示。
+  自摸（`zimo`）场景保持放铳者隐藏且清空
+  (`public/resultStateActions.js`, `public/app.js`, `public/resultModalView.js`).
+- 结果弹窗四家结算区域新增校验失败可视化，避免非法角色输入时出现“静默全 0”
+  误导 (`public/resultModalView.js`, `src/app/resultViewModel.js`).
+- `MCR_Official` 预设锁定为“番数直接作为结算单位”口径，并补充点和/自摸
+  黄金样例测试，确保公式不漂移
+  (`src/config/scoreRuleConfig.js`, `tests/unit/roundSettlement.test.js`).
+- 结果区规则信息增加公式说明文案（`formulaNote`），便于用户核对当前结算口径
+  (`src/app/resultViewModel.js`, `tests/unit/resultViewModel.test.js`).
+- 版本升级到 `5.0.0`（build 1），同步运行时版本常量
+  (`package.json`, `src/config/appVersion.js`).
 
 ## [4.12.0] - 2026-04-03
 
@@ -40,6 +65,13 @@ All notable changes to this project will be documented in this file.
   放铳者或与和牌者相同，前置阻断计算并给出提示
   (`public/resultStateActions.js`, `public/app.js`, `public/index.html`,
   `public/styles-modals.css`, `tests/unit/resultStateActions.test.js`).
+- 结算规则新增参数化配置与双预设（`MCR_Official` / `Current_Compat`），并支持
+  本地持久化选择与自定义克隆回退；结果区显示当前规则信息
+  (`src/config/scoreRuleConfig.js`, `src/contracts/scoreRuleConfigValidator.js`,
+  `public/scoreRuleState.js`, `src/app/roundSettlement.js`, `public/app.js`,
+  `public/resultStateActions.js`, `public/index.html`,
+  `src/app/resultViewModel.js`, `public/resultModalView.js`,
+  `tests/unit/scoreRuleConfigValidator.test.js`).
 
 ## [4.11.0] - 2026-03-30
 

@@ -18,6 +18,24 @@ function validateSeat(seat) {
   return SEATS.includes(seat);
 }
 
+function resolvePointFromFan(totalFan, ruleConfig) {
+  const fanToPoint = ruleConfig?.fanToPoint || {};
+  if (fanToPoint.mode === "table") {
+    const table = fanToPoint.table?.byFan || {};
+    const raw = table[String(totalFan)];
+    return Math.max(0, asInt(raw, 0));
+  }
+  const linear = fanToPoint.linear || {};
+  const perFan = Math.max(1, asInt(linear.pointPerFan, 1));
+  let point = totalFan * perFan;
+  const minPoint = Math.max(0, asInt(linear.minPoint, 0));
+  const maxRaw = linear.maxPoint;
+  const maxPoint = maxRaw == null ? null : Math.max(0, asInt(maxRaw, 0));
+  if (point < minPoint) point = minPoint;
+  if (maxPoint != null && point > maxPoint) point = maxPoint;
+  return point;
+}
+
 function normalizePlayers(players = []) {
   const map = new Map();
   for (const item of players) {
@@ -48,6 +66,7 @@ export function computeRoundSettlement(input = {}) {
   const winnerSeat = input.winnerSeat;
   const discarderSeat = input.discarderSeat || null;
   const totalFan = Math.max(0, asInt(input.totalFan, 0));
+  const ruleConfig = input.ruleConfig || null;
   const isWin = input.isWin === true;
   const problems = [];
   if (!validateSeat(winnerSeat)) {
@@ -61,13 +80,19 @@ export function computeRoundSettlement(input = {}) {
   }
   const deltas = { E: 0, S: 0, W: 0, N: 0 };
   if (problems.length === 0 && isWin && totalFan > 0) {
+    const point = resolvePointFromFan(totalFan, ruleConfig);
+    const dist = ruleConfig?.distribution || {};
+    const zimoWinMul = Math.max(1, asInt(dist.zimo?.winnerMultiplier, 3));
+    const zimoLoseMul = Math.max(1, asInt(dist.zimo?.loserMultiplier, 1));
+    const dhWinMul = Math.max(1, asInt(dist.dianhe?.winnerMultiplier, 1));
+    const dhLoseMul = Math.max(1, asInt(dist.dianhe?.discarderMultiplier, 1));
     if (winType === "dianhe") {
-      deltas[winnerSeat] += totalFan;
-      deltas[discarderSeat] -= totalFan;
+      deltas[winnerSeat] += point * dhWinMul;
+      deltas[discarderSeat] -= point * dhLoseMul;
     } else {
-      deltas[winnerSeat] += totalFan * 3;
+      deltas[winnerSeat] += point * zimoWinMul;
       for (const seat of SEATS) {
-        if (seat !== winnerSeat) deltas[seat] -= totalFan;
+        if (seat !== winnerSeat) deltas[seat] -= point * zimoLoseMul;
       }
     }
   }

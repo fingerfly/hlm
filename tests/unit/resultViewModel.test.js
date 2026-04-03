@@ -120,3 +120,26 @@ test("buildResultViewModel exposes settlementErrorText when settlement is invali
   assert.equal(vm.hasSettlementError, true);
   assert.match(vm.settlementErrorText, /结算校验失败：/);
 });
+
+test("buildResultViewModel maps rule meta text", () => {
+  const vm = buildResultViewModel({
+    recognition: { status: "manual_ready" },
+    scoring: {
+      isWin: true,
+      totalFan: 2,
+      minWinningFan: 1,
+      winPattern: "standard",
+      matchedFans: [],
+      excludedFans: []
+    },
+    ruleMeta: {
+      id: "MCR_Official",
+      name: "国标预设",
+      version: "1.0.0",
+      formulaNote: "番数直接作为结算单位"
+    }
+  });
+  assert.match(vm.ruleMetaText, /国标预设/);
+  assert.match(vm.ruleMetaText, /1.0.0/);
+  assert.match(vm.ruleMetaText, /番数直接作为结算单位/);
+});

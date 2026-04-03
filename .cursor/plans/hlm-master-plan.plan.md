@@ -94,6 +94,12 @@ todos:
       结算校验失败原因（避免静默全 0）。Child:
       hlm_round_settlement_roles_visible_01c13181.plan.md
     status: completed
+  - id: track-score-config-mcr-presets
+    content: >
+      结算公式参数化（scoreRuleConfig）并提供双预设：
+      MCR_Official + Current_Compat；支持规则选择与自定义持久化回退。Child:
+      hlm_score_config_mcr_presets_620b275b.plan.md
+    status: completed
 isProject: false
 ---
 
@@ -197,6 +203,8 @@ not present in current workspace)
   [hlm_round_setup_table_ui_525519a5.plan.md](hlm_round_setup_table_ui_525519a5.plan.md)
 - 点和结算角色强制手选与错误可视化（**completed** 2026-04-03）:
   [hlm_round_settlement_roles_visible_01c13181.plan.md](hlm_round_settlement_roles_visible_01c13181.plan.md)
+- 结算公式参数化 + 双预设（**completed** 2026-04-03）:
+  [hlm_score_config_mcr_presets_620b275b.plan.md](hlm_score_config_mcr_presets_620b275b.plan.md)
 - Historical supporting plans (traceability only):
   - [hlm_版本升级工具与中文术语统一_35161103.plan.md](hlm_版本升级工具与中文术语统一_35161103.plan.md)
   - `spike_full_automation_6a79ecff.plan.md` (historical reference; file
@@ -271,20 +279,25 @@ practicality upgrade exit (or after Pages if practicality is deferred).
   [hlm_post_holistic_ui_polish.plan.md](hlm_post_holistic_ui_polish.plan.md).
 - Round setup table metaphor UI (**completed** 2026-04-03): see
   [hlm_round_setup_table_ui_525519a5.plan.md](hlm_round_setup_table_ui_525519a5.plan.md).
-- Settlement role visibility + manual discarder enforcement (**pending**):
+- Settlement role visibility + manual discarder enforcement (**completed** 2026-04-03):
   [hlm_round_settlement_roles_visible_01c13181.plan.md](hlm_round_settlement_roles_visible_01c13181.plan.md).
+- Score config scalability with MCR + compat presets (**completed** 2026-04-03):
+  [hlm_score_config_mcr_presets_620b275b.plan.md](hlm_score_config_mcr_presets_620b275b.plan.md).
 
 ## Phase Status Dashboard
 
 ### Current delivery queue (post-baseline)
 
-- TrackId: `track-round-settlement-roles-visible`（**completed** 2026-04-03）
+- TrackId: `track-score-config-mcr-presets`（**completed** 2026-04-03）
 - Prerequisite（**completed**）:
   `track-round-setup-four-player-settlement` →
   [hlm_round_setup_four_player_settlement_c30c89d1.plan.md](hlm_round_setup_four_player_settlement_c30c89d1.plan.md)
 - Prerequisite（**completed**）:
   `track-round-setup-table-ui` →
   [hlm_round_setup_table_ui_525519a5.plan.md](hlm_round_setup_table_ui_525519a5.plan.md)
+- Prerequisite（**completed**）:
+  `track-round-settlement-roles-visible` →
+  [hlm_round_settlement_roles_visible_01c13181.plan.md](hlm_round_settlement_roles_visible_01c13181.plan.md)
 - ChildPlans — 桌面 UI（已完成）:
   - Baseline / history:
     [hlm_desktop_web_ui_ce34a47e.plan.md](hlm_desktop_web_ui_ce34a47e.plan.md)
@@ -295,9 +308,9 @@ practicality upgrade exit (or after Pages if practicality is deferred).
 - ChildPlans — 牌桌式启动门（已完成）:
   - [hlm_round_setup_table_ui_525519a5.plan.md](hlm_round_setup_table_ui_525519a5.plan.md)
 - ChildPlans — 当前可执行轨道:
-  - [hlm_round_settlement_roles_visible_01c13181.plan.md](hlm_round_settlement_roles_visible_01c13181.plan.md)
+  - [hlm_score_config_mcr_presets_620b275b.plan.md](hlm_score_config_mcr_presets_620b275b.plan.md)
 - **Active slice：**
-  无（点和放铳者强制手选 + 结算校验失败反馈已完成）
+  无（scoreRuleConfig 参数化 + 双预设已完成）
 - TrackTodoStatus: `completed`
 - Prior closed: `track-five-principles-exact-scoring` →
   [hlm-five-principles-exact-engine_cf4e8446.plan.md](hlm-five-principles-exact-engine_cf4e8446.plan.md)
@@ -361,6 +374,15 @@ practicality upgrade exit (or after Pages if practicality is deferred).
     `rendering on desktop/mobile breakpoints.`
   - `Keep track in monitoring mode; no open blocker.`
 - ValidationEvidence:
+  - `2026-04-03: implemented track-score-config-mcr-presets — added`
+    `scoreRuleConfig presets + validator, rule persistence, settlement`
+    `ruleConfig integration, preset/custom UI hooks, and result rule meta`
+    `display; tests added/updated across validator, settlement, result VM,`
+    `stylesheet/id contracts. Gates pass: npm test, quality:complexity, cloc.`
+  - `2026-04-03: plan review-fix completed for score config track; canonical`
+    `child moved to workspace .cursor/plans, placeholders removed, and`
+    `master frontmatter/index/dependency/dashboard linked;`
+    `readiness verdict ready_to_execute.`
   - `2026-04-03: settlement role constraints refined — zimo disables discarder;`
     `dianhe requires manual discarder and blocks calculate with explicit`
     `message when invalid. Added resultStateActions.test.js and updated`
