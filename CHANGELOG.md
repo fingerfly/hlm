@@ -4,7 +4,62 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [5.2.2] - 2026-04-03
+
+### Added
+- 结果弹窗番数行：当引擎 `gateFan` 低于 `totalFan`（如花牌不计入起和）时显示
+  **总番** 与 **起和** 分项（`resultViewModel`、`resultModalView`、
+  `tests/unit/resultModalView.test.js`）。
+
+## [5.2.1] - 2026-04-04
+
+### Changed
+- 中文帮助「推荐使用步骤」与 **三步向导**（设定玩家 → 手牌 2/3 → 条件 3/3）对齐；
+  补充底部上/下一步提示（`public/index.html`）。
+- `tests/unit/indexStylesheetLinks.test.js`：帮助模板含设定玩家与步骤 2/3、3/3 文案
+  契约。
+
+## [5.2.0] - 2026-04-03
+
+### Changed
+- **三步向导（Option B）**：「设定玩家」并入 `main.app-shell` 为步骤 1/3，取消全屏
+  启动门遮挡主界面；手牌为 2/3，和牌条件为 3/3；底部「下一步」统一离开设定
+  （`startRoundBtn` 保留 id 供契约测试，默认隐藏）。
+- `uiFlowState` 扩展为三步；`goWizardNext` / `syncWizardModals` /
+  `handleWizardNextClick`（step 3 计算）与桌面内联 context 对齐；
+  「再玩一局」回到步骤 2（手牌）。
+- 样式：`round-setup-gate` 改为壳内卡片布局（非 `100vh` 遮罩）。
+
+### Added
+- `tests/unit/roundSetupGateDom.test.js`：断言 `#roundSetupGate` 位于 `<main>` 内、
+  `handCardSection` id 存在。
+
+## [5.1.1] - 2026-04-03
+
+### Fixed
+- 结果弹窗「四家结算」表头与数据列错位：改为 `table` + `colgroup` 固定列宽，
+  与 `tbody` 共用同一列网格 (`public/index.html`, `public/resultModalView.js`,
+  `public/styles-components.css`, `public/styles-responsive.css`).
+
 ## [5.1.0] - 2026-04-03
+
+### Added
+- `buildScoringRuleSnapshot` 与规则配置中的 `scoring` / `settlement` 字段：支持起和门槛
+  与花牌排除、`officialBaseFan` 底分+基本分结算；新增
+  `src/app/officialBaseFanSettlement.js`。
+- 单元/集成测试覆盖国标起和门槛、花牌不计起和、官方结算守恒
+  (`tests/unit/scoreAggregator.test.js`、`tests/unit/roundSettlement.test.js`、
+  `tests/unit/scoringEngine/contractAndBaseline.test.js`、
+  `tests/integration/evaluateCapturedHand.test.js`、
+  `tests/unit/scoreRuleConfigValidator.test.js`)。
+
+### Changed
+- **国标预设**（`MCR_Official`）：8 分起和（`HUA_PAI` 不计入起和判定）、自摸/点和按
+  体育总局公式「底分 8 + 总番」结算；**当前兼容**预设保持原线性番→点逻辑。
+- `calculate()` 将当前 `scoreRuleConfig` 注入 `evaluateCapturedHand` / `scoreHand`
+  (`public/resultStateActions.js`, `src/app/evaluateCapturedHand.js`)。
+- `scoreHand` 在多个分解间优先保留满足起和的候选 (`src/rules/scoringEngine.js`)。
+- 版本 `5.1.0`（build 1）(`package.json`, `src/config/appVersion.js`)。
 
 ## [5.0.0] - 2026-04-03
 
@@ -23,11 +78,6 @@ All notable changes to this project will be documented in this file.
   (`public/resultStateActions.js`, `public/app.js`, `public/resultModalView.js`).
 - 结果弹窗四家结算区域新增校验失败可视化，避免非法角色输入时出现“静默全 0”
   误导 (`public/resultModalView.js`, `src/app/resultViewModel.js`).
-- `MCR_Official` 预设锁定为“番数直接作为结算单位”口径，并补充点和/自摸
-  黄金样例测试，确保公式不漂移
-  (`src/config/scoreRuleConfig.js`, `tests/unit/roundSettlement.test.js`).
-- 结果区规则信息增加公式说明文案（`formulaNote`），便于用户核对当前结算口径
-  (`src/app/resultViewModel.js`, `tests/unit/resultViewModel.test.js`).
 - 版本升级到 `5.0.0`（build 1），同步运行时版本常量
   (`package.json`, `src/config/appVersion.js`).
 

@@ -527,17 +527,11 @@ select {
   color: #1f2328;
 }
 
+/* In-shell setup (wizard step 1); not a full-viewport overlay. */
 .round-setup-gate {
-  min-height: 100vh;
-  display: grid;
-  place-items: center;
-  padding: 16px;
+  margin: 0 0 12px 0;
+  padding: 0;
   opacity: 1;
-  transition: opacity 0.2s ease;
-}
-
-.round-setup-gate.is-exiting {
-  opacity: 0;
 }
 
 .round-setup-card {
@@ -546,12 +540,6 @@ select {
   border: 1px solid var(--border);
   border-radius: 16px;
   padding: 14px;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .round-setup-gate {
-    transition: none;
-  }
 }
 
 /* Bird's-eye table: N top, E right, S bottom, W left; center = dealer + CTA */
@@ -673,25 +661,65 @@ select {
   width: 100%;
 }
 
-.settlement-head,
-.settlement-row {
-  display: grid;
-  grid-template-columns: minmax(0, 2fr) repeat(3, minmax(0, 1fr));
-  gap: 8px;
-  align-items: center;
+/* Four-seat settlement: table keeps header and body columns aligned. */
+.settlement-table {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: separate;
+  border-spacing: 0 6px;
 }
 
-.settlement-head {
+.settlement-col-name {
+  width: 36%;
+}
+
+.settlement-col-num {
+  width: 21.333%;
+}
+
+.settlement-table thead th {
+  padding: 0 8px 6px 8px;
   font-size: 12px;
+  font-weight: 500;
   color: var(--subtext);
-  margin-bottom: 6px;
+  text-align: left;
+  vertical-align: bottom;
+  border-bottom: 1px solid var(--border);
 }
 
-.settlement-row {
+.settlement-table thead th:not(:first-child) {
+  text-align: right;
+}
+
+.settlement-table tbody td {
   padding: 6px 8px;
-  border: 1px solid var(--border);
+  vertical-align: middle;
+  background: var(--card);
+  border-style: solid;
+  border-color: var(--border);
+  border-width: 1px 0;
+  font-size: 14px;
+}
+
+.settlement-table tbody td:not(:first-child) {
+  border-left-width: 1px;
+}
+
+.settlement-table tbody td:first-child {
+  border-left-width: 1px;
+  border-radius: 8px 0 0 8px;
+}
+
+.settlement-table tbody td:last-child {
+  border-right-width: 1px;
+  border-radius: 0 8px 8px 0;
+}
+
+.settlement-table tbody .settlement-empty {
+  text-align: center;
+  color: var(--subtext);
+  border-right-width: 1px;
   border-radius: 8px;
-  margin-bottom: 6px;
 }
 
 .settlement-name {

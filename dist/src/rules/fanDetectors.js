@@ -12,9 +12,19 @@ import { extractHandFeatures } from "./handFeatures.js";
  * Convert fan definition into runtime match object.
  *
  * @param {{id: string, fan: number, evidence: string}} def
+ * @param {object} input - Scoring input (context fields).
  * @returns {{id: string, fan: number, evidence: string}}
  */
-function toMatchedFan(def) {
+function toMatchedFan(def, input) {
+  if (def.id === "HUA_PAI") {
+    const n = Number.parseInt(input?.flowerCount ?? 0, 10);
+    const flowers = Number.isNaN(n) ? 0 : n;
+    return {
+      id: def.id,
+      fan: flowers,
+      evidence: def.evidence
+    };
+  }
   return {
     id: def.id,
     fan: def.fan,
@@ -35,7 +45,7 @@ export function detectFans(input, win = {}) {
   const fans = [];
   for (const def of FAN_CATALOG) {
     if (def.detect(context)) {
-      fans.push(toMatchedFan(def));
+      fans.push(toMatchedFan(def, input));
     }
   }
   return fans;

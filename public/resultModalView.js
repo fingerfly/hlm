@@ -84,6 +84,20 @@ function tileDisplay(tile) {
 }
 
 /**
+ * One-line summary for 总番 vs 起和番 (when gate excludes e.g. 花牌).
+ *
+ * @param {number} totalFan
+ * @param {number} gateFan
+ * @returns {string}
+ */
+export function formatResultFanSummary(totalFan, gateFan) {
+  const t = Math.max(0, Number(totalFan) || 0);
+  const g = Math.max(0, Number(gateFan) || 0);
+  if (g === t) return `${t} 番`;
+  return `${t} 番（起和 ${g} 番）`;
+}
+
+/**
  * Render grouped meld rows for result readability.
  *
  * @param {HTMLElement} target - Group rows container.
@@ -120,31 +134,36 @@ function renderSettlementRows(target, settlement) {
     !Array.isArray(settlement.rows) ||
     !settlement.rows.length
   ) {
-    target.textContent = "无";
+    const tr = document.createElement("tr");
+    const td = document.createElement("td");
+    td.colSpan = 4;
+    td.className = "settlement-empty";
+    td.textContent = "无";
+    tr.appendChild(td);
+    target.appendChild(tr);
     return;
   }
   for (const rowData of settlement.rows) {
-    const row = document.createElement("div");
-    row.className = "settlement-row";
-    const name = document.createElement("span");
+    const tr = document.createElement("tr");
+    const name = document.createElement("td");
     name.className = "settlement-name";
     name.textContent = `${rowData.name}（${rowData.seat}）`;
-    const before = document.createElement("span");
+    const before = document.createElement("td");
     before.className = "settlement-score";
     before.textContent = String(rowData.scoreBefore);
-    const delta = document.createElement("span");
+    const delta = document.createElement("td");
     delta.className = "settlement-score";
     delta.textContent = rowData.delta > 0
       ? `+${rowData.delta}`
       : String(rowData.delta);
-    const after = document.createElement("span");
+    const after = document.createElement("td");
     after.className = "settlement-score";
     after.textContent = String(rowData.scoreAfter);
-    row.appendChild(name);
-    row.appendChild(before);
-    row.appendChild(delta);
-    row.appendChild(after);
-    target.appendChild(row);
+    tr.appendChild(name);
+    tr.appendChild(before);
+    tr.appendChild(delta);
+    tr.appendChild(after);
+    target.appendChild(tr);
   }
 }
 
@@ -157,7 +176,10 @@ function renderSettlementRows(target, settlement) {
  */
 export function renderResultModal(result, refs) {
   const vm = buildResultViewModel(result);
-  refs.total.textContent = `${vm.totalFan} 番`;
+  refs.total.textContent = formatResultFanSummary(
+    vm.totalFan,
+    vm.gateFan
+  );
   refs.status.textContent = vm.winText;
   if (refs.ruleMeta) refs.ruleMeta.textContent = vm.ruleMetaText || "";
   renderMeldRows(refs.meldRows, vm.meldGroups);

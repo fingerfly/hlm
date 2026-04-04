@@ -28,15 +28,19 @@ function cloneCounts(map) {
   return new Map(map);
 }
 
-function tryRemoveMelds(counts) {
+function findStandardMelds(counts) {
   const keys = [...counts.keys()].filter((k) => counts.get(k) > 0).sort();
-  if (keys.length === 0) return true;
+  if (keys.length === 0) return [];
 
   const first = keys[0];
   const c = counts.get(first);
+
   if (c >= 3) {
     counts.set(first, c - 3);
-    if (tryRemoveMelds(counts)) return true;
+    const tail = findStandardMelds(counts);
+    if (tail) {
+      return [{ type: "pung", tiles: [first, first, first] }, ...tail];
+    }
     counts.set(first, c);
   }
 
@@ -49,28 +53,85 @@ function tryRemoveMelds(counts) {
       counts.set(first, c - 1);
       counts.set(t2, (counts.get(t2) || 0) - 1);
       counts.set(t3, (counts.get(t3) || 0) - 1);
-      if (tryRemoveMelds(counts)) return true;
+      const tail = findStandardMelds(counts);
+      if (tail) return [{ type: "chow", tiles: [first, t2, t3] }, ...tail];
       counts.set(first, c);
       counts.set(t2, (counts.get(t2) || 0) + 1);
       counts.set(t3, (counts.get(t3) || 0) + 1);
     }
   }
-
-  return false;
+  return null;
 }
 
-function isStandardWin(tiles) {
-  const counts = countTiles(tiles);
-  for (const [tile, n] of counts.entries()) {
-    if (n >= 2) {
-      const c = cloneCounts(counts);
-      c.set(tile, n - 2);
-      if (tryRemoveMelds(c)) {
-        return true;
+function groupKey(groups) {
+  const parts = groups.map(
+    (group) => `${group.type}:${[...group.tiles].sort().join(",")}`
+  );
+  return parts.sort().join("|");
+}
+
+function findAllStandardMelds(counts) {
+  const keys = [...counts.keys()].filter((k) => counts.get(k) > 0).sort();
+  if (keys.length === 0) return [[]];
+
+  const first = keys[0];
+  const c = counts.get(first);
+  const all = [];
+
+  if (c >= 3) {
+    counts.set(first, c - 3);
+    const tails = findAllStandardMelds(counts);
+    for (const tail of tails) {
+      all.push([{ type: "pung", tiles: [first, first, first] }, ...tail]);
+    }
+    counts.set(first, c);
+  }
+
+  const suit = tileSuit(first);
+  const rank = tileRank(first);
+  if (suit !== "Z" && rank <= 7) {
+    const t2 = `${rank + 1}${suit}`;
+    const t3 = `${rank + 2}${suit}`;
+    if ((counts.get(t2) || 0) > 0 && (counts.get(t3) || 0) > 0) {
+      counts.set(first, c - 1);
+      counts.set(t2, (counts.get(t2) || 0) - 1);
+      counts.set(t3, (counts.get(t3) || 0) - 1);
+      const tails = findAllStandardMelds(counts);
+      for (const tail of tails) {
+        all.push([{ type: "chow", tiles: [first, t2, t3] }, ...tail]);
       }
+      counts.set(first, c);
+      counts.set(t2, (counts.get(t2) || 0) + 1);
+      counts.set(t3, (counts.get(t3) || 0) + 1);
     }
   }
-  return false;
+  return all;
+}
+
+export function enumerateStandardWinGroups(tiles) {
+  const counts = countTiles(tiles);
+  const all = [];
+  const seen = new Set();
+  for (const [tile, n] of counts.entries()) {
+    if (n < 2) continue;
+    const nextCounts = cloneCounts(counts);
+    nextCounts.set(tile, n - 2);
+    const meldOptions = findAllStandardMelds(nextCounts);
+    for (const melds of meldOptions) {
+      const groups = [...melds, { type: "pair", tiles: [tile, tile] }];
+      const key = groupKey(groups);
+      if (seen.has(key)) continue;
+      seen.add(key);
+      all.push(groups);
+    }
+  }
+  return all;
+}
+
+function standardWinGroups(tiles) {
+  const all = enumerateStandardWinGroups(tiles);
+  if (all.length === 0) return null;
+  return all[0];
 }
 
 function isSevenPairs(tiles) {
@@ -103,6 +164,16 @@ function isThirteenOrphans(tiles) {
   return pairFound;
 }
 
+function sevenPairsGroups(tiles) {
+  const counts = countTiles(tiles);
+  const groups = [];
+  for (const [tile, n] of [...counts.entries()].sort()) {
+    if (n !== 2) continue;
+    groups.push({ type: "pair", tiles: [tile, tile] });
+  }
+  return groups;
+}
+
 /**
  * Validate win pattern for one 14-tile hand.
  *
@@ -111,13 +182,30 @@ function isThirteenOrphans(tiles) {
  */
 export function validateWin(tiles) {
   if (!Array.isArray(tiles) || tiles.length !== 14) {
-    return { isWin: false, pattern: null };
+    return { isWin: false, pattern: null, meldGroups: [] };
   }
 
   if (isThirteenOrphans(tiles)) {
-    return { isWin: true, pattern: "thirteen_orphans" };
+    return {
+      isWin: true,
+      pattern: "thirteen_orphans",
+      meldGroups: [{ type: "orphans", tiles: [...tiles].sort() }]
+    };
   }
-  if (isSevenPairs(tiles)) return { isWin: true, pattern: "seven_pairs" };
-  if (isStandardWin(tiles)) return { isWin: true, pattern: "standard" };
-  return { isWin: false, pattern: null };
+  if (isSevenPairs(tiles)) {
+    return {
+      isWin: true,
+      pattern: "seven_pairs",
+      meldGroups: sevenPairsGroups(tiles)
+    };
+  }
+  const standardGroups = standardWinGroups(tiles);
+  if (standardGroups) {
+    return {
+      isWin: true,
+      pattern: "standard",
+      meldGroups: standardGroups
+    };
+  }
+  return { isWin: false, pattern: null, meldGroups: [] };
 }

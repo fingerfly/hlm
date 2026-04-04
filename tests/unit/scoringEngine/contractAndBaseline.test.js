@@ -1,5 +1,10 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import {
+  buildScoringRuleSnapshot,
+  getScoreRulePreset,
+  SCORE_RULE_PRESET_IDS
+} from "../../../src/config/scoreRuleConfig.js";
 import { scoreHand } from "../../../src/rules/scoringEngine.js";
 
 test("scoreHand returns NEED_CONTEXT when required context is missing", () => {
@@ -81,4 +86,36 @@ test("scoreHand accepts higher-fan hand", () => {
   });
   assert.equal(result.totalFan, 14);
   assert.equal(result.isWin, true);
+});
+
+test("scoreHand applies MCR 8-fan gate when snapshot from official preset", () => {
+  const snap = buildScoringRuleSnapshot(
+    getScoreRulePreset(SCORE_RULE_PRESET_IDS.MCR_OFFICIAL)
+  );
+  const result = scoreHand({
+    tiles: ["1W", "1W", "1W", "2W", "3W", "4W", "5W", "6W", "7W", "2T", "3T", "4T", "9B", "9B"],
+    winType: "zimo",
+    handState: "menqian",
+    kongType: "none",
+    timingEvent: "none",
+    scoringRule: snap
+  });
+  assert.equal(result.totalFan, 6);
+  assert.equal(result.gateFan, 6);
+  assert.equal(result.minWinningFan, 8);
+  assert.equal(result.isWin, false);
+  assert.equal(result.errorCode, "NOT_A_WINNING_HAND");
+});
+
+test("scoreHand rejects malformed scoringRule", () => {
+  const result = scoreHand({
+    tiles: ["1W", "1W", "1W", "2W", "3W", "4W", "5W", "6W", "7W", "2T", "3T", "4T", "9B", "9B"],
+    winType: "zimo",
+    handState: "menqian",
+    kongType: "none",
+    timingEvent: "none",
+    scoringRule: { gateMinFan: 1.5, gateExcludeFanIds: [], settlementMode: "compatLinear", officialBasePoint: 8 }
+  });
+  assert.equal(result.errorCode, "INVALID_INPUT");
+  assert.equal(result.isWin, false);
 });

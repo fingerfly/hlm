@@ -2,9 +2,7 @@ import {
   SCORE_RULE_PRESET_IDS,
   getScoreRulePreset
 } from "../src/config/scoreRuleConfig.js";
-import {
-  normalizeScoreRuleConfig
-} from "../src/contracts/scoreRuleConfigValidator.js";
+import { normalizeScoreRuleConfig } from "../src/contracts/scoreRuleConfigValidator.js";
 
 const STORAGE_KEY_PRESET = "hlm_score_rule_preset";
 const STORAGE_KEY_CUSTOM = "hlm_score_rule_custom_v1";
@@ -35,9 +33,7 @@ export function readStoredScoreRuleSelection() {
     ? getScoreRulePreset(SCORE_RULE_PRESET_IDS.CURRENT_COMPAT)
     : customParsed;
   return {
-    presetId: normalized.fallback
-      ? SCORE_RULE_PRESET_IDS.CURRENT_COMPAT
-      : SCORE_RULE_PRESET_IDS.CUSTOM,
+    presetId: normalized.fallback ? SCORE_RULE_PRESET_IDS.CURRENT_COMPAT : SCORE_RULE_PRESET_IDS.CUSTOM,
     ruleConfig: config,
     fallback: normalized.fallback,
     problems: normalized.problems

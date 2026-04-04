@@ -58,38 +58,38 @@ test("getPickerTilesByMode returns active tab in twoLayer mode", () => {
   assert.deepEqual(tiles, ["1T"]);
 });
 
-test("syncWizardModals keeps picker for missing tiles", () => {
+test("syncWizardModals keeps picker for missing tiles on tile step", () => {
   const calls = [];
   const modalActions = {
     openModalByKey: (key) => calls.push(`open:${key}`),
     closeModalByKey: (key) => calls.push(`close:${key}`)
   };
-  syncWizardModals({ ok: false, needs: "tiles", step: 1 }, modalActions);
+  syncWizardModals({ ok: false, needs: "tiles", step: 2 }, modalActions);
   assert.deepEqual(calls, ["close:context", "open:picker"]);
 });
 
-test("syncWizardModals switches from picker to context at step 2", () => {
+test("syncWizardModals switches from picker to context at step 3 (mobile)", () => {
   const calls = [];
   const modalActions = {
     openModalByKey: (key) => calls.push(`open:${key}`),
     closeModalByKey: (key) => calls.push(`close:${key}`)
   };
-  syncWizardModals({ ok: true, step: 2 }, modalActions);
+  syncWizardModals({ ok: true, step: 3 }, modalActions);
   assert.deepEqual(calls, ["close:picker", "open:context"]);
 });
 
-test("handleWizardNextClick from step 2 directly calculates and shows result", () => {
+test("handleWizardNextClick from step 3 calculates and shows result", () => {
   const modalCalls = [];
   const store = {
     uiState: {
-      wizard: { step: 2 },
+      wizard: { step: 3 },
       hand: { tiles: new Array(14).fill("1W") }
     }
   };
   const stateActions = {
     calculate: () => true,
     goWizardNext: () => {
-      throw new Error("goWizardNext should not be called from step 2");
+      throw new Error("goWizardNext should not be called from step 3");
     }
   };
   const modalActions = {
@@ -105,12 +105,12 @@ test("handleWizardNextClick from step 2 directly calculates and shows result", (
   ]);
 });
 
-test("handleWizardNextClick from step 1 advances wizard via goWizardNext", () => {
+test("handleWizardNextClick from step 1 advances via goWizardNext + sync", () => {
   const modalCalls = [];
   const store = {
     uiState: {
       wizard: { step: 1 },
-      hand: { tiles: new Array(14).fill("1W") }
+      hand: { tiles: [] }
     }
   };
   const stateActions = {
@@ -125,10 +125,10 @@ test("handleWizardNextClick from step 1 advances wizard via goWizardNext", () =>
     openModalByKey: (key) => modalCalls.push(`open:${key}`)
   };
   handleWizardNextClick(store, stateActions, modalActions, syncWizardModals);
-  assert.deepEqual(modalCalls, ["close:picker", "open:context"]);
+  assert.deepEqual(modalCalls, ["close:context", "open:picker"]);
 });
 
-test("syncWizardModals avoids context modal in desktop inline mode", () => {
+test("syncWizardModals desktop step 2 opens picker", () => {
   const prev = globalThis.matchMedia;
   globalThis.matchMedia = () => ({ matches: true });
   const calls = [];
@@ -137,6 +137,32 @@ test("syncWizardModals avoids context modal in desktop inline mode", () => {
     closeModalByKey: (key) => calls.push(`close:${key}`)
   };
   syncWizardModals({ ok: true, step: 2 }, modalActions);
+  globalThis.matchMedia = prev;
+  assert.deepEqual(calls, ["close:context", "open:picker"]);
+});
+
+test("syncWizardModals desktop step 3 closes picker for inline context", () => {
+  const prev = globalThis.matchMedia;
+  globalThis.matchMedia = () => ({ matches: true });
+  const calls = [];
+  const modalActions = {
+    openModalByKey: (key) => calls.push(`open:${key}`),
+    closeModalByKey: (key) => calls.push(`close:${key}`)
+  };
+  syncWizardModals({ ok: true, step: 3 }, modalActions);
+  globalThis.matchMedia = prev;
+  assert.deepEqual(calls, ["close:context", "close:picker"]);
+});
+
+test("syncWizardModals desktop step 1 keeps picker closed", () => {
+  const prev = globalThis.matchMedia;
+  globalThis.matchMedia = () => ({ matches: true });
+  const calls = [];
+  const modalActions = {
+    openModalByKey: (key) => calls.push(`open:${key}`),
+    closeModalByKey: (key) => calls.push(`close:${key}`)
+  };
+  syncWizardModals({ ok: true, step: 1 }, modalActions);
   globalThis.matchMedia = prev;
   assert.deepEqual(calls, ["close:context", "close:picker"]);
 });

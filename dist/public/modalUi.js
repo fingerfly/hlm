@@ -6,6 +6,8 @@
  */
 /**
  * Toggle modal open class on one element.
+ * When #pickerModal has desktop-inline-picker, syncs
+ * #desktopPickerHost.hidden.
  *
  * @param {HTMLElement|null} element - Modal root node.
  * @param {boolean} open - True when modal should be visible.
@@ -14,6 +16,14 @@
 export function setModalOpen(element, open) {
   if (!element) return;
   element.classList.toggle("is-open", open);
+  if (
+    element.id === "pickerModal" &&
+    element.classList.contains("desktop-inline-picker") &&
+    element.dataset.pickerInlineHost
+  ) {
+    const host = document.getElementById(element.dataset.pickerInlineHost);
+    if (host) host.hidden = !open;
+  }
 }
 
 /**

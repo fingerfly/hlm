@@ -132,14 +132,42 @@ test("buildResultViewModel maps rule meta text", () => {
       matchedFans: [],
       excludedFans: []
     },
-    ruleMeta: {
-      id: "MCR_Official",
-      name: "国标预设",
-      version: "1.0.0",
-      formulaNote: "番数直接作为结算单位"
-    }
+    ruleMeta: { id: "MCR_Official", name: "国标预设", version: "1.0.0" }
   });
   assert.match(vm.ruleMetaText, /国标预设/);
   assert.match(vm.ruleMetaText, /1.0.0/);
-  assert.match(vm.ruleMetaText, /番数直接作为结算单位/);
+});
+
+test("buildResultViewModel defaults gateFan to totalFan when omitted", () => {
+  const vm = buildResultViewModel({
+    recognition: { status: "manual_ready" },
+    scoring: {
+      isWin: true,
+      totalFan: 5,
+      minWinningFan: 8,
+      winPattern: "standard",
+      matchedFans: [],
+      excludedFans: []
+    },
+    explanation: "ok"
+  });
+  assert.equal(vm.gateFan, 5);
+});
+
+test("buildResultViewModel maps gateFan when below totalFan (花牌等不计起和)", () => {
+  const vm = buildResultViewModel({
+    recognition: { status: "manual_ready" },
+    scoring: {
+      isWin: true,
+      totalFan: 10,
+      gateFan: 8,
+      minWinningFan: 8,
+      winPattern: "standard",
+      matchedFans: [],
+      excludedFans: []
+    },
+    explanation: "ok"
+  });
+  assert.equal(vm.totalFan, 10);
+  assert.equal(vm.gateFan, 8);
 });

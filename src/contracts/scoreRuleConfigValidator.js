@@ -1,6 +1,7 @@
 import {
   SCORE_RULE_PRESET_IDS,
-  getScoreRulePreset
+  getScoreRulePreset,
+  SETTLEMENT_MODES
 } from "../config/scoreRuleConfig.js";
 
 function isPositiveNumber(value) {
@@ -9,6 +10,10 @@ function isPositiveNumber(value) {
 
 function isNonNegativeNumber(value) {
   return typeof value === "number" && Number.isFinite(value) && value >= 0;
+}
+
+function isNonNegativeInt(value) {
+  return typeof value === "number" && Number.isInteger(value) && value >= 0;
 }
 
 function validateLinear(linear, problems) {
@@ -42,6 +47,66 @@ function validateDistribution(dist, problems) {
   }
 }
 
+function validateScoringBlock(scoring, problems) {
+  if (scoring == null) return;
+  if (typeof scoring !== "object" || Array.isArray(scoring)) {
+    problems.push("scoring must be an object");
+    return;
+  }
+  if (
+    scoring.gateMinFan != null &&
+    !isNonNegativeInt(scoring.gateMinFan)
+  ) {
+    problems.push("scoring.gateMinFan must be a non-negative integer");
+  }
+  if (scoring.gateExcludeFanIds != null) {
+    if (!Array.isArray(scoring.gateExcludeFanIds)) {
+      problems.push("scoring.gateExcludeFanIds must be an array");
+    } else {
+      for (const id of scoring.gateExcludeFanIds) {
+        if (typeof id !== "string") {
+          problems.push("scoring.gateExcludeFanIds entries must be strings");
+          break;
+        }
+      }
+    }
+  }
+}
+
+function validateSettlementBlock(settlement, problems) {
+  if (settlement == null) return;
+  if (typeof settlement !== "object" || Array.isArray(settlement)) {
+    problems.push("settlement must be an object");
+    return;
+  }
+  const mode = settlement.mode;
+  if (
+    mode != null &&
+    mode !== SETTLEMENT_MODES.COMPAT_LINEAR &&
+    mode !== SETTLEMENT_MODES.OFFICIAL_BASE_FAN
+  ) {
+    problems.push(
+      "settlement.mode must be compatLinear or officialBaseFan"
+    );
+  }
+  if (
+    settlement.officialBasePoint != null &&
+    !isNonNegativeInt(settlement.officialBasePoint)
+  ) {
+    problems.push("settlement.officialBasePoint must be integer >= 0");
+  }
+  if (
+    mode === SETTLEMENT_MODES.OFFICIAL_BASE_FAN &&
+    typeof settlement.officialBasePoint === "number" &&
+    (!Number.isInteger(settlement.officialBasePoint) ||
+      settlement.officialBasePoint < 1)
+  ) {
+    problems.push(
+      "settlement.officialBasePoint must be integer >= 1 when specified"
+    );
+  }
+}
+
 /**
  * Validate score rule config object.
  *
@@ -64,12 +129,14 @@ export function validateScoreRuleConfig(config) {
     validateLinear(config.fanToPoint.linear, problems);
   }
   if (
-    mode === "table"
-    && typeof config.fanToPoint?.table?.byFan !== "object"
+    mode === "table" &&
+    typeof config.fanToPoint?.table?.byFan !== "object"
   ) {
     problems.push("fanToPoint.table.byFan must be object");
   }
   validateDistribution(config.distribution, problems);
+  validateScoringBlock(config.scoring, problems);
+  validateSettlementBlock(config.settlement, problems);
   return { ok: problems.length === 0, problems };
 }
 
@@ -90,4 +157,3 @@ export function normalizeScoreRuleConfig(candidate) {
     problems: valid.problems
   };
 }
-

@@ -1,13 +1,12 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import {
+  SETTLEMENT_MODES
+} from "../../src/config/scoreRuleConfig.js";
+import {
   computeRoundSettlement,
   createDefaultRoundPlayers
 } from "../../src/app/roundSettlement.js";
-import {
-  SCORE_RULE_PRESET_IDS,
-  getScoreRulePreset
-} from "../../src/config/scoreRuleConfig.js";
 
 test("createDefaultRoundPlayers returns four seats in order", () => {
   const players = createDefaultRoundPlayers();
@@ -109,35 +108,64 @@ test("computeRoundSettlement applies ruleConfig multipliers", () => {
   assert.equal(south.delta, -4);
 });
 
-test("MCR_Official preset uses fan as settlement unit for dianhe", () => {
+test("computeRoundSettlement officialBaseFan zimo uses base plus fan", () => {
   const result = computeRoundSettlement({
     players: createDefaultRoundPlayers(),
     isWin: true,
-    totalFan: 6,
-    winType: "dianhe",
-    winnerSeat: "N",
-    discarderSeat: "W",
-    ruleConfig: getScoreRulePreset(SCORE_RULE_PRESET_IDS.MCR_OFFICIAL)
+    totalFan: 8,
+    winType: "zimo",
+    winnerSeat: "E",
+    ruleConfig: {
+      settlement: {
+        mode: SETTLEMENT_MODES.OFFICIAL_BASE_FAN,
+        officialBasePoint: 8
+      },
+      fanToPoint: {
+        mode: "linear",
+        linear: { pointPerFan: 1, minPoint: 0, maxPoint: null }
+      },
+      distribution: {
+        zimo: { winnerMultiplier: 3, loserMultiplier: 1 },
+        dianhe: { winnerMultiplier: 1, discarderMultiplier: 1 }
+      }
+    }
   });
-  const north = result.rows.find((row) => row.seat === "N");
-  const west = result.rows.find((row) => row.seat === "W");
-  assert.equal(north.delta, 6);
-  assert.equal(west.delta, -6);
+  assert.equal(result.ok, true);
   assert.equal(result.sumDelta, 0);
+  const east = result.rows.find((row) => row.seat === "E");
+  const south = result.rows.find((row) => row.seat === "S");
+  assert.equal(east.delta, 48);
+  assert.equal(south.delta, -16);
 });
 
-test("MCR_Official preset uses fan as settlement unit for zimo", () => {
+test("computeRoundSettlement officialBaseFan dianhe matches 8+8 pattern", () => {
   const result = computeRoundSettlement({
     players: createDefaultRoundPlayers(),
     isWin: true,
-    totalFan: 4,
-    winType: "zimo",
-    winnerSeat: "S",
-    ruleConfig: getScoreRulePreset(SCORE_RULE_PRESET_IDS.MCR_OFFICIAL)
+    totalFan: 8,
+    winType: "dianhe",
+    winnerSeat: "E",
+    discarderSeat: "S",
+    ruleConfig: {
+      settlement: {
+        mode: SETTLEMENT_MODES.OFFICIAL_BASE_FAN,
+        officialBasePoint: 8
+      },
+      fanToPoint: {
+        mode: "linear",
+        linear: { pointPerFan: 1, minPoint: 0, maxPoint: null }
+      },
+      distribution: {
+        zimo: { winnerMultiplier: 3, loserMultiplier: 1 },
+        dianhe: { winnerMultiplier: 1, discarderMultiplier: 1 }
+      }
+    }
   });
-  const south = result.rows.find((row) => row.seat === "S");
+  assert.equal(result.ok, true);
   const east = result.rows.find((row) => row.seat === "E");
-  assert.equal(south.delta, 12);
-  assert.equal(east.delta, -4);
-  assert.equal(result.sumDelta, 0);
+  const south = result.rows.find((row) => row.seat === "S");
+  const west = result.rows.find((row) => row.seat === "W");
+  assert.equal(east.delta, 32);
+  assert.equal(south.delta, -16);
+  assert.equal(west.delta, -8);
 });

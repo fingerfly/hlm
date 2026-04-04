@@ -50,6 +50,23 @@ function mapFanItem(item) {
 }
 
 /**
+ * Normalize gate fan for UI: excludes flower-only fan from 起和门槛 when
+ * engine supplies gateFan; falls back to totalFan for older payloads.
+ *
+ * @param {{totalFan?: number, gateFan?: number}} scoring
+ * @param {number} totalFan - Non-negative total fan.
+ * @returns {number}
+ */
+function resolveGateFan(scoring, totalFan) {
+  if (!Object.prototype.hasOwnProperty.call(scoring, "gateFan")) {
+    return totalFan;
+  }
+  const g = Number(scoring.gateFan);
+  if (!Number.isFinite(g)) return totalFan;
+  return Math.max(0, g);
+}
+
+/**
  * Build render model consumed by the result modal.
  *
  * @param {object} result - End-to-end evaluation result payload.
@@ -64,12 +81,14 @@ export function buildResultViewModel(result) {
   const ruleMetaText = ruleMeta
     ? `规则：${ruleMeta.name || ruleMeta.id || "未知"}`
       + `（${ruleMeta.version || "n/a"}）`
-      + (ruleMeta.formulaNote ? ` · ${ruleMeta.formulaNote}` : "")
     : "";
+  const totalFan = Math.max(0, Number(scoring.totalFan) || 0);
+  const gateFan = resolveGateFan(scoring, totalFan);
   return {
     statusText: STATUS_TEXT[status] || status || "未知状态",
     winText: scoring.isWin ? "和牌" : "未和牌",
-    totalFan: Number(scoring.totalFan || 0),
+    totalFan,
+    gateFan,
     minWinningFan: Number(scoring.minWinningFan || 0),
     winPatternText: WIN_PATTERN_TEXT[pattern] || "未成和",
     explanation: result?.explanation || "",

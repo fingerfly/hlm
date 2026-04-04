@@ -14,32 +14,34 @@
 export function createAppRefs(byId) {
   const refs = {
     openPickerBtn: byId("openPickerBtn"),
-    openContextBtn: byId("openContextBtn"),
+    clearHandBtn: byId("clearHandBtn"),
     tilePickerGridEl: byId("tilePickerGrid"),
     tilePreviewEl: byId("tilePreview"),
     tileCountEl: byId("tileCount"),
     pickerCountEl: byId("pickerCount"),
-    pickerActionHintEl: byId("pickerActionHint"),
     pickerDeleteBtn: byId("pickerDeleteBtn"),
     contextSummaryEl: byId("contextSummary"),
+    wizardStepHintEl: byId("wizardStepHint"),
+    wizardBackBtn: byId("wizardBackBtn"),
+    wizardNextBtn: byId("wizardNextBtn"),
+    desktopSidePanelEl: byId("desktopSidePanel"),
     readyHintEl: byId("readyHint"),
-    calculateBtn: byId("calculateBtn"),
+    scoreRuleStatusEl: byId("scoreRuleStatus"),
     resultRefs: {
       total: byId("resultTotalFan"),
       status: byId("resultStatus"),
-      hitPreview: byId("hitPreview")
-    },
-    infoRefs: {
-      hitAll: byId("infoHitList"),
-      excludedAll: byId("infoExcludedList"),
-      explanation: byId("infoExplanation")
+      ruleMeta: byId("resultRuleMeta"),
+      meldRows: byId("resultMeldRows"),
+      hitPreview: byId("hitPreview"),
+      settlementRows: byId("resultSettlementRows"),
+      explanation: byId("resultExplanation")
     }
   };
   const modalRefs = {
     picker: byId("pickerModal"),
     context: byId("contextModal"),
     result: byId("resultModal"),
-    info: byId("infoModal")
+    help: byId("helpModal")
   };
   return { refs, modalRefs };
 }

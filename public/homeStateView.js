@@ -3,6 +3,7 @@
  * Description:
  * - Updates top hand preview and picker CTA labels.
  * - Updates context summary and calculation readiness hint.
+ * - Three wizard steps: setup, tiles, context (in-shell setup).
  */
 import { pickerToTiles } from "../src/app/tilePickerState.js";
 
@@ -36,17 +37,20 @@ function updatePickerPrimaryCta(openPickerBtn, pickedCount) {
 }
 
 function wizardStepHint(step) {
-  if (step === 1) return "步骤 1/2：选择 14 张手牌";
-  return "步骤 2/2：确认和牌条件";
+  if (step === 1) return "步骤 1/3：设定玩家";
+  if (step === 2) return "步骤 2/3：选择 14 张手牌";
+  return "步骤 3/3：确认和牌条件";
 }
 
 function wizardNextLabel(step) {
-  if (step === 1) return "下一步：条件设置";
+  if (step === 1) return "下一步：选择手牌";
+  if (step === 2) return "下一步：条件设置";
   return "下一步：计算番数";
 }
 
 function wizardBackLabel(step) {
-  if (step === 2) return "上一步：手牌输入";
+  if (step === 2) return "上一步：设定玩家";
+  if (step === 3) return "上一步：手牌输入";
   return "上一步";
 }
 
@@ -87,9 +91,25 @@ export function syncHomeStateView(input) {
     refs.pickerDeleteBtn.hidden = !hasSelection;
     refs.pickerDeleteBtn.disabled = !hasSelection;
   }
+  const gateEl = byId("roundSetupGate");
+  if (gateEl) {
+    gateEl.hidden = wizardStep !== 1;
+  }
+  const handSec = byId("handCardSection");
+  if (handSec) {
+    handSec.hidden = wizardStep === 1;
+  }
+  const startRoundBtn = byId("startRoundBtn");
+  if (startRoundBtn) {
+    startRoundBtn.hidden = true;
+  }
+  const resetCtx = byId("resetContextBtn");
+  if (resetCtx) {
+    resetCtx.hidden = wizardStep === 1;
+  }
   if (refs.contextSummaryEl) {
     refs.contextSummaryEl.textContent =
-      wizardStep === 1 ? "—" : getContextSummary(byId);
+      wizardStep >= 3 ? getContextSummary(byId) : "—";
   }
   if (refs.wizardStepHintEl) {
     refs.wizardStepHintEl.textContent = wizardStepHint(wizardStep);
@@ -104,20 +124,26 @@ export function syncHomeStateView(input) {
   if (refs.desktopSidePanelEl) {
     const desktop =
       globalThis.matchMedia?.("(min-width: 1024px)")?.matches === true;
+    const hideContextRail = wizardStep === 1 || wizardStep === 2;
     refs.desktopSidePanelEl.classList.toggle(
       "desktop-step-1",
-      desktop && wizardStep === 1
+      desktop && hideContextRail
     );
     refs.desktopSidePanelEl.classList.toggle(
       "desktop-step-2",
-      desktop && wizardStep === 2
+      desktop && wizardStep === 3
     );
   }
-  if (refs.openPickerBtn) refs.openPickerBtn.hidden = wizardStep !== 1;
+  if (refs.openPickerBtn) refs.openPickerBtn.hidden = wizardStep !== 2;
   if (refs.clearHandBtn) {
-    refs.clearHandBtn.hidden = wizardStep !== 1 || pickedCount === 0;
+    refs.clearHandBtn.hidden = wizardStep !== 2 || pickedCount === 0;
   }
   if (wizardStep === 1) {
+    refs.readyHintEl.textContent =
+      "确认四家名称、分数与庄家后进入下一步";
+    return;
+  }
+  if (wizardStep === 2) {
     refs.readyHintEl.textContent = canScore
       ? "手牌已满，可进入下一步"
       : `再选 ${14 - pickedCount} 张即可进入下一步`;

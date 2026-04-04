@@ -1,4 +1,5 @@
 import { RULE_BASELINE, ERROR_CODES } from "../config/ruleBaseline.js";
+import { buildScoringRuleSnapshot } from "../config/scoreRuleConfig.js";
 import { validateHandInput } from "../contracts/handState.js";
 import {
   validateWin,
@@ -30,12 +31,17 @@ export function scoreHand(input) {
       excludedFans: [],
       meldGroups: [],
       totalFan: 0,
+      gateFan: 0,
       ruleVersion: RULE_BASELINE.ruleVersion,
       errorCode: validation.code,
       missingFields: validation.missingFields,
       problems: validation.problems
     };
   }
+
+  const snapshot = input.scoringRule
+    ? input.scoringRule
+    : buildScoringRuleSnapshot(null);
 
   const win = validateWin(input.tiles);
   if (!win.isWin) {
@@ -45,6 +51,7 @@ export function scoreHand(input) {
       excludedFans: [],
       meldGroups: [],
       totalFan: 0,
+      gateFan: 0,
       ruleVersion: RULE_BASELINE.ruleVersion,
       errorCode: ERROR_CODES.NOT_A_WINNING_HAND,
       missingFields: [],
@@ -59,35 +66,36 @@ export function scoreHand(input) {
       const candidateWin = { ...win, meldGroups };
       const rawFans = detectFans(input, candidateWin);
       const { matchedFans, excludedFans } = resolveFanConflicts(rawFans);
-      const {
-        totalFan,
-        reachesMinWinningFan
-      } = aggregateScore(matchedFans);
+      const agg = aggregateScore(matchedFans, snapshot);
       candidates.push({
         meldGroups,
         matchedFans,
         excludedFans,
-        totalFan,
-        reachesMinWinningFan
+        totalFan: agg.totalFan,
+        gateFan: agg.gateFan,
+        reachesMinWinningFan: agg.reachesMinWinningFan
       });
     }
   } else {
     const rawFans = detectFans(input, win);
     const { matchedFans, excludedFans } = resolveFanConflicts(rawFans);
-    const {
-      totalFan,
-      reachesMinWinningFan
-    } = aggregateScore(matchedFans);
+    const agg = aggregateScore(matchedFans, snapshot);
     candidates.push({
       meldGroups: win.meldGroups || [],
       matchedFans,
       excludedFans,
-      totalFan,
-      reachesMinWinningFan
+      totalFan: agg.totalFan,
+      gateFan: agg.gateFan,
+      reachesMinWinningFan: agg.reachesMinWinningFan
     });
   }
 
   candidates.sort((a, b) => {
+    const aOk = Boolean(a.reachesMinWinningFan);
+    const bOk = Boolean(b.reachesMinWinningFan);
+    if (aOk !== bOk) {
+      return aOk ? -1 : 1;
+    }
     if (b.totalFan !== a.totalFan) return b.totalFan - a.totalFan;
     const aIds = a.matchedFans.map((f) => f.id).sort().join(",");
     const bIds = b.matchedFans.map((f) => f.id).sort().join(",");
@@ -103,7 +111,8 @@ export function scoreHand(input) {
     matchedFans: best.matchedFans,
     excludedFans: best.excludedFans,
     totalFan: best.totalFan,
-    minWinningFan: RULE_BASELINE.minWinningFan,
+    gateFan: best.gateFan,
+    minWinningFan: snapshot.gateMinFan,
     reachesMinWinningFan: best.reachesMinWinningFan,
     ruleVersion: RULE_BASELINE.ruleVersion,
     errorCode: best.reachesMinWinningFan

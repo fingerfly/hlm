@@ -5,42 +5,150 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>和了么 - 国标麻将计番助手</title>
     <link rel="icon" type="image/svg+xml" href="./favicon-traditional.svg" />
-    <link
-      rel="apple-touch-icon"
-      type="image/svg+xml"
-      href="./icon-app-traditional.svg"
-    />
+    <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
     <link rel="stylesheet" href="./styles-base.css" />
     <link rel="stylesheet" href="./styles-components.css" />
     <link rel="stylesheet" href="./styles-modals.css" />
     <link rel="stylesheet" href="./styles-responsive.css" />
   </head>
   <body>
+    <div id="appSplash" class="app-splash" aria-live="polite"
+      aria-label="应用启动画面">
+      <div class="app-splash-motif" aria-hidden="true"></div>
+      <div class="app-splash-card">
+        <h1 class="app-splash-title">和了么</h1>
+        <p class="app-splash-subtitle">国标麻将计番</p>
+        <ul class="app-splash-values">
+          <li>手牌录入</li>
+          <li>番种拆解</li>
+          <li>条件与规则说明</li>
+        </ul>
+        <p id="splashVersion" class="app-splash-version"></p>
+      </div>
+    </div>
     <!-- Home screen keeps primary actions always visible on mobile. -->
-    <main class="container">
+    <main class="container app-shell">
       <header class="nav-bar">
-        <h1>和了番数</h1>
-        <button id="moreBtn" class="icon-btn" aria-label="更多">...</button>
+        <strong class="nav-app-title">和了么</strong>
+        <div class="nav-help-cluster">
+          <button id="moreBtn" type="button" class="icon-btn"
+            aria-label="打开帮助" aria-expanded="false" aria-haspopup="dialog">
+            帮助
+          </button>
+          <div id="helpPopover" class="help-popover" hidden>
+            <div class="help-popover-panel" role="dialog" aria-modal="true"
+              aria-label="使用帮助">
+              <div class="sheet-header help-popover-header">
+                <h3>使用帮助</h3>
+                <button type="button" id="helpPopoverCloseBtn"
+                  class="ghost-btn">关闭</button>
+              </div>
+              <div class="help-content"></div>
+            </div>
+          </div>
+        </div>
       </header>
       <p id="versionBadge" class="version-badge">版本信息加载中...</p>
 
-      <section class="card">
+      <section id="roundSetupGate" class="round-setup-gate">
+        <div class="round-setup-card">
+          <h2>设定玩家</h2>
+          <p class="summary-text">俯视牌桌设定四风位与起始分，再进入每手计番与结算。</p>
+          <div class="round-setup-table" role="group" aria-label="四家座位">
+            <div class="round-setup-seat round-setup-seat--e" data-seat="E">
+              <div class="round-setup-seat-head">
+                <span class="round-setup-wind">东</span>
+                <span class="round-setup-dealer-badge" aria-hidden="true">庄</span>
+              </div>
+              <label>名称
+                <input id="playerNameE" name="playerNameE" value="东家" />
+              </label>
+              <label>分数
+                <input id="playerScoreE" name="playerScoreE" type="number"
+                  value="0" />
+              </label>
+            </div>
+            <div class="round-setup-seat round-setup-seat--s" data-seat="S">
+              <div class="round-setup-seat-head">
+                <span class="round-setup-wind">南</span>
+                <span class="round-setup-dealer-badge" aria-hidden="true">庄</span>
+              </div>
+              <label>名称
+                <input id="playerNameS" name="playerNameS" value="南家" />
+              </label>
+              <label>分数
+                <input id="playerScoreS" name="playerScoreS" type="number"
+                  value="0" />
+              </label>
+            </div>
+            <div class="round-setup-seat round-setup-seat--w" data-seat="W">
+              <div class="round-setup-seat-head">
+                <span class="round-setup-wind">西</span>
+                <span class="round-setup-dealer-badge" aria-hidden="true">庄</span>
+              </div>
+              <label>名称
+                <input id="playerNameW" name="playerNameW" value="西家" />
+              </label>
+              <label>分数
+                <input id="playerScoreW" name="playerScoreW" type="number"
+                  value="0" />
+              </label>
+            </div>
+            <div class="round-setup-seat round-setup-seat--n" data-seat="N">
+              <div class="round-setup-seat-head">
+                <span class="round-setup-wind">北</span>
+                <span class="round-setup-dealer-badge" aria-hidden="true">庄</span>
+              </div>
+              <label>名称
+                <input id="playerNameN" name="playerNameN" value="北家" />
+              </label>
+              <label>分数
+                <input id="playerScoreN" name="playerScoreN" type="number"
+                  value="0" />
+              </label>
+            </div>
+            <div class="round-setup-table-center">
+              <label class="round-dealer-row">庄家
+                <select id="dealerSeat" name="dealerSeat">
+                  <option value="E">东</option>
+                  <option value="S">南</option>
+                  <option value="W">西</option>
+                  <option value="N">北</option>
+                </select>
+              </label>
+              <button id="startRoundBtn" class="primary-btn" type="button"
+                hidden aria-hidden="true" tabindex="-1">
+                开始对局
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="handCardSection" class="card hand-card">
         <div class="card-top">
           <h2>当前手牌 <span id="tileCount">0/14</span></h2>
         </div>
         <div id="tilePreview" class="tile-preview"></div>
-        <button id="openPickerBtn" class="primary-btn">继续选牌</button>
+        <div class="card-actions">
+          <button id="openPickerBtn" class="primary-btn">继续选牌</button>
+          <button id="clearHandBtn" class="ghost-btn">清空</button>
+        </div>
       </section>
 
-      <section class="card">
-        <h2>和牌条件</h2>
-        <p id="contextSummary" class="summary-text">自摸 · 门前清 · 无杠</p>
-        <button id="openContextBtn" class="ghost-btn">可选：编辑条件</button>
-      </section>
+      <!-- Desktop ≥1024px: picker .sheet moves here (see desktopPickerMount.js). -->
+      <div id="desktopPickerHost" class="desktop-picker-host" hidden></div>
 
-      <footer class="sticky-footer">
+      <footer id="desktopSidePanel" class="sticky-footer desktop-side-panel">
+        <div id="desktopContextHost" class="desktop-context-host"></div>
+        <p id="wizardStepHint" class="hint">步骤 1/3：设定玩家</p>
+        <p id="contextSummary" class="hint">自摸 · 门前清 · 无杠</p>
         <p id="readyHint" class="hint">请先选满 14 张牌</p>
-        <button id="calculateBtn" class="primary-btn" disabled>计算番数</button>
+        <div class="wizard-controls">
+          <button id="wizardBackBtn" class="ghost-btn">上一步</button>
+          <button id="wizardNextBtn" class="ghost-btn">下一步</button>
+        </div>
+        <button id="resetContextBtn" class="ghost-btn">重置条件</button>
       </footer>
     </main>
 
@@ -57,120 +165,348 @@
           <button data-tab="B" class="tab-btn">筒</button>
           <button data-tab="Z" class="tab-btn">字牌</button>
         </div>
-        <div class="pattern-actions">
-          <button data-pattern-action="single" class="ghost-btn active">单张</button>
-          <details class="pattern-secondary">
-            <summary class="ghost-btn">组合</summary>
-            <div class="pattern-secondary-grid">
-              <button data-pattern-action="pair" class="ghost-btn">对子</button>
-              <button data-pattern-action="pung" class="ghost-btn">刻子</button>
-              <button data-pattern-action="chow_front" class="ghost-btn">顺子前位</button>
-              <button data-pattern-action="chow_middle" class="ghost-btn">顺子中位</button>
-              <button data-pattern-action="chow_back" class="ghost-btn">顺子后位</button>
-            </div>
-          </details>
+        <div id="tileContextMenu" class="tile-context-menu" hidden
+          role="menu" aria-label="选择添加方式">
+          <button type="button" data-context-action="single" class="ghost-btn">
+            单张
+          </button>
+          <button type="button" data-context-action="pair" class="ghost-btn">
+            对子
+          </button>
+          <button type="button" data-context-action="pung" class="ghost-btn">
+            刻子
+          </button>
+          <div class="context-chow-submenu">
+            <button type="button" data-context-action="chow_front"
+              class="ghost-btn">顺子前位</button>
+            <button type="button" data-context-action="chow_middle"
+              class="ghost-btn">顺子中位</button>
+            <button type="button" data-context-action="chow_back"
+              class="ghost-btn">顺子后位</button>
+          </div>
         </div>
-        <p id="pickerActionHint" class="summary-text">当前快捷动作：单张</p>
         <div id="tilePickerGrid" class="tile-picker-grid"></div>
         <div class="sheet-footer">
           <span id="pickerCount">已选 0/14</span>
           <div class="inline-actions">
-            <button id="pickerDeleteBtn" class="ghost-btn">删除选中</button>
+            <button id="pickerClearBtn" class="ghost-btn">清空</button>
             <button id="pickerUndoBtn" class="ghost-btn">撤销</button>
-            <details class="picker-more-actions">
-              <summary class="ghost-btn">更多</summary>
-              <div class="picker-more-actions-panel">
-                <button id="pickerClearBtn" class="ghost-btn">清空</button>
-              </div>
-            </details>
+            <button id="pickerDeleteBtn" class="ghost-btn">删除选中</button>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Context settings are isolated to avoid accidental edits. -->
+    <!-- Context settings: grouped form (HIG-oriented). -->
     <section id="contextModal" class="modal">
-      <div class="sheet">
-        <div class="sheet-header">
+      <div class="sheet context-sheet">
+        <div class="sheet-header context-sheet-header">
           <h3>和牌条件</h3>
-          <button data-close="context" class="ghost-btn">应用</button>
         </div>
-        <div class="preset-actions">
-          <button data-preset="zimo-menqian" class="ghost-btn">自摸 + 门前清</button>
-          <button data-preset="dianhe-menqian" class="ghost-btn">点和 + 门前清</button>
-          <button data-preset="dianhe-fulu" class="ghost-btn">点和 + 副露</button>
-        </div>
-        <div class="context-grid">
-          <label>和牌方式
-            <select id="winType">
-              <option value="zimo">自摸</option>
-              <option value="dianhe">点和</option>
-            </select>
-          </label>
-          <label>门前/副露
-            <select id="handState">
-              <option value="menqian">门前清</option>
-              <option value="fulu">副露</option>
-            </select>
-          </label>
-        </div>
-        <details>
-          <summary>高级条件</summary>
-          <div class="context-grid">
-            <label>杠类型
-              <select id="kongType">
-                <option value="none">无杠</option>
-                <option value="an">暗杠</option>
-                <option value="ming">明杠</option>
-                <option value="bu">补杠</option>
-              </select>
-            </label>
-            <label>时机事件
-              <select id="timingEvent">
+        <div class="context-sheet-body">
+          <section class="context-group" aria-labelledby="ctxWinHandTitle">
+            <h4 id="ctxWinHandTitle" class="context-group-title">和牌方式与门前状态</h4>
+            <div class="context-segmented">
+              <span class="context-label">和牌方式</span>
+              <div class="segmented-row" role="radiogroup" aria-label="和牌方式">
+                <input type="radio" id="winTypeZimo" name="winType" value="zimo"
+                  checked />
+                <label for="winTypeZimo">自摸</label>
+                <input type="radio" id="winTypeDianhe" name="winType"
+                  value="dianhe" />
+                <label for="winTypeDianhe">点和</label>
+              </div>
+            </div>
+            <input type="hidden" id="winType" value="zimo" />
+            <div class="context-segmented">
+              <span class="context-label">门前/副露</span>
+              <div class="segmented-row" role="radiogroup" aria-label="门前副露">
+                <input type="radio" id="handStateMenqian" name="handState"
+                  value="menqian" checked />
+                <label for="handStateMenqian">门前清</label>
+                <input type="radio" id="handStateFulu" name="handState"
+                  value="fulu" />
+                <label for="handStateFulu">副露</label>
+              </div>
+            </div>
+            <input type="hidden" id="handState" value="menqian" />
+          </section>
+          <section class="context-group" aria-labelledby="ctxFlowerTitle">
+            <h4 id="ctxFlowerTitle" class="context-group-title">花牌</h4>
+            <p class="context-hint">花牌张数不计入 14 张手牌（每花 1 番）。</p>
+            <div class="context-control-mobile">
+              <div class="stepper-row">
+                <button type="button" id="flowerDec" class="stepper-btn"
+                  aria-label="减少花牌张数">−</button>
+                <span id="flowerCountLabel" class="stepper-value"
+                  aria-live="polite">0</span>
+                <input type="hidden" id="flowerCount" value="0" />
+                <button type="button" id="flowerInc" class="stepper-btn"
+                  aria-label="增加花牌张数">+</button>
+              </div>
+            </div>
+            <div class="context-control-desktop">
+              <div class="context-desktop-field">
+                <label for="flowerCountInput" class="context-label">花牌张数</label>
+                <input type="number" id="flowerCountInput" class="context-number-input"
+                  min="0" max="8" step="1" value="0"
+                  aria-label="花牌张数" />
+              </div>
+            </div>
+          </section>
+          <section class="context-group" aria-labelledby="ctxKongTitle">
+            <h4 id="ctxKongTitle" class="context-group-title">杠（组数）</h4>
+            <p class="context-hint">暗杠与明杠组数合计不超过 4。</p>
+            <div class="context-control-mobile">
+              <div class="stepper-field">
+                <span class="stepper-field-label">暗杠</span>
+                <div class="stepper-row">
+                  <button type="button" id="kongAnDec" class="stepper-btn"
+                    aria-label="减少暗杠组数">−</button>
+                  <span id="kongAnLabel" class="stepper-value"
+                    aria-live="polite">0</span>
+                  <input type="hidden" id="kongAnCount" value="0" />
+                  <button type="button" id="kongAnInc" class="stepper-btn"
+                    aria-label="增加暗杠组数">+</button>
+                </div>
+              </div>
+              <div class="stepper-field">
+                <span class="stepper-field-label">明杠</span>
+                <div class="stepper-row">
+                  <button type="button" id="kongMingDec" class="stepper-btn"
+                    aria-label="减少明杠组数">−</button>
+                  <span id="kongMingLabel" class="stepper-value"
+                    aria-live="polite">0</span>
+                  <input type="hidden" id="kongMingCount" value="0" />
+                  <button type="button" id="kongMingInc" class="stepper-btn"
+                    aria-label="增加明杠组数">+</button>
+                </div>
+              </div>
+            </div>
+            <div class="context-control-desktop">
+              <div class="context-desktop-kong-row">
+                <div class="context-desktop-field">
+                  <label for="kongAnCountInput" class="context-label">暗杠</label>
+                  <input type="number" id="kongAnCountInput"
+                    class="context-number-input" min="0" max="4" step="1"
+                    value="0" aria-label="暗杠组数" />
+                </div>
+                <div class="context-desktop-field">
+                  <label for="kongMingCountInput" class="context-label">明杠</label>
+                  <input type="number" id="kongMingCountInput"
+                    class="context-number-input" min="0" max="4" step="1"
+                    value="0" aria-label="明杠组数" />
+                </div>
+              </div>
+            </div>
+            <input type="hidden" id="kongType" value="none" />
+          </section>
+          <section class="context-group" aria-labelledby="ctxTimingTitle">
+            <h4 id="ctxTimingTitle" class="context-group-title">时机事件</h4>
+            <div class="context-control-mobile">
+              <div class="radio-list timing-hig-list" role="radiogroup"
+                aria-label="时机事件">
+                <label class="radio-list-item timing-hig-row">
+                  <input type="radio" name="timingEvent" value="none" checked />
+                  <span class="timing-hig-label">无</span>
+                  <span class="timing-hig-check" aria-hidden="true">✓</span>
+                </label>
+                <label class="radio-list-item timing-hig-row">
+                  <input type="radio" name="timingEvent" value="haidi" />
+                  <span class="timing-hig-label">海底捞月</span>
+                  <span class="timing-hig-check" aria-hidden="true">✓</span>
+                </label>
+                <label class="radio-list-item timing-hig-row">
+                  <input type="radio" name="timingEvent" value="hedi" />
+                  <span class="timing-hig-label">河底捞鱼</span>
+                  <span class="timing-hig-check" aria-hidden="true">✓</span>
+                </label>
+                <label class="radio-list-item timing-hig-row">
+                  <input type="radio" name="timingEvent" value="gangshang" />
+                  <span class="timing-hig-label">杠上开花</span>
+                  <span class="timing-hig-check" aria-hidden="true">✓</span>
+                </label>
+                <label class="radio-list-item timing-hig-row">
+                  <input type="radio" name="timingEvent" value="qianggang" />
+                  <span class="timing-hig-label">抢杠和</span>
+                  <span class="timing-hig-check" aria-hidden="true">✓</span>
+                </label>
+              </div>
+            </div>
+            <div class="context-control-desktop">
+              <label for="timingEventSelect" class="context-label">时机</label>
+              <select id="timingEventSelect" class="context-select-input"
+                aria-label="时机事件">
                 <option value="none">无</option>
                 <option value="haidi">海底捞月</option>
                 <option value="hedi">河底捞鱼</option>
                 <option value="gangshang">杠上开花</option>
+                <option value="qianggang">抢杠和</option>
               </select>
-            </label>
-          </div>
-        </details>
+            </div>
+            <input type="hidden" id="timingEvent" value="none" />
+          </section>
+          <section class="context-group" aria-labelledby="ctxRoleTitle">
+            <h4 id="ctxRoleTitle" class="context-group-title">结算角色</h4>
+            <div class="context-role-controls">
+              <div class="context-desktop-field">
+                <label for="winnerSeat" class="context-label">和牌者</label>
+                <select id="winnerSeat" name="winnerSeat" class="context-select-input">
+                  <option value="E">东</option>
+                  <option value="S">南</option>
+                  <option value="W">西</option>
+                  <option value="N">北</option>
+                </select>
+              </div>
+              <div class="context-desktop-field">
+                <label for="discarderSeat" class="context-label">放铳者</label>
+                <select id="discarderSeat" name="discarderSeat" class="context-select-input">
+                  <option value="S">南</option>
+                  <option value="E">东</option>
+                  <option value="W">西</option>
+                  <option value="N">北</option>
+                </select>
+              </div>
+            </div>
+            <p id="roleValidationError" class="context-error-text summary-text"
+              hidden></p>
+          </section>
+          <section class="context-group" aria-labelledby="ctxScoreRuleTitle">
+            <h4 id="ctxScoreRuleTitle" class="context-group-title">结算规则</h4>
+            <div class="context-role-controls">
+              <div class="context-desktop-field">
+                <label for="scoreRulePreset" class="context-label">规则预设</label>
+                <select id="scoreRulePreset" class="context-select-input">
+                  <option value="MCR_Official">国标预设</option>
+                  <option value="Current_Compat">当前兼容</option>
+                  <option value="Custom">自定义</option>
+                </select>
+              </div>
+              <div class="context-desktop-field">
+                <span class="context-label">自定义规则</span>
+                <button type="button" id="cloneScoreRuleBtn"
+                  class="ghost-btn">从当前预设克隆为自定义</button>
+              </div>
+            </div>
+            <p id="scoreRuleStatus" class="summary-text"></p>
+          </section>
+        </div>
+        <div class="context-sheet-footer">
+          <button type="button" data-close="context"
+            class="primary-btn context-apply-btn">
+            应用
+          </button>
+        </div>
       </div>
     </section>
 
-    <!-- Result modal summarizes top fan hits before details. -->
+    <!-- Result modal: sticky summary + scrollable breakdown. -->
     <section id="resultModal" class="modal">
-      <div class="sheet">
-        <div class="sheet-header">
-          <h3>结果</h3>
-          <button data-close="result" class="ghost-btn">关闭</button>
+      <div class="sheet result-sheet">
+        <div class="result-sticky-top">
+          <div class="sheet-header result-sheet-header">
+            <h3>结果</h3>
+            <button type="button" data-close="result" class="ghost-btn">
+              关闭
+            </button>
+          </div>
+          <p id="resultStatus" class="status-pill">未和牌</p>
+          <p id="resultRuleMeta" class="summary-text"></p>
+          <p id="resultTotalFan" class="total-fan">0 番</p>
         </div>
-        <p id="resultStatus" class="status-pill">未和牌</p>
-        <p id="resultTotalFan" class="total-fan">0 番</p>
-        <h4>命中番种（前3项）</h4>
-        <ul id="hitPreview" class="fan-list"></ul>
-        <div class="inline-actions">
-          <button id="openInfoBtn" class="ghost-btn">Info</button>
-          <button id="playAgainBtn" class="ghost-btn">再来一手</button>
+        <div class="result-scroll">
+          <section class="result-section" aria-labelledby="resultMeldHeading">
+            <h4 id="resultMeldHeading" class="result-section-title">和牌分组</h4>
+            <div id="resultMeldRows" class="meld-rows"></div>
+          </section>
+          <section class="result-section" aria-labelledby="resultFanHeading">
+            <h4 id="resultFanHeading" class="result-section-title">番种明细</h4>
+            <ul id="hitPreview" class="fan-list fan-breakdown"></ul>
+          </section>
+          <section class="result-section" aria-labelledby="resultSettleHeading">
+            <h4 id="resultSettleHeading" class="result-section-title">四家结算</h4>
+            <table class="settlement-table"
+              aria-label="四家分数结算">
+              <colgroup>
+                <col class="settlement-col-name" />
+                <col class="settlement-col-num" />
+                <col class="settlement-col-num" />
+                <col class="settlement-col-num" />
+              </colgroup>
+              <thead>
+                <tr>
+                  <th scope="col">玩家</th>
+                  <th scope="col">局前</th>
+                  <th scope="col">增减</th>
+                  <th scope="col">局后</th>
+                </tr>
+              </thead>
+              <tbody id="resultSettlementRows"></tbody>
+            </table>
+          </section>
+          <p id="resultExplanation" class="result-explanation summary-text"></p>
+          <div class="inline-actions">
+            <button type="button" id="playAgainBtn" class="ghost-btn">
+              再来一手
+            </button>
+          </div>
         </div>
       </div>
     </section>
-
-    <!-- Info modal shows full explanation lists for auditability. -->
-    <section id="infoModal" class="modal">
-      <div class="sheet">
+    <section id="helpModal" class="modal help-modal">
+      <div class="sheet help-sheet" role="dialog" aria-modal="true"
+        aria-label="使用帮助">
         <div class="sheet-header">
-          <h3>详细解释</h3>
-          <button data-close="info" class="ghost-btn">关闭</button>
+          <h3>使用帮助</h3>
+          <button id="helpCloseBtn" type="button" class="ghost-btn">
+            关闭
+          </button>
         </div>
-        <h4>命中番种</h4>
-        <ul id="infoHitList" class="fan-list"></ul>
-        <h4>排除番种</h4>
-        <ul id="infoExcludedList" class="fan-list"></ul>
-        <h4>解释</h4>
-        <p id="infoExplanation" class="summary-text"></p>
+        <div class="help-content"></div>
       </div>
     </section>
+    <template id="helpArticleTemplate">
+      <section class="help-section" aria-labelledby="helpPurposeTitle">
+        <h4 id="helpPurposeTitle" class="help-section-title">本应用是做什么的</h4>
+        <p class="summary-text">和了么用于国标麻将的计番与番种拆解。</p>
+        <p class="summary-text">完成「设定玩家」、选满 14 张手牌并设置和牌条件后，
+          应用输出番种明细与总番，辅助核对。</p>
+        <p class="summary-text">说明文本不替代《中国麻将竞赛规则》原文；遇到规则
+          争议时，请以正式规则与裁判口径为准。</p>
+      </section>
+      <section class="help-section" aria-labelledby="helpStepsTitle">
+        <h4 id="helpStepsTitle" class="help-section-title">推荐使用步骤</h4>
+        <ol class="help-steps">
+          <li class="summary-text">在主界面「设定玩家」中填写四家名称与起始分、
+            选择庄家，点「下一步」进入选牌。</li>
+          <li class="summary-text">录入 14 张手牌（向导步骤 2/3）。桌面宽屏通常为
+            内联选牌，手机/窄屏通常为底部弹层选牌。</li>
+          <li class="summary-text">进入「和牌条件」（步骤 3/3），设置自摸/点和、
+            门前/副露、花牌、杠、时机等。</li>
+          <li class="summary-text">点击「下一步」计算，查看和牌分组、番种明细与
+            总番。</li>
+        </ol>
+        <p class="summary-text">提示：底部「下一步/上一步」在三个步骤间切换；
+          「重置条件」只清空条件；「清空」会清除当前手牌。</p>
+      </section>
+      <section class="help-section" aria-labelledby="helpFanConceptTitle">
+        <h4 id="helpFanConceptTitle" class="help-section-title">番、起和与不计</h4>
+        <p class="summary-text">番是计分单位；番种能否叠加，受不计与互斥关系约束。
+        </p>
+        <p class="summary-text">本工具按内置规则与注册表做检测；是否满足赛事起和
+          门槛请以当场规程为准。</p>
+      </section>
+      <section id="helpFanLexiconRegion" class="help-section"
+        aria-label="番种释义列表" aria-labelledby="helpFanLexiconTitle">
+        <h4 id="helpFanLexiconTitle" class="help-section-title">番种释义</h4>
+        <p class="summary-text">下列释义为规则浓缩说明，点击条目可展开查看。</p>
+        <label class="help-fan-search-label">
+          <input type="search" class="help-fan-search" autocomplete="off"
+            placeholder="搜索番种名称…" aria-label="搜索番种名称" />
+        </label>
+        <p class="help-fan-empty summary-text" hidden>无匹配项，请调整关键词。</p>
+      </section>
+    </template>
     <script type="module" src="./app.js"></script>
   </body>
 </html>

@@ -15,13 +15,13 @@ function initialModalState() {
 }
 
 function initialWizardState() {
-  return { step: 1, totalSteps: 2 };
+  return { step: 1, totalSteps: 3 };
 }
 
 function clampWizardStep(step) {
   if (!Number.isInteger(step)) return 1;
   if (step < 1) return 1;
-  if (step > 2) return 2;
+  if (step > 3) return 3;
   return step;
 }
 
@@ -120,7 +120,7 @@ export function setWizardStep(state, step) {
     wizard: {
       ...(state.wizard || initialWizardState()),
       step: clampWizardStep(step),
-      totalSteps: 2
+      totalSteps: 3
     }
   };
 }

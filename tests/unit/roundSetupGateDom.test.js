@@ -46,3 +46,13 @@ test("round setup gate exposes table layout and wind seat markers", () => {
     );
   }
 });
+
+test("round setup gate lives inside main app shell", () => {
+  const html = readFileSync(indexPath, "utf8");
+  const mainIdx = html.indexOf("<main ");
+  const gateIdx = html.indexOf('id="roundSetupGate"');
+  const mainClose = html.indexOf("</main>");
+  assert.ok(mainIdx >= 0 && gateIdx >= 0 && mainClose >= 0);
+  assert.ok(mainIdx < gateIdx && gateIdx < mainClose);
+  assert.match(html, /id="handCardSection"/);
+});

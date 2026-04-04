@@ -6,6 +6,9 @@
  * - Produces before/delta/after rows with conservation check.
  */
 
+import { SETTLEMENT_MODES } from "../config/scoreRuleConfig.js";
+import { applyOfficialBaseFanDeltas } from "./officialBaseFanSettlement.js";
+
 const SEATS = Object.freeze(["E", "S", "W", "N"]);
 
 function asInt(value, fallback = 0) {
@@ -79,20 +82,36 @@ export function computeRoundSettlement(input = {}) {
     problems.push("discarderSeat must be one of E/S/W/N and not winnerSeat");
   }
   const deltas = { E: 0, S: 0, W: 0, N: 0 };
+  const official =
+    ruleConfig?.settlement?.mode === SETTLEMENT_MODES.OFFICIAL_BASE_FAN;
   if (problems.length === 0 && isWin && totalFan > 0) {
-    const point = resolvePointFromFan(totalFan, ruleConfig);
-    const dist = ruleConfig?.distribution || {};
-    const zimoWinMul = Math.max(1, asInt(dist.zimo?.winnerMultiplier, 3));
-    const zimoLoseMul = Math.max(1, asInt(dist.zimo?.loserMultiplier, 1));
-    const dhWinMul = Math.max(1, asInt(dist.dianhe?.winnerMultiplier, 1));
-    const dhLoseMul = Math.max(1, asInt(dist.dianhe?.discarderMultiplier, 1));
-    if (winType === "dianhe") {
-      deltas[winnerSeat] += point * dhWinMul;
-      deltas[discarderSeat] -= point * dhLoseMul;
+    if (official) {
+      applyOfficialBaseFanDeltas(
+        deltas,
+        winType,
+        winnerSeat,
+        discarderSeat,
+        totalFan,
+        ruleConfig
+      );
     } else {
-      deltas[winnerSeat] += point * zimoWinMul;
-      for (const seat of SEATS) {
-        if (seat !== winnerSeat) deltas[seat] -= point * zimoLoseMul;
+      const point = resolvePointFromFan(totalFan, ruleConfig);
+      const dist = ruleConfig?.distribution || {};
+      const zimoWinMul = Math.max(1, asInt(dist.zimo?.winnerMultiplier, 3));
+      const zimoLoseMul = Math.max(1, asInt(dist.zimo?.loserMultiplier, 1));
+      const dhWinMul = Math.max(1, asInt(dist.dianhe?.winnerMultiplier, 1));
+      const dhLoseMul = Math.max(
+        1,
+        asInt(dist.dianhe?.discarderMultiplier, 1)
+      );
+      if (winType === "dianhe") {
+        deltas[winnerSeat] += point * dhWinMul;
+        deltas[discarderSeat] -= point * dhLoseMul;
+      } else {
+        deltas[winnerSeat] += point * zimoWinMul;
+        for (const seat of SEATS) {
+          if (seat !== winnerSeat) deltas[seat] -= point * zimoLoseMul;
+        }
       }
     }
   }

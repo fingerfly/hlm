@@ -3,31 +3,50 @@ import { getDisplayVersion } from "../src/config/appVersion.js";
 import {
   createTilePickerState,
   addTileToPicker,
+  addTilesToPicker,
   selectPickerSlot,
   deleteSelectedSlot,
   clearTilePicker,
-  undoLastTile
+  undoLastTile,
+  undoLastAction,
+  undoBySlot
 } from "../src/app/tilePickerState.js";
 import { resolvePatternAction } from "../src/app/tilePatternActions.js";
-import { createUiFlowState } from "../src/app/uiFlowState.js";
-import { TAB_TILES, CONTEXT_PRESETS } from "./uiConfig.js";
+import { createUiFlowState, canCalculate } from "../src/app/uiFlowState.js";
+import { TAB_TILES } from "./uiConfig.js";
 import {
   renderTilePreview,
   renderPickerTabButtons,
-  renderTilePickerGrid,
-  renderPatternActionButtons
+  renderTilePickerGrid
 } from "./uiRenderers.js";
 import {
   resetContext,
-  bindTabButtons,
-  bindPresetButtons
+  bindTabButtons
 } from "./uiBindings.js";
+import { readStoredGestureTipDismissed } from "./pickerModeState.js";
 import { bindCloseButtons } from "./modalUi.js";
-import { renderResultModal, renderInfoTip } from "./resultModalView.js";
+import { renderResultModal } from "./resultModalView.js";
 import { createModalActions } from "./appModalActions.js";
 import { createStateActions } from "./appStateActions.js";
-import { wireAppEvents, renderPickerByTab } from "./appEventWiring.js";
+import {
+  wireAppEvents,
+  renderPickerByTab,
+  syncWizardModals
+} from "./appEventWiring.js";
 import { createAppRefs } from "./appRefs.js";
+import { createDefaultRoundPlayers } from "../src/app/roundSettlement.js";
+import {
+  syncDesktopPickerSheet,
+  installDesktopPickerLayoutListener
+} from "./desktopPickerMount.js";
+import { mountHelpContent } from "./helpContentMount.js";
+import { installHelpFanHashNavigation } from "./helpFanHash.js";
+import {
+  readStoredScoreRuleSelection,
+  writeScoreRulePresetSelection,
+  writeCustomScoreRuleFromPreset
+} from "./scoreRuleState.js";
+import { SCORE_RULE_PRESET_IDS } from "../src/config/scoreRuleConfig.js";
 
 /**
  * Purpose: Bootstrap HLM web UI and connect app modules.
@@ -39,36 +58,174 @@ import { createAppRefs } from "./appRefs.js";
 const versionLabel = getDisplayVersion();
 const byId = (id) => document.getElementById(id);
 byId("versionBadge").textContent = `当前版本: ${versionLabel}`;
+const splashEl = byId("appSplash");
+const splashVersionEl = byId("splashVersion");
+if (splashVersionEl) {
+  splashVersionEl.textContent = `版本 ${versionLabel}`;
+}
 const { refs, modalRefs } = createAppRefs(byId);
+const initialRuleSelection = readStoredScoreRuleSelection();
 
 const store = {
   uiState: createUiFlowState(),
+  roundState: {
+    initialized: false,
+    dealerSeat: "E",
+    players: createDefaultRoundPlayers(),
+    scoreRulePreset: initialRuleSelection.presetId,
+    scoreRuleConfig: initialRuleSelection.ruleConfig
+  },
   pickerState: createTilePickerState([]),
   pickerAction: "single",
+  pickerActionOnce: null,
+  pickerActionLock: null,
+  pickerGestureTipDismissed: readStoredGestureTipDismissed(),
   resultVm: null
 };
+const wizardUi = { afterPickerSync: () => {} };
 const stateActions = createStateActions(store, {
   byId,
   refs,
-  contextPresets: CONTEXT_PRESETS,
+  wizardUi,
   addTileToPicker,
+  addTilesToPicker,
   resolvePatternAction,
-  renderPatternActionButtons,
   selectPickerSlot,
   deleteSelectedSlot,
   clearTilePicker,
   undoLastTile,
+  undoLastAction,
+  undoBySlot,
   evaluateCapturedHand,
   renderTilePreview,
-  renderResultModal,
-  renderInfoTip
+  renderResultModal
 });
-const modalActions = createModalActions(store, modalRefs);
+const modalActions = createModalActions(store, modalRefs, {
+  onBeforeClosePicker: () => stateActions.closeTileContextMenu?.(),
+  onBeforeOpenModal: () => {
+    const pop = byId("helpPopover");
+    if (pop) pop.hidden = true;
+    const moreBtn = byId("moreBtn");
+    if (moreBtn) moreBtn.setAttribute("aria-expanded", "false");
+  }
+});
 
-wireAppEvents({
+syncDesktopPickerSheet(byId);
+installDesktopPickerLayoutListener(byId, () => modalActions.updateModalUi());
+
+wizardUi.afterPickerSync = () => {
+  if (localStorage.getItem("hlm_disableAutoWizardAdvance") === "1") {
+    return;
+  }
+  const step = store.uiState.wizard?.step || 1;
+  if (step !== 2) return;
+  if (!canCalculate(store.uiState)) return;
+  const result = stateActions.goWizardNext();
+  syncWizardModals(result, modalActions);
+};
+
+function dismissSplash() {
+  if (splashEl) splashEl.classList.add("splash-dismissed");
+}
+const reduceMotion = globalThis.matchMedia?.(
+  "(prefers-reduced-motion: reduce)"
+)?.matches;
+const splashMs = reduceMotion ? 400 : 900;
+globalThis.setTimeout(dismissSplash, splashMs);
+
+function mountDesktopContextInline() {
+  const isDesktop = globalThis.matchMedia?.("(min-width: 1024px)")?.matches;
+  if (!isDesktop) return;
+  const host = byId("desktopContextHost");
+  const contextModal = byId("contextModal");
+  const contextSheet = contextModal?.querySelector(".context-sheet");
+  if (!host || !contextModal || !contextSheet) return;
+  if (!host.contains(contextSheet)) host.appendChild(contextSheet);
+  contextModal.classList.add("desktop-inline-context");
+  host.dataset.mode = "inline";
+}
+mountDesktopContextInline();
+
+function syncDiscarderVisibility() {
+  const winType = byId("winType")?.value;
+  const discarder = byId("discarderSeat");
+  if (!discarder) return;
+  const wrap = discarder.closest(".context-desktop-field");
+  const hint = byId("roleValidationError");
+  const shouldShow = winType === "dianhe";
+  if (wrap) wrap.hidden = !shouldShow;
+  discarder.disabled = !shouldShow;
+  discarder.required = shouldShow;
+  if (!shouldShow) {
+    discarder.value = "";
+    if (hint) {
+      hint.textContent = "";
+      hint.hidden = true;
+    }
+  }
+}
+
+function syncScoreRuleStatus() {
+  const statusEl = refs.scoreRuleStatusEl;
+  const presetEl = byId("scoreRulePreset");
+  if (presetEl) {
+    presetEl.value = store.roundState?.scoreRulePreset
+      || SCORE_RULE_PRESET_IDS.MCR_OFFICIAL;
+  }
+  if (!statusEl) return;
+  const meta = store.roundState?.scoreRuleConfig?.meta || {};
+  const name = meta.name || store.roundState?.scoreRulePreset || "未知规则";
+  const version = meta.version || "n/a";
+  statusEl.textContent = `当前规则：${name}（${version}）`;
+}
+
+/** Marks the seat panel matching dealerSeat with .is-dealer (visual only). */
+function syncRoundSetupDealerHighlight() {
+  const dealer = byId("dealerSeat")?.value || "E";
+  document.querySelectorAll(".round-setup-seat[data-seat]").forEach((el) => {
+    el.classList.toggle("is-dealer", el.dataset.seat === dealer);
+  });
+}
+
+const dealerSeatEl = byId("dealerSeat");
+if (dealerSeatEl) {
+  dealerSeatEl.addEventListener("change", syncRoundSetupDealerHighlight);
+  syncRoundSetupDealerHighlight();
+}
+const scoreRulePresetEl = byId("scoreRulePreset");
+if (scoreRulePresetEl) {
+  scoreRulePresetEl.addEventListener("change", () => {
+    const id = scoreRulePresetEl.value || SCORE_RULE_PRESET_IDS.MCR_OFFICIAL;
+    writeScoreRulePresetSelection(id);
+    const next = readStoredScoreRuleSelection();
+    store.roundState = {
+      ...(store.roundState || {}),
+      scoreRulePreset: next.presetId,
+      scoreRuleConfig: next.ruleConfig
+    };
+    syncScoreRuleStatus();
+  });
+}
+const cloneScoreRuleBtn = byId("cloneScoreRuleBtn");
+if (cloneScoreRuleBtn) {
+  cloneScoreRuleBtn.addEventListener("click", () => {
+    const baseId = store.roundState?.scoreRulePreset
+      || SCORE_RULE_PRESET_IDS.MCR_OFFICIAL;
+    writeCustomScoreRuleFromPreset(baseId);
+    const next = readStoredScoreRuleSelection();
+    store.roundState = {
+      ...(store.roundState || {}),
+      scoreRulePreset: next.presetId,
+      scoreRuleConfig: next.ruleConfig
+    };
+    syncScoreRuleStatus();
+  });
+}
+syncScoreRuleStatus();
+
+const { openHelp } = wireAppEvents({
   byId,
   bindTabButtons,
-  bindPresetButtons,
   bindCloseButtons,
   modalActions,
   stateActions,
@@ -77,17 +234,23 @@ wireAppEvents({
   tilePickerGridEl: refs.tilePickerGridEl,
   renderPickerTabButtons,
   renderTilePickerGrid,
-  addTileToPicker,
   resetContext
 });
+mountHelpContent(byId);
+installHelpFanHashNavigation({ byId, openHelp });
 renderPickerByTab({
   store,
   tabTiles: TAB_TILES,
   tilePickerGridEl: refs.tilePickerGridEl,
   renderPickerTabButtons,
   renderTilePickerGrid,
-  addTileToPicker,
   stateActions
 });
 stateActions.syncHomeState();
+syncWizardModals({ ok: true, step: 1 }, modalActions);
 modalActions.updateModalUi();
+syncDiscarderVisibility();
+const winTypeEl = byId("winType");
+if (winTypeEl) {
+  winTypeEl.addEventListener("change", syncDiscarderVisibility);
+}

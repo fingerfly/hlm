@@ -94,8 +94,7 @@ export function createHelpHandlers(byId, modalActions) {
 }
 
 /**
- * Handle wizard "next": from step 2, calculate and show result modal;
- * else advance wizard step.
+ * Handle wizard "next": from step 3, calculate; else advance wizard.
  *
  * @param {object} store - App store with uiState.
  * @param {object} stateActions - calculate, goWizardNext.
@@ -110,7 +109,7 @@ export function handleWizardNextClick(
   syncWizardModalsFn
 ) {
   const step = store.uiState.wizard?.step || 1;
-  if (step === 2) {
+  if (step === 3) {
     modalActions.closeModalByKey("picker");
     modalActions.closeModalByKey("context");
     if (stateActions.calculate()) modalActions.updateModalUi();
@@ -135,10 +134,14 @@ export function syncWizardModals(result, modalActions) {
       return;
     }
     if (result.step === 1) {
-      modalActions.openModalByKey("picker");
+      modalActions.closeModalByKey("picker");
       return;
     }
     if (result.step === 2) {
+      modalActions.openModalByKey("picker");
+      return;
+    }
+    if (result.step === 3) {
       modalActions.closeModalByKey("picker");
     }
     return;
@@ -150,10 +153,15 @@ export function syncWizardModals(result, modalActions) {
   }
   if (result.step === 1) {
     modalActions.closeModalByKey("context");
-    modalActions.openModalByKey("picker");
+    modalActions.closeModalByKey("picker");
     return;
   }
   if (result.step === 2) {
+    modalActions.closeModalByKey("context");
+    modalActions.openModalByKey("picker");
+    return;
+  }
+  if (result.step === 3) {
     modalActions.closeModalByKey("picker");
     modalActions.openModalByKey("context");
   }
@@ -211,7 +219,7 @@ export function wireAppEvents(params) {
   bindModalCloseButtons(bindCloseButtons, modalActions);
 
   bindClick("openPickerBtn", () => {
-    stateActions.jumpWizardStep(1);
+    stateActions.jumpWizardStep(2);
     modalActions.closeModalByKey("context");
     modalActions.openModalByKey("picker");
   });
@@ -238,8 +246,9 @@ export function wireAppEvents(params) {
   bindClick("pickerClearBtn", stateActions.clearHand);
   bindClick("playAgainBtn", () => {
     stateActions.clearHand();
-    stateActions.jumpWizardStep(1);
+    stateActions.jumpWizardStep(2);
     modalActions.closeModalByKey("result");
+    syncWizardModals({ ok: true, step: 2 }, modalActions);
   });
 
   wireContextSegmentedControls(byId, stateActions);

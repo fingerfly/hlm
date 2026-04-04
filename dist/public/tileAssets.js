@@ -58,6 +58,55 @@ function tileColor(tileCode) {
   return "#2f2f2f";
 }
 
+/** Unicode Mahjong Tiles block U+1F000–U+1F021. */
+const TILE_TO_UNICODE = Object.freeze({
+  E: "\u{1F000}",
+  S: "\u{1F001}",
+  Wn: "\u{1F002}",
+  N: "\u{1F003}",
+  R: "\u{1F004}",
+  G: "\u{1F005}",
+  Wh: "\u{1F006}",
+  "1W": "\u{1F007}",
+  "2W": "\u{1F008}",
+  "3W": "\u{1F009}",
+  "4W": "\u{1F00A}",
+  "5W": "\u{1F00B}",
+  "6W": "\u{1F00C}",
+  "7W": "\u{1F00D}",
+  "8W": "\u{1F00E}",
+  "9W": "\u{1F00F}",
+  "1T": "\u{1F010}",
+  "2T": "\u{1F011}",
+  "3T": "\u{1F012}",
+  "4T": "\u{1F013}",
+  "5T": "\u{1F014}",
+  "6T": "\u{1F015}",
+  "7T": "\u{1F016}",
+  "8T": "\u{1F017}",
+  "9T": "\u{1F018}",
+  "1B": "\u{1F019}",
+  "2B": "\u{1F01A}",
+  "3B": "\u{1F01B}",
+  "4B": "\u{1F01C}",
+  "5B": "\u{1F01D}",
+  "6B": "\u{1F01E}",
+  "7B": "\u{1F01F}",
+  "8B": "\u{1F020}",
+  "9B": "\u{1F021}"
+});
+
+/**
+ * Return Unicode character for tile if available.
+ *
+ * @param {string} tileCode - Canonical tile code.
+ * @returns {string|null} Unicode char or null if no mapping.
+ */
+export function getTileUnicode(tileCode) {
+  const u = TILE_TO_UNICODE[tileCode];
+  return u ? u : null;
+}
+
 /**
  * Return readable Chinese tile label for one canonical code.
  *

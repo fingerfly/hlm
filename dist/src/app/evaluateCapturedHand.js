@@ -1,3 +1,4 @@
+import { buildScoringRuleSnapshot } from "../config/scoreRuleConfig.js";
 import { scoreHand } from "../rules/scoringEngine.js";
 import { explainScoringResult } from "../llm/explainer.js";
 import { createReplayLog } from "../utils/replayLog.js";
@@ -13,7 +14,8 @@ import { normalizeManualTiles } from "./manualTileInput.js";
 /**
  * Evaluate one captured hand request with manual tile path.
  *
- * @param {{tiles?: string[], context?: object}} request - Input request.
+ * @param {{tiles?: string[], context?: object,
+ *   scoringRule?: object|null, ruleConfig?: object|null}} request
  * @returns {{recognition: object, scoring: object, explanation: string,
  *   replayLog: object}}
  */
@@ -25,6 +27,7 @@ export function evaluateCapturedHand(request) {
       matchedFans: [],
       excludedFans: [],
       totalFan: 0,
+      gateFan: 0,
       errorCode: "INVALID_INPUT",
       missingFields: [],
       problems: normalizedTiles.problems
@@ -48,9 +51,14 @@ export function evaluateCapturedHand(request) {
     tileCodes: normalizedTiles.tileCodes,
     missingIndices: []
   };
+  const scoringRule =
+    request?.scoringRule != null
+      ? request.scoringRule
+      : buildScoringRuleSnapshot(request?.ruleConfig ?? null);
   const scoringInput = {
     ...request?.context,
-    tiles: normalizedTiles.tileCodes
+    tiles: normalizedTiles.tileCodes,
+    scoringRule
   };
   const scoring = scoreHand(scoringInput);
   const explanation = scoring.errorCode === "INVALID_INPUT"

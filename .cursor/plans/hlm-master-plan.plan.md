@@ -100,6 +100,18 @@ todos:
       MCR_Official + Current_Compat；支持规则选择与自定义持久化回退。Child:
       hlm_score_config_mcr_presets_620b275b.plan.md
     status: completed
+  - id: track-mcr-p0-official-alignment
+    content: >
+      国标预设对齐体育总局核心口径：8 分起和、花牌不计入起和、自摸/点和
+      底分+基本分结算；保留 Current_Compat 行为。Child:
+      hlm_mcr_p0_alignment_01c0c730.plan.md
+    status: completed
+  - id: track-onboarding-shell-hig
+    content: >
+      Option B：将「设定玩家」并入 main.app-shell 为向导第 1 步（三步流）+
+      模态/表单 HIG 打磨。Child:
+      hlm_onboarding_shell_merge_f9a1c8e0.plan.md（**completed** 2026-04-03；v5.2.0）
+    status: completed
 isProject: false
 ---
 
@@ -205,6 +217,10 @@ not present in current workspace)
   [hlm_round_settlement_roles_visible_01c13181.plan.md](hlm_round_settlement_roles_visible_01c13181.plan.md)
 - 结算公式参数化 + 双预设（**completed** 2026-04-03）:
   [hlm_score_config_mcr_presets_620b275b.plan.md](hlm_score_config_mcr_presets_620b275b.plan.md)
+- 国标结算口径 P0（**completed** 2026-04-03；v5.1.0）:
+  [hlm_mcr_p0_alignment_01c0c730.plan.md](hlm_mcr_p0_alignment_01c0c730.plan.md)
+- 启动并入壳 + 三步向导（**completed** 2026-04-03；v5.2.0；Option B）:
+  [hlm_onboarding_shell_merge_f9a1c8e0.plan.md](hlm_onboarding_shell_merge_f9a1c8e0.plan.md)
 - Historical supporting plans (traceability only):
   - [hlm_版本升级工具与中文术语统一_35161103.plan.md](hlm_版本升级工具与中文术语统一_35161103.plan.md)
   - `spike_full_automation_6a79ecff.plan.md` (historical reference; file
@@ -283,12 +299,26 @@ practicality upgrade exit (or after Pages if practicality is deferred).
   [hlm_round_settlement_roles_visible_01c13181.plan.md](hlm_round_settlement_roles_visible_01c13181.plan.md).
 - Score config scalability with MCR + compat presets (**completed** 2026-04-03):
   [hlm_score_config_mcr_presets_620b275b.plan.md](hlm_score_config_mcr_presets_620b275b.plan.md).
+- MCR official settlement + gate alignment P0 (**completed** 2026-04-03):
+  [hlm_mcr_p0_alignment_01c0c730.plan.md](hlm_mcr_p0_alignment_01c0c730.plan.md).
+- Onboarding in main shell + three-step wizard (**completed** 2026-04-03;
+  **v5.2.0**): prerequisite `track-round-setup-table-ui` + four-player
+  settlement; child
+  [hlm_onboarding_shell_merge_f9a1c8e0.plan.md](hlm_onboarding_shell_merge_f9a1c8e0.plan.md)
+  （`uiFlowState` 三步、`goWizardNext` 写 `roundState`、`handCardSection`、
+  `roundSetupGateDom` `main` 断言、CHANGELOG [5.2.0]）。
 
 ## Phase Status Dashboard
 
 ### Current delivery queue (post-baseline)
 
-- TrackId: `track-score-config-mcr-presets`（**completed** 2026-04-03）
+- TrackId (latest closed): `track-onboarding-shell-hig`（**completed** 2026-04-03；
+  v5.2.0）→
+  [hlm_onboarding_shell_merge_f9a1c8e0.plan.md](hlm_onboarding_shell_merge_f9a1c8e0.plan.md)
+- Prior TrackId: `track-mcr-p0-official-alignment`（**completed** 2026-04-03）→
+  [hlm_mcr_p0_alignment_01c0c730.plan.md](hlm_mcr_p0_alignment_01c0c730.plan.md)
+- Earlier: `track-score-config-mcr-presets`（**completed** 2026-04-03）→
+  [hlm_score_config_mcr_presets_620b275b.plan.md](hlm_score_config_mcr_presets_620b275b.plan.md)
 - Prerequisite（**completed**）:
   `track-round-setup-four-player-settlement` →
   [hlm_round_setup_four_player_settlement_c30c89d1.plan.md](hlm_round_setup_four_player_settlement_c30c89d1.plan.md)
@@ -307,11 +337,15 @@ practicality upgrade exit (or after Pages if practicality is deferred).
     [hlm_desktop_context_controls_dual_ui.plan.md](hlm_desktop_context_controls_dual_ui.plan.md)
 - ChildPlans — 牌桌式启动门（已完成）:
   - [hlm_round_setup_table_ui_525519a5.plan.md](hlm_round_setup_table_ui_525519a5.plan.md)
-- ChildPlans — 当前可执行轨道:
+- ChildPlans — 最近完成:
+  - [hlm_onboarding_shell_merge_f9a1c8e0.plan.md](hlm_onboarding_shell_merge_f9a1c8e0.plan.md)
+    （**completed** 2026-04-03；`track-onboarding-shell-hig`）
+- ChildPlans — 历史可执行轨道（均已 completed）:
   - [hlm_score_config_mcr_presets_620b275b.plan.md](hlm_score_config_mcr_presets_620b275b.plan.md)
+  - [hlm_mcr_p0_alignment_01c0c730.plan.md](hlm_mcr_p0_alignment_01c0c730.plan.md)
 - **Active slice：**
-  无（scoreRuleConfig 参数化 + 双预设已完成）
-- TrackTodoStatus: `completed`
+  无（onboarding 已交付；桌面浏览器矩阵仍为可选手工项）
+- TrackTodoStatus: `completed`（`track-onboarding-shell-hig`）
 - Prior closed: `track-five-principles-exact-scoring` →
   [hlm-five-principles-exact-engine_cf4e8446.plan.md](hlm-five-principles-exact-engine_cf4e8446.plan.md)
   (2026-03-22)
@@ -326,12 +360,20 @@ practicality upgrade exit (or after Pages if practicality is deferred).
 
 - Owner: `project-owner`
 - OverallStatus: `in_progress`
-- ProgressPercent: `95` (help 中文扩展完成；等待桌面手工矩阵验证)
-- ActivePhase: `settlement-role-manual-selection`
+- ProgressPercent: `96`（v5.2.2 结果窗体起和番展示；**DesktopBrowserMatrix** 仍为
+  pending）
+- ActivePhase: `monitoring`
 - Focus:
-  - `Primary execution track: enforce manual discarder selection in dianhe +`
-    `mobile/desktop role parity + settlement error visibility.`
-  - `Track plan:`
+  - `Delivered 2026-04-03: onboarding shell merge — 三步向导（设定玩家入主壳`
+    `v5.2.0）—`
+    [hlm_onboarding_shell_merge_f9a1c8e0.plan.md](hlm_onboarding_shell_merge_f9a1c8e0.plan.md)
+  - `Delivered 2026-04-03: MCR P0 — 国标预设 8 分起和（花牌不计起和）、`
+    `officialBaseFan 结算、评分穿线、v5.1.0 —`
+    [hlm_mcr_p0_alignment_01c0c730.plan.md](hlm_mcr_p0_alignment_01c0c730.plan.md)
+  - `Closed 2026-04-03: 四家结算表头/列对齐（table 布局）— see master`
+    `ValidationEvidence +`
+    [hlm_round_setup_four_player_settlement_c30c89d1.plan.md](hlm_round_setup_four_player_settlement_c30c89d1.plan.md)
+  - `Prior delivered: manual discarder for dianhe + settlement errors —`
     [hlm_round_settlement_roles_visible_01c13181.plan.md](hlm_round_settlement_roles_visible_01c13181.plan.md)
   - `Delivered 2026-04-03: round setup table-metaphor gate UI + dealer highlight`
     `+ roundSetupGateDom.test.js —`
@@ -343,6 +385,8 @@ practicality upgrade exit (or after Pages if practicality is deferred).
   - `Preserve hlm_desktop_web_ui baseline: inline context host, help surfaces,`
     `two-pane shell.`
   - `TDD + npm test + quality:complexity + cloc per slice gates.`
+  - `Delivered 2026-04-03: result modal 番数行含起和（v5.2.2）当 gateFan <`
+    `totalFan 时显示「总番（起和 x 番）」。`
 - ExitGateCheck:
   - Unit: `pass`
   - Integration: `pass`
@@ -369,11 +413,27 @@ practicality upgrade exit (or after Pages if practicality is deferred).
     ` tabindex 与 heading 层级，避免对话框内焦点陷阱回归.`
   - `Manual desktop browser matrix remains pending; automated browser-use`
     `validation was blocked by regional model availability.`
+  - `Onboarding v5.2.0 shipped (2026-04-03): manual spot-check wizard 1→2→3 +`
+    `resize/breakpoints still recommended (automated browser matrix pending).`
 - NextActions:
-  - `Run manual UI verification for round-setup gate and result settlement`
-    `rendering on desktop/mobile breakpoints.`
-  - `Keep track in monitoring mode; no open blocker.`
+  - `Manual UI pass: in-shell setup + three-step wizard + settlement on`
+    `desktop/mobile breakpoints (post v5.2.0).`
 - ValidationEvidence:
+  - `2026-04-03: result modal shows 起和番 when gateFan < totalFan`
+    `(formatResultFanSummary + vm.gateFan); v5.2.2; npm test +`
+    `quality:complexity + build:dist pass.`
+  - `2026-04-04: help zh steps aligned to 3-step wizard + indexStylesheetLinks`
+    `contract test; v5.2.1; npm test + quality:complexity + build:dist pass.`
+  - `2026-04-03: implemented track-onboarding-shell-hig — uiFlowState 3 steps,`
+    `setup in main.app-shell, goWizardNext/syncWizardModals/handleWizardNext`
+    `step-3 calculate, playAgain→step2, tests updated + roundSetupGateDom main`
+    `assertion; CHANGELOG 5.2.0; gates: npm test, quality:complexity,`
+    `build:dist, cloc on touched files.`
+  - `2026-04-03: plan review-fix for track-onboarding-shell-hig — child`
+    `hlm_onboarding_shell_merge_f9a1c8e0.plan.md gained prerequisites,`
+    `acceptance criteria, state invariants, phase exits, file list, rollback,`
+    `gate command list, readiness verdict ready_to_execute; master NextActions`
+    `and RisksAndBlockers aligned to in-shell setup wording.`
   - `2026-04-03: implemented track-score-config-mcr-presets — added`
     `scoreRuleConfig presets + validator, rule persistence, settlement`
     `ruleConfig integration, preset/custom UI hooks, and result rule meta`
@@ -383,6 +443,27 @@ practicality upgrade exit (or after Pages if practicality is deferred).
     `child moved to workspace .cursor/plans, placeholders removed, and`
     `master frontmatter/index/dependency/dashboard linked;`
     `readiness verdict ready_to_execute.`
+  - `2026-04-03: MCR P0 alignment child plan canonical under`
+    `hlm/.cursor/plans/hlm_mcr_p0_alignment_01c0c730.plan.md; master`
+    `frontmatter todo track-mcr-p0-official-alignment linked (later marked`
+    `completed same day), Consolidated Index, Dependency order, Phase`
+    `dashboard, Current Status updated; duplicate ~/.cursor/plans copy removed.`
+  - `2026-04-03: MCR P0 plan review-fix — locked 起和/花牌/结算语义，评分穿线`
+    `calculate→evaluateCapturedHand→scoreHand，config 扩展草案，数值锚点表（含点和`
+    `+32 守恒），文件清单含 handState/集成测/CHANGELOG，质量门禁含`
+    `quality:complexity；子计划 verdict ready_to_execute。`
+  - `2026-04-03: MCR P0 implemented — scoring/settlement on presets,`
+    `buildScoringRuleSnapshot, aggregateScore gateFan + HUA_PAI exclude,`
+    `scoreHand sort prefers reaching gate, officialBaseFanSettlement module,`
+    `evaluateCapturedHand + resultStateActions wiring, handState scoringRule`
+    `validation, tests + CHANGELOG 5.1.0; npm test + quality:complexity pass.`
+  - `2026-04-03: Result modal 四家结算表头与数据列对齐 — replaced parallel CSS`
+    `Grid header/rows with semantic <table> + colgroup (fixed columns),`
+    `renderSettlementRows emits tr/td; styles-components +`
+    `styles-responsive; CHANGELOG [Unreleased] Fixed; gates: npm test,`
+    `quality:complexity, build:dist. Traceability:`
+    `hlm_round_setup_four_player_settlement_c30c89d1.plan.md post-closeout`
+    `slice.`
   - `2026-04-03: settlement role constraints refined — zimo disables discarder;`
     `dianhe requires manual discarder and blocks calculate with explicit`
     `message when invalid. Added resultStateActions.test.js and updated`
@@ -532,9 +613,10 @@ practicality upgrade exit (or after Pages if practicality is deferred).
     now orchestrates principle steps only. Added principle-layer unit tests for
     these rules. Re-ran full gates:
     unit/regression/integration/complexity/full all pass.`
-- LastUpdated: `2026-04-02` (new track implemented:
-    round setup + four-player settlement implemented and closed)`
+- LastUpdated: `2026-04-03` (v5.2.2 result modal gateFan line; prior 2026-04-04
+  v5.2.1 help + test; 2026-04-03 onboarding v5.2.0)
 - TrackCloseout:
+  - `track-onboarding-shell-hig completed on 2026-04-03 (v5.2.0).`
   - `track-five-principles-exact-scoring completed on 2026-03-22.`
 
 ## Security and Privacy Hardening Track

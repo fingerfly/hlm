@@ -1,5 +1,6 @@
 import { setResultPayload, canCalculate } from "../src/app/uiFlowState.js";
 import { computeRoundSettlement } from "../src/app/roundSettlement.js";
+import { buildScoringRuleSnapshot } from "../src/config/scoreRuleConfig.js";
 
 function parseBoundedInt(el, fallback) {
   if (!el) return fallback;
@@ -81,10 +82,15 @@ export function createResultStateActions(input) {
       return false;
     }
     setRoleValidationMessage(byId, "");
-    const result = evaluateCapturedHand(request);
+    const ruleConfig = store.roundState?.scoreRuleConfig || null;
+    const result = evaluateCapturedHand({
+      ...request,
+      ruleConfig,
+      scoringRule: buildScoringRuleSnapshot(ruleConfig)
+    });
     const settlement = computeRoundSettlement({
       players: store.roundState?.players || [],
-      ruleConfig: store.roundState?.scoreRuleConfig || null,
+      ruleConfig,
       isWin: result?.scoring?.isWin === true,
       totalFan: result?.scoring?.totalFan || 0,
       winType: request.context.winType,

@@ -1,5 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { getScoreRulePreset, SCORE_RULE_PRESET_IDS } from "../../src/config/scoreRuleConfig.js";
 import { evaluateCapturedHand } from "../../src/app/evaluateCapturedHand.js";
 
 const winningTiles = [
@@ -78,6 +79,22 @@ test("evaluateCapturedHand treats updated baseline hand as winning", () => {
   assert.equal(result.scoring.totalFan, 6);
   assert.equal(result.scoring.isWin, true);
   assert.equal(result.scoring.errorCode, null);
+});
+
+test("evaluateCapturedHand uses MCR gate when ruleConfig is official preset", () => {
+  const result = evaluateCapturedHand({
+    tiles: [...winningTiles],
+    ruleConfig: getScoreRulePreset(SCORE_RULE_PRESET_IDS.MCR_OFFICIAL),
+    context: {
+      winType: "zimo",
+      handState: "menqian",
+      kongType: "none",
+      timingEvent: "none"
+    }
+  });
+  assert.equal(result.scoring.totalFan, 6);
+  assert.equal(result.scoring.isWin, false);
+  assert.equal(result.scoring.errorCode, "NOT_A_WINNING_HAND");
 });
 
 test("evaluateCapturedHand accepts legacy flower aliases as valid tiles", () => {

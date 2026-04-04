@@ -1,4 +1,5 @@
 import { ERROR_CODES } from "../config/ruleBaseline.js";
+import { SETTLEMENT_MODES } from "../config/scoreRuleConfig.js";
 import {
   addStructuredContextProblems
 } from "./structuredContextValidator.js";
@@ -21,6 +22,47 @@ export const TIMING_EVENTS = Object.freeze([
   "qianggang"
 ]);
 export const WINDS = Object.freeze(["E", "S", "Wn", "N"]);
+
+/**
+ * Append problems when optional scoringRule snapshot is malformed.
+ *
+ * @param {object} input - Scoring input.
+ * @param {string[]} problems - Mutable problem list.
+ */
+function addScoringRuleProblems(input, problems) {
+  if (!Object.prototype.hasOwnProperty.call(input, "scoringRule")) return;
+  const rule = input.scoringRule;
+  if (rule == null) return;
+  if (typeof rule !== "object" || Array.isArray(rule)) {
+    problems.push("scoringRule must be a plain object");
+    return;
+  }
+  if (!Number.isInteger(rule.gateMinFan) || rule.gateMinFan < 0) {
+    problems.push("scoringRule.gateMinFan must be integer >= 0");
+  }
+  if (!Array.isArray(rule.gateExcludeFanIds)) {
+    problems.push("scoringRule.gateExcludeFanIds must be an array");
+    return;
+  }
+  for (const id of rule.gateExcludeFanIds) {
+    if (typeof id !== "string") {
+      problems.push("scoringRule.gateExcludeFanIds must be string ids");
+      break;
+    }
+  }
+  if (
+    rule.settlementMode !== SETTLEMENT_MODES.COMPAT_LINEAR &&
+    rule.settlementMode !== SETTLEMENT_MODES.OFFICIAL_BASE_FAN
+  ) {
+    problems.push("scoringRule.settlementMode is invalid");
+  }
+  if (
+    !Number.isInteger(rule.officialBasePoint) ||
+    rule.officialBasePoint < 0
+  ) {
+    problems.push("scoringRule.officialBasePoint must be integer >= 0");
+  }
+}
 
 /**
  * Collect required context fields with invalid values.
@@ -85,6 +127,7 @@ export function validateHandInput(input = {}) {
   }
 
   addStructuredContextProblems(input, problems);
+  addScoringRuleProblems(input, problems);
 
   if (problems.length > 0) {
     return {

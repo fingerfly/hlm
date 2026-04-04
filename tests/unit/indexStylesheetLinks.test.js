@@ -90,6 +90,13 @@ test("index.html exposes help modal and explicit reset button", () => {
   assert.doesNotMatch(html, /id="moreBtn"[^>]*>\.\.\.<\/button>/);
 });
 
+test("help article template matches three-step wizard copy", () => {
+  const html = readFileSync(indexPath, "utf8");
+  assert.match(html, /设定玩家/);
+  assert.match(html, /步骤 2\/3/);
+  assert.match(html, /步骤 3\/3/);
+});
+
 test("styles-responsive includes desktop two-pane shell rules", () => {
   const css = readFileSync(responsiveCssPath, "utf8");
   assert.match(css, /@media\s*\(min-width:\s*1024px\)/);

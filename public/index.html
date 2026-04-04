@@ -12,79 +12,6 @@
     <link rel="stylesheet" href="./styles-responsive.css" />
   </head>
   <body>
-    <section id="roundSetupGate" class="round-setup-gate">
-      <div class="round-setup-card">
-        <h2>设定玩家</h2>
-        <p class="summary-text">俯视牌桌设定四风位与起始分，再进入每手计番与结算。</p>
-        <div class="round-setup-table" role="group" aria-label="四家座位">
-          <div class="round-setup-seat round-setup-seat--e" data-seat="E">
-            <div class="round-setup-seat-head">
-              <span class="round-setup-wind">东</span>
-              <span class="round-setup-dealer-badge" aria-hidden="true">庄</span>
-            </div>
-            <label>名称
-              <input id="playerNameE" name="playerNameE" value="东家" />
-            </label>
-            <label>分数
-              <input id="playerScoreE" name="playerScoreE" type="number"
-                value="0" />
-            </label>
-          </div>
-          <div class="round-setup-seat round-setup-seat--s" data-seat="S">
-            <div class="round-setup-seat-head">
-              <span class="round-setup-wind">南</span>
-              <span class="round-setup-dealer-badge" aria-hidden="true">庄</span>
-            </div>
-            <label>名称
-              <input id="playerNameS" name="playerNameS" value="南家" />
-            </label>
-            <label>分数
-              <input id="playerScoreS" name="playerScoreS" type="number"
-                value="0" />
-            </label>
-          </div>
-          <div class="round-setup-seat round-setup-seat--w" data-seat="W">
-            <div class="round-setup-seat-head">
-              <span class="round-setup-wind">西</span>
-              <span class="round-setup-dealer-badge" aria-hidden="true">庄</span>
-            </div>
-            <label>名称
-              <input id="playerNameW" name="playerNameW" value="西家" />
-            </label>
-            <label>分数
-              <input id="playerScoreW" name="playerScoreW" type="number"
-                value="0" />
-            </label>
-          </div>
-          <div class="round-setup-seat round-setup-seat--n" data-seat="N">
-            <div class="round-setup-seat-head">
-              <span class="round-setup-wind">北</span>
-              <span class="round-setup-dealer-badge" aria-hidden="true">庄</span>
-            </div>
-            <label>名称
-              <input id="playerNameN" name="playerNameN" value="北家" />
-            </label>
-            <label>分数
-              <input id="playerScoreN" name="playerScoreN" type="number"
-                value="0" />
-            </label>
-          </div>
-          <div class="round-setup-table-center">
-            <label class="round-dealer-row">庄家
-              <select id="dealerSeat" name="dealerSeat">
-                <option value="E">东</option>
-                <option value="S">南</option>
-                <option value="W">西</option>
-                <option value="N">北</option>
-              </select>
-            </label>
-            <button id="startRoundBtn" class="primary-btn" type="button">
-              开始对局
-            </button>
-          </div>
-        </div>
-      </div>
-    </section>
     <div id="appSplash" class="app-splash" aria-live="polite"
       aria-label="应用启动画面">
       <div class="app-splash-motif" aria-hidden="true"></div>
@@ -123,7 +50,82 @@
       </header>
       <p id="versionBadge" class="version-badge">版本信息加载中...</p>
 
-      <section class="card hand-card">
+      <section id="roundSetupGate" class="round-setup-gate">
+        <div class="round-setup-card">
+          <h2>设定玩家</h2>
+          <p class="summary-text">俯视牌桌设定四风位与起始分，再进入每手计番与结算。</p>
+          <div class="round-setup-table" role="group" aria-label="四家座位">
+            <div class="round-setup-seat round-setup-seat--e" data-seat="E">
+              <div class="round-setup-seat-head">
+                <span class="round-setup-wind">东</span>
+                <span class="round-setup-dealer-badge" aria-hidden="true">庄</span>
+              </div>
+              <label>名称
+                <input id="playerNameE" name="playerNameE" value="东家" />
+              </label>
+              <label>分数
+                <input id="playerScoreE" name="playerScoreE" type="number"
+                  value="0" />
+              </label>
+            </div>
+            <div class="round-setup-seat round-setup-seat--s" data-seat="S">
+              <div class="round-setup-seat-head">
+                <span class="round-setup-wind">南</span>
+                <span class="round-setup-dealer-badge" aria-hidden="true">庄</span>
+              </div>
+              <label>名称
+                <input id="playerNameS" name="playerNameS" value="南家" />
+              </label>
+              <label>分数
+                <input id="playerScoreS" name="playerScoreS" type="number"
+                  value="0" />
+              </label>
+            </div>
+            <div class="round-setup-seat round-setup-seat--w" data-seat="W">
+              <div class="round-setup-seat-head">
+                <span class="round-setup-wind">西</span>
+                <span class="round-setup-dealer-badge" aria-hidden="true">庄</span>
+              </div>
+              <label>名称
+                <input id="playerNameW" name="playerNameW" value="西家" />
+              </label>
+              <label>分数
+                <input id="playerScoreW" name="playerScoreW" type="number"
+                  value="0" />
+              </label>
+            </div>
+            <div class="round-setup-seat round-setup-seat--n" data-seat="N">
+              <div class="round-setup-seat-head">
+                <span class="round-setup-wind">北</span>
+                <span class="round-setup-dealer-badge" aria-hidden="true">庄</span>
+              </div>
+              <label>名称
+                <input id="playerNameN" name="playerNameN" value="北家" />
+              </label>
+              <label>分数
+                <input id="playerScoreN" name="playerScoreN" type="number"
+                  value="0" />
+              </label>
+            </div>
+            <div class="round-setup-table-center">
+              <label class="round-dealer-row">庄家
+                <select id="dealerSeat" name="dealerSeat">
+                  <option value="E">东</option>
+                  <option value="S">南</option>
+                  <option value="W">西</option>
+                  <option value="N">北</option>
+                </select>
+              </label>
+              <button id="startRoundBtn" class="primary-btn" type="button"
+                hidden aria-hidden="true" tabindex="-1">
+                开始对局
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="handCardSection" class="card hand-card">
         <div class="card-top">
           <h2>当前手牌 <span id="tileCount">0/14</span></h2>
         </div>
@@ -139,7 +141,7 @@
 
       <footer id="desktopSidePanel" class="sticky-footer desktop-side-panel">
         <div id="desktopContextHost" class="desktop-context-host"></div>
-        <p id="wizardStepHint" class="hint">步骤 1/2：选择 14 张手牌</p>
+        <p id="wizardStepHint" class="hint">步骤 1/3：设定玩家</p>
         <p id="contextSummary" class="hint">自摸 · 门前清 · 无杠</p>
         <p id="readyHint" class="hint">请先选满 14 张牌</p>
         <div class="wizard-controls">
@@ -423,10 +425,24 @@
           </section>
           <section class="result-section" aria-labelledby="resultSettleHeading">
             <h4 id="resultSettleHeading" class="result-section-title">四家结算</h4>
-            <div class="settlement-head">
-              <span>玩家</span><span>局前</span><span>增减</span><span>局后</span>
-            </div>
-            <div id="resultSettlementRows" class="settlement-rows"></div>
+            <table class="settlement-table"
+              aria-label="四家分数结算">
+              <colgroup>
+                <col class="settlement-col-name" />
+                <col class="settlement-col-num" />
+                <col class="settlement-col-num" />
+                <col class="settlement-col-num" />
+              </colgroup>
+              <thead>
+                <tr>
+                  <th scope="col">玩家</th>
+                  <th scope="col">局前</th>
+                  <th scope="col">增减</th>
+                  <th scope="col">局后</th>
+                </tr>
+              </thead>
+              <tbody id="resultSettlementRows"></tbody>
+            </table>
           </section>
           <p id="resultExplanation" class="result-explanation summary-text"></p>
           <div class="inline-actions">
@@ -453,22 +469,25 @@
       <section class="help-section" aria-labelledby="helpPurposeTitle">
         <h4 id="helpPurposeTitle" class="help-section-title">本应用是做什么的</h4>
         <p class="summary-text">和了么用于国标麻将的计番与番种拆解。</p>
-        <p class="summary-text">在选满 14 张手牌并设置和牌条件后，应用输出番种
-          明细与总番，辅助核对。</p>
+        <p class="summary-text">完成「设定玩家」、选满 14 张手牌并设置和牌条件后，
+          应用输出番种明细与总番，辅助核对。</p>
         <p class="summary-text">说明文本不替代《中国麻将竞赛规则》原文；遇到规则
           争议时，请以正式规则与裁判口径为准。</p>
       </section>
       <section class="help-section" aria-labelledby="helpStepsTitle">
         <h4 id="helpStepsTitle" class="help-section-title">推荐使用步骤</h4>
         <ol class="help-steps">
-          <li class="summary-text">录入 14 张手牌。桌面宽屏通常为内联选牌，手机/
-            窄屏通常为底部弹层选牌。</li>
-          <li class="summary-text">进入「和牌条件」，设置自摸/点和、门前/副露、
-            花牌、杠、时机等。</li>
-          <li class="summary-text">点击计算，查看和牌分组、番种明细与总番。</li>
+          <li class="summary-text">在主界面「设定玩家」中填写四家名称与起始分、
+            选择庄家，点「下一步」进入选牌。</li>
+          <li class="summary-text">录入 14 张手牌（向导步骤 2/3）。桌面宽屏通常为
+            内联选牌，手机/窄屏通常为底部弹层选牌。</li>
+          <li class="summary-text">进入「和牌条件」（步骤 3/3），设置自摸/点和、
+            门前/副露、花牌、杠、时机等。</li>
+          <li class="summary-text">点击「下一步」计算，查看和牌分组、番种明细与
+            总番。</li>
         </ol>
-        <p class="summary-text">提示：「重置条件」只清空条件；「清空」会清除
-          当前手牌。</p>
+        <p class="summary-text">提示：底部「下一步/上一步」在三个步骤间切换；
+          「重置条件」只清空条件；「清空」会清除当前手牌。</p>
       </section>
       <section class="help-section" aria-labelledby="helpFanConceptTitle">
         <h4 id="helpFanConceptTitle" class="help-section-title">番、起和与不计</h4>

@@ -30,6 +30,11 @@ todos:
       Link child plan into master plan sections and define closeout checks for
       status, links, and validation evidence.
     status: completed
+  - id: settlement-table-column-alignment
+    content: >
+      Post-closeout: result modal 四家结算改用 table+colgroup 对齐表头与数据列；
+      CHANGELOG [Unreleased]; master ValidationEvidence 2026-04-03.
+    status: completed
 isProject: false
 ---
 
@@ -152,3 +157,17 @@ Status: `completed`
   - `npm test`
   - `npm run quality:complexity`
   - `cloc` on touched files
+
+## Post-closeout slice (closed 2026-04-03)
+
+- **Issue:** Header row and data rows each used separate CSS Grid; column
+  widths were computed independently → misaligned headers vs numbers.
+- **Fix:** Semantic `<table>` with `<colgroup>` fixed widths, `<thead>` /
+  `<tbody id="resultSettlementRows">`; `renderSettlementRows` builds `tr`/`td`.
+- **Files:** `public/index.html`, `public/resultModalView.js`,
+  `public/styles-components.css`, `public/styles-responsive.css`;
+  `CHANGELOG.md` [Unreleased] **Fixed**.
+- **Gates:** `npm test`, `npm run quality:complexity`, `npm run build:dist`.
+- **Master:** [hlm-master-plan.plan.md](hlm-master-plan.plan.md)
+  ValidationEvidence updated; frontmatter todo
+  `settlement-table-column-alignment` **completed**.

@@ -1,3 +1,6 @@
+import { getFanDisplayName } from "../rules/fanRegistry.js";
+import { getFanLexiconText } from "../config/fanLexicon.js";
+
 /**
  * Purpose: Translate scoring payload into UI-friendly result view model.
  * Description:
@@ -16,34 +19,55 @@ const WIN_PATTERN_TEXT = Object.freeze({
   thirteen_orphans: "十三幺"
 });
 
-const FAN_ID_TEXT = Object.freeze({
-  MEN_QIAN_QING: "门前清",
-  ZI_MO: "自摸",
-  QI_DUI: "七对",
-  SHI_SAN_YAO: "十三幺",
-  GANG_SHANG_HUA: "杠上开花",
-  HAI_DI_LAO_YUE: "海底捞月",
-  HE_DI_LAO_YU: "河底捞鱼",
-  QING_YI_SE: "清一色",
-  HUN_YI_SE: "混一色",
-  DUAN_YAO: "断幺"
-});
+/**
+ * Purpose: Convert settlement validation problems into one UI string.
+ *
+ * @param {null|{ok?: boolean, problems?: string[]}} settlement
+ * @returns {string} Empty string means no settlement error.
+ */
+function buildSettlementErrorText(settlement) {
+  if (!settlement) return "";
+  if (settlement.ok === true) return "";
+  const problems = Array.isArray(settlement.problems)
+    ? settlement.problems.filter(Boolean)
+    : [];
+  if (problems.length === 0) return "";
+  return `结算校验失败：${problems.join("；")}`;
+}
 
 /**
  * Map one fan item into localized display fields.
  *
  * @param {{id: string, fan: number}} item - Raw fan item.
- * @returns {{id: string, fan: number, name: string}}
+ * @returns {{id: string, fan: number, name: string, detailText: string}}
  */
 function mapFanItem(item) {
   return {
     ...item,
-    name: FAN_ID_TEXT[item.id] || item.id
+    name: getFanDisplayName(item.id),
+    detailText: getFanLexiconText(item.id)
   };
 }
 
 /**
- * Build render model consumed by result and info modals.
+ * Normalize gate fan for UI: excludes flower-only fan from 起和门槛 when
+ * engine supplies gateFan; falls back to totalFan for older payloads.
+ *
+ * @param {{totalFan?: number, gateFan?: number}} scoring
+ * @param {number} totalFan - Non-negative total fan.
+ * @returns {number}
+ */
+function resolveGateFan(scoring, totalFan) {
+  if (!Object.prototype.hasOwnProperty.call(scoring, "gateFan")) {
+    return totalFan;
+  }
+  const g = Number(scoring.gateFan);
+  if (!Number.isFinite(g)) return totalFan;
+  return Math.max(0, g);
+}
+
+/**
+ * Build render model consumed by the result modal.
  *
  * @param {object} result - End-to-end evaluation result payload.
  * @returns {object}
@@ -52,15 +76,29 @@ export function buildResultViewModel(result) {
   const status = result?.recognition?.status || "";
   const scoring = result?.scoring || {};
   const pattern = scoring.winPattern;
+  const settlementErrorText = buildSettlementErrorText(result?.settlement);
+  const ruleMeta = result?.ruleMeta || null;
+  const ruleMetaText = ruleMeta
+    ? `规则：${ruleMeta.name || ruleMeta.id || "未知"}`
+      + `（${ruleMeta.version || "n/a"}）`
+    : "";
+  const totalFan = Math.max(0, Number(scoring.totalFan) || 0);
+  const gateFan = resolveGateFan(scoring, totalFan);
   return {
     statusText: STATUS_TEXT[status] || status || "未知状态",
     winText: scoring.isWin ? "和牌" : "未和牌",
-    totalFan: Number(scoring.totalFan || 0),
+    totalFan,
+    gateFan,
     minWinningFan: Number(scoring.minWinningFan || 0),
     winPatternText: WIN_PATTERN_TEXT[pattern] || "未成和",
     explanation: result?.explanation || "",
+    meldGroups: scoring.meldGroups || [],
     matchedFans: (scoring.matchedFans || []).map(mapFanItem),
     excludedFans: (scoring.excludedFans || []).map(mapFanItem),
+    settlement: result?.settlement || null,
+    settlementErrorText,
+    hasSettlementError: Boolean(settlementErrorText),
+    ruleMetaText,
     raw: result
   };
 }

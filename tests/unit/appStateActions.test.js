@@ -25,10 +25,23 @@ function createByIdMap() {
     timingEvent: { value: "none" },
     flowerCount: { value: "0" },
     kongAnCount: { value: "0" },
-    kongMingCount: { value: "0" }
+    kongMingCount: { value: "0" },
+    dealerSeat: { value: "E" },
+    playerNameE: { value: "东家" },
+    playerScoreE: { value: "0" },
+    playerNameS: { value: "南家" },
+    playerScoreS: { value: "0" },
+    playerNameW: { value: "西家" },
+    playerScoreW: { value: "0" },
+    playerNameN: { value: "北家" },
+    playerScoreN: { value: "0" },
+    roundSetupGate: { hidden: false },
+    handCardSection: { hidden: false },
+    startRoundBtn: { hidden: false },
+    resetContextBtn: { hidden: false }
   };
   return {
-    byId: (id) => controls[id],
+    byId: (id) => controls[id] ?? null,
     controls
   };
 }
@@ -45,6 +58,7 @@ function createRefs() {
     wizardStepHintEl: { textContent: "" },
     wizardBackBtn: { textContent: "", hidden: false },
     wizardNextBtn: { textContent: "", hidden: false },
+    desktopSidePanelEl: { classList: { toggle: () => {} } },
     readyHintEl: { textContent: "" },
     resultRefs: {}
   };
@@ -53,7 +67,7 @@ function createRefs() {
 test("syncHomeState toggles delete button visibility by editing state", () => {
   const byIdState = createByIdMap();
   const store = {
-    uiState: { hand: { tiles: [] } },
+    uiState: { hand: { tiles: [] }, wizard: { step: 2, totalSteps: 3 } },
     pickerState: createTilePickerState(["1W", "2W"]),
     pickerAction: "single",
     resultVm: null
@@ -89,7 +103,7 @@ test("syncHomeState toggles delete button visibility by editing state", () => {
 test("syncHomeState updates primary picker CTA by tile count", () => {
   const byIdState = createByIdMap();
   const store = {
-    uiState: { hand: { tiles: [] } },
+    uiState: { hand: { tiles: [] }, wizard: { step: 2, totalSteps: 3 } },
     pickerState: createTilePickerState([]),
     pickerAction: "single",
     resultVm: null
@@ -124,10 +138,10 @@ test("syncHomeState updates primary picker CTA by tile count", () => {
   assert.equal(refs.openPickerBtn.textContent, "手牌已满，可修改");
 });
 
-test("syncHomeState shows placeholder for contextSummary at step 1", () => {
+test("syncHomeState shows setup hints at wizard step 1", () => {
   const byIdState = createByIdMap();
   const store = {
-    uiState: { hand: { tiles: [] }, wizard: { step: 1 } },
+    uiState: { hand: { tiles: [] }, wizard: { step: 1, totalSteps: 3 } },
     pickerState: createTilePickerState([]),
     pickerAction: "single",
     resultVm: null
@@ -151,14 +165,17 @@ test("syncHomeState shows placeholder for contextSummary at step 1", () => {
   });
 
   actions.syncHomeState();
-  assert.equal(refs.readyHintEl.textContent, "再选 14 张即可进入下一步");
+  assert.equal(
+    refs.readyHintEl.textContent,
+    "确认四家名称、分数与庄家后进入下一步"
+  );
   assert.equal(refs.contextSummaryEl.textContent, "—");
 });
 
 test("syncHomeState toggles clearHandBtn visibility by step and tile count", () => {
   const byIdState = createByIdMap();
   const store = {
-    uiState: { hand: { tiles: [] }, wizard: { step: 1 } },
+    uiState: { hand: { tiles: [] }, wizard: { step: 2, totalSteps: 3 } },
     pickerState: createTilePickerState([]),
     pickerAction: "single",
     resultVm: null
@@ -188,15 +205,15 @@ test("syncHomeState toggles clearHandBtn visibility by step and tile count", () 
   actions.syncHomeState();
   assert.equal(refs.clearHandBtn.hidden, false);
 
-  store.uiState.wizard.step = 2;
+  store.uiState.wizard.step = 3;
   actions.syncHomeState();
   assert.equal(refs.clearHandBtn.hidden, true);
 });
 
-test("syncHomeState shows actual context summary at step 2", () => {
+test("syncHomeState shows actual context summary at step 3", () => {
   const byIdState = createByIdMap();
   const store = {
-    uiState: { hand: { tiles: [] }, wizard: { step: 2 } },
+    uiState: { hand: { tiles: [] }, wizard: { step: 3, totalSteps: 3 } },
     pickerState: createTilePickerState(new Array(14).fill("1W")),
     pickerAction: "single",
     resultVm: null
@@ -241,7 +258,7 @@ test("syncHomeState shows actual context summary at step 2", () => {
 test("undoHand rolls back last pattern action (e.g. pung)", () => {
   const byIdState = createByIdMap();
   const store = {
-    uiState: { hand: { tiles: [] } },
+    uiState: { hand: { tiles: [] }, wizard: { step: 2, totalSteps: 3 } },
     pickerState: createTilePickerState([]),
     pickerAction: "pung",
     resultVm: null
@@ -282,7 +299,10 @@ test("resolveInitialPickerMode always returns twoLayer", () => {
 test("setPickerMode keeps picker slots and cursor unchanged", () => {
   const byIdState = createByIdMap();
   const store = {
-    uiState: { hand: { tiles: [], pickerMode: "twoLayer" } },
+    uiState: {
+      hand: { tiles: [], pickerMode: "twoLayer" },
+      wizard: { step: 2, totalSteps: 3 }
+    },
     pickerState: {
       ...createTilePickerState(["1W", "2W"]),
       actionHistory: [{ slotIndices: [0], tiles: ["1W"] }]
@@ -319,10 +339,11 @@ test("setPickerMode keeps picker slots and cursor unchanged", () => {
   assert.deepEqual(store.pickerState.actionHistory, before.actionHistory);
 });
 
-test("wizard buttons show dynamic next and back labels", () => {
+test("wizard buttons show dynamic next and back labels across three steps", () => {
   const byIdState = createByIdMap();
   const store = {
-    uiState: { hand: { tiles: [] } },
+    uiState: { hand: { tiles: [] }, wizard: { step: 1, totalSteps: 3 } },
+    roundState: { initialized: false, dealerSeat: "E", players: [] },
     pickerState: createTilePickerState(new Array(14).fill("1W")),
     pickerAction: "single",
     resultVm: null
@@ -345,6 +366,10 @@ test("wizard buttons show dynamic next and back labels", () => {
     renderResultModal: () => ({})
   });
   actions.syncHomeState();
+  assert.equal(refs.wizardNextBtn.textContent, "下一步：选择手牌");
+  actions.goWizardNext();
+  assert.equal(store.uiState.wizard.step, 2);
+  assert.equal(refs.wizardBackBtn.textContent, "上一步：设定玩家");
   assert.equal(refs.wizardNextBtn.textContent, "下一步：条件设置");
   actions.goWizardNext();
   assert.equal(refs.wizardBackBtn.textContent, "上一步：手牌输入");
@@ -354,7 +379,7 @@ test("wizard buttons show dynamic next and back labels", () => {
 test("tap action applies once then falls back to single", () => {
   const byIdState = createByIdMap();
   const store = {
-    uiState: { hand: { tiles: [] } },
+    uiState: { hand: { tiles: [] }, wizard: { step: 2, totalSteps: 3 } },
     pickerState: createTilePickerState([]),
     pickerAction: "single",
     pickerActionOnce: null,
@@ -392,7 +417,7 @@ test("tap action applies once then falls back to single", () => {
 test("locked action keeps applying across picks", () => {
   const byIdState = createByIdMap();
   const store = {
-    uiState: { hand: { tiles: [] } },
+    uiState: { hand: { tiles: [] }, wizard: { step: 2, totalSteps: 3 } },
     pickerState: createTilePickerState([]),
     pickerAction: "single",
     pickerActionOnce: null,
@@ -429,7 +454,7 @@ test("locked action keeps applying across picks", () => {
 test("dismissPickerGestureTip sets store flag and persists", () => {
   const byIdState = createByIdMap();
   const store = {
-    uiState: { hand: { tiles: [] } },
+    uiState: { hand: { tiles: [] }, wizard: { step: 2, totalSteps: 3 } },
     pickerState: createTilePickerState([]),
     pickerAction: "single",
     pickerActionOnce: null,

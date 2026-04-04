@@ -26,6 +26,7 @@ export const RELEASE_PROMPT_TEMPLATE = [
 
 export const DEPLOY_USAGE =
   "Invalid usage: npm run deploy -- " +
-  "major|minor|patch|build|release|prompt-update|" +
+  "major|minor|patch|build|release|doctor|prompt-update|" +
   "prompt-release|prompt-all|prompt-update-agent|" +
-  "prompt-release-agent [--confirm] [--run-agent]";
+  "prompt-release-agent [--confirm] [--run-agent] [--skip-tests] " +
+  "[--dry-run]";

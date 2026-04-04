@@ -42,17 +42,15 @@
     font-size: 16px;
   }
 
-  .settlement-head,
-  .settlement-row {
-    grid-template-columns: minmax(0, 1.6fr) repeat(3, minmax(0, 1fr));
-    gap: 6px;
+  .settlement-col-name {
+    width: 34%;
   }
 
-  .settlement-head {
+  .settlement-table thead th {
     font-size: 11px;
   }
 
-  .settlement-row {
+  .settlement-table tbody td {
     font-size: 13px;
   }
 

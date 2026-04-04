@@ -189,3 +189,9 @@ flowchart TD
     `tests/unit/indexStylesheetLinks.test.js`.
   - Gates passed: `npm test`, `npm run quality:complexity`, `cloc`.
 
+## Follow-on (separate child plan)
+
+- 国标预设与体育总局核心口径对齐（8 分起和、花牌不计起和、底分+基本分结算）：
+  [hlm_mcr_p0_alignment_01c0c730.plan.md](hlm_mcr_p0_alignment_01c0c730.plan.md)
+  （**completed** 2026-04-03 / app v5.1.0。）
+
