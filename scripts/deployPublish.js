@@ -123,11 +123,14 @@ function ensureDeployCheckout(deployDir, remoteUrl, platform, env) {
   }
   if (shouldClone) {
     rmSync(deployDir, { recursive: true, force: true });
-    runGitOrThrow(["clone", remoteUrl, deployDir], {
-      platform,
-      env,
-      stdio: "inherit"
-    });
+    runGitOrThrow(
+      ["clone", "--depth", "1", remoteUrl, deployDir],
+      {
+        platform,
+        env,
+        stdio: "inherit"
+      }
+    );
   }
   const hasCommits = spawnSync("git", ["rev-parse", "HEAD"], {
     cwd: deployDir,

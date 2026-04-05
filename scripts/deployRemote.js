@@ -148,7 +148,10 @@ export function resolveDeployRemote(
   return getDefaultDeployRemoteForPlatform(platform, env, runSync, cwd);
 }
 
-export function getDeployTransportMismatchWarning(originRemote, deployRemote) {
+export function getDeployTransportMismatchWarning(
+  originRemote,
+  deployRemote
+) {
   const originTransport = detectRemoteTransport(originRemote);
   const deployTransport = detectRemoteTransport(deployRemote);
   if (!originTransport || !deployTransport) {
@@ -234,7 +237,19 @@ export function preflightRemoteAccess(
   }
 }
 
+/**
+ * Deploy working clone directory.
+ * Set HLM_DEPLOY_DIR to a persistent absolute path to avoid TMP cleanup
+ * forcing a full re-fetch.
+ *
+ * @param {object} [env] - Process environment.
+ * @returns {string}
+ */
 export function resolveDeployDir(env = process.env) {
+  const override = String(env.HLM_DEPLOY_DIR ?? "").trim();
+  if (override) {
+    return override;
+  }
   const tmpRoot = env.TMPDIR || env.TEMP || env.TMP || "/tmp";
   return join(tmpRoot, DEPLOY_DIR_NAME);
 }

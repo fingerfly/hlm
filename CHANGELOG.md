@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [5.2.5] - 2026-04-05
+
+### Changed
+- 部署：`git clone` 使用 `--depth 1` 浅克隆以缩短首次/重建克隆下载时间；
+  支持 `HLM_DEPLOY_DIR` 将 deploy 工作目录固定到非 TMP 路径（避免临时目录
+  清理后反复全量克隆）。`resolveDeployDir`、`deployPublish.js`、
+  `tests/unit/deployRuntime.test.js`。
+- 单测：`getSandboxChildEnv` 在沙箱内清空 `HLM_DEPLOY_DIR` 并固定
+  `TMPDIR`/`HLM_DEPLOY_REMOTE`，避免 `node --test` 并行执行时共用一个
+  deploy 工作目录导致偶发失败。
+
 ## [5.2.4] - 2026-04-05
 
 ### Added

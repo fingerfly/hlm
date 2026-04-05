@@ -5,6 +5,7 @@ import { readFileSync, rmSync } from "node:fs";
 import { join } from "node:path";
 import {
   deployScriptPath,
+  getSandboxChildEnv,
   prepareDeploySandbox,
   rootDir,
   today
@@ -13,7 +14,8 @@ import {
 function runInSandbox(sandboxRoot, ...args) {
   return spawnSync(process.execPath, [join("scripts", "deploy.js"), ...args], {
     cwd: sandboxRoot,
-    encoding: "utf8"
+    encoding: "utf8",
+    env: getSandboxChildEnv(sandboxRoot)
   });
 }
 

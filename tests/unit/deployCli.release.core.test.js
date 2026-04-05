@@ -4,6 +4,7 @@ import { execFileSync, spawnSync } from "node:child_process";
 import { readFileSync, rmSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import {
+  getSandboxChildEnv,
   getSandboxDeployRemote,
   prepareDeploySandbox,
   today
@@ -13,11 +14,7 @@ function runInSandbox(sandboxRoot, ...args) {
   return spawnSync(process.execPath, [join("scripts", "deploy.js"), ...args], {
     cwd: sandboxRoot,
     encoding: "utf8",
-    env: {
-      ...process.env,
-      TMPDIR: sandboxRoot,
-      HLM_DEPLOY_REMOTE: getSandboxDeployRemote(sandboxRoot)
-    }
+    env: getSandboxChildEnv(sandboxRoot)
   });
 }
 
@@ -25,11 +22,7 @@ function runInSandboxWithEnv(sandboxRoot, env, ...args) {
   return spawnSync(process.execPath, [join("scripts", "deploy.js"), ...args], {
     cwd: sandboxRoot,
     encoding: "utf8",
-    env: {
-      ...process.env,
-      TMPDIR: sandboxRoot,
-      ...env
-    }
+    env: getSandboxChildEnv(sandboxRoot, env)
   });
 }
 
@@ -105,11 +98,9 @@ test("deploy CLI fails remote preflight before mutating files", (t) => {
     {
       cwd: sandboxRoot,
       encoding: "utf8",
-      env: {
-        ...process.env,
-        TMPDIR: sandboxRoot,
+      env: getSandboxChildEnv(sandboxRoot, {
         HLM_DEPLOY_REMOTE: join(sandboxRoot, "missing-remote.git")
-      }
+      })
     }
   );
   assert.equal(run.status, 1);

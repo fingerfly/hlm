@@ -4,6 +4,7 @@ import { spawnSync } from "node:child_process";
 import { readFileSync, rmSync } from "node:fs";
 import { join } from "node:path";
 import {
+  getSandboxChildEnv,
   getSandboxDeployRemote,
   prepareDeploySandbox,
   today
@@ -13,11 +14,7 @@ function runInSandbox(sandboxRoot, ...args) {
   return spawnSync(process.execPath, [join("scripts", "deploy.js"), ...args], {
     cwd: sandboxRoot,
     encoding: "utf8",
-    env: {
-      ...process.env,
-      TMPDIR: sandboxRoot,
-      HLM_DEPLOY_REMOTE: getSandboxDeployRemote(sandboxRoot)
-    }
+    env: getSandboxChildEnv(sandboxRoot)
   });
 }
 

@@ -47,6 +47,9 @@ Blueprint implementation for `和了么 - 国标麻将计番助手` (`Huleme - G
   - Override expected repo template:
     - `HLM_DEPLOY_REPO=<owner>/<repo>`
   - Override remote per shell: `HLM_DEPLOY_REMOTE=<remote-url>`
+  - Optional persistent deploy clone dir (default: `$TMPDIR/hlm-deploy`):
+    `HLM_DEPLOY_DIR=/absolute/path/to/hlm-deploy` — reduces re-clone after
+    temp cleanup; first run creates the clone there.
   - Non-destructive remote check:
     - `git ls-remote <your-remote-url> HEAD`
     - Example: `npm run deploy -- patch --confirm`

@@ -169,6 +169,19 @@ test("preflightRemoteAccess throws clear error on failed ls-remote", () => {
   );
 });
 
+test("resolveDeployDir honors HLM_DEPLOY_DIR override", () => {
+  const normalized = (path) => path.split(sep).join("/");
+  assert.equal(
+    normalized(
+      resolveDeployDir({
+        HLM_DEPLOY_DIR: "/custom/persistent/hlm-deploy",
+        TMPDIR: "/ignored/tmp"
+      })
+    ),
+    "/custom/persistent/hlm-deploy"
+  );
+});
+
 test("resolveDeployDir follows TMPDIR -> TEMP -> TMP -> /tmp order", () => {
   const normalized = (path) => path.split(sep).join("/");
   assert.equal(
