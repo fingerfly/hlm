@@ -37,7 +37,6 @@ function createByIdMap() {
     playerScoreN: { value: "0" },
     roundSetupGate: { hidden: false },
     handCardSection: { hidden: false },
-    startRoundBtn: { hidden: false },
     resetContextBtn: { hidden: false }
   };
   return {

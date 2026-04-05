@@ -12,6 +12,9 @@ import {
   bindModalCloseButtons
 } from "./appEventBindings.js";
 import {
+  installHelpPopoverOutsidePointerDown
+} from "./modalBackdropWiring.js";
+import {
   wireContextSegmentedControls,
   wireContextSteppers,
   wireDesktopContextControls,
@@ -100,19 +103,25 @@ export function createHelpHandlers(byId, modalActions) {
  * @param {object} stateActions - calculate, goWizardNext.
  * @param {object} modalActions - closeModalByKey, updateModalUi.
  * @param {Function} syncWizardModalsFn - syncWizardModals.
+ * @param {{onStep3CalculateFailed?: () => void}} [hooks] - Optional UI hooks.
  * @returns {void}
  */
 export function handleWizardNextClick(
   store,
   stateActions,
   modalActions,
-  syncWizardModalsFn
+  syncWizardModalsFn,
+  hooks = {}
 ) {
   const step = store.uiState.wizard?.step || 1;
   if (step === 3) {
     modalActions.closeModalByKey("picker");
     modalActions.closeModalByKey("context");
-    if (stateActions.calculate()) modalActions.updateModalUi();
+    if (stateActions.calculate()) {
+      modalActions.updateModalUi();
+    } else {
+      hooks.onStep3CalculateFailed?.();
+    }
     return;
   }
   const result = stateActions.goWizardNext();
@@ -225,7 +234,13 @@ export function wireAppEvents(params) {
   });
   bindClick("clearHandBtn", stateActions.clearHand);
   bindClick("wizardNextBtn", () =>
-    handleWizardNextClick(store, stateActions, modalActions, syncWizardModals)
+    handleWizardNextClick(
+      store,
+      stateActions,
+      modalActions,
+      syncWizardModals,
+      params.wizardNextHooks || {}
+    )
   );
   bindClick("wizardBackBtn", () => {
     const result = stateActions.goWizardPrev();
@@ -278,5 +293,15 @@ export function wireAppEvents(params) {
       closeHelp();
     });
   }
+  installHelpPopoverOutsidePointerDown({
+    isPopoverMode: () => isDesktopHelpPopover(),
+    getPopover: () => byId("helpPopover"),
+    getTrigger: () => byId("moreBtn"),
+    isPopoverOpen: () => {
+      const p = byId("helpPopover");
+      return Boolean(p && !p.hidden);
+    },
+    onClose: closeHelp
+  });
   return { openHelp, closeHelp };
 }

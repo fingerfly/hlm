@@ -4,6 +4,23 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [5.2.4] - 2026-04-05
+
+### Added
+- 启动画面「跳过」按钮；桌面帮助浮层点击外部关闭；模态层点击遮罩关闭
+  （含结果窗；桌面内联选牌/条件不触发）。
+- `public/modalBackdropWiring.js`、`public/modalFocusUtils.js`；
+  帮助文档说明选满 14 张自动进入条件步骤及
+  `localStorage hlm_disableAutoWizardAdvance`。
+- 和牌条件内「结算规则与自定义」默认折叠（`<details>`）；四家分数输入
+  `min`/`max` 与 `parsePlayerScoreInput` 钳位（-99999–99999）。
+
+### Changed
+- 底部「重置和牌条件」文案；结果番种行释义按钮由符号改为「释义」；
+  步骤 3 计算失败时在底部提示原因（角色错误仍以表单内文案为准）。
+- `openModalByKey` 后对焦 picker/context 表单首控件；Escape 关闭选牌/
+  遮罩式条件/结果窗；移除未使用的 `#startRoundBtn` DOM。
+
 ## [5.2.3] - 2026-04-04
 
 ## [5.2.2] - 2026-04-03

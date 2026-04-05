@@ -37,6 +37,22 @@ test("openModalByKey keeps only one modal open at a time", () => {
   assert.equal(store.uiState.modal.help, true);
 });
 
+test("openModalByKey invokes onAfterOpenModal with key after update", () => {
+  const store = { uiState: createUiFlowState() };
+  const modalRefs = {
+    picker: createModalEl(),
+    context: createModalEl(),
+    result: createModalEl(),
+    help: createModalEl()
+  };
+  const order = [];
+  const actions = createModalActions(store, modalRefs, {
+    onAfterOpenModal: (key) => order.push(`after:${key}`)
+  });
+  actions.openModalByKey("picker");
+  assert.deepEqual(order, ["after:picker"]);
+});
+
 test("openModalByKey invokes onBeforeOpenModal before state change", () => {
   const store = { uiState: createUiFlowState() };
   const modalRefs = {

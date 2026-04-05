@@ -112,6 +112,13 @@ todos:
       模态/表单 HIG 打磨。Child:
       hlm_onboarding_shell_merge_f9a1c8e0.plan.md（**completed** 2026-04-03；v5.2.0）
     status: completed
+  - id: track-ux-audit-followup
+    content: >
+      UX audit follow-up: modal backdrop dismiss, help popover outside-click,
+      splash skip, calculate hint, copy/score bounds, score-rule details,
+      Escape/focus polish. Child: hlm_ux_audit_followup_5d8c2f1a.plan.md
+      (**completed** 2026-04-05).
+    status: completed
 isProject: false
 ---
 
@@ -221,6 +228,8 @@ not present in current workspace)
   [hlm_mcr_p0_alignment_01c0c730.plan.md](hlm_mcr_p0_alignment_01c0c730.plan.md)
 - 启动并入壳 + 三步向导（**completed** 2026-04-03；v5.2.0；Option B）:
   [hlm_onboarding_shell_merge_f9a1c8e0.plan.md](hlm_onboarding_shell_merge_f9a1c8e0.plan.md)
+- UX audit follow-up（**completed** 2026-04-05）:
+  [hlm_ux_audit_followup_5d8c2f1a.plan.md](hlm_ux_audit_followup_5d8c2f1a.plan.md)
 - Historical supporting plans (traceability only):
   - [hlm_版本升级工具与中文术语统一_35161103.plan.md](hlm_版本升级工具与中文术语统一_35161103.plan.md)
   - `spike_full_automation_6a79ecff.plan.md` (historical reference; file
@@ -312,9 +321,8 @@ practicality upgrade exit (or after Pages if practicality is deferred).
 
 ### Current delivery queue (post-baseline)
 
-- TrackId (latest closed): `track-onboarding-shell-hig`（**completed** 2026-04-03；
-  v5.2.0）→
-  [hlm_onboarding_shell_merge_f9a1c8e0.plan.md](hlm_onboarding_shell_merge_f9a1c8e0.plan.md)
+- TrackId (latest closed): `track-ux-audit-followup`（**completed** 2026-04-05）→
+  [hlm_ux_audit_followup_5d8c2f1a.plan.md](hlm_ux_audit_followup_5d8c2f1a.plan.md)
 - Prior TrackId: `track-mcr-p0-official-alignment`（**completed** 2026-04-03）→
   [hlm_mcr_p0_alignment_01c0c730.plan.md](hlm_mcr_p0_alignment_01c0c730.plan.md)
 - Earlier: `track-score-config-mcr-presets`（**completed** 2026-04-03）→
@@ -338,14 +346,18 @@ practicality upgrade exit (or after Pages if practicality is deferred).
 - ChildPlans — 牌桌式启动门（已完成）:
   - [hlm_round_setup_table_ui_525519a5.plan.md](hlm_round_setup_table_ui_525519a5.plan.md)
 - ChildPlans — 最近完成:
+  - [hlm_ux_audit_followup_5d8c2f1a.plan.md](hlm_ux_audit_followup_5d8c2f1a.plan.md)
+    （**completed** 2026-04-05；`track-ux-audit-followup`）
   - [hlm_onboarding_shell_merge_f9a1c8e0.plan.md](hlm_onboarding_shell_merge_f9a1c8e0.plan.md)
     （**completed** 2026-04-03；`track-onboarding-shell-hig`）
 - ChildPlans — 历史可执行轨道（均已 completed）:
   - [hlm_score_config_mcr_presets_620b275b.plan.md](hlm_score_config_mcr_presets_620b275b.plan.md)
   - [hlm_mcr_p0_alignment_01c0c730.plan.md](hlm_mcr_p0_alignment_01c0c730.plan.md)
 - **Active slice：**
-  无（onboarding 已交付；桌面浏览器矩阵仍为可选手工项）
-- TrackTodoStatus: `completed`（`track-onboarding-shell-hig`）
+  无（`track-ux-audit-followup` 已于 2026-04-05 关闭；桌面浏览器矩阵仍为可选手工项）
+- TrackTodoStatus: `completed`（`track-ux-audit-followup`）
+- Prior closed: `track-onboarding-shell-hig` →
+  [hlm_onboarding_shell_merge_f9a1c8e0.plan.md](hlm_onboarding_shell_merge_f9a1c8e0.plan.md)
 - Prior closed: `track-five-principles-exact-scoring` →
   [hlm-five-principles-exact-engine_cf4e8446.plan.md](hlm-five-principles-exact-engine_cf4e8446.plan.md)
   (2026-03-22)
@@ -418,7 +430,12 @@ practicality upgrade exit (or after Pages if practicality is deferred).
 - NextActions:
   - `Manual UI pass: in-shell setup + three-step wizard + settlement on`
     `desktop/mobile breakpoints (post v5.2.0).`
+  - `2026-04-05: track-ux-audit-followup closed — backdrop/popover dismiss,`
+    `splash skip, calculate hint, score bounds, details score-rule block,`
+    `Escape/focus polish; see hlm_ux_audit_followup_5d8c2f1a.plan.md.`
 - ValidationEvidence:
+  - `2026-04-05: UX audit follow-up shipped as v5.2.4 — npm test,`
+    `quality:complexity, build:dist; CHANGELOG [5.2.4].`
   - `2026-04-03: result modal shows 起和番 when gateFan < totalFan`
     `(formatResultFanSummary + vm.gateFan); v5.2.2; npm test +`
     `quality:complexity + build:dist pass.`

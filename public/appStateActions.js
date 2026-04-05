@@ -14,6 +14,25 @@ import {
 } from "./handStateActions.js";
 import { createResultStateActions } from "./resultStateActions.js";
 
+/** Inclusive bounds for round-setup score inputs (UI guardrail). */
+export const PLAYER_SCORE_MIN = -99999;
+export const PLAYER_SCORE_MAX = 99999;
+
+/**
+ * Clamp parsed integer score to PLAYER_SCORE_* (for tests and collectRound).
+ *
+ * @param {unknown} raw - Input value.
+ * @returns {number}
+ */
+export function parsePlayerScoreInput(raw) {
+  const n = Number.parseInt(String(raw ?? ""), 10);
+  if (!Number.isInteger(n)) return 0;
+  return Math.min(
+    PLAYER_SCORE_MAX,
+    Math.max(PLAYER_SCORE_MIN, n)
+  );
+}
+
 /**
  * Read four seat rows from the round-setup form (stable ids).
  *
@@ -25,22 +44,22 @@ function collectRoundPlayers(byId) {
     {
       seat: "E",
       name: byId("playerNameE")?.value || "东家",
-      score: Number.parseInt(byId("playerScoreE")?.value || "0", 10) || 0
+      score: parsePlayerScoreInput(byId("playerScoreE")?.value)
     },
     {
       seat: "S",
       name: byId("playerNameS")?.value || "南家",
-      score: Number.parseInt(byId("playerScoreS")?.value || "0", 10) || 0
+      score: parsePlayerScoreInput(byId("playerScoreS")?.value)
     },
     {
       seat: "W",
       name: byId("playerNameW")?.value || "西家",
-      score: Number.parseInt(byId("playerScoreW")?.value || "0", 10) || 0
+      score: parsePlayerScoreInput(byId("playerScoreW")?.value)
     },
     {
       seat: "N",
       name: byId("playerNameN")?.value || "北家",
-      score: Number.parseInt(byId("playerScoreN")?.value || "0", 10) || 0
+      score: parsePlayerScoreInput(byId("playerScoreN")?.value)
     }
   ];
 }

@@ -67,6 +67,12 @@ test("index.html loads modular stylesheets", () => {
   assert.match(html, /href="\.\/styles-responsive\.css"/);
 });
 
+test("index.html exposes splash skip control", () => {
+  const html = readFileSync(indexPath, "utf8");
+  assert.match(html, /id="splashSkipBtn"/);
+  assert.match(html, /class="app-splash-skip"/);
+});
+
 test("index.html exposes help modal and explicit reset button", () => {
   const html = readFileSync(indexPath, "utf8");
   assert.match(html, /class="nav-app-title"/);
@@ -95,6 +101,8 @@ test("help article template matches three-step wizard copy", () => {
   assert.match(html, /设定玩家/);
   assert.match(html, /步骤 2\/3/);
   assert.match(html, /步骤 3\/3/);
+  assert.match(html, /hlm_disableAutoWizardAdvance/);
+  assert.match(html, /重置和牌条件/);
 });
 
 test("styles-responsive includes desktop two-pane shell rules", () => {
@@ -124,6 +132,12 @@ test("styles-modals hides desktop context controls by default", () => {
   assert.match(css, /\.context-control-desktop/);
   assert.match(css, /\.context-number-input/);
   assert.match(css, /\.context-select-input/);
+});
+
+test("index.html wraps score rule block in collapsible details", () => {
+  const html = readFileSync(indexPath, "utf8");
+  assert.match(html, /class="context-advanced-details"/);
+  assert.match(html, /id="scoreRulePreset"/);
 });
 
 test("index.html includes desktop context dual-control ids", () => {

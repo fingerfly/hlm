@@ -41,7 +41,7 @@ function renderFanList(target, fans, options = {}) {
       const btn = document.createElement("button");
       btn.type = "button";
       btn.className = "fan-info-btn";
-      btn.textContent = "ℹ️";
+      btn.textContent = "释义";
       btn.setAttribute(
         "aria-label",
         `${fan.name}番种释义`

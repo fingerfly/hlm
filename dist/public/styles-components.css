@@ -485,7 +485,25 @@ select {
   color: #94a3b8;
 }
 
-/* Result fan rows: ℹ️ only expands detail (not whole row). */
+/* Skip control: touch-safe, visible on dark splash. */
+.app-splash-skip {
+  margin-top: 16px;
+  min-height: 44px;
+  padding: 0 20px;
+  border-radius: 12px;
+  border: 1px solid rgba(248, 250, 252, 0.38);
+  background: transparent;
+  color: #f8fafc;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.app-splash-skip:focus-visible {
+  outline: 2px solid #38bdf8;
+  outline-offset: 2px;
+}
+
+/* Result fan rows: 释义 only expands detail (not whole row). */
 .fan-breakdown .fan-row {
   display: block;
   list-style: disc;

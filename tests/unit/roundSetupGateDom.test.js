@@ -21,8 +21,7 @@ const REQUIRED_IDS = [
   "playerScoreW",
   "playerNameN",
   "playerScoreN",
-  "dealerSeat",
-  "startRoundBtn"
+  "dealerSeat"
 ];
 
 test("round setup gate keeps collectRoundPlayers ids", () => {

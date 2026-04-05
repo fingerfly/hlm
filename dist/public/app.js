@@ -47,6 +47,8 @@ import {
   writeCustomScoreRuleFromPreset
 } from "./scoreRuleState.js";
 import { SCORE_RULE_PRESET_IDS } from "../src/config/scoreRuleConfig.js";
+import { installModalBackdropDismiss } from "./modalBackdropWiring.js";
+import { focusFirstInModalSheet } from "./modalFocusUtils.js";
 
 /**
  * Purpose: Bootstrap HLM web UI and connect app modules.
@@ -107,8 +109,21 @@ const modalActions = createModalActions(store, modalRefs, {
     if (pop) pop.hidden = true;
     const moreBtn = byId("moreBtn");
     if (moreBtn) moreBtn.setAttribute("aria-expanded", "false");
+  },
+  onAfterOpenModal: (modalKey) => {
+    focusFirstInModalSheet(modalKey, byId, modalRefs);
   }
 });
+
+installModalBackdropDismiss(
+  [
+    { el: modalRefs.picker, key: "picker" },
+    { el: modalRefs.context, key: "context" },
+    { el: modalRefs.result, key: "result" },
+    { el: modalRefs.help, key: "help" }
+  ],
+  (key) => modalActions.closeModalByKey(key)
+);
 
 syncDesktopPickerSheet(byId);
 installDesktopPickerLayoutListener(byId, () => modalActions.updateModalUi());
@@ -124,14 +139,26 @@ wizardUi.afterPickerSync = () => {
   syncWizardModals(result, modalActions);
 };
 
+let splashTimerId = null;
 function dismissSplash() {
+  if (splashTimerId !== null) {
+    clearTimeout(splashTimerId);
+    splashTimerId = null;
+  }
   if (splashEl) splashEl.classList.add("splash-dismissed");
 }
 const reduceMotion = globalThis.matchMedia?.(
   "(prefers-reduced-motion: reduce)"
 )?.matches;
 const splashMs = reduceMotion ? 400 : 900;
-globalThis.setTimeout(dismissSplash, splashMs);
+splashTimerId = globalThis.setTimeout(() => {
+  splashTimerId = null;
+  dismissSplash();
+}, splashMs);
+const splashSkipBtn = byId("splashSkipBtn");
+if (splashSkipBtn) {
+  splashSkipBtn.addEventListener("click", () => dismissSplash());
+}
 
 function mountDesktopContextInline() {
   const isDesktop = globalThis.matchMedia?.("(min-width: 1024px)")?.matches;
@@ -223,6 +250,26 @@ if (cloneScoreRuleBtn) {
 }
 syncScoreRuleStatus();
 
+function applyStep3CalculateFailureHint() {
+  const roleErr = byId("roleValidationError");
+  if (
+    roleErr
+    && !roleErr.hidden
+    && String(roleErr.textContent || "").trim().length > 0
+  ) {
+    return;
+  }
+  const hint = byId("readyHint");
+  if (!hint) return;
+  const tiles = store.uiState.hand?.tiles;
+  if (!Array.isArray(tiles) || tiles.length !== 14) {
+    hint.textContent = "请先选满 14 张手牌后再计算。";
+    return;
+  }
+  hint.textContent =
+    "无法计算：请检查和牌条件与结算角色（点和须选放铳者）。";
+}
+
 const { openHelp } = wireAppEvents({
   byId,
   bindTabButtons,
@@ -234,7 +281,32 @@ const { openHelp } = wireAppEvents({
   tilePickerGridEl: refs.tilePickerGridEl,
   renderPickerTabButtons,
   renderTilePickerGrid,
-  resetContext
+  resetContext,
+  wizardNextHooks: {
+    onStep3CalculateFailed: applyStep3CalculateFailureHint
+  }
+});
+
+document.addEventListener("keydown", (event) => {
+  if (event.key !== "Escape") return;
+  const m = store.uiState.modal;
+  const ctxModal = byId("contextModal");
+  const ctxInline = ctxModal?.classList?.contains("desktop-inline-context");
+  if (m.picker) {
+    event.preventDefault();
+    modalActions.closeModalByKey("picker");
+    return;
+  }
+  if (m.context && !ctxInline) {
+    event.preventDefault();
+    modalActions.closeModalByKey("context");
+    return;
+  }
+  if (m.result) {
+    event.preventDefault();
+    modalActions.closeModalByKey("result");
+    return;
+  }
 });
 mountHelpContent(byId);
 installHelpFanHashNavigation({ byId, openHelp });

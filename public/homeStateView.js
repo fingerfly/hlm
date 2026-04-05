@@ -99,10 +99,6 @@ export function syncHomeStateView(input) {
   if (handSec) {
     handSec.hidden = wizardStep === 1;
   }
-  const startRoundBtn = byId("startRoundBtn");
-  if (startRoundBtn) {
-    startRoundBtn.hidden = true;
-  }
   const resetCtx = byId("resetContextBtn");
   if (resetCtx) {
     resetCtx.hidden = wizardStep === 1;

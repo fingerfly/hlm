@@ -24,6 +24,9 @@
           <li>条件与规则说明</li>
         </ul>
         <p id="splashVersion" class="app-splash-version"></p>
+        <button type="button" id="splashSkipBtn" class="app-splash-skip">
+          跳过
+        </button>
       </div>
     </div>
     <!-- Home screen keeps primary actions always visible on mobile. -->
@@ -65,7 +68,7 @@
               </label>
               <label>分数
                 <input id="playerScoreE" name="playerScoreE" type="number"
-                  value="0" />
+                  min="-99999" max="99999" step="1" value="0" />
               </label>
             </div>
             <div class="round-setup-seat round-setup-seat--s" data-seat="S">
@@ -78,7 +81,7 @@
               </label>
               <label>分数
                 <input id="playerScoreS" name="playerScoreS" type="number"
-                  value="0" />
+                  min="-99999" max="99999" step="1" value="0" />
               </label>
             </div>
             <div class="round-setup-seat round-setup-seat--w" data-seat="W">
@@ -91,7 +94,7 @@
               </label>
               <label>分数
                 <input id="playerScoreW" name="playerScoreW" type="number"
-                  value="0" />
+                  min="-99999" max="99999" step="1" value="0" />
               </label>
             </div>
             <div class="round-setup-seat round-setup-seat--n" data-seat="N">
@@ -104,7 +107,7 @@
               </label>
               <label>分数
                 <input id="playerScoreN" name="playerScoreN" type="number"
-                  value="0" />
+                  min="-99999" max="99999" step="1" value="0" />
               </label>
             </div>
             <div class="round-setup-table-center">
@@ -116,10 +119,6 @@
                   <option value="N">北</option>
                 </select>
               </label>
-              <button id="startRoundBtn" class="primary-btn" type="button"
-                hidden aria-hidden="true" tabindex="-1">
-                开始对局
-              </button>
             </div>
           </div>
         </div>
@@ -148,7 +147,7 @@
           <button id="wizardBackBtn" class="ghost-btn">上一步</button>
           <button id="wizardNextBtn" class="ghost-btn">下一步</button>
         </div>
-        <button id="resetContextBtn" class="ghost-btn">重置条件</button>
+        <button id="resetContextBtn" class="ghost-btn">重置和牌条件</button>
       </footer>
     </main>
 
@@ -371,25 +370,29 @@
             <p id="roleValidationError" class="context-error-text summary-text"
               hidden></p>
           </section>
-          <section class="context-group" aria-labelledby="ctxScoreRuleTitle">
-            <h4 id="ctxScoreRuleTitle" class="context-group-title">结算规则</h4>
-            <div class="context-role-controls">
-              <div class="context-desktop-field">
-                <label for="scoreRulePreset" class="context-label">规则预设</label>
-                <select id="scoreRulePreset" class="context-select-input">
-                  <option value="MCR_Official">国标预设</option>
-                  <option value="Current_Compat">当前兼容</option>
-                  <option value="Custom">自定义</option>
-                </select>
+          <details class="context-advanced-details">
+            <summary class="context-advanced-summary">
+              结算规则与自定义（点击展开）
+            </summary>
+            <div class="context-advanced-body">
+              <div class="context-role-controls">
+                <div class="context-desktop-field">
+                  <label for="scoreRulePreset" class="context-label">规则预设</label>
+                  <select id="scoreRulePreset" class="context-select-input">
+                    <option value="MCR_Official">国标预设</option>
+                    <option value="Current_Compat">当前兼容</option>
+                    <option value="Custom">自定义</option>
+                  </select>
+                </div>
+                <div class="context-desktop-field">
+                  <span class="context-label">自定义规则</span>
+                  <button type="button" id="cloneScoreRuleBtn"
+                    class="ghost-btn">从当前预设克隆为自定义</button>
+                </div>
               </div>
-              <div class="context-desktop-field">
-                <span class="context-label">自定义规则</span>
-                <button type="button" id="cloneScoreRuleBtn"
-                  class="ghost-btn">从当前预设克隆为自定义</button>
-              </div>
+              <p id="scoreRuleStatus" class="summary-text"></p>
             </div>
-            <p id="scoreRuleStatus" class="summary-text"></p>
-          </section>
+          </details>
         </div>
         <div class="context-sheet-footer">
           <button type="button" data-close="context"
@@ -487,7 +490,11 @@
             总番。</li>
         </ol>
         <p class="summary-text">提示：底部「下一步/上一步」在三个步骤间切换；
-          「重置条件」只清空条件；「清空」会清除当前手牌。</p>
+          「重置和牌条件」只清空和牌条件；「清空」会清除当前手牌。</p>
+        <p class="summary-text">选满 14 张后应用会自动进入「和牌条件」步骤；若希望
+          关闭此行为，可在浏览器控制台执行
+          <code>localStorage.setItem(&quot;hlm_disableAutoWizardAdvance&quot;,&quot;1&quot;)</code>
+          后刷新页面。</p>
       </section>
       <section class="help-section" aria-labelledby="helpFanConceptTitle">
         <h4 id="helpFanConceptTitle" class="help-section-title">番、起和与不计</h4>
