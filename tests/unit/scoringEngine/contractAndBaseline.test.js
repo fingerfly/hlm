@@ -6,6 +6,7 @@ import {
   SCORE_RULE_PRESET_IDS
 } from "../../../src/config/scoreRuleConfig.js";
 import { scoreHand } from "../../../src/rules/scoringEngine.js";
+import { COMPAT_SCORING_RULE_SNAPSHOT } from "../../helpers/scoringTestSnapshots.js";
 
 test("scoreHand returns NEED_CONTEXT when required context is missing", () => {
   const result = scoreHand({
@@ -57,20 +58,30 @@ test("scoreHand now passes baseline with newly covered 1-fan items", () => {
     winType: "dianhe",
     handState: "fulu",
     kongType: "none",
-    timingEvent: "none"
+    timingEvent: "none",
+    scoringRule: COMPAT_SCORING_RULE_SNAPSHOT
   });
   assert.equal(result.rawWin, true);
   assert.equal(result.totalFan, 3);
   assert.equal(result.isWin, true);
 });
 
-test("scoreHand accepts hand when total fan reaches min gate", () => {
+test("buildScoringRuleSnapshot(null) matches MCR official preset snapshot", () => {
+  const fromNull = buildScoringRuleSnapshot(null);
+  const fromPreset = buildScoringRuleSnapshot(
+    getScoreRulePreset(SCORE_RULE_PRESET_IDS.MCR_OFFICIAL)
+  );
+  assert.deepEqual(fromNull, fromPreset);
+});
+
+test("scoreHand accepts hand when total fan reaches min gate (compat)", () => {
   const result = scoreHand({
     tiles: ["1W", "1W", "1W", "2W", "3W", "4W", "5W", "6W", "7W", "2T", "3T", "4T", "9B", "9B"],
     winType: "zimo",
     handState: "menqian",
     kongType: "none",
-    timingEvent: "none"
+    timingEvent: "none",
+    scoringRule: COMPAT_SCORING_RULE_SNAPSHOT
   });
   assert.equal(result.totalFan, 6);
   assert.equal(result.isWin, true);
@@ -99,6 +110,21 @@ test("scoreHand applies MCR 8-fan gate when snapshot from official preset", () =
     kongType: "none",
     timingEvent: "none",
     scoringRule: snap
+  });
+  assert.equal(result.totalFan, 6);
+  assert.equal(result.gateFan, 6);
+  assert.equal(result.minWinningFan, 8);
+  assert.equal(result.isWin, false);
+  assert.equal(result.errorCode, "NOT_A_WINNING_HAND");
+});
+
+test("scoreHand omits scoringRule uses MCR official gate by default", () => {
+  const result = scoreHand({
+    tiles: ["1W", "1W", "1W", "2W", "3W", "4W", "5W", "6W", "7W", "2T", "3T", "4T", "9B", "9B"],
+    winType: "zimo",
+    handState: "menqian",
+    kongType: "none",
+    timingEvent: "none"
   });
   assert.equal(result.totalFan, 6);
   assert.equal(result.gateFan, 6);

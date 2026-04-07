@@ -15,7 +15,9 @@ import { normalizeManualTiles } from "./manualTileInput.js";
  * Evaluate one captured hand request with manual tile path.
  *
  * @param {{tiles?: string[], context?: object,
- *   scoringRule?: object|null, ruleConfig?: object|null}} request
+ *   scoringRule?: object|null, ruleConfig?: object|null}} request -
+ *   When both scoringRule and ruleConfig are absent, snapshot follows
+ *   bundled MCR official preset (see buildScoringRuleSnapshot).
  * @returns {{recognition: object, scoring: object, explanation: string,
  *   replayLog: object}}
  */

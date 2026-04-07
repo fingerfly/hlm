@@ -5,15 +5,20 @@ import {
   validateWin,
   enumerateStandardWinGroups
 } from "./winValidator.js";
-import { detectFans } from "./fanDetectors.js";
-import { resolveFanConflicts } from "./conflictResolver.js";
-import { aggregateScore } from "./scoreAggregator.js";
+import {
+  compareStandardWinPrecedence,
+  scoreWinShape
+} from "./scoringCandidate.js";
 
 /**
  * Purpose: Orchestrate full hand scoring pipeline.
  * Description:
  * - Validates input contract and required context fields.
  * - Verifies winning pattern before fan detection.
+ * - For seven_pairs, also scores every standard decomposition and picks
+ *   the highest-fan candidate (e.g. 一色双龙会 over 七对).
+ * - Among standard decompositions, prefers 一色三节高 over 一色三同顺 when
+ *   both apply to the same tiles.
  * - Resolves fan conflicts and aggregates final fan total.
  */
 /**
@@ -63,31 +68,21 @@ export function scoreHand(input) {
   if (win.pattern === "standard") {
     const allGroups = enumerateStandardWinGroups(input.tiles);
     for (const meldGroups of allGroups) {
-      const candidateWin = { ...win, meldGroups };
-      const rawFans = detectFans(input, candidateWin);
-      const { matchedFans, excludedFans } = resolveFanConflicts(rawFans);
-      const agg = aggregateScore(matchedFans, snapshot);
-      candidates.push({
-        meldGroups,
-        matchedFans,
-        excludedFans,
-        totalFan: agg.totalFan,
-        gateFan: agg.gateFan,
-        reachesMinWinningFan: agg.reachesMinWinningFan
-      });
+      const candidateWin = { ...win, pattern: "standard", meldGroups };
+      candidates.push(scoreWinShape(input, candidateWin, snapshot));
+    }
+  } else if (win.pattern === "seven_pairs") {
+    candidates.push(scoreWinShape(input, win, snapshot));
+    const allGroups = enumerateStandardWinGroups(input.tiles);
+    for (const meldGroups of allGroups) {
+      const candidateWin = {
+        pattern: "standard",
+        meldGroups
+      };
+      candidates.push(scoreWinShape(input, candidateWin, snapshot));
     }
   } else {
-    const rawFans = detectFans(input, win);
-    const { matchedFans, excludedFans } = resolveFanConflicts(rawFans);
-    const agg = aggregateScore(matchedFans, snapshot);
-    candidates.push({
-      meldGroups: win.meldGroups || [],
-      matchedFans,
-      excludedFans,
-      totalFan: agg.totalFan,
-      gateFan: agg.gateFan,
-      reachesMinWinningFan: agg.reachesMinWinningFan
-    });
+    candidates.push(scoreWinShape(input, win, snapshot));
   }
 
   candidates.sort((a, b) => {
@@ -96,6 +91,8 @@ export function scoreHand(input) {
     if (aOk !== bOk) {
       return aOk ? -1 : 1;
     }
+    const shapeCmp = compareStandardWinPrecedence(a, b);
+    if (shapeCmp !== 0) return shapeCmp;
     if (b.totalFan !== a.totalFan) return b.totalFan - a.totalFan;
     const aIds = a.matchedFans.map((f) => f.id).sort().join(",");
     const bIds = b.matchedFans.map((f) => f.id).sort().join(",");
@@ -106,7 +103,7 @@ export function scoreHand(input) {
   return {
     isWin: best.reachesMinWinningFan,
     rawWin: true,
-    winPattern: win.pattern,
+    winPattern: best.winPattern,
     meldGroups: best.meldGroups,
     matchedFans: best.matchedFans,
     excludedFans: best.excludedFans,

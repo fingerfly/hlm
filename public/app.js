@@ -175,6 +175,7 @@ mountDesktopContextInline();
 
 function syncDiscarderVisibility() {
   const winType = byId("winType")?.value;
+  const winner = byId("winnerSeat")?.value || "";
   const discarder = byId("discarderSeat");
   if (!discarder) return;
   const wrap = discarder.closest(".context-desktop-field");
@@ -183,6 +184,11 @@ function syncDiscarderVisibility() {
   if (wrap) wrap.hidden = !shouldShow;
   discarder.disabled = !shouldShow;
   discarder.required = shouldShow;
+  if (shouldShow && !discarder.value) {
+    const options = Array.from(discarder.options || []).map((o) => o.value);
+    const fallback = options.find((v) => v && v !== winner) || "";
+    discarder.value = fallback;
+  }
   if (!shouldShow) {
     discarder.value = "";
     if (hint) {

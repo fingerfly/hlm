@@ -25,6 +25,19 @@ test("validateWin returns seven_pairs pattern", () => {
   assert.equal(result.meldGroups[0].type, "pair");
 });
 
+test("validateWin returns thirteen_orphans pattern", () => {
+  const tiles = [
+    "1W", "1W",
+    "9W", "1T", "9T", "1B", "9B",
+    "E", "S", "Wn", "N", "R", "G", "Wh"
+  ];
+  const result = validateWin(tiles);
+  assert.equal(result.isWin, true);
+  assert.equal(result.pattern, "thirteen_orphans");
+  assert.equal(result.meldGroups.length, 1);
+  assert.equal(result.meldGroups[0].type, "orphans");
+});
+
 test("validateWin rejects non-winning hand", () => {
   const tiles = ["1W", "1W", "2W", "2W", "3W", "3W", "4T", "4T", "5T", "5T", "6B", "6B", "R", "G"];
   const result = validateWin(tiles);

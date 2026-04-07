@@ -1,6 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { scoreHand } from "../../../src/rules/scoringEngine.js";
+import { COMPAT_SCORING_RULE_SNAPSHOT } from "../../helpers/scoringTestSnapshots.js";
 
 test("scoreHand detects hua long", () => {
   const result = scoreHand({
@@ -21,7 +22,8 @@ test("scoreHand detects one-voided and no-honor with short straight", () => {
     winType: "dianhe",
     handState: "fulu",
     kongType: "none",
-    timingEvent: "none"
+    timingEvent: "none",
+    scoringRule: COMPAT_SCORING_RULE_SNAPSHOT
   });
   assert.equal(result.isWin, true);
   assert.equal(result.totalFan, 3);
@@ -51,7 +53,8 @@ test("scoreHand detects san se san bu gao", () => {
     winType: "dianhe",
     handState: "fulu",
     kongType: "none",
-    timingEvent: "none"
+    timingEvent: "none",
+    scoringRule: COMPAT_SCORING_RULE_SNAPSHOT
   });
   assert.equal(result.isWin, true);
   assert.equal(result.totalFan, 6);

@@ -1,4 +1,4 @@
----
+﻿---
 name: hlm-master-plan
 overview: Coordinate all HLM delivery tracks under one execution order, shared quality guardrails, and release gates.
 todos:
@@ -119,6 +119,13 @@ todos:
       Escape/focus polish. Child: hlm_ux_audit_followup_5d8c2f1a.plan.md
       (**completed** 2026-04-05).
     status: completed
+  - id: track-mcr-full-official-alignment
+    content: >
+      Full latest-Guobiao conformance track: official rule-source freeze,
+      rule-to-code trace matrix, TDD closure for remaining fan/scoring gaps,
+      and full-gate validation. Child:
+      hlm_mcr_full_official_alignment_a1b2c3d4.plan.md
+    status: completed
 isProject: false
 ---
 
@@ -230,6 +237,10 @@ not present in current workspace)
   [hlm_onboarding_shell_merge_f9a1c8e0.plan.md](hlm_onboarding_shell_merge_f9a1c8e0.plan.md)
 - UX audit follow-up（**completed** 2026-04-05）:
   [hlm_ux_audit_followup_5d8c2f1a.plan.md](hlm_ux_audit_followup_5d8c2f1a.plan.md)
+- Full latest-Guobiao conformance（**completed** 2026-04-07）:
+  [hlm_mcr_full_official_alignment_a1b2c3d4.plan.md](hlm_mcr_full_official_alignment_a1b2c3d4.plan.md)
+  ; trace matrix shell
+  [hlm_rule_code_trace_matrix.plan.md](hlm_rule_code_trace_matrix.plan.md)
 - Historical supporting plans (traceability only):
   - [hlm_版本升级工具与中文术语统一_35161103.plan.md](hlm_版本升级工具与中文术语统一_35161103.plan.md)
   - `spike_full_automation_6a79ecff.plan.md` (historical reference; file
@@ -321,8 +332,13 @@ practicality upgrade exit (or after Pages if practicality is deferred).
 
 ### Current delivery queue (post-baseline)
 
-- TrackId (latest closed): `track-ux-audit-followup`（**completed** 2026-04-05）→
+- TrackId (latest closed): `track-mcr-full-official-alignment`（**completed**
+  2026-04-07）→
+  [hlm_mcr_full_official_alignment_a1b2c3d4.plan.md](hlm_mcr_full_official_alignment_a1b2c3d4.plan.md)
+- Prior closed: `track-ux-audit-followup`（**completed** 2026-04-05）→
   [hlm_ux_audit_followup_5d8c2f1a.plan.md](hlm_ux_audit_followup_5d8c2f1a.plan.md)
+- Active TrackId: `maintenance`（no queued code track; Playwright smoke **pass**;
+  optional Safari / viewport matrix; **rankZone** vs **QUAN** merge **deferred**）
 - Prior TrackId: `track-mcr-p0-official-alignment`（**completed** 2026-04-03）→
   [hlm_mcr_p0_alignment_01c0c730.plan.md](hlm_mcr_p0_alignment_01c0c730.plan.md)
 - Earlier: `track-score-config-mcr-presets`（**completed** 2026-04-03）→
@@ -346,6 +362,9 @@ practicality upgrade exit (or after Pages if practicality is deferred).
 - ChildPlans — 牌桌式启动门（已完成）:
   - [hlm_round_setup_table_ui_525519a5.plan.md](hlm_round_setup_table_ui_525519a5.plan.md)
 - ChildPlans — 最近完成:
+  - [hlm_mcr_full_official_alignment_a1b2c3d4.plan.md](hlm_mcr_full_official_alignment_a1b2c3d4.plan.md)
+    （**completed** 2026-04-07；`track-mcr-full-official-alignment`）;
+    [hlm_rule_code_trace_matrix.plan.md](hlm_rule_code_trace_matrix.plan.md)
   - [hlm_ux_audit_followup_5d8c2f1a.plan.md](hlm_ux_audit_followup_5d8c2f1a.plan.md)
     （**completed** 2026-04-05；`track-ux-audit-followup`）
   - [hlm_onboarding_shell_merge_f9a1c8e0.plan.md](hlm_onboarding_shell_merge_f9a1c8e0.plan.md)
@@ -353,9 +372,11 @@ practicality upgrade exit (or after Pages if practicality is deferred).
 - ChildPlans — 历史可执行轨道（均已 completed）:
   - [hlm_score_config_mcr_presets_620b275b.plan.md](hlm_score_config_mcr_presets_620b275b.plan.md)
   - [hlm_mcr_p0_alignment_01c0c730.plan.md](hlm_mcr_p0_alignment_01c0c730.plan.md)
-- **Active slice：**
-  无（`track-ux-audit-followup` 已于 2026-04-05 关闭；桌面浏览器矩阵仍为可选手工项）
-- TrackTodoStatus: `completed`（`track-ux-audit-followup`）
+- **Closed slice：**
+  `track-mcr-full-official-alignment`（**completed** 2026-04-07；trace matrix +
+  doc-sync test + exclusion truth table；子计划
+  [hlm_rule_code_trace_matrix.plan.md](hlm_rule_code_trace_matrix.plan.md)）
+- TrackTodoStatus: `completed`（`track-mcr-full-official-alignment`）
 - Prior closed: `track-onboarding-shell-hig` →
   [hlm_onboarding_shell_merge_f9a1c8e0.plan.md](hlm_onboarding_shell_merge_f9a1c8e0.plan.md)
 - Prior closed: `track-five-principles-exact-scoring` →
@@ -372,9 +393,10 @@ practicality upgrade exit (or after Pages if practicality is deferred).
 
 - Owner: `project-owner`
 - OverallStatus: `in_progress`
-- ProgressPercent: `96`（v5.2.2 结果窗体起和番展示；**DesktopBrowserMatrix** 仍为
-  pending）
-- ActivePhase: `monitoring`
+- ProgressPercent: `100`（`track-mcr-full-official-alignment` **completed**
+  2026-04-07；**82** = MCR registry row count / fan-coverage snapshot, not
+  incomplete %）
+- ActivePhase: `implementation`
 - Focus:
   - `Delivered 2026-04-03: onboarding shell merge — 三步向导（设定玩家入主壳`
     `v5.2.0）—`
@@ -397,6 +419,10 @@ practicality upgrade exit (or after Pages if practicality is deferred).
   - `Preserve hlm_desktop_web_ui baseline: inline context host, help surfaces,`
     `two-pane shell.`
   - `TDD + npm test + quality:complexity + cloc per slice gates.`
+  - `Delivered 2026-04-07: full MCR official alignment track + rule->code trace`
+    `matrix + ruleTraceMatrix.docSync.test.js / writeRuleTraceMatrix.mjs`
+    `(v5.2.15) —`
+    [hlm_mcr_full_official_alignment_a1b2c3d4.plan.md](hlm_mcr_full_official_alignment_a1b2c3d4.plan.md)
   - `Delivered 2026-04-03: result modal 番数行含起和（v5.2.2）当 gateFan <`
     `totalFan 时显示「总番（起和 x 番）」。`
 - ExitGateCheck:
@@ -407,11 +433,17 @@ practicality upgrade exit (or after Pages if practicality is deferred).
   - Complexity: `pass`
   - SLOCReview: `pass`
   - AccessibilityKeyboardFlow: `pass`
-  - DesktopBrowserMatrix: `pending`
+  - DesktopBrowserMatrix: `pass`（automated **Chromium + WebKit + mobile**
+    viewport via `npm run test:e2e` + `scripts/e2eStaticServe.mjs`; real Safari
+    / extra breakpoints still optional）
   - SecurityScan: `carry-forward pass`
   - PublicArtifactScope: `carry-forward pass`
   - PublishLayoutDecision: `carry-forward pass`
 - RisksAndBlockers:
+  - `Primary risk (mitigated for MCR track): registry count vs detector/exclusion`
+    `drift — control: rule-to-code matrix +`
+    `tests/unit/ruleTraceMatrix.docSync.test.js` +
+    `exclusionMap.truthTable.test.js` + structure tests.`
   - `No blocker; primary risk is desktop CSS regressions on tablet/mobile`
     `breakpoints without tight responsive scoping and test coverage.`
   - `Workspace slice: moving picker .sheet across breakpoint requires`
@@ -423,17 +455,146 @@ practicality upgrade exit (or after Pages if practicality is deferred).
     `can regress keyboard UX or cause accidental context loss.`
   - `Help 详版: 番种 <details> 列表变长时须验证窄屏 modal 与桌面 popover 滚动、`
     ` tabindex 与 heading 层级，避免对话框内焦点陷阱回归.`
-  - `Manual desktop browser matrix remains pending; automated browser-use`
-    `validation was blocked by regional model availability.`
+  - `Playwright covers load + splash + help on Chromium/WebKit/tablet/mobile,`
+    `plus Chromium/WebKit/tablet/mobile wizard 14-tiles -> result modal path`
+    `and tablet modal-flow assertions; real Safari on Apple hardware optional.`
   - `Onboarding v5.2.0 shipped (2026-04-03): manual spot-check wizard 1→2→3 +`
-    `resize/breakpoints still recommended (automated browser matrix pending).`
+    `resize/breakpoints still recommended beyond automated smoke.`
 - NextActions:
+  - `MCR alignment track closed (2026-04-07): trace matrix v1 +`
+    `ruleTraceMatrix.docSync.test.js + writeRuleTraceMatrix.mjs; exclusion`
+    `truth table covers all EXCLUSION_MAP keys. **Deferred:** merging`
+    `SHANG_SAN_PAI / rankZone rows into QUAN_* — fanLexiconEntries documents`
+    `distinct semantics vs composition 全大; keep 82-row registry until product`
+    `redefines UX.`
+  - `Regression hygiene: run npm test + quality:complexity after any`
+    `fanRegistry / detector / exclusionMap / matrix regen change.`
+  - `Next optional slice: expand calculate-path assertions with context variants`
+    `(dianhe/discarder/flower/kong/timing) across all projects — TDD when prioritized.`
   - `Manual UI pass: in-shell setup + three-step wizard + settlement on`
     `desktop/mobile breakpoints (post v5.2.0).`
   - `2026-04-05: track-ux-audit-followup closed — backdrop/popover dismiss,`
     `splash skip, calculate hint, score bounds, details score-rule block,`
     `Escape/focus polish; see hlm_ux_audit_followup_5d8c2f1a.plan.md.`
 - ValidationEvidence:
+  - `2026-04-07: maintenance iteration 32 — mobile calculate-path enabled;`
+    `wizard 14-tiles -> result now passes on Chromium/WebKit/tablet/mobile;`
+    `npm test + quality:complexity pass.`
+  - `2026-04-07: maintenance iteration 31 — tablet calculate-path stabilized`
+    `with wizard click fallback + unit update for step3-failure context reopen;`
+    `Chromium/WebKit/tablet calculate path pass; npm test + quality:complexity.`
+  - `2026-04-07: maintenance iteration 30 — Playwright tablet project (900x1200)`
+    `+ tablet modal-flow assertions; calculate-path expanded to WebKit;`
+    `npm test + quality:complexity pass.`
+  - `2026-04-07: maintenance iteration 29 — Playwright add Chromium wizard`
+    `calculate path (14 tiles -> result modal) in appShell.smoke; npm test +`
+    `quality:complexity pass.`
+  - `2026-04-07: maintenance iteration 28 — Playwright projects: WebKit +`
+    `mobile (Pixel 5) + rename appShell.smoke.spec.js; CI installs chromium`
+    `webkit; npm test + quality:complexity pass.`
+  - `2026-04-07: maintenance iteration 27 — Playwright e2e smoke +`
+    `e2eStaticServe.mjs; workflow unit-and-e2e.yml; DesktopBrowserMatrix gate`
+    `pass; npm test + quality:complexity.`
+  - `2026-04-07: full-official track iteration 26 — trace matrix plan + master`
+    `dashboard closeout; hlm_rule_code_trace_matrix.plan.md **completed**;`
+    `track-mcr-full-official-alignment YAML **completed**; gates: npm test +`
+    `quality:complexity.`
+  - `2026-04-07: full-official track iteration 25 — rule->code trace matrix v1`
+    `(.cursor/plans/hlm_rule_code_trace_matrix.md);`
+    `build-rule-code-trace-matrix completed; docSync test + write script added`
+    `same pass.`
+  - `2026-04-07: full-official track iteration 24 — SI_GUI_YI detector + registry`
+    `82 + YI_SE_SI_TONG_SHUN excludes SI_GUI_YI (v5.2.15). Gates: npm test +`
+    `quality:complexity.`
+  - `2026-04-07: full-official track iteration 23 — YI_SE_SI_TONG_SHUN`
+    `exclusions + compareStandardWinPrecedence (si tong over san jie; v5.2.14).`
+    `Gates: npm test + quality:complexity + cloc.`
+  - `2026-04-07: full-official track iteration 22 — YI_SE_SAN_JIE_GAO excludes`
+    `YI_SE_SAN_TONG_SHUN + decomposition precedence (v5.2.13). Gates: npm test +`
+    `quality:complexity + cloc scoringEngine/scoringCandidate.`
+  - `2026-04-07: full-official track iteration 21 — SAN_SE_SHUANG_LONG_HUI`
+    `exclusions (ping/xi/lao/hua/yi ban/lian liu; v5.2.12). Gates: npm test +`
+    `quality:complexity + cloc exclusionMap.js.`
+  - `2026-04-07: full-official track iteration 20 — seven_pairs vs standard`
+    `candidate max + YI_SE_SHUANG_LONG_HUI exclusions (v5.2.11). Gates: npm test +`
+    `quality:complexity.`
+  - `2026-04-07: full-official track iteration 19 — QI_DUI / SHI_SAN_YAO`
+    `extended 不计 (duan yao, wu zi, dan diao; v5.2.10). Gates: npm test +`
+    `quality:complexity.`
+  - `2026-04-07: full-official track iteration 18 — SHI_SAN_YAO / QI_DUI`
+    `exclusions (hun yao + men qian subfans; v5.2.9). Gates: npm test +`
+    `quality:complexity.`
+  - `2026-04-07: full-official track iteration 17 — HUN_YAO_JIU /`
+    `JIU_LIAN_BAO_DENG / LV_YI_SE exclusions + exclusionMap.js extract +`
+    `RULE_SOURCE freeze (v5.2.8). Gates: npm test + quality:complexity.`
+  - `2026-04-07: full-official track iteration 16 — EXCLUSION_MAP: ZI_YI_SE`
+    `drops honor/wind subfans; QING_YAO_JIU drops PENG_PENG_HU + YAO_JIU_KE`
+    `(TDD conflictResolver + scoring/regression). v5.2.7. Gates: npm test +`
+    `quality:complexity.`
+  - `2026-04-07: full-official track iteration 15 — default scoring path uses`
+    `MCR official snapshot when ruleConfig/scoringRule omitted`
+    `(buildScoringRuleSnapshot + scoreAggregator DEFAULT_SNAPSHOT; tests +`
+    `goldenCases + mobilePickerFlow). v5.2.6. Gates: npm test +`
+    `quality:complexity.`
+  - `2026-04-06: full-official track iteration 14 — TDD added`
+    `SAN_GANG hierarchy exclusions (drop SHUANG_AN_GANG,`
+    `SHUANG_MING_GANG, AN_GANG, MING_GANG when SAN_GANG hits)`
+    `(principleConstraints EXCLUSION_MAP refinement). Gates pass:`
+    `test:unit/regression/integration/full + quality:complexity.`
+  - `2026-04-06: full-official track iteration 13 — TDD added`
+    `SHUANG_AN_GANG -> excludes AN_GANG and`
+    `SHUANG_MING_GANG -> excludes MING_GANG rules`
+    `(principleConstraints EXCLUSION_MAP refinement). Gates pass:`
+    `test:unit/regression/integration/full + quality:complexity.`
+  - `2026-04-06: full-official track iteration 12 — TDD added`
+    `SI_GANG -> excludes SAN_GANG rule`
+    `(principleConstraints EXCLUSION_MAP refinement). Gates pass:`
+    `test:unit/regression/integration/full + quality:complexity.`
+  - `2026-04-06: full-official track iteration 11 — TDD added`
+    `SHUANG_JIAN_KE -> excludes JIAN_KE rule`
+    `(principleConstraints EXCLUSION_MAP refinement). Gates pass:`
+    `test:unit/regression/integration/full + quality:complexity.`
+  - `2026-04-06: full-official track iteration 10 — TDD added`
+    `DA_SAN_FENG -> excludes YAO_JIU_KE rule`
+    `(principleConstraints EXCLUSION_MAP refinement). Gates pass:`
+    `test:unit/regression/integration/full + quality:complexity.`
+  - `2026-04-06: full-official track iteration 9 — TDD added`
+    `XIAO_SAN_YUAN -> excludes YAO_JIU_KE rule`
+    `(principleConstraints EXCLUSION_MAP refinement). Gates pass:`
+    `test:unit/regression/integration/full + quality:complexity.`
+  - `2026-04-06: full-official track iteration 8 — TDD added`
+    `XIAO_SAN_YUAN -> excludes JIAN_KE rule`
+    `(principleConstraints EXCLUSION_MAP refinement). Gates pass:`
+    `test:unit/regression/integration/full + quality:complexity.`
+  - `2026-04-06: full-official track iteration 7 — TDD added`
+    `XIAO_SI_XI -> excludes YAO_JIU_KE rule`
+    `(principleConstraints EXCLUSION_MAP refinement). Gates pass:`
+    `test:unit/regression/integration/full + quality:complexity.`
+  - `2026-04-06: full-official track iteration 6 — TDD added`
+    `DA_SI_XI -> excludes YAO_JIU_KE rule`
+    `(principleConstraints EXCLUSION_MAP refinement). Gates pass:`
+    `test:unit/regression/integration/full + quality:complexity.`
+  - `2026-04-06: full-official track iteration 5 — TDD added`
+    `DA_SAN_YUAN -> excludes YAO_JIU_KE rule`
+    `(principleConstraints EXCLUSION_MAP refinement). Gates pass:`
+    `test:unit/regression/integration/full + quality:complexity.`
+  - `2026-04-06: full-official track iteration 4 — TDD added`
+    `DA_SAN_YUAN -> excludes JIAN_KE rule`
+    `(principleConstraints EXCLUSION_MAP refinement). Gates pass:`
+    `test:unit/regression/integration/full + quality:complexity.`
+  - `2026-04-06: full-official track iteration 3 — TDD added`
+    `QI_LIAN_DUI -> excludes QI_DUI rule in conflict resolver`
+    `(principleConstraints EXCLUSION_MAP). Gates pass:`
+    `test:unit/regression/integration/full + quality:complexity.`
+  - `2026-04-06: full-official track iteration 2 — generated automated`
+    `registry/detector/exclusion gap snapshot (81/81 detector coverage,`
+    `exclusion-map still sparse), added TDD for JIU_LIAN_BAO_DENG without`
+    `advancedAuto, implemented narrowed detector change, and validated with`
+    `full gates (unit/regression/integration/full + quality:complexity).`
+  - `2026-04-06: full-official track started. Fail-first tests added for`
+    `registry->detector parity and TUI_BU_DAO detection; implemented`
+    `TUI_BU_DAO feature+detector in scoring engine. Gates pass:`
+    `test:unit/regression/integration/full + quality:complexity.`
   - `2026-04-05: UX audit follow-up shipped as v5.2.4 — npm test,`
     `quality:complexity, build:dist; CHANGELOG [5.2.4].`
   - `2026-04-03: result modal shows 起和番 when gateFan < totalFan`
@@ -920,4 +1081,5 @@ cooperating modules.
 - Complexity checks pass.
 - Touched files reviewed against SLOC and function-size guardrails.
 - Security and reliability gates pass with no unresolved release blockers.
+
 

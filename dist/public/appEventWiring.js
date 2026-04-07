@@ -121,6 +121,9 @@ export function handleWizardNextClick(
       modalActions.updateModalUi();
     } else {
       hooks.onStep3CalculateFailed?.();
+      if (!isDesktopInlineContext()) {
+        modalActions.openModalByKey("context");
+      }
     }
     return;
   }

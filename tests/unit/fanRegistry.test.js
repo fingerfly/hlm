@@ -34,6 +34,15 @@ test("fan display name resolves canonical Chinese and keeps unknown id", () => {
   assert.equal(getFanDisplayName("X_UNKNOWN"), "X_UNKNOWN");
 });
 
+test("rank-zone fans have labels distinct from composition QUAN_*", () => {
+  assert.equal(getFanDisplayName("SHANG_SAN_PAI"), "序数上档和");
+  assert.equal(getFanDisplayName("ZHONG_SAN_PAI"), "序数中档和");
+  assert.equal(getFanDisplayName("XIA_SAN_PAI"), "序数下档和");
+  assert.equal(getFanDisplayName("QUAN_DA"), "全大");
+  assert.equal(getFanDisplayName("QUAN_ZHONG"), "全中");
+  assert.equal(getFanDisplayName("QUAN_XIAO"), "全小");
+});
+
 test("fan coverage progress tracks implemented count toward MCR target", () => {
   const progress = getFanCoverageProgress();
   assert.equal(progress.implemented, IMPLEMENTED_FAN_IDS.length);
@@ -41,9 +50,9 @@ test("fan coverage progress tracks implemented count toward MCR target", () => {
   assert.equal(progress.remaining, MCR_TARGET_FAN_COUNT - FAN_REGISTRY.length);
 });
 
-test("fan registry reaches full 81-item MCR coverage", () => {
+test("fan registry reaches full 82-item MCR coverage", () => {
   const progress = getFanCoverageProgress();
-  assert.equal(progress.implemented, 81);
-  assert.equal(progress.target, 81);
+  assert.equal(progress.implemented, 82);
+  assert.equal(progress.target, 82);
   assert.equal(progress.remaining, 0);
 });

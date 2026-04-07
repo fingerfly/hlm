@@ -829,6 +829,32 @@ test("detectFans auto-detects advanced structure fans", () => {
     true
   );
 
+  const siGuiYi = detectFans(
+    {
+      tiles: [
+        "1W", "2W", "2W", "2W", "2W",
+        "3W", "3W", "4W", "5W", "6W",
+        "7W", "7W", "8W", "9W"
+      ],
+      winType: "dianhe",
+      handState: "fulu",
+      kongType: "none",
+      timingEvent: "none",
+      advancedAuto: true
+    },
+    {
+      pattern: "standard",
+      meldGroups: [
+        { type: "chow", tiles: ["1W", "2W", "3W"] },
+        { type: "chow", tiles: ["2W", "3W", "4W"] },
+        { type: "chow", tiles: ["5W", "6W", "7W"] },
+        { type: "chow", tiles: ["7W", "8W", "9W"] },
+        { type: "pair", tiles: ["2W", "2W"] }
+      ]
+    }
+  );
+  assert.equal(siGuiYi.some((fan) => fan.id === "SI_GUI_YI"), true);
+
   const fiveGates = detectFans(
     {
       tiles: [
@@ -856,6 +882,35 @@ test("detectFans auto-detects advanced structure fans", () => {
     }
   );
   assert.equal(fiveGates.some((fan) => fan.id === "WU_MEN_QI"), true);
+});
+
+test("detectFans identifies advanced structure fans without advancedAuto flag", () => {
+  const nineGates = detectFans(
+    {
+      tiles: [
+        "1W", "1W", "1W",
+        "2W", "3W", "4W",
+        "5W", "6W", "7W",
+        "8W", "9W", "9W",
+        "9W", "5W"
+      ],
+      winType: "zimo",
+      handState: "menqian",
+      kongType: "none",
+      timingEvent: "none"
+    },
+    {
+      pattern: "standard",
+      meldGroups: [
+        { type: "pung", tiles: ["1W", "1W", "1W"] },
+        { type: "chow", tiles: ["2W", "3W", "4W"] },
+        { type: "chow", tiles: ["5W", "6W", "7W"] },
+        { type: "chow", tiles: ["7W", "8W", "9W"] },
+        { type: "pair", tiles: ["9W", "9W"] }
+      ]
+    }
+  );
+  assert.equal(nineGates.some((fan) => fan.id === "JIU_LIAN_BAO_DENG"), true);
 });
 
 test("detectFans supports structured context detectors", () => {
@@ -919,4 +974,33 @@ test("detectFans sets HUA_PAI fan equal to flowerCount", () => {
   };
   const r5 = detectFans({ ...base, flowerCount: 5 }, win);
   assert.equal(r5.find((f) => f.id === "HUA_PAI")?.fan, 5);
+});
+
+test("detectFans returns tui bu dao for valid no-turnover tile set", () => {
+  const result = detectFans(
+    {
+      tiles: [
+        "2B", "2B", "2B",
+        "4B", "4B", "4B",
+        "5T", "5T", "5T",
+        "8T", "8T", "8T",
+        "Wh", "Wh"
+      ],
+      winType: "dianhe",
+      handState: "fulu",
+      kongType: "none",
+      timingEvent: "none"
+    },
+    {
+      pattern: "standard",
+      meldGroups: [
+        { type: "pung", tiles: ["2B", "2B", "2B"] },
+        { type: "pung", tiles: ["4B", "4B", "4B"] },
+        { type: "pung", tiles: ["5T", "5T", "5T"] },
+        { type: "pung", tiles: ["8T", "8T", "8T"] },
+        { type: "pair", tiles: ["Wh", "Wh"] }
+      ]
+    }
+  );
+  assert.equal(result.some((fan) => fan.id === "TUI_BU_DAO"), true);
 });

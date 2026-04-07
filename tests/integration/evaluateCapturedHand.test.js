@@ -65,7 +65,7 @@ test("evaluateCapturedHand normalizes aliases and returns scoring + replay log",
   assert.match(result.explanation, /总番/);
 });
 
-test("evaluateCapturedHand treats updated baseline hand as winning", () => {
+test("evaluateCapturedHand omits ruleConfig uses MCR official gate", () => {
   const result = evaluateCapturedHand({
     tiles: [...winningTiles],
     context: {
@@ -77,8 +77,8 @@ test("evaluateCapturedHand treats updated baseline hand as winning", () => {
   });
   assert.equal(result.recognition.status, "manual_ready");
   assert.equal(result.scoring.totalFan, 6);
-  assert.equal(result.scoring.isWin, true);
-  assert.equal(result.scoring.errorCode, null);
+  assert.equal(result.scoring.isWin, false);
+  assert.equal(result.scoring.errorCode, "NOT_A_WINNING_HAND");
 });
 
 test("evaluateCapturedHand uses MCR gate when ruleConfig is official preset", () => {

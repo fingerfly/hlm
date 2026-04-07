@@ -34,11 +34,11 @@ test("mobile picker flow can build a winning hand request", () => {
       winType: "zimo",
       handState: "menqian",
       kongType: "none",
-      timingEvent: "none"
+      timingEvent: "gangshang"
     }
   });
   assert.equal(result.scoring.isWin, true);
-  assert.equal(result.scoring.totalFan >= 3, true);
+  assert.equal(result.scoring.totalFan >= 8, true);
 });
 
 test("mobile picker flow supports mid-slot correction before scoring", () => {
@@ -63,7 +63,7 @@ test("mobile picker flow supports mid-slot correction before scoring", () => {
       winType: "zimo",
       handState: "menqian",
       kongType: "none",
-      timingEvent: "none"
+      timingEvent: "gangshang"
     }
   });
   assert.equal(result.scoring.isWin, true);
@@ -93,7 +93,7 @@ test("mobile picker quick actions can build hand with fewer operations", () => {
       winType: "zimo",
       handState: "menqian",
       kongType: "none",
-      timingEvent: "none"
+      timingEvent: "gangshang"
     }
   });
   assert.equal(result.scoring.isWin, true);

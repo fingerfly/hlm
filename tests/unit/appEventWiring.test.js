@@ -80,6 +80,7 @@ test("syncWizardModals switches from picker to context at step 3 (mobile)", () =
 
 test("handleWizardNextClick from step 3 invokes hook when calculate false", () => {
   const hooks = { calls: 0 };
+  const modalCalls = [];
   const store = {
     uiState: {
       wizard: { step: 3 },
@@ -93,7 +94,8 @@ test("handleWizardNextClick from step 3 invokes hook when calculate false", () =
     }
   };
   const modalActions = {
-    closeModalByKey: () => {},
+    closeModalByKey: (key) => modalCalls.push(`close:${key}`),
+    openModalByKey: (key) => modalCalls.push(`open:${key}`),
     updateModalUi: () => {
       throw new Error("updateModalUi should not run when calculate false");
     }
@@ -104,6 +106,7 @@ test("handleWizardNextClick from step 3 invokes hook when calculate false", () =
     }
   });
   assert.equal(hooks.calls, 1);
+  assert.deepEqual(modalCalls, ["close:picker", "close:context", "open:context"]);
 });
 
 test("handleWizardNextClick from step 3 calculates and shows result", () => {

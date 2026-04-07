@@ -8,9 +8,9 @@ import { SETTLEMENT_MODES } from "../config/scoreRuleConfig.js";
  * - Compares gateFan to rule snapshot gateMinFan.
  */
 const DEFAULT_SNAPSHOT = Object.freeze({
-  gateMinFan: 1,
-  gateExcludeFanIds: [],
-  settlementMode: SETTLEMENT_MODES.COMPAT_LINEAR,
+  gateMinFan: 8,
+  gateExcludeFanIds: ["HUA_PAI"],
+  settlementMode: SETTLEMENT_MODES.OFFICIAL_BASE_FAN,
   officialBasePoint: 8
 });
 

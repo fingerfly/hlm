@@ -22,13 +22,7 @@ export function getSandboxDeployRemote(sandboxRoot) {
 }
 
 /**
- * Child env for spawnSync deploy.js runs inside a sandbox.
- * Clears HLM_DEPLOY_DIR so parallel node --test files do not share one
- * working tree; sets TMPDIR so deploy dir stays under the sandbox.
- *
- * @param {string} sandboxRoot
- * @param {Record<string, string | undefined>} [extra]
- * @returns {NodeJS.ProcessEnv}
+ * Process.env for sandbox deploy.js spawns; clears inherited HLM_DEPLOY_DIR.
  */
 export function getSandboxChildEnv(sandboxRoot, extra = {}) {
   return {

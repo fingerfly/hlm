@@ -98,8 +98,12 @@ Blueprint implementation for `和了么 - 国标麻将计番助手` (`Huleme - G
 ## Run tests
 
 ```bash
-npm test
+npx playwright install chromium webkit   # once per machine (browser binaries)
+npm test                          # unit + regression + integration + e2e
 ```
+
+E2E uses Playwright against a local `dist/` static server (`scripts/e2eStaticServe.mjs`)
+so `/public/index.html` asset URLs resolve correctly.
 
 ## Demo
 

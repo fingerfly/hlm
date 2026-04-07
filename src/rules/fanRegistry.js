@@ -60,9 +60,9 @@ export const FAN_REGISTRY = Object.freeze([
   { id: "QUAN_SHUANG_KE", fan: 24, zhName: "全双刻" },
   { id: "YI_SE_SAN_TONG_SHUN", fan: 24, zhName: "一色三同顺" },
   { id: "YI_SE_SAN_JIE_GAO", fan: 24, zhName: "一色三节高" },
-  { id: "SHANG_SAN_PAI", fan: 24, zhName: "全大" },
-  { id: "ZHONG_SAN_PAI", fan: 24, zhName: "全中" },
-  { id: "XIA_SAN_PAI", fan: 24, zhName: "全小" },
+  { id: "SHANG_SAN_PAI", fan: 24, zhName: "序数上档和" },
+  { id: "ZHONG_SAN_PAI", fan: 24, zhName: "序数中档和" },
+  { id: "XIA_SAN_PAI", fan: 24, zhName: "序数下档和" },
   { id: "SAN_SE_YI_TONG_SHUN", fan: 8, zhName: "三色一通顺" },
   { id: "TUI_BU_DAO", fan: 8, zhName: "推不倒" },
   { id: "SAN_SE_SAN_JIE_GAO", fan: 8, zhName: "三色三节高" },
@@ -86,10 +86,11 @@ export const FAN_REGISTRY = Object.freeze([
   { id: "DAN_DIAO_JIANG", fan: 1, zhName: "单钓将" },
   { id: "HUA_PAI", fan: 1, zhName: "花牌" },
   { id: "SHUANG_AN_KE", fan: 2, zhName: "双暗刻" },
+  { id: "SI_GUI_YI", fan: 2, zhName: "四归一" },
   { id: "SAN_SE_SHUANG_LONG_HUI", fan: 16, zhName: "三色双龙会" }
 ]);
 
-export const MCR_TARGET_FAN_COUNT = 81;
+export const MCR_TARGET_FAN_COUNT = 82;
 
 export const FAN_REGISTRY_MAP = Object.freeze(
   FAN_REGISTRY.reduce((map, item) => {

@@ -86,5 +86,7 @@ export const FAN_LEXICON_ENTRIES = Object.freeze({
   DAN_DIAO_JIANG: "单钓将：仅听一张作将成和，计 1 番。",
   HUA_PAI: "花牌：每花 1 番，不计入 14 张；在和牌条件中填花数。",
   SHUANG_AN_KE: "双暗刻：两组暗刻，计 2 番。",
+  SI_GUI_YI:
+    "四归一：四张相同牌分在顺、刻、将中（杠不计），计 2 番。",
   SAN_SE_SHUANG_LONG_HUI: "三色双龙会：三色两组老少副且 5 作将，计 16 番。",
 });

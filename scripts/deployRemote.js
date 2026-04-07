@@ -238,12 +238,7 @@ export function preflightRemoteAccess(
 }
 
 /**
- * Deploy working clone directory.
- * Set HLM_DEPLOY_DIR to a persistent absolute path to avoid TMP cleanup
- * forcing a full re-fetch.
- *
- * @param {object} [env] - Process environment.
- * @returns {string}
+ * Deploy clone path: env HLM_DEPLOY_DIR or TMPDIR/TEMP/TMP + /hlm-deploy.
  */
 export function resolveDeployDir(env = process.env) {
   const override = String(env.HLM_DEPLOY_DIR ?? "").trim();

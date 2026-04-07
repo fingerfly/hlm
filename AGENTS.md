@@ -11,7 +11,9 @@ Coding agent instructions for the HLM (Huleme) codebase - a Chinese Mahjong scor
 ## Build/Lint/Test Commands
 
 ```bash
-npm test                           # Run all tests
+npx playwright install chromium webkit   # once: e2e browser binaries
+npm test                           # Unit + regression + integration + Playwright e2e
+npm run test:e2e                   # Playwright only (Chromium, WebKit, tablet, mobile)
 npm run test:unit                  # Unit tests only
 npm run test:regression           # Regression tests
 npm run test:integration          # Integration tests
@@ -34,7 +36,10 @@ hlm/
 │   ├── rules/            # Mahjong scoring rules
 │   └── tiles/            # Canonical tile catalog + encoding utilities
 ├── tests/
+│   ├── e2e/              # Playwright browser smoke
 │   ├── helpers/          # Test helper utilities
+│   ├── integration/      # Integration tests
+│   ├── regression/       # Regression tests
 │   └── unit/             # Unit tests
 └── scripts/              # Deployment scripts
 ```

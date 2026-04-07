@@ -1,6 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { scoreHand } from "../../../src/rules/scoringEngine.js";
+import { COMPAT_SCORING_RULE_SNAPSHOT } from "../../helpers/scoringTestSnapshots.js";
 
 test("scoreHand detects qing yi se in pure one-suit hand", () => {
   const result = scoreHand({
@@ -20,7 +21,8 @@ test("scoreHand detects peng peng hu and reaches min fan gate", () => {
     winType: "dianhe",
     handState: "fulu",
     kongType: "none",
-    timingEvent: "none"
+    timingEvent: "none",
+    scoringRule: COMPAT_SCORING_RULE_SNAPSHOT
   });
   assert.equal(result.isWin, true);
   assert.equal(result.totalFan, 7);
@@ -36,7 +38,7 @@ test("scoreHand detects hun yao jiu for terminals-and-honors hand", () => {
     timingEvent: "none"
   });
   assert.equal(result.isWin, true);
-  assert.equal(result.totalFan, 40);
+  assert.equal(result.totalFan, 34);
   assert.equal(result.matchedFans.some((fan) => fan.id === "HUN_YAO_JIU"), true);
 });
 
@@ -49,7 +51,7 @@ test("scoreHand detects qing yao jiu and excludes hun yao jiu", () => {
     timingEvent: "none"
   });
   assert.equal(result.isWin, true);
-  assert.equal(result.totalFan, 73);
+  assert.equal(result.totalFan, 67);
   assert.equal(result.matchedFans.some((fan) => fan.id === "QING_YAO_JIU"), true);
   assert.equal(result.matchedFans.some((fan) => fan.id === "HUN_YAO_JIU"), false);
 });
@@ -74,7 +76,8 @@ test("scoreHand detects ping hu in chow-only hand", () => {
     winType: "dianhe",
     handState: "fulu",
     kongType: "none",
-    timingEvent: "none"
+    timingEvent: "none",
+    scoringRule: COMPAT_SCORING_RULE_SNAPSHOT
   });
   assert.equal(result.isWin, true);
   assert.equal(result.totalFan, 3);

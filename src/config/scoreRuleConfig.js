@@ -94,23 +94,20 @@ export function getScoreRulePreset(id) {
 }
 
 /**
- * Build runtime scoring snapshot from rule config (or null for compat
- * defaults).
+ * Build runtime scoring snapshot from rule config.
+ * Null/undefined uses bundled MCR official preset (8 分起和, HUA_PAI 不计入
+ * 起和分, officialBaseFan settlement).
  *
  * @param {object|null|undefined} ruleConfig
  * @returns {{ gateMinFan: number, gateExcludeFanIds: string[],
  *   settlementMode: string, officialBasePoint: number }}
  */
 export function buildScoringRuleSnapshot(ruleConfig) {
-  if (!ruleConfig || typeof ruleConfig !== "object") {
-    return {
-      gateMinFan: 1,
-      gateExcludeFanIds: [],
-      settlementMode: SETTLEMENT_MODES.COMPAT_LINEAR,
-      officialBasePoint: 8
-    };
-  }
-  const settlement = ruleConfig.settlement || {};
+  const cfg =
+    ruleConfig && typeof ruleConfig === "object"
+      ? ruleConfig
+      : getScoreRulePreset(SCORE_RULE_PRESET_IDS.MCR_OFFICIAL);
+  const settlement = cfg.settlement || {};
   const rawMode = settlement.mode;
   const settlementMode =
     rawMode === SETTLEMENT_MODES.OFFICIAL_BASE_FAN
@@ -123,7 +120,7 @@ export function buildScoringRuleSnapshot(ruleConfig) {
     baseRaw >= 0
       ? Math.floor(baseRaw)
       : 8;
-  const scoring = ruleConfig.scoring || {};
+  const scoring = cfg.scoring || {};
   const defaultGate =
     settlementMode === SETTLEMENT_MODES.OFFICIAL_BASE_FAN ? 8 : 1;
   const defaultExclude =

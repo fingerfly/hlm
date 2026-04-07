@@ -1,8 +1,119 @@
-# Changelog
+﻿# Changelog
 
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [5.2.15] - 2026-04-07
+
+### Added
+- **四归一** `SI_GUI_YI`（2 番）：`handFeatures` 检测、`featureDetectors`、
+  `fanLexiconEntries`；杠类面子类型 `kong` 不计入（预留）。
+- 规则→代码追溯表：`.cursor/plans/hlm_rule_code_trace_matrix.md`（含 81/82
+  说明、Feature 列、维护步骤）、`tests/support/ruleTraceMatrixSnippets.js`、
+  `ruleTraceMatrix.docSync.test.js`、`scripts/writeRuleTraceMatrix.mjs` /
+  `printTraceMatrixSnippets.mjs`。
+- **Playwright** 浏览器烟测：`tests/e2e/appShell.smoke.spec.js`、
+  `playwright.config.js`、`scripts/e2eStaticServe.mjs`（避免 `serve` 将
+  `/public/index.html` 规范到 `/public` 导致静态资源 404）；`npm test` 含
+  `npm run test:e2e`（Chromium + WebKit + tablet + Pixel 5 视口），并新增
+  Chromium/WebKit/tablet/mobile 向导计算链路断言（14 张手牌 -> 结果窗体）和 tablet
+  断点模态行为断言（非 desktop inline host）；CI：
+  `.github/workflows/unit-and-e2e.yml`。
+
+### Changed
+- `YI_SE_SI_TONG_SHUN` 套算增列 `SI_GUI_YI`（国标「不计四归一」）。
+- `RULE_SOURCE.registryFanCount` / `MCR_TARGET_FAN_COUNT`：**82**（补全遗漏番种）。
+- **显示名消歧：** `SHANG_SAN_PAI` / `ZHONG_SAN_PAI` / `XIA_SAN_PAI` 的
+  `zhName` 改为「序数上档和」「序数中档和」「序数下档和」，与牌型番
+  `QUAN_DA` / `QUAN_ZHONG` / `QUAN_XIAO`（全大/全中/全小）区分，与
+  `fanLexiconEntries` 一致。
+- 单测：`fanRegistry`、`ruleBaseline`、`fanDetectors`、`conflictResolver`、
+  `patternsComposite`。
+
+## [5.2.14] - 2026-04-07
+
+### Changed
+- **套算：** `YI_SE_SI_TONG_SHUN` 排除 `YI_SE_SAN_JIE_GAO`、`YI_SE_SAN_TONG_SHUN`、
+  `YI_BAN_GAO`（国标「不计」一色三节高、一色三同顺、一般高；**四归一** 番种
+  尚未实现，待 detector 落地后再并入映射）。
+- **分解择优：** `compareStandardWinPrecedence` 在 一色四同顺 与 三节刻分解
+  并存时优先四同顺，避免误用「三节高优于三同顺」规则压过四同顺分解。
+- 单测：`conflictResolver`、`patternsComposite`（四副 123 万 + 44 将 = 86 番）。
+
+## [5.2.13] - 2026-04-07
+
+### Changed
+- **国标：** 一色三节高 **不计** 一色三同顺（`exclusionMap.js`）。
+- **分解择优：** 同一牌张 multiset 既可作三节刻又可作三副同顺时，标准形候选
+  优先采用三节高分解（`scoringEngine.js`、`scoringCandidate.js`）。
+- 单测：`conflictResolver`、`patternsComposite`（555666777+副露 合计 25 番）。
+
+## [5.2.12] - 2026-04-07
+
+### Changed
+- **套算：** `SAN_SE_SHUANG_LONG_HUI` 排除 `PING_HU`、`XI_XIANG_FENG`、
+  `LIAN_LIU`、`LAO_SHAO_FU`、`HUA_LONG`、`YI_BAN_GAO`（`exclusionMap.js`）。
+- 单测：`conflictResolver`、`patternsComposite`（三色双龙会 16 番净计）。
+
+## [5.2.11] - 2026-04-07
+
+### Added
+- `scoringCandidate.js`：`scoreWinShape` 单次计分封装。
+
+### Changed
+- **型别择优：** `scoreHand` 在 `validateWin` 为 `seven_pairs` 时，同时枚举标准形分解，
+  与原有七对候选一并按起和与总番择优（解决一色双龙会牌型被七对抢先的问题）。
+- **套算：** `YI_SE_SHUANG_LONG_HUI` 排除 `QING_YI_SE`、`PING_HU`、`YI_BAN_GAO`、
+  `LIAN_LIU`、`LAO_SHAO_FU`（`exclusionMap.js`）。
+- 单测：`conflictResolver`、`patternsComposite`（双龙会 64 番、和型为 standard）。
+
+## [5.2.10] - 2026-04-07
+
+### Changed
+- 国标套算：`QI_DUI` 另排除 `DUAN_YAO`、`WU_ZI`、`DAN_DIAO_JIANG`；`SHI_SAN_YAO`
+  另排除 `DAN_DIAO_JIANG`（`exclusionMap.js`）。
+- 单测：`conflictResolver`、`patternsComposite`（全带幺七对、单钓听牌等路径）。
+
+## [5.2.9] - 2026-04-07
+
+### Changed
+- 国标套算：`SHI_SAN_YAO` 排除 `HUN_YAO_JIU`、`MEN_QIAN_QING`；`QI_DUI` 排除
+  `MEN_QIAN_QING`（`exclusionMap.js`）。
+- 单测：`conflictResolver`、`patternsComposite`（十三幺 / 七对合计）；
+  `winValidator` 增加 `thirteen_orphans` 用例。
+
+## [5.2.8] - 2026-04-07
+
+### Added
+- `RULE_SOURCE` 冻结引用（与 `RULE_BASELINE.ruleVersion` 对齐，含 81 番注册表
+  计数）；`ruleBaseline.test.js` 断言。
+- `src/rules/exclusionMap.js`：集中维护国标「不计」映射；
+  `principleConstraints.js` 引用并再导出 `EXCLUSION_MAP`。
+
+### Changed
+- **套算扩展：** `HUN_YAO_JIU` 排除 `PENG_PENG_HU`、`YAO_JIU_KE`；
+  `JIU_LIAN_BAO_DENG` 排除 `QING_YI_SE`、`MEN_QIAN_QING`、`YAO_JIU_KE`；
+  `LV_YI_SE` 排除清一色/碰碰和/断幺/一色三节高/一色三同顺/一般高等组合番。
+- 混幺九、九莲宝灯、绿一色合计与单测、回归 `hun_yao_jiu_hand` 已对齐。
+
+## [5.2.7] - 2026-04-07
+
+### Changed
+- 国标套算：`EXCLUSION_MAP` 增加 **字一色** 对 `YAO_JIU_KE`、`JIAN_KE`、
+  `MEN_FENG_KE`、`QUAN_FENG_KE` 的排除；**清幺九** 对 `YAO_JIU_KE`、
+  `PENG_PENG_HU` 的排除（`principleConstraints.js`）。
+- 单测：`conflictResolver`、`patternsAndShapes`、回归 `qing_yao_jiu_hand`、
+  `windDragonAndHighFans`（字一色+场风圈风）对齐新番合计。
+
+## [5.2.6] - 2026-04-07
+
+### Changed
+- **默认计分门闸与国标预设对齐**：`buildScoringRuleSnapshot(null)` 与省略配置时
+  使用 bundled `MCR_Official`（8 分起和、`HUA_PAI` 不计起和分、`officialBaseFan`
+  结算），与 `readStoredScoreRuleSelection` 默认一致；`scoreAggregator` 内部
+  默认快照同步为官方口径。
+- 单测：`tests/helpers/scoringTestSnapshots.js` 提供兼容预设快照；低于 8 分起和
+  的用例显式传入；回归 `goldenCases.json`、integration（含 mobile picker）
+  期望与默认官方门闸一致。
 
 ## [5.2.5] - 2026-04-05
 
@@ -858,3 +969,4 @@ splash, and test/deps alignment. **Does not** ship a standalone result
 - Added `npm run spike:auto` one-command orchestrator (`batch -> fill-eval -> summary`) with upfront credential/provider checks.
 - Enhanced step scripts with optional path parameters, default result cleanup for `spike:batch`, and `--keep-old` override.
 - Scoped summary statistics to sample IDs from the current image directory rather than all historical JSON files.
+

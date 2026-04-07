@@ -11,6 +11,11 @@ const HONORS = new Set(["E", "S", "Wn", "N", "R", "G", "Wh"]);
 const WINDS = new Set(["E", "S", "Wn", "N"]);
 const DRAGONS = new Set(["R", "G", "Wh"]);
 const GREEN_TILES = new Set(["2T", "3T", "4T", "6T", "8T", "G"]);
+const TUI_BU_DAO_TILES = new Set([
+  "1T", "2T", "3T", "4T", "5T", "8T", "9T",
+  "2B", "4B", "5B", "6B", "8B", "9B",
+  "Wh"
+]);
 
 function tileSuit(tile) {
   const suit = tile.slice(-1);
@@ -322,6 +327,10 @@ function detectAllGreen(tiles) {
   return tiles.every((tile) => GREEN_TILES.has(tile));
 }
 
+function detectTuiBuDao(tiles) {
+  return tiles.every((tile) => TUI_BU_DAO_TILES.has(tile));
+}
+
 function detectNineGates(tiles) {
   const suitSet = new Set(tiles.map((tile) => tileSuit(tile)));
   if (suitSet.size !== 1 || suitSet.has("Z")) return false;
@@ -549,6 +558,33 @@ function detectThreeColorDoubleDragon(win = {}) {
   return true;
 }
 
+const SI_GUI_YI_MELD_TYPES = new Set(["chow", "pung", "pair"]);
+
+/**
+ * True when four identical tiles lie in chows / pungs / pair (not 杠).
+ *
+ * @param {{ pattern?: string, meldGroups?: object[] }} win
+ * @returns {boolean}
+ */
+function detectSiGuiYi(win = {}) {
+  if (win.pattern !== "standard" || !Array.isArray(win.meldGroups)) {
+    return false;
+  }
+  const counts = new Map();
+  for (const group of win.meldGroups) {
+    if (group.type === "kong") continue;
+    if (!SI_GUI_YI_MELD_TYPES.has(group.type)) continue;
+    if (!Array.isArray(group.tiles)) continue;
+    for (const tile of group.tiles) {
+      counts.set(tile, (counts.get(tile) || 0) + 1);
+    }
+  }
+  for (const n of counts.values()) {
+    if (n === 4) return true;
+  }
+  return false;
+}
+
 /**
  * Extract reusable hand-level features for fan rules.
  *
@@ -600,6 +636,7 @@ export function extractHandFeatures(input, win = {}) {
     quanXiao: detectAllRanksInRange(tiles, 1, 3),
     quanZhong: detectAllRanksInRange(tiles, 4, 6),
     lvYiSe: detectAllGreen(tiles),
+    tuiBuDao: detectTuiBuDao(tiles),
     jiuLianBaoDeng: detectNineGates(tiles),
     qiLianDui: detectSevenShiftedPairs(tiles, win.pattern),
     yiSeShuangLongHui: detectPureDoubleDragon(win),
@@ -632,6 +669,7 @@ export function extractHandFeatures(input, win = {}) {
     bigFourWinds: hm.windPungs === 4,
     littleFourWinds: hm.windPungs === 3 && hm.windPairs === 1,
     bigThreeDragons: hm.dragonPungs === 3,
-    littleThreeDragons: hm.dragonPungs === 2 && hm.dragonPairs === 1
+    littleThreeDragons: hm.dragonPungs === 2 && hm.dragonPairs === 1,
+    siGuiYi: detectSiGuiYi(win)
   };
 }
