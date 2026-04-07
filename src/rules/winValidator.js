@@ -174,6 +174,31 @@ function sevenPairsGroups(tiles) {
   return groups;
 }
 
+function isQuanBuKao(tiles) {
+  const counts = countTiles(tiles);
+  if ([...counts.values()].some((n) => n !== 1)) return false;
+  const perms = [
+    ["W", "T", "B"],
+    ["W", "B", "T"],
+    ["T", "W", "B"],
+    ["T", "B", "W"],
+    ["B", "W", "T"],
+    ["B", "T", "W"]
+  ];
+  const honors = ["E", "S", "Wn", "N", "R", "G", "Wh"];
+  for (const [s147, s258, s369] of perms) {
+    const allowed = new Set([
+      `1${s147}`, `4${s147}`, `7${s147}`,
+      `2${s258}`, `5${s258}`, `8${s258}`,
+      `3${s369}`, `6${s369}`, `9${s369}`,
+      ...honors
+    ]);
+    const ok = tiles.every((tile) => allowed.has(tile));
+    if (ok) return true;
+  }
+  return false;
+}
+
 /**
  * Validate win pattern for one 14-tile hand.
  *
@@ -197,6 +222,13 @@ export function validateWin(tiles) {
       isWin: true,
       pattern: "seven_pairs",
       meldGroups: sevenPairsGroups(tiles)
+    };
+  }
+  if (isQuanBuKao(tiles)) {
+    return {
+      isWin: true,
+      pattern: "quan_bu_kao",
+      meldGroups: [{ type: "bukao", tiles: [...tiles].sort() }]
     };
   }
   const standardGroups = standardWinGroups(tiles);

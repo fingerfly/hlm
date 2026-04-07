@@ -16,7 +16,7 @@ function compareFanItem(a, b) {
 }
 
 export const CONFLICT_GROUPS = Object.freeze([
-  new Set(["GANG_SHANG_HUA", "HAI_DI_LAO_YUE", "HE_DI_LAO_YU"]),
+  new Set(["GANG_SHANG_HUA", "MIAO_SHOU_HUI_CHUN", "HAI_DI_LAO_YUE"]),
   new Set(["QING_YI_SE", "HUN_YI_SE"]),
   new Set(["DA_SI_XI", "XIAO_SI_XI"]),
   new Set(["DA_SAN_YUAN", "XIAO_SAN_YUAN"])

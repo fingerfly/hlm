@@ -126,6 +126,12 @@ todos:
       and full-gate validation. Child:
       hlm_mcr_full_official_alignment_a1b2c3d4.plan.md
     status: completed
+  - id: track-mjpdf-official-alignment-execution
+    content: >
+      MJ.pdf authoritative alignment execution: extract official checklist,
+      audit rule-to-code gaps, apply TDD remediation, and run full validation
+      gates. Child: hlm_mjpdf_alignment_execution_7866867f.plan.md
+    status: completed
 isProject: false
 ---
 
@@ -321,6 +327,8 @@ practicality upgrade exit (or after Pages if practicality is deferred).
   [hlm_score_config_mcr_presets_620b275b.plan.md](hlm_score_config_mcr_presets_620b275b.plan.md).
 - MCR official settlement + gate alignment P0 (**completed** 2026-04-03):
   [hlm_mcr_p0_alignment_01c0c730.plan.md](hlm_mcr_p0_alignment_01c0c730.plan.md).
+- MJ.pdf authoritative alignment execution (**in_progress**):
+  [hlm_mjpdf_alignment_execution_7866867f.plan.md](hlm_mjpdf_alignment_execution_7866867f.plan.md).
 - Onboarding in main shell + three-step wizard (**completed** 2026-04-03;
   **v5.2.0**): prerequisite `track-round-setup-table-ui` + four-player
   settlement; child
@@ -332,13 +340,14 @@ practicality upgrade exit (or after Pages if practicality is deferred).
 
 ### Current delivery queue (post-baseline)
 
-- TrackId (latest closed): `track-mcr-full-official-alignment`（**completed**
-  2026-04-07）→
+- TrackId (latest closed): `track-mjpdf-official-alignment-execution`
+  （**completed** 2026-04-07）→
+  [hlm_mjpdf_alignment_execution_7866867f.plan.md](hlm_mjpdf_alignment_execution_7866867f.plan.md)
+- Prior closed: `track-mcr-full-official-alignment`（**completed** 2026-04-07）→
   [hlm_mcr_full_official_alignment_a1b2c3d4.plan.md](hlm_mcr_full_official_alignment_a1b2c3d4.plan.md)
 - Prior closed: `track-ux-audit-followup`（**completed** 2026-04-05）→
   [hlm_ux_audit_followup_5d8c2f1a.plan.md](hlm_ux_audit_followup_5d8c2f1a.plan.md)
-- Active TrackId: `maintenance`（no queued code track; Playwright smoke **pass**;
-  optional Safari / viewport matrix; **rankZone** vs **QUAN** merge **deferred**）
+- Active TrackId: `maintenance`（no queued code track）
 - Prior TrackId: `track-mcr-p0-official-alignment`（**completed** 2026-04-03）→
   [hlm_mcr_p0_alignment_01c0c730.plan.md](hlm_mcr_p0_alignment_01c0c730.plan.md)
 - Earlier: `track-score-config-mcr-presets`（**completed** 2026-04-03）→
@@ -362,6 +371,8 @@ practicality upgrade exit (or after Pages if practicality is deferred).
 - ChildPlans — 牌桌式启动门（已完成）:
   - [hlm_round_setup_table_ui_525519a5.plan.md](hlm_round_setup_table_ui_525519a5.plan.md)
 - ChildPlans — 最近完成:
+  - [hlm_mjpdf_alignment_execution_7866867f.plan.md](hlm_mjpdf_alignment_execution_7866867f.plan.md)
+    （**completed**；`track-mjpdf-official-alignment-execution`）
   - [hlm_mcr_full_official_alignment_a1b2c3d4.plan.md](hlm_mcr_full_official_alignment_a1b2c3d4.plan.md)
     （**completed** 2026-04-07；`track-mcr-full-official-alignment`）;
     [hlm_rule_code_trace_matrix.plan.md](hlm_rule_code_trace_matrix.plan.md)
@@ -376,7 +387,7 @@ practicality upgrade exit (or after Pages if practicality is deferred).
   `track-mcr-full-official-alignment`（**completed** 2026-04-07；trace matrix +
   doc-sync test + exclusion truth table；子计划
   [hlm_rule_code_trace_matrix.plan.md](hlm_rule_code_trace_matrix.plan.md)）
-- TrackTodoStatus: `completed`（`track-mcr-full-official-alignment`）
+- TrackTodoStatus: `completed`（`track-mjpdf-official-alignment-execution`）
 - Prior closed: `track-onboarding-shell-hig` →
   [hlm_onboarding_shell_merge_f9a1c8e0.plan.md](hlm_onboarding_shell_merge_f9a1c8e0.plan.md)
 - Prior closed: `track-five-principles-exact-scoring` →
@@ -393,11 +404,15 @@ practicality upgrade exit (or after Pages if practicality is deferred).
 
 - Owner: `project-owner`
 - OverallStatus: `in_progress`
-- ProgressPercent: `100`（`track-mcr-full-official-alignment` **completed**
-  2026-04-07；**82** = MCR registry row count / fan-coverage snapshot, not
-  incomplete %）
-- ActivePhase: `implementation`
+- ProgressPercent: `100`（MJ.pdf strict_81 alignment track completed）
+- ActivePhase: `maintenance`
 - Focus:
+  - `MJ.pdf strict_81 slice-1 delivered: canonical ids + quan_bu_kao pattern`
+    `support + timing semantics realigned; full gates pass for this slice.`
+    [hlm_mjpdf_alignment_execution_7866867f.plan.md](hlm_mjpdf_alignment_execution_7866867f.plan.md)
+  - `Closed 2026-04-07: MJ.pdf authoritative alignment execution (strict_81`
+    `canonical ids + quan_bu_kao pattern + timing semantics + full gates) —`
+    [hlm_mjpdf_alignment_execution_7866867f.plan.md](hlm_mjpdf_alignment_execution_7866867f.plan.md)
   - `Delivered 2026-04-03: onboarding shell merge — 三步向导（设定玩家入主壳`
     `v5.2.0）—`
     [hlm_onboarding_shell_merge_f9a1c8e0.plan.md](hlm_onboarding_shell_merge_f9a1c8e0.plan.md)
@@ -461,12 +476,13 @@ practicality upgrade exit (or after Pages if practicality is deferred).
   - `Onboarding v5.2.0 shipped (2026-04-03): manual spot-check wizard 1→2→3 +`
     `resize/breakpoints still recommended beyond automated smoke.`
 - NextActions:
+  - `MJ.pdf strict_81 alignment track closed; keep maintenance-only regression`
+    `hygiene for scoring rules/docs synchronization.`
   - `MCR alignment track closed (2026-04-07): trace matrix v1 +`
     `ruleTraceMatrix.docSync.test.js + writeRuleTraceMatrix.mjs; exclusion`
-    `truth table covers all EXCLUSION_MAP keys. **Deferred:** merging`
-    `SHANG_SAN_PAI / rankZone rows into QUAN_* — fanLexiconEntries documents`
-    `distinct semantics vs composition 全大; keep 82-row registry until product`
-    `redefines UX.`
+    `truth table covers all EXCLUSION_MAP keys. MJ.pdf strict_81 follow-up`
+    `completed in current track: canonical 81-row registry restored and`
+    `non-canonical split aliases removed from active scoring path.`
   - `Regression hygiene: run npm test + quality:complexity after any`
     `fanRegistry / detector / exclusionMap / matrix regen change.`
   - `Next optional slice: expand calculate-path assertions with context variants`

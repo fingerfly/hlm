@@ -16,8 +16,8 @@ export const HAND_STATES = Object.freeze(["menqian", "fulu"]);
 export const KONG_TYPES = Object.freeze(["none", "an", "ming", "bu"]);
 export const TIMING_EVENTS = Object.freeze([
   "none",
+  "miaoshou",
   "haidi",
-  "hedi",
   "gangshang",
   "qianggang"
 ]);

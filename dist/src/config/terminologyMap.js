@@ -10,6 +10,7 @@ export const TERMINOLOGY_MAP = Object.freeze({
   menqian: "门前清",
   fulu: "副露",
   gangshang: "杠上",
+  miaoshou: "妙手",
   haidi: "海底",
-  hedi: "河底"
+  qianggang: "抢杠"
 });

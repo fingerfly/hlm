@@ -16,14 +16,12 @@ test("addStructuredContextProblems reports enum and boolean violations", () => {
     {
       waitType: "bad_wait",
       specialPattern: "bad_pattern",
-      rankZone: "bad_zone",
       allSetsMelded: "yes"
     },
     problems
   );
   assert.equal(problems.some((p) => p.includes("waitType")), true);
   assert.equal(problems.some((p) => p.includes("specialPattern")), true);
-  assert.equal(problems.some((p) => p.includes("rankZone")), true);
   assert.equal(problems.some((p) => p.includes("allSetsMelded")), true);
 });
 

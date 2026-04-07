@@ -211,6 +211,11 @@ export const FEATURE_DETECTORS = Object.freeze([
     evidence: "feature=yiSeSiTongShun"
   },
   {
+    id: "YI_SE_SI_JIE_GAO",
+    detect: advancedDetect(({ features }) => features.yiSeSiJieGao),
+    evidence: "feature=yiSeSiJieGao"
+  },
+  {
     id: "YI_SE_SI_BU_GAO",
     detect: advancedDetect(({ features }) => features.yiSeSiBuGao),
     evidence: "feature=yiSeSiBuGao"
@@ -264,6 +269,11 @@ export const FEATURE_DETECTORS = Object.freeze([
     id: "SAN_SE_SHUANG_LONG_HUI",
     detect: advancedDetect(({ features }) => features.sanSeShuangLongHui),
     evidence: "feature=sanSeShuangLongHui"
+  },
+  {
+    id: "ZU_HE_LONG",
+    detect: advancedDetect(({ features }) => features.zuHeLong),
+    evidence: "feature=zuHeLong"
   },
   {
     id: "SI_GUI_YI",

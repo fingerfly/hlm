@@ -6,8 +6,11 @@
  * - Keeps `handState` focused on orchestration and required fields.
  */
 const WAIT_TYPES = Object.freeze(["edge", "closed", "single"]);
-const SPECIAL_PATTERNS = Object.freeze(["qixing_bukao", "mixed_straight"]);
-const RANK_ZONES = Object.freeze(["upper", "middle", "lower"]);
+const SPECIAL_PATTERNS = Object.freeze([
+  "qixing_bukao",
+  "quan_bu_kao",
+  "zu_he_long"
+]);
 
 function isNonNegativeInteger(value) {
   return Number.isInteger(value) && value >= 0;
@@ -67,8 +70,7 @@ export function addStructuredContextProblems(input = {}, problems = []) {
     input,
     [
       ["waitType", WAIT_TYPES],
-      ["specialPattern", SPECIAL_PATTERNS],
-      ["rankZone", RANK_ZONES]
+      ["specialPattern", SPECIAL_PATTERNS]
     ],
     problems
   );

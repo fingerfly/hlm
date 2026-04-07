@@ -696,8 +696,7 @@ test("detectFans supports structured special context fan ids", () => {
       handState: "fulu",
       kongType: "none",
       timingEvent: "none",
-      specialPattern: "qixing_bukao",
-      rankZone: "upper",
+      specialPattern: "quan_bu_kao",
       isChickenHand: true
     },
     {
@@ -711,17 +710,17 @@ test("detectFans supports structured special context fan ids", () => {
       ]
     }
   );
-  const expected = ["QI_XING_BU_KAO", "SHANG_SAN_PAI", "WU_FAN_HE"];
+  const expected = ["QUAN_BU_KAO", "WU_FAN_HE"];
   for (const id of expected) {
     assert.equal(result.some((fan) => fan.id === id), true);
   }
 
-  const mixedStraight = detectFans(
+  const zuHeLong = detectFans(
     {
       tiles: [
-        "1W", "2W", "3W",
-        "4T", "5T", "6T",
-        "7B", "8B", "9B",
+        "1W", "4W", "7W",
+        "2T", "5T", "8T",
+        "3B", "6B", "9B",
         "E", "E", "E",
         "R", "R"
       ],
@@ -729,21 +728,21 @@ test("detectFans supports structured special context fan ids", () => {
       handState: "fulu",
       kongType: "none",
       timingEvent: "none",
-      specialPattern: "mixed_straight"
+      advancedAuto: true
     },
     {
       pattern: "standard",
       meldGroups: [
         { type: "chow", tiles: ["1W", "2W", "3W"] },
-        { type: "chow", tiles: ["4T", "5T", "6T"] },
-        { type: "chow", tiles: ["7B", "8B", "9B"] },
+        { type: "chow", tiles: ["4W", "5W", "6W"] },
+        { type: "chow", tiles: ["7W", "8W", "9W"] },
         { type: "pung", tiles: ["E", "E", "E"] },
         { type: "pair", tiles: ["R", "R"] }
       ]
     }
   );
   assert.equal(
-    mixedStraight.some((fan) => fan.id === "SAN_SE_YI_TONG_SHUN"),
+    zuHeLong.some((fan) => fan.id === "ZU_HE_LONG"),
     true
   );
 });

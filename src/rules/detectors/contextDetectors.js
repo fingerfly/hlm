@@ -30,19 +30,24 @@ export const CONTEXT_DETECTORS = Object.freeze([
     evidence: "winType=zimo"
   },
   {
+    id: "QUAN_BU_KAO",
+    detect: ({ input }) => input.specialPattern === "quan_bu_kao",
+    evidence: "specialPattern=quan_bu_kao"
+  },
+  {
     id: "GANG_SHANG_HUA",
     detect: ({ input }) => input.timingEvent === "gangshang",
     evidence: "timingEvent=gangshang"
   },
   {
+    id: "MIAO_SHOU_HUI_CHUN",
+    detect: ({ input }) => input.timingEvent === "miaoshou",
+    evidence: "timingEvent=miaoshou"
+  },
+  {
     id: "HAI_DI_LAO_YUE",
     detect: ({ input }) => input.timingEvent === "haidi",
     evidence: "timingEvent=haidi"
-  },
-  {
-    id: "HE_DI_LAO_YU",
-    detect: ({ input }) => input.timingEvent === "hedi",
-    evidence: "timingEvent=hedi"
   },
   {
     id: "QIANG_GANG_HU",
@@ -141,26 +146,6 @@ export const CONTEXT_DETECTORS = Object.freeze([
     id: "QI_XING_BU_KAO",
     detect: ({ input }) => input.specialPattern === "qixing_bukao",
     evidence: "specialPattern=qixing_bukao"
-  },
-  {
-    id: "SHANG_SAN_PAI",
-    detect: ({ input }) => input.rankZone === "upper",
-    evidence: "rankZone=upper"
-  },
-  {
-    id: "ZHONG_SAN_PAI",
-    detect: ({ input }) => input.rankZone === "middle",
-    evidence: "rankZone=middle"
-  },
-  {
-    id: "XIA_SAN_PAI",
-    detect: ({ input }) => input.rankZone === "lower",
-    evidence: "rankZone=lower"
-  },
-  {
-    id: "SAN_SE_YI_TONG_SHUN",
-    detect: ({ input }) => input.specialPattern === "mixed_straight",
-    evidence: "specialPattern=mixed_straight"
   },
   {
     id: "WU_FAN_HE",

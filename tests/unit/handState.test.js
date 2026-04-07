@@ -33,14 +33,12 @@ test("validateHandInput rejects invalid structured context enum values", () => {
   const result = validateHandInput({
     ...base,
     waitType: "bad_wait",
-    specialPattern: "bad_pattern",
-    rankZone: "bad_zone"
+    specialPattern: "bad_pattern"
   });
   assert.equal(result.ok, false);
   assert.equal(result.code, "INVALID_INPUT");
   assert.equal(result.problems.some((p) => p.includes("waitType")), true);
   assert.equal(result.problems.some((p) => p.includes("specialPattern")), true);
-  assert.equal(result.problems.some((p) => p.includes("rankZone")), true);
 });
 
 test("validateHandInput rejects invalid structured context numeric values", () => {
@@ -77,8 +75,7 @@ test("validateHandInput accepts valid structured context payload", () => {
   const result = validateHandInput({
     ...base,
     waitType: "edge",
-    specialPattern: "mixed_straight",
-    rankZone: "upper",
+    specialPattern: "zu_he_long",
     flowerCount: 2,
     concealedPungCount: 3,
     kongSummary: { an: 2, ming: 1 },

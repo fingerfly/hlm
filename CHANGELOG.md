@@ -2,6 +2,42 @@
 
 All notable changes to this project will be documented in this file.
 
+## [5.2.16] - 2026-04-07
+
+### Added
+- MJ.pdf（WMO 2009）strict_81 对齐切片：
+  `QUAN_BU_KAO`（全不靠，12）、`ZU_HE_LONG`（组合龙，12）、
+  `YI_SE_SI_JIE_GAO`（一色四节高，48）、
+  `MIAO_SHOU_HUI_CHUN`（妙手回春，8）。
+- `winValidator` 增加 `quan_bu_kao` 特殊和牌型识别。
+- `handFeatures` / `featureDetectors` 增加 `ZU_HE_LONG` 与
+  `YI_SE_SI_JIE_GAO` 检测路径；`patternDetectors` 增加 `QUAN_BU_KAO`。
+
+### Changed
+- `MCR_TARGET_FAN_COUNT` 从 **82** 调整为 **81**（strict_81）。
+- 时机语义按 MJ.pdf 对齐：
+  - `MIAO_SHOU_HUI_CHUN` = 自摸牌墙最后一张。
+  - `HAI_DI_LAO_YUE` = 和他人打出的最后一张。
+- `TIMING_EVENTS` 与 UI 选项去除 `hedi`，新增 `miaoshou`；
+  `public/index.html` 时机项更新为「妙手回春 / 海底捞月 / 杠上开花 / 抢杠和」。
+- `structuredContextValidator` 移除旧 `rankZone` 校验，`specialPattern`
+  收敛为 `qixing_bukao` / `quan_bu_kao` / `zu_he_long`。
+- `fanLexiconEntries`、`terminologyMap`、`principleConstraints` 同步新口径。
+
+### Removed
+- 非 canonical 旧项从 active scoring path 移除：
+  `HE_DI_LAO_YU`、`SHANG_SAN_PAI`、`ZHONG_SAN_PAI`、`XIA_SAN_PAI`、
+  `SAN_SE_YI_TONG_SHUN`。
+
+### Tests
+- 新增/调整单测：
+  `winValidator.test.js`、`fanRegistry.test.js`、`fanDetectors.test.js`、
+  `handState.test.js`、`structuredContextValidator.test.js`。
+- 规则追溯文档重生成：`.cursor/plans/hlm_rule_code_trace_matrix.md`。
+- 门禁通过：
+  `npm run test:unit`、`npm run test:integration`、
+  `npm run test:regression`、`npm test`、`npm run quality:complexity`。
+
 ## [5.2.15] - 2026-04-07
 
 ### Added

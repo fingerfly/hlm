@@ -10,20 +10,14 @@ hooks.
 
 **Rule baseline:** `src/config/ruleBaseline.js` (`RULE_SOURCE`, `RULE_BASELINE`)
 
-**Last regenerated:** 2026-04-07 (v5.2.15; registry / detector rows **82**;
+**Last regenerated:** 2026-04-07 (v5.2.15; registry / detector rows **81**;
 `EXCLUSION_MAP` keys **33**)
 
-## 82 registry rows vs official 81 番种
+## 81 registry rows (MJ.pdf strict baseline)
 
-Official MCR lists **81** titled 番种. This codebase keeps **82** registry rows
-because composition **全大 / 全中 / 全小** (`QUAN_DA`, `QUAN_ZHONG`,
-`QUAN_XIAO`, `featureDetectors.js`) coexist with **序数上/中/下档和**
-(`SHANG_SAN_PAI`, `ZHONG_SAN_PAI`, `XIA_SAN_PAI`, `contextDetectors.js`,
-`rankZone=upper|middle|lower`) — different semantics; `zhName` matches
-`fanLexiconEntries` so UI stays unambiguous. Only one variant should win per
-hand; both ids remain for scoring traceability.
-`MCR_TARGET_FAN_COUNT`, `RULE_SOURCE.registryFanCount`, and this
-matrix use **82**.
+This matrix follows the strict MJ.pdf canonical baseline with **81** registry
+rows and detector rows. Non-canonical split aliases were removed from the
+active registry and detector catalog.
 
 ## Column legend
 
@@ -70,7 +64,7 @@ Defined in `src/rules/principleConstraints.js`:
 
 | # | Members |
 |---|---------|
-| 1 | GANG_SHANG_HUA, HAI_DI_LAO_YUE, HE_DI_LAO_YU |
+| 1 | GANG_SHANG_HUA, MIAO_SHOU_HUI_CHUN, HAI_DI_LAO_YUE |
 | 2 | QING_YI_SE, HUN_YI_SE |
 | 3 | DA_SI_XI, XIAO_SI_XI |
 | 4 | DA_SAN_YUAN, XIAO_SAN_YUAN |
@@ -79,16 +73,17 @@ Defined in `src/rules/principleConstraints.js`:
 
 **Maintenance — registry:** run `node scripts/writeRuleTraceMatrix.mjs` from
 `hlm/` after `fanRegistry.js` / detector edits; set **Last regenerated** when
-the date changes. Expect **82** rows (`FAN_CATALOG.length`).
+the date changes. Expect **81** rows (`FAN_CATALOG.length`).
 
 <!-- REGISTRY_TABLE_BEGIN -->
 | Registry id | zh | 番 | Detector cat | Detector file | Feature (`handFeatures.js`) | Evidence |
 |---|---:|---:|---|---|---|---|
 | MEN_QIAN_QING | 门前清 | 2 | context | contextDetectors.js | — | handState=menqian |
 | ZI_MO | 自摸 | 1 | context | contextDetectors.js | — | winType=zimo |
+| QUAN_BU_KAO | 全不靠 | 12 | context | contextDetectors.js | — | specialPattern=quan_bu_kao |
 | GANG_SHANG_HUA | 杠上开花 | 8 | context | contextDetectors.js | — | timingEvent=gangshang |
+| MIAO_SHOU_HUI_CHUN | 妙手回春 | 8 | context | contextDetectors.js | — | timingEvent=miaoshou |
 | HAI_DI_LAO_YUE | 海底捞月 | 8 | context | contextDetectors.js | — | timingEvent=haidi |
-| HE_DI_LAO_YU | 河底捞鱼 | 8 | context | contextDetectors.js | — | timingEvent=hedi |
 | QIANG_GANG_HU | 抢杠和 | 8 | context | contextDetectors.js | — | timingEvent=qianggang |
 | AN_GANG | 暗杠 | 2 | context | contextDetectors.js | — | kongSummary.an>=1 |
 | MING_GANG | 明杠 | 1 | context | contextDetectors.js | — | kongSummary.ming>=1 |
@@ -107,11 +102,8 @@ the date changes. Expect **82** rows (`FAN_CATALOG.length`).
 | DAN_DIAO_JIANG | 单钓将 | 1 | context | contextDetectors.js | — | waitType=single |
 | HUA_PAI | 花牌 | 1 | context | contextDetectors.js | — | flowerCount>0 |
 | QI_XING_BU_KAO | 七星不靠 | 24 | context | contextDetectors.js | — | specialPattern=qixing_bukao |
-| SHANG_SAN_PAI | 序数上档和 | 24 | context | contextDetectors.js | — | rankZone=upper |
-| ZHONG_SAN_PAI | 序数中档和 | 24 | context | contextDetectors.js | — | rankZone=middle |
-| XIA_SAN_PAI | 序数下档和 | 24 | context | contextDetectors.js | — | rankZone=lower |
-| SAN_SE_YI_TONG_SHUN | 三色一通顺 | 8 | context | contextDetectors.js | — | specialPattern=mixed_straight |
 | WU_FAN_HE | 无番和 | 8 | context | contextDetectors.js | — | isChickenHand=true |
+| QUAN_BU_KAO | 全不靠 | 12 | context | contextDetectors.js | — | pattern=quan_bu_kao |
 | QI_DUI | 七对 | 24 | pattern | patternDetectors.js | — | pattern=seven_pairs |
 | SHI_SAN_YAO | 十三幺 | 88 | pattern | patternDetectors.js | — | pattern=thirteen_orphans |
 | QING_YI_SE | 清一色 | 24 | feature | featureDetectors.js | pureOneSuit | feature=pureOneSuit |
@@ -154,6 +146,7 @@ the date changes. Expect **82** rows (`FAN_CATALOG.length`).
 | QI_LIAN_DUI | 连七对 | 88 | feature | featureDetectors.js | qiLianDui | feature=qiLianDui |
 | YI_SE_SHUANG_LONG_HUI | 一色双龙会 | 64 | feature | featureDetectors.js | yiSeShuangLongHui | feature=yiSeShuangLongHui |
 | YI_SE_SI_TONG_SHUN | 一色四同顺 | 48 | feature | featureDetectors.js | yiSeSiTongShun | feature=yiSeSiTongShun |
+| YI_SE_SI_JIE_GAO | 一色四节高 | 48 | feature | featureDetectors.js | yiSeSiJieGao | feature=yiSeSiJieGao |
 | YI_SE_SI_BU_GAO | 一色四步高 | 32 | feature | featureDetectors.js | yiSeSiBuGao | feature=yiSeSiBuGao |
 | QUAN_SHUANG_KE | 全双刻 | 24 | feature | featureDetectors.js | quanShuangKe | feature=quanShuangKe |
 | YI_SE_SAN_TONG_SHUN | 一色三同顺 | 24 | feature | featureDetectors.js | yiSeSanTongShun | feature=yiSeSanTongShun |
@@ -165,6 +158,7 @@ the date changes. Expect **82** rows (`FAN_CATALOG.length`).
 | JIAN_KE | 箭刻 | 2 | feature | featureDetectors.js | jianKe | feature=jianKe |
 | YAO_JIU_KE | 幺九刻 | 1 | feature | featureDetectors.js | yaoJiuKe | feature=yaoJiuKe |
 | SAN_SE_SHUANG_LONG_HUI | 三色双龙会 | 16 | feature | featureDetectors.js | sanSeShuangLongHui | feature=sanSeShuangLongHui |
+| ZU_HE_LONG | 组合龙 | 12 | feature | featureDetectors.js | zuHeLong | feature=zuHeLong |
 | SI_GUI_YI | 四归一 | 2 | feature | featureDetectors.js | siGuiYi | feature=siGuiYi |
 <!-- REGISTRY_TABLE_END -->
 

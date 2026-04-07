@@ -38,6 +38,18 @@ test("validateWin returns thirteen_orphans pattern", () => {
   assert.equal(result.meldGroups[0].type, "orphans");
 });
 
+test("validateWin returns quan_bu_kao pattern", () => {
+  const tiles = [
+    "1W", "4W", "7W",
+    "2T", "5T", "8T",
+    "3B", "6B", "9B",
+    "E", "S", "Wn", "N", "R"
+  ];
+  const result = validateWin(tiles);
+  assert.equal(result.isWin, true);
+  assert.equal(result.pattern, "quan_bu_kao");
+});
+
 test("validateWin rejects non-winning hand", () => {
   const tiles = ["1W", "1W", "2W", "2W", "3W", "3W", "4T", "4T", "5T", "5T", "6B", "6B", "R", "G"];
   const result = validateWin(tiles);

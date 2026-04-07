@@ -7,6 +7,11 @@
  */
 export const PATTERN_DETECTORS = Object.freeze([
   {
+    id: "QUAN_BU_KAO",
+    detect: ({ win }) => win.pattern === "quan_bu_kao",
+    evidence: "pattern=quan_bu_kao"
+  },
+  {
     id: "QI_DUI",
     detect: ({ win }) => win.pattern === "seven_pairs",
     evidence: "pattern=seven_pairs"

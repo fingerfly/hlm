@@ -10,9 +10,10 @@ export const FAN_REGISTRY = Object.freeze([
   { id: "ZI_MO", fan: 1, zhName: "自摸" },
   { id: "QI_DUI", fan: 24, zhName: "七对" },
   { id: "SHI_SAN_YAO", fan: 88, zhName: "十三幺" },
+  { id: "QUAN_BU_KAO", fan: 12, zhName: "全不靠" },
   { id: "GANG_SHANG_HUA", fan: 8, zhName: "杠上开花" },
+  { id: "MIAO_SHOU_HUI_CHUN", fan: 8, zhName: "妙手回春" },
   { id: "HAI_DI_LAO_YUE", fan: 8, zhName: "海底捞月" },
-  { id: "HE_DI_LAO_YU", fan: 8, zhName: "河底捞鱼" },
   { id: "QING_YI_SE", fan: 24, zhName: "清一色" },
   { id: "HUN_YI_SE", fan: 6, zhName: "混一色" },
   { id: "DUAN_YAO", fan: 2, zhName: "断幺" },
@@ -57,13 +58,11 @@ export const FAN_REGISTRY = Object.freeze([
   { id: "YI_SE_SI_BU_GAO", fan: 32, zhName: "一色四步高" },
   { id: "SAN_GANG", fan: 32, zhName: "三杠" },
   { id: "QI_XING_BU_KAO", fan: 24, zhName: "七星不靠" },
+  { id: "ZU_HE_LONG", fan: 12, zhName: "组合龙" },
   { id: "QUAN_SHUANG_KE", fan: 24, zhName: "全双刻" },
   { id: "YI_SE_SAN_TONG_SHUN", fan: 24, zhName: "一色三同顺" },
   { id: "YI_SE_SAN_JIE_GAO", fan: 24, zhName: "一色三节高" },
-  { id: "SHANG_SAN_PAI", fan: 24, zhName: "序数上档和" },
-  { id: "ZHONG_SAN_PAI", fan: 24, zhName: "序数中档和" },
-  { id: "XIA_SAN_PAI", fan: 24, zhName: "序数下档和" },
-  { id: "SAN_SE_YI_TONG_SHUN", fan: 8, zhName: "三色一通顺" },
+  { id: "YI_SE_SI_JIE_GAO", fan: 48, zhName: "一色四节高" },
   { id: "TUI_BU_DAO", fan: 8, zhName: "推不倒" },
   { id: "SAN_SE_SAN_JIE_GAO", fan: 8, zhName: "三色三节高" },
   { id: "WU_FAN_HE", fan: 8, zhName: "无番和" },
@@ -90,7 +89,7 @@ export const FAN_REGISTRY = Object.freeze([
   { id: "SAN_SE_SHUANG_LONG_HUI", fan: 16, zhName: "三色双龙会" }
 ]);
 
-export const MCR_TARGET_FAN_COUNT = 82;
+export const MCR_TARGET_FAN_COUNT = 81;
 
 export const FAN_REGISTRY_MAP = Object.freeze(
   FAN_REGISTRY.reduce((map, item) => {

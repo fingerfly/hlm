@@ -422,6 +422,24 @@ function detectPureFourShiftedChows(chowStartsBySuit) {
   return false;
 }
 
+function detectPureFourShiftedPungs(pungRanksBySuit) {
+  for (const suit of SUITS) {
+    const ranks = [...new Set(pungRanksBySuit[suit])].sort((a, b) => a - b);
+    if (ranks.length < 4) continue;
+    for (let i = 0; i + 3 < ranks.length; i += 1) {
+      const seq = ranks.slice(i, i + 4);
+      if (
+        seq[0] + 1 === seq[1]
+        && seq[1] + 1 === seq[2]
+        && seq[2] + 1 === seq[3]
+      ) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
 function detectPureShiftedPungs(pungRanksBySuit) {
   for (const suit of SUITS) {
     const ranks = [...new Set(pungRanksBySuit[suit])].sort((a, b) => a - b);
@@ -558,6 +576,26 @@ function detectThreeColorDoubleDragon(win = {}) {
   return true;
 }
 
+function detectZuHeLong(tiles) {
+  const perms = [
+    ["W", "T", "B"],
+    ["W", "B", "T"],
+    ["T", "W", "B"],
+    ["T", "B", "W"],
+    ["B", "W", "T"],
+    ["B", "T", "W"]
+  ];
+  for (const [s147, s258, s369] of perms) {
+    const required = [
+      `1${s147}`, `4${s147}`, `7${s147}`,
+      `2${s258}`, `5${s258}`, `8${s258}`,
+      `3${s369}`, `6${s369}`, `9${s369}`
+    ];
+    if (required.every((tile) => tiles.includes(tile))) return true;
+  }
+  return false;
+}
+
 const SI_GUI_YI_MELD_TYPES = new Set(["chow", "pung", "pair"]);
 
 /**
@@ -641,6 +679,7 @@ export function extractHandFeatures(input, win = {}) {
     qiLianDui: detectSevenShiftedPairs(tiles, win.pattern),
     yiSeShuangLongHui: detectPureDoubleDragon(win),
     yiSeSiTongShun: detectPureFourSameChow(chowStartsBySuit),
+    yiSeSiJieGao: detectPureFourShiftedPungs(pungRanksBySuit),
     yiSeSiBuGao: detectPureFourShiftedChows(chowStartsBySuit),
     quanShuangKe:
       allSimples
@@ -660,6 +699,7 @@ export function extractHandFeatures(input, win = {}) {
     jianKe: detectAnyDragonPung(win),
     yaoJiuKe: detectTerminalHonorPung(win),
     sanSeShuangLongHui: detectThreeColorDoubleDragon(win),
+    zuHeLong: detectZuHeLong(tiles),
     daSanFeng: hm.windPungs >= 3,
     shuangJianKe: hm.dragonPungs >= 2,
     shuangTongKe: detectSameRankPungCounts(rankToPungSuits, 2),
