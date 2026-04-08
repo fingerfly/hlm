@@ -19,6 +19,7 @@
   padding: 14px;
   max-height: 84vh;
   overflow: auto;
+  overflow-x: hidden;
 }
 
 .sheet h3 {
@@ -287,7 +288,7 @@
 }
 
 .help-sheet {
-  width: min(520px, calc(100vw - 24px));
-  max-height: min(72vh, 560px);
+  width: min(820px, calc(100vw - 24px));
+  max-height: min(86vh, 780px);
   border-radius: 16px;
 }

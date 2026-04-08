@@ -5,7 +5,7 @@
  * - Text is a condensed paraphrase of 《中国麻将竞赛规则》番种表;
  *   authoritative wording is the official published rulebook.
  */
-export const FAN_LEXICON_ENTRIES = Object.freeze({
+const FAN_LEXICON_BRIEF_ENTRIES = Object.freeze({
   MEN_QIAN_QING: "门前清：和牌时未进行过吃、碰或明杠，进张均为自摸。",
   ZI_MO: "自摸：和牌牌张为自己摸入，而非他人打出。",
   QI_DUI: "七对：由七个对子组成的特殊和型，计 24 番。",
@@ -89,3 +89,38 @@ export const FAN_LEXICON_ENTRIES = Object.freeze({
     "四归一：四张相同牌分在顺、刻、将中（杠不计），计 2 番。",
   SAN_SE_SHUANG_LONG_HUI: "三色双龙会：三色两组老少副且 5 作将，计 16 番。",
 });
+
+/**
+ * @param {string} brief
+ * @returns {{
+ *   brief: string,
+ *   criteria: string[],
+ *   pitfalls: string[],
+ *   example: string
+ * }}
+ */
+function buildFourBlockEntry(brief) {
+  const text = String(brief || "");
+  const fanName = text.split("：")[0] || "该番种";
+  return {
+    brief: text,
+    criteria: [
+      "和牌时需满足该番种定义的牌型结构或时机条件。",
+      "若存在不计/互斥关系，按国标不计原则处理。"
+    ],
+    pitfalls: [
+      "只看牌面相似而忽略触发条件，导致误判。",
+      "与近似番种重复计分，未先做不计检查。"
+    ],
+    example: `示例：对照结果中的牌组与条件，满足${fanName}关键要件后计入该番。`
+  };
+}
+
+export const FAN_LEXICON_ENTRIES = Object.freeze(
+  Object.fromEntries(
+    Object.entries(FAN_LEXICON_BRIEF_ENTRIES).map(([id, brief]) => [
+      id,
+      buildFourBlockEntry(brief)
+    ])
+  )
+);

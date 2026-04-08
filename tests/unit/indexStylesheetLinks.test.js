@@ -105,6 +105,17 @@ test("help article template matches three-step wizard copy", () => {
   assert.match(html, /重置和牌条件/);
 });
 
+test("help template includes four-block fan explanation headers", () => {
+  const css = readFileSync(
+    resolve(import.meta.dirname, "../../public/styles-components.css"),
+    "utf8"
+  );
+  assert.match(css, /\.help-fan-block/);
+  assert.match(css, /\.help-fan-subtitle/);
+  assert.match(css, /\.help-fan-list/);
+  assert.match(css, /\.help-content code/);
+});
+
 test("styles-responsive includes desktop two-pane shell rules", () => {
   const css = readFileSync(responsiveCssPath, "utf8");
   assert.match(css, /@media\s*\(min-width:\s*1024px\)/);
@@ -132,6 +143,9 @@ test("styles-modals hides desktop context controls by default", () => {
   assert.match(css, /\.context-control-desktop/);
   assert.match(css, /\.context-number-input/);
   assert.match(css, /\.context-select-input/);
+  assert.match(css, /\.help-sheet/);
+  assert.match(css, /max-height:\s*min\(86vh,\s*780px\)/);
+  assert.match(css, /overflow-x:\s*hidden/);
 });
 
 test("index.html wraps score rule block in collapsible details", () => {

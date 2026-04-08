@@ -97,7 +97,7 @@
     top: calc(100% + 8px);
     right: 0;
     z-index: 60;
-    width: min(380px, calc(100vw - 32px));
+    width: min(560px, calc(100vw - 32px));
   }
 
   .help-popover-panel {
@@ -114,7 +114,7 @@
 
   .help-popover .help-content {
     padding: 0 14px 14px;
-    max-height: min(70vh, 420px);
+    max-height: min(78vh, 680px);
     overflow-y: auto;
   }
 

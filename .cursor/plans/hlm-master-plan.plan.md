@@ -77,6 +77,12 @@ todos:
       中文帮助详版（程序目的、使用步骤、番种释义；复用 lexicon；单模板双端）。
       Child: hlm_help_zh_expansion_d3a197ba.plan.md
     status: completed
+  - id: track-help-fan-four-block-upgrade
+    content: >
+      帮助番种释义升级为四段（定义/判定要点/易错/例子），并修复移动端横向滚动、
+      提升桌面帮助空间利用。Child:
+      hlm_help_fan_4block_upgrade_7088d9a3.plan.md
+    status: completed
   - id: track-round-setup-four-player-settlement
     content: >
       启动先定义四家（座位/起始分/庄家）并在结果窗体展示四家结算
@@ -229,6 +235,8 @@ not present in current workspace)
   [hlm_desktop_context_controls_dual_ui.plan.md](hlm_desktop_context_controls_dual_ui.plan.md).
 - 中文帮助详版（**completed**）:
   [hlm_help_zh_expansion_d3a197ba.plan.md](hlm_help_zh_expansion_d3a197ba.plan.md)
+- Help 番种四段升级（**completed**）:
+  [hlm_help_fan_4block_upgrade_7088d9a3.plan.md](hlm_help_fan_4block_upgrade_7088d9a3.plan.md)
 - 四家对局初始化与结果结算（**completed**）:
   [hlm_round_setup_four_player_settlement_c30c89d1.plan.md](hlm_round_setup_four_player_settlement_c30c89d1.plan.md)
 - 启动门牌桌式四风位 UI（**completed** 2026-04-03）:
@@ -371,6 +379,8 @@ practicality upgrade exit (or after Pages if practicality is deferred).
 - ChildPlans — 牌桌式启动门（已完成）:
   - [hlm_round_setup_table_ui_525519a5.plan.md](hlm_round_setup_table_ui_525519a5.plan.md)
 - ChildPlans — 最近完成:
+  - [hlm_help_fan_4block_upgrade_7088d9a3.plan.md](hlm_help_fan_4block_upgrade_7088d9a3.plan.md)
+    （**completed** 2026-04-08；`track-help-fan-four-block-upgrade`）
   - [hlm_mjpdf_alignment_execution_7866867f.plan.md](hlm_mjpdf_alignment_execution_7866867f.plan.md)
     （**completed**；`track-mjpdf-official-alignment-execution`）
   - [hlm_mcr_full_official_alignment_a1b2c3d4.plan.md](hlm_mcr_full_official_alignment_a1b2c3d4.plan.md)
@@ -428,6 +438,10 @@ practicality upgrade exit (or after Pages if practicality is deferred).
     `+ roundSetupGateDom.test.js —`
     [hlm_round_setup_table_ui_525519a5.plan.md](hlm_round_setup_table_ui_525519a5.plan.md)
   - `Primary: run manual desktop matrix (Chrome/Safari) after help expansion.`
+  - `Delivered 2026-04-08: help fan four-block upgrade — mobile help overflow-x`
+    `fixed, desktop help surface enlarged, lexicon rendered as 定义/判定要点/`
+    `易错/例子 with compatibility fallback —`
+    [hlm_help_fan_4block_upgrade_7088d9a3.plan.md](hlm_help_fan_4block_upgrade_7088d9a3.plan.md)
   - `Regression: inline picker + context form + reset after dual-UI; manual`
     `keyboard through select/number on desktop host.`
   - `Desktop shell: align-content:start fix in v4.10.0; user confirmed.`
@@ -494,6 +508,10 @@ practicality upgrade exit (or after Pages if practicality is deferred).
     `splash skip, calculate hint, score bounds, details score-rule block,`
     `Escape/focus polish; see hlm_ux_audit_followup_5d8c2f1a.plan.md.`
 - ValidationEvidence:
+  - `2026-04-08: help four-block upgrade — FAN_LEXICON_ENTRIES four-block`
+    `schema + normalize fallback; help content renders 定义/判定要点/易错/例子;`
+    `mobile overflow-x removed and desktop help dimensions increased; gates`
+    `pass: npm test + quality:complexity + cloc.`
   - `2026-04-08: release hygiene — RULE_SOURCE.registryFanCount 81,`
     `QUAN_BU_KAO single catalog row (pattern + specialPattern), matrix regen,`
     `npm test + quality:complexity pass.`
@@ -811,9 +829,10 @@ practicality upgrade exit (or after Pages if practicality is deferred).
     now orchestrates principle steps only. Added principle-layer unit tests for
     these rules. Re-ran full gates:
     unit/regression/integration/complexity/full all pass.`
-- LastUpdated: `2026-04-03` (v5.2.2 result modal gateFan line; prior 2026-04-04
-  v5.2.1 help + test; 2026-04-03 onboarding v5.2.0)
+- LastUpdated: `2026-04-08` (help fan four-block upgrade closeout; full gates
+  pass and master linkage synced)
 - TrackCloseout:
+  - `track-help-fan-four-block-upgrade completed on 2026-04-08.`
   - `track-onboarding-shell-hig completed on 2026-04-03 (v5.2.0).`
   - `track-five-principles-exact-scoring completed on 2026-03-22.`
 

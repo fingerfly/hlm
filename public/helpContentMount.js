@@ -20,6 +20,35 @@ export function matchesFanSearchQuery(displayName, rawQuery) {
   return displayName.toLowerCase().includes(q);
 }
 
+/**
+ * Normalize lexicon payload to four help blocks.
+ *
+ * @param {string|object} entry
+ * @returns {{
+ *   brief: string,
+ *   criteria: string[],
+ *   pitfalls: string[],
+ *   example: string
+ * }}
+ */
+export function normalizeFanLexiconEntry(entry) {
+  if (entry && typeof entry === "object") {
+    return {
+      brief: String(entry.brief || ""),
+      criteria: Array.isArray(entry.criteria) ? entry.criteria : [],
+      pitfalls: Array.isArray(entry.pitfalls) ? entry.pitfalls : [],
+      example: String(entry.example || "")
+    };
+  }
+  const text = String(entry || "");
+  return {
+    brief: text,
+    criteria: ["按当前规则口径满足该番定义，并结合和牌条件判定。"],
+    pitfalls: ["常见误判：忽略不计关系或将相似番种重复计入。"],
+    example: "示例：满足该番关键结构后和牌，即可计入该番。"
+  };
+}
+
 function getHelpHosts() {
   const pop = document.querySelector("#helpPopover .help-content");
   const modal = document.querySelector("#helpModal .help-content");
@@ -49,17 +78,45 @@ function sortFanEntries(entries) {
 function appendFanDetails(region, anchorSuffix) {
   const frag = document.createDocumentFragment();
   const entries = sortFanEntries(Object.entries(FAN_LEXICON_ENTRIES));
-  for (const [id, text] of entries) {
+  for (const [id, raw] of entries) {
+    const lex = normalizeFanLexiconEntry(raw);
     const details = document.createElement("details");
     details.className = "help-fan-entry";
     details.id = `fan-${id}-${anchorSuffix}`;
     details.dataset.fanRegistryId = id;
     const summary = document.createElement("summary");
     summary.textContent = getFanDisplayName(id) || id;
-    const para = document.createElement("p");
-    para.className = "summary-text";
-    para.textContent = text;
-    details.append(summary, para);
+    const block = document.createElement("div");
+    block.className = "help-fan-block";
+    const sections = [
+      ["定义", [lex.brief]],
+      ["判定要点", lex.criteria],
+      ["易错", lex.pitfalls],
+      ["例子", [lex.example]]
+    ];
+    for (const [title, lines] of sections) {
+      const allEmpty = lines.every((s) => !String(s || "").trim());
+      if (!lines.length || allEmpty) continue;
+      const h = document.createElement("h5");
+      h.className = "help-fan-subtitle";
+      h.textContent = title;
+      if (title === "判定要点" || title === "易错") {
+        const ul = document.createElement("ul");
+        ul.className = "help-fan-list";
+        for (const line of lines) {
+          const li = document.createElement("li");
+          li.textContent = line;
+          ul.appendChild(li);
+        }
+        block.append(h, ul);
+      } else {
+        const p = document.createElement("p");
+        p.className = "summary-text";
+        p.textContent = lines[0];
+        block.append(h, p);
+      }
+    }
+    details.append(summary, block);
     frag.append(details);
   }
   region.append(frag);
