@@ -37,3 +37,15 @@ test("every fan entry has dedicated non-generic example copy", () => {
     assert.equal(entry.example.startsWith("示例："), true);
   }
 });
+
+test("every fan entry has fan-specific criteria and pitfalls", () => {
+  for (const id of Object.keys(FAN_LEXICON_ENTRIES)) {
+    const entry = FAN_LEXICON_ENTRIES[id];
+    assert.equal(entry.criteria.length >= 1, true);
+    assert.equal(entry.pitfalls.length >= 1, true);
+    assert.equal(entry.criteria.join("").includes("该番种定义"), false);
+    assert.equal(entry.pitfalls.join("").includes("该番种定义"), false);
+    assert.equal(entry.criteria.join("").includes("请按"), false);
+    assert.equal(entry.pitfalls.join("").includes("避免把"), false);
+  }
+});

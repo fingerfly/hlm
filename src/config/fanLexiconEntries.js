@@ -174,6 +174,333 @@ const EXAMPLE_BY_FAN_ID = Object.freeze({
   SAN_SE_SHUANG_LONG_HUI: "示例：三色双龙结构齐全并以5作将后和牌。"
 });
 
+const DETAIL_BY_FAN_ID = Object.freeze({
+  MEN_QIAN_QING: {
+    criteria: ["和牌前未吃、碰、明杠。", "门前状态保持到和牌时点。"],
+    pitfalls: ["做过副露后仍误记门前清。", "把门前清与自摸当成同一番。"]
+  },
+  ZI_MO: {
+    criteria: ["和牌张必须由自己摸入。", "不是他家打出的点和。"],
+    pitfalls: ["点和误标为自摸。", "先点和后又勾选自摸条件。"]
+  },
+  QI_DUI: {
+    criteria: ["牌型为七个对子。", "不能按四面子一将计型。"],
+    pitfalls: ["出现刻子却仍按七对计。", "对子不足七组仍误判。"]
+  },
+  SHI_SAN_YAO: {
+    criteria: ["13种幺九字齐全，另有一张作将。", "结构必须是十三幺专属型。"],
+    pitfalls: ["缺少某个幺九字仍误算。", "把普通混幺九误当十三幺。"]
+  },
+  QUAN_BU_KAO: {
+    criteria: ["单张之间不连不靠。", "满足全不靠规定牌张结构。"],
+    pitfalls: ["有可连顺关系仍记全不靠。", "把七星不靠与全不靠混用。"]
+  },
+  GANG_SHANG_HUA: {
+    criteria: ["在开杠补牌阶段和牌。", "和牌张是补牌而非普通摸牌。"],
+    pitfalls: ["普通自摸误记杠上开花。", "非补牌时点和仍误记。"]
+  },
+  MIAO_SHOU_HUI_CHUN: {
+    criteria: ["和牌张为牌墙最后一张自摸。", "必须是自摸末张。"],
+    pitfalls: ["最后一张点和误记妙手。", "末张判定时点错误。"]
+  },
+  HAI_DI_LAO_YUE: {
+    criteria: ["和牌张为别人打出的最后一张。", "属于点和末张场景。"],
+    pitfalls: ["最后一张自摸误记海底。", "非末张点和误算海底。"]
+  },
+  QING_YI_SE: {
+    criteria: ["全手仅一种序数花色。", "不得夹入字牌或他色序数牌。"],
+    pitfalls: ["混入字牌仍按清一色。", "跨两门序数牌未发现。"]
+  },
+  HUN_YI_SE: {
+    criteria: ["一种序数花色+字牌。", "不能出现第二种序数花色。"],
+    pitfalls: ["两门序数牌仍误计混一色。", "无字牌时与清一色混淆。"]
+  },
+  DUAN_YAO: {
+    criteria: ["全手无1、9和字牌。", "所有面子与将均为中张。"],
+    pitfalls: ["含1/9仍误记断幺。", "含风箭牌未剔除。"]
+  },
+  PENG_PENG_HU: {
+    criteria: ["四组面子都为刻子或杠。", "不得含顺子面子。"],
+    pitfalls: ["有顺子却误记碰碰和。", "把双同刻直接当碰碰和。"]
+  },
+  HUN_YAO_JIU: {
+    criteria: ["由幺九牌与字牌构成。", "整体结构符合混幺九定义。"],
+    pitfalls: ["掺入中张仍误算。", "与全带幺概念混淆。"]
+  },
+  ZI_YI_SE: {
+    criteria: ["全手均为字牌。", "不得出现序数牌。"],
+    pitfalls: ["出现序数牌仍误算字一色。", "和混一色混为一谈。"]
+  },
+  QING_YAO_JIU: {
+    criteria: ["全为1或9序数牌。", "不得含字牌与中张。"],
+    pitfalls: ["出现中张仍误算。", "含字牌误判为清幺九。"]
+  },
+  QING_LONG: {
+    criteria: ["同色含123、456、789三顺。", "龙形三顺须同一花色。"],
+    pitfalls: ["跨花色三顺误记清龙。", "缺一段顺子仍误算。"]
+  },
+  PING_HU: {
+    criteria: ["四顺子+一将的平和结构。", "听型需满足平和要求。"],
+    pitfalls: ["将位或听型不符仍误算。", "含刻子后仍记平和。"]
+  },
+  YI_BAN_GAO: {
+    criteria: ["两组完全相同顺子。", "同花色同起点。"],
+    pitfalls: ["只同点不同花误算。", "顺子重叠识别错误。"]
+  },
+  SAN_SE_SAN_TONG_SHUN: {
+    criteria: ["三色各有一组同数顺子。", "万条筒三门齐备。"],
+    pitfalls: ["只有两色却误记三色。", "顺子起点不一致。"]
+  },
+  MEN_FENG_KE: {
+    criteria: ["自己门风牌成刻/杠。", "门风须与座位一致。"],
+    pitfalls: ["把圈风当门风。", "仅对子误记门风刻。"]
+  },
+  QUAN_FENG_KE: {
+    criteria: ["圈风牌成刻/杠。", "圈风须与当前局风一致。"],
+    pitfalls: ["把门风刻误记圈风刻。", "圈风未更新导致误判。"]
+  },
+  DA_SI_XI: {
+    criteria: ["东南西北四风全刻/杠。", "四风都需成组。"],
+    pitfalls: ["缺一风仍误算大四喜。", "小四喜误记为大四喜。"]
+  },
+  XIAO_SI_XI: {
+    criteria: ["三风刻/杠+一风将。", "四风均出现。"],
+    pitfalls: ["将牌不是风牌仍误记。", "仅两风刻时误算。"]
+  },
+  DA_SAN_YUAN: {
+    criteria: ["中发白三箭全刻/杠。", "三箭都需成组。"],
+    pitfalls: ["少一箭刻仍误算。", "小三元误记大三元。"]
+  },
+  XIAO_SAN_YUAN: {
+    criteria: ["两箭刻/杠+一箭将。", "中发白需三者齐现。"],
+    pitfalls: ["将牌非箭牌仍误记。", "三箭全刻时应转大三元。"]
+  },
+  HUA_LONG: {
+    criteria: ["三色拼成123/456/789龙形。", "三段顺子连贯覆盖1-9。"],
+    pitfalls: ["顺子断档仍误算。", "同色龙误记花龙。"]
+  },
+  XI_XIANG_FENG: {
+    criteria: ["两色两组同数顺子。", "顺子起点一致。"],
+    pitfalls: ["仅同花不同数误记。", "把一般高混入喜相逢。"]
+  },
+  LIAN_LIU: {
+    criteria: ["同色两顺相连六张。", "如123与456同色。"],
+    pitfalls: ["跨色相连误记。", "非连续两顺仍误算。"]
+  },
+  LAO_SHAO_FU: {
+    criteria: ["同色同时含123与789。", "需同花色成对出现。"],
+    pitfalls: ["跨色老少副误判。", "缺一端顺子仍误算。"]
+  },
+  QUE_YI_MEN: {
+    criteria: ["万条筒缺一门。", "其余两门可正常组合。"],
+    pitfalls: ["三门齐全仍误记缺一门。", "把无字错当缺一门。"]
+  },
+  WU_ZI: {
+    criteria: ["和牌中没有字牌。", "仅万条筒参与。"],
+    pitfalls: ["出现风箭仍误算无字。", "把缺一门误记无字。"]
+  },
+  SAN_SE_SAN_BU_GAO: {
+    criteria: ["三色顺子依次步进。", "三组起点按+1递增。"],
+    pitfalls: ["步进不连续仍误算。", "同色步高误记三色步高。"]
+  },
+  YI_SE_SAN_BU_GAO: {
+    criteria: ["同色三组顺子步进。", "起点按+1递增。"],
+    pitfalls: ["跨色顺子误算一色步高。", "步进跨度错误。"]
+  },
+  DA_YU_WU: {
+    criteria: ["序数牌仅6-9。", "不得出现1-5与字牌违例。"],
+    pitfalls: ["出现5及以下仍误算。", "把全大和大于五混淆。"]
+  },
+  XIAO_YU_WU: {
+    criteria: ["序数牌仅1-4。", "不得出现5-9与字牌违例。"],
+    pitfalls: ["出现5及以上仍误算。", "把全小和小于五混淆。"]
+  },
+  QUAN_DA: {
+    criteria: ["序数牌都在7-9。", "结构中不含低位序数牌。"],
+    pitfalls: ["出现6及以下仍误算。", "与大于五混淆。"]
+  },
+  QUAN_XIAO: {
+    criteria: ["序数牌都在1-3。", "结构中不含中高位序数牌。"],
+    pitfalls: ["出现4及以上仍误算。", "与小于五混淆。"]
+  },
+  QUAN_ZHONG: {
+    criteria: ["序数牌都在4-6。", "结构中不含1-3或7-9。"],
+    pitfalls: ["出现边张数牌仍误算。", "与断幺误混。"]
+  },
+  DA_SAN_FENG: {
+    criteria: ["三风刻/杠+另一风将。", "四风必须全部出现。"],
+    pitfalls: ["将牌非风仍误算。", "两风刻就误记大三风。"]
+  },
+  SHUANG_JIAN_KE: {
+    criteria: ["中发白中两组成刻/杠。", "至少两箭成组。"],
+    pitfalls: ["只有一箭刻仍误算。", "把大/小三元重复计分。"]
+  },
+  SHUANG_TONG_KE: {
+    criteria: ["两色同点数刻子。", "点数与刻型都要一致。"],
+    pitfalls: ["同色双刻误记双同刻。", "点数不同仍误算。"]
+  },
+  SAN_TONG_KE: {
+    criteria: ["三色同点数刻子齐全。", "万条筒三门同点同刻。"],
+    pitfalls: ["缺一色仍误算。", "点数不一致未排除。"]
+  },
+  LV_YI_SE: {
+    criteria: ["仅用绿一色允许牌张。", "牌池必须满足绿牌集合。"],
+    pitfalls: ["混入非绿牌仍误算。", "只看颜色忽略牌种约束。"]
+  },
+  JIU_LIAN_BAO_DENG: {
+    criteria: ["同色1112345678999基础。", "听型满足九莲宝灯要求。"],
+    pitfalls: ["基础牌型不全仍误算。", "跨色同形误判。"]
+  },
+  SI_GANG: {
+    criteria: ["和牌时共四组杠。", "杠数须准确统计。"],
+    pitfalls: ["三杠误记四杠。", "把刻子误算杠组。"]
+  },
+  QI_LIAN_DUI: {
+    criteria: ["同色连续七个对子。", "对子须连续且同花色。"],
+    pitfalls: ["非连续对子仍误算。", "跨色七对误记连七对。"]
+  },
+  SI_AN_KE: {
+    criteria: ["四组暗刻/暗杠。", "暗组来源须成立。"],
+    pitfalls: ["明刻混入仍误算。", "暗刻数量不足四组。"]
+  },
+  YI_SE_SHUANG_LONG_HUI: {
+    criteria: ["同色两组123与789且5作将。", "双龙结构与将位同时满足。"],
+    pitfalls: ["将牌非5仍误算。", "缺少双龙段仍误记。"]
+  },
+  YI_SE_SI_TONG_SHUN: {
+    criteria: ["同色四组完全相同顺子。", "四组顺子起点一致。"],
+    pitfalls: ["只有三组同顺仍误算。", "混入节高分解重复计。"]
+  },
+  YI_SE_SI_JIE_GAO: {
+    criteria: ["同色四组刻子点数递增1。", "四节刻连续上升。"],
+    pitfalls: ["点数跳档仍误算。", "同顺结构误记节高。"]
+  },
+  YI_SE_SI_BU_GAO: {
+    criteria: ["同色四组顺子步进递增。", "四步顺子连续推进。"],
+    pitfalls: ["步进断裂仍误算。", "跨色步高误记一色。"]
+  },
+  SAN_GANG: {
+    criteria: ["和牌时有三组杠。", "杠来源与数量都要成立。"],
+    pitfalls: ["两杠或四杠混算。", "杠型统计遗漏。"]
+  },
+  QI_XING_BU_KAO: {
+    criteria: ["七字齐全并满足不靠。", "结构需符合七星不靠专型。"],
+    pitfalls: ["缺字牌仍误算。", "与全不靠边界混淆。"]
+  },
+  ZU_HE_LONG: {
+    criteria: ["三色147/258/369组合。", "组合龙结构与和牌并存。"],
+    pitfalls: ["组合不完整仍误算。", "把花龙误作组合龙。"]
+  },
+  QUAN_SHUANG_KE: {
+    criteria: ["刻子点数均为双数。", "2/4/6/8刻组覆盖成型。"],
+    pitfalls: ["含奇数刻仍误算。", "顺子混入仍误记。"]
+  },
+  YI_SE_SAN_TONG_SHUN: {
+    criteria: ["同色三组相同顺子。", "三组顺子起点一致。"],
+    pitfalls: ["两组同顺也误算。", "跨色同顺误判。"]
+  },
+  YI_SE_SAN_JIE_GAO: {
+    criteria: ["同色三组刻子递增1。", "三节刻点数连续。"],
+    pitfalls: ["点数不连仍误算。", "同顺结构误记节高。"]
+  },
+  TUI_BU_DAO: {
+    criteria: ["仅使用推不倒允许牌。", "牌池限制必须满足。"],
+    pitfalls: ["混入禁用牌仍误算。", "只看外形忽略牌值规则。"]
+  },
+  SAN_SE_SAN_JIE_GAO: {
+    criteria: ["三色刻子点数递增。", "三门刻组需按步进排列。"],
+    pitfalls: ["三门不齐仍误算。", "点数顺序错误。"]
+  },
+  WU_FAN_HE: {
+    criteria: ["无其他番可计时成立。", "须先排除全部可计番。"],
+    pitfalls: ["已有番仍误记无番和。", "门槛逻辑未先校验。"]
+  },
+  QIANG_GANG_HU: {
+    criteria: ["抢他家补杠牌和牌。", "时机必须发生在加杠瞬间。"],
+    pitfalls: ["普通点和误记抢杠和。", "非补杠时机误算。"]
+  },
+  SHUANG_AN_GANG: {
+    criteria: ["同手有两组暗杠。", "暗杠判定与数量都成立。"],
+    pitfalls: ["明杠混入仍误算。", "仅一组暗杠却误记双暗杠。"]
+  },
+  QUAN_DAI_WU: {
+    criteria: ["每组面子与将都含5。", "任何一组不含5即不成立。"],
+    pitfalls: ["只多数含5就误算。", "将牌不含5未排除。"]
+  },
+  SAN_AN_KE: {
+    criteria: ["至少三组暗刻成立。", "暗组来源须明确。"],
+    pitfalls: ["明刻计入暗刻。", "暗刻数量不足三组。"]
+  },
+  WU_MEN_QI: {
+    criteria: ["万条筒风箭五门齐。", "五类牌都需出现。"],
+    pitfalls: ["缺任一门仍误算。", "把花牌当作门类。"]
+  },
+  QUAN_QIU_REN: {
+    criteria: ["副露为主并以点和完成。", "最后一张依赖他家打牌。"],
+    pitfalls: ["自摸误记全求人。", "门前手误算全求人。"]
+  },
+  SHUANG_MING_GANG: {
+    criteria: ["同手有两组明杠。", "明杠数量准确为两组。"],
+    pitfalls: ["暗杠计入明杠。", "只有一组明杠仍误算。"]
+  },
+  QUAN_DAI_YAO: {
+    criteria: ["每组面子与将都含幺九。", "任一组不带幺九即失效。"],
+    pitfalls: ["个别组不带幺九仍误算。", "与混幺九混淆。"]
+  },
+  BU_QIU_REN: {
+    criteria: ["不依赖点和完成和牌。", "不以求人方式成和。"],
+    pitfalls: ["点和后仍误记不求人。", "副露行为与口径冲突。"]
+  },
+  AN_GANG: {
+    criteria: ["四张同牌暗扣成杠。", "未明示给他家前即成立。"],
+    pitfalls: ["明杠误算暗杠。", "三张同牌误记为杠。"]
+  },
+  MING_GANG: {
+    criteria: ["明示形成的杠组。", "来源可为直杠或补杠。"],
+    pitfalls: ["暗杠误记明杠。", "碰牌未补成杠就计分。"]
+  },
+  JUE_ZHANG: {
+    criteria: ["和到该牌最后可用一张。", "需满足绝张场景。"],
+    pitfalls: ["非绝张环境误算。", "可见牌计数错误。"]
+  },
+  JIAN_KE: {
+    criteria: ["中发白任一成刻/杠。", "箭牌必须成组。"],
+    pitfalls: ["箭牌对子误记箭刻。", "与双箭刻重复计分。"]
+  },
+  YAO_JIU_KE: {
+    criteria: ["1/9或风牌成刻/杠。", "刻组属性需为幺九类。"],
+    pitfalls: ["中张刻误记幺九刻。", "与大牌番重复计入。"]
+  },
+  BIAN_ZHANG: {
+    criteria: ["听12和3或听89和7。", "听型必须是边张。"],
+    pitfalls: ["两面听误记边张。", "中洞听误记边张。"]
+  },
+  KAN_ZHANG: {
+    criteria: ["听夹张中张成和。", "听型为坎张而非两面。"],
+    pitfalls: ["两面听误记坎张。", "边张听混入坎张。"]
+  },
+  DAN_DIAO_JIANG: {
+    criteria: ["仅听一张将牌。", "和牌张用于成将。"],
+    pitfalls: ["听面子牌却误记单钓将。", "多面听误判单钓。"]
+  },
+  HUA_PAI: {
+    criteria: ["按花牌张数逐张计番。", "花牌不计入14张结构。"],
+    pitfalls: ["把花牌并入手牌结构。", "花牌张数录入错误。"]
+  },
+  SHUANG_AN_KE: {
+    criteria: ["两组暗刻成立。", "暗刻来源须清晰。"],
+    pitfalls: ["明刻混入暗刻。", "只有一组暗刻仍误算。"]
+  },
+  SI_GUI_YI: {
+    criteria: ["四张同牌分散在顺刻将中。", "杠组不计入四归一。"],
+    pitfalls: ["把杠当四归一来源。", "四张同牌未分散仍误算。"]
+  },
+  SAN_SE_SHUANG_LONG_HUI: {
+    criteria: ["三色双龙结构且5作将。", "龙段与将位同时满足。"],
+    pitfalls: ["将位不是5仍误算。", "只成双龙未成三色仍误判。"]
+  }
+});
+
 /**
  * @param {string} id
  * @param {string} brief
@@ -187,18 +514,13 @@ const EXAMPLE_BY_FAN_ID = Object.freeze({
 function buildFourBlockEntry(id, brief) {
   const text = String(brief || "");
   const fanName = text.split("：")[0] || "该番种";
+  const detail = DETAIL_BY_FAN_ID[id];
   const concreteExample = EXAMPLE_BY_FAN_ID[id]
     || `示例：满足${fanName}判定后即可计入该番。`;
   return {
     brief: text,
-    criteria: [
-      "和牌时需满足该番种定义的牌型结构或时机条件。",
-      "若存在不计/互斥关系，按国标不计原则处理。"
-    ],
-    pitfalls: [
-      "只看牌面相似而忽略触发条件，导致误判。",
-      "与近似番种重复计分，未先做不计检查。"
-    ],
+    criteria: detail?.criteria || [`请按${fanName}定义核对牌型条件。`],
+    pitfalls: detail?.pitfalls || [`避免把${fanName}与相近番种重复计分。`],
     example: concreteExample
   };
 }

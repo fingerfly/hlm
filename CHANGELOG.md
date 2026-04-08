@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+## [5.3.1] - 2026-04-08
+
+- 帮助文案去技术化：删除面向开发者的控制台说明，改为面向最终用户的
+  “怎么看番种结果”引导；常见番种补充更直观示例文案。
+- 番种示例升级为 81 条一对一专属文案：`FAN_LEXICON_ENTRIES` 每个番种
+  均提供独立 example，不再依赖通用兜底示例句。
+- `判定要点` 与 `易错` 同步升级为 81 条逐番专属文案（每番两条要点与两条
+  易错），不再使用统一模板句。
+
+
 ## [5.3.0] - 2026-04-08
 
 - 帮助系统升级为“番种四段释义”：每个番渲染 `定义 / 判定要点 / 易错 / 例子`，
@@ -10,10 +22,7 @@ All notable changes to this project will be documented in this file.
   桌面端提升帮助面板宽高与可读空间。
 - `FAN_LEXICON_ENTRIES` 改为四段结构对象（`brief/criteria/pitfalls/example`），
   `fanLexicon` 读取 `brief` 以保持结果窗体释义兼容。
-- 帮助文案去技术化：删除面向开发者的控制台说明，改为面向最终用户的
-  “怎么看番种结果”引导；常见番种补充更直观示例文案。
-- 番种示例升级为 81 条一对一专属文案：`FAN_LEXICON_ENTRIES` 每个番种
-  均提供独立 example，不再依赖通用兜底示例句。
+
 
 ### Tests
 - 新增/更新：
@@ -21,6 +30,7 @@ All notable changes to this project will be documented in this file.
   `fanLexicon.test.js`（词条四段结构契约）、
   `indexStylesheetLinks.test.js`（帮助样式与响应式契约）。
 - `fanLexicon.test.js` 新增“每个番均为专属示例文案”断言。
+- `fanLexicon.test.js` 新增“每个番的要点/易错都非统一模板”断言。
 - 门禁通过：`npm test`、`npm run quality:complexity`。
 
 ## [5.2.17] - 2026-04-08
