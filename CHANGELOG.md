@@ -2,6 +2,30 @@
 
 All notable changes to this project will be documented in this file.
 
+## [5.2.17] - 2026-04-08
+
+### Fixed
+- 2026-04-08：`RULE_SOURCE.registryFanCount`、`APP_VERSION`、`package.json` 与
+  strict_81 一致；`QUAN_BU_KAO` 仅保留 pattern 检测（含 `specialPattern`），
+  去掉 context 重复项，使 `FAN_CATALOG` 与追溯表均为 **81** 行；
+  `writeRuleTraceMatrix.mjs` / `ruleTraceMatrix.docSync.test.js` 同步。
+
+### Changed
+- 发布号与 `src/config/appVersion.js` 对齐：`package.json` / `APP_VERSION`
+  **5.2.17**。
+- `handFeatures` 拆为 `src/rules/handFeatures/` 子模块（constants、tile、
+  chow/pung、荣誉、组合龙等），`handFeatures.js` 仅再导出
+  `extractHandFeatures`。
+- `featureDetectors` 拆为 `detectors/featureDetectors/` 三段目录
+ （suit/wind/dragon、sequences、advanced）+ `advancedDetect.js`，
+  `featureDetectors.js` 按原 `FAN_CATALOG` 顺序拼接。
+
+### Notes（开发环境）
+- Windows 上 Chocolatey 自带的 **`cloc` 2.08** 等打包 `.exe` 可能报错
+  `Undefined subroutine &main::testL`（参见 AlDanial/cloc#936）。
+  可改用 **`choco install cloc --version=2.2.0`**（内含上游 **cloc 2.02**
+  `.exe`），或使用 **`perl cloc-x.xx.pl`**。
+
 ## [5.2.16] - 2026-04-07
 
 ### Added
@@ -37,12 +61,6 @@ All notable changes to this project will be documented in this file.
 - 门禁通过：
   `npm run test:unit`、`npm run test:integration`、
   `npm run test:regression`、`npm test`、`npm run quality:complexity`。
-
-### Fixed
-- 2026-04-08：`RULE_SOURCE.registryFanCount`、`APP_VERSION`、`package.json` 与
-  strict_81 一致；`QUAN_BU_KAO` 仅保留 pattern 检测（含 `specialPattern`），
-  去掉 context 重复项，使 `FAN_CATALOG` 与追溯表均为 **81** 行；
-  `writeRuleTraceMatrix.mjs` / `ruleTraceMatrix.docSync.test.js` 同步。
 
 ## [5.2.15] - 2026-04-07
 
