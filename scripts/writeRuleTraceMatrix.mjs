@@ -30,20 +30,15 @@ hooks.
 
 **Rule baseline:** \`src/config/ruleBaseline.js\` (\`RULE_SOURCE\`, \`RULE_BASELINE\`)
 
-**Last regenerated:** 2026-04-07 (v5.2.15; registry / detector rows **${REGISTRY_ROW_COUNT}**;
+**Last regenerated:** 2026-04-08 (v5.2.16; registry / detector rows **${REGISTRY_ROW_COUNT}**;
 \`EXCLUSION_MAP\` keys **${EXCLUSION_MAP_KEY_COUNT}**)
 
-## 82 registry rows vs official 81 番种
+## 81 registry rows (MJ.pdf strict baseline)
 
-Official MCR lists **81** titled 番种. This codebase keeps **82** registry rows
-because composition **全大 / 全中 / 全小** (\`QUAN_DA\`, \`QUAN_ZHONG\`,
-\`QUAN_XIAO\`, \`featureDetectors.js\`) coexist with **序数上/中/下档和**
-(\`SHANG_SAN_PAI\`, \`ZHONG_SAN_PAI\`, \`XIA_SAN_PAI\`, \`contextDetectors.js\`,
-\`rankZone=upper|middle|lower\`) — different semantics; \`zhName\` matches
-\`fanLexiconEntries\` so UI stays unambiguous. Only one variant should win per
-hand; both ids remain for scoring traceability.
-\`MCR_TARGET_FAN_COUNT\`, \`RULE_SOURCE.registryFanCount\`, and this
-matrix use **82**.
+This matrix follows the strict MJ.pdf canonical baseline with **81** registry
+rows and one detector row per id (\`FAN_CATALOG.length\`). \`QUAN_BU_KAO\` is
+detected in \`patternDetectors.js\` using \`win.pattern\` or
+\`input.specialPattern\`.
 
 ## Column legend
 
@@ -90,7 +85,7 @@ Defined in \`src/rules/principleConstraints.js\`:
 
 | # | Members |
 |---|---------|
-| 1 | GANG_SHANG_HUA, HAI_DI_LAO_YUE, HE_DI_LAO_YU |
+| 1 | GANG_SHANG_HUA, MIAO_SHOU_HUI_CHUN, HAI_DI_LAO_YUE |
 | 2 | QING_YI_SE, HUN_YI_SE |
 | 3 | DA_SI_XI, XIAO_SI_XI |
 | 4 | DA_SAN_YUAN, XIAO_SAN_YUAN |

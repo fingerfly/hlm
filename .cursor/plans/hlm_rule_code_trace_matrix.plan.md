@@ -12,13 +12,13 @@ todos:
     content: Rewrite Known gaps — exclusionMap.truthTable covers all keys; conflictResolver.test.js is supplemental narrative coverage.
     status: completed
   - id: matrix-sync-on-registry-change
-    content: On FAN_REGISTRY or detector moves, rerun registry-table snippet and update Last regenerated + row count 82 check.
+    content: On FAN_REGISTRY or detector moves, rerun registry-table snippet and update Last regenerated + row count 81 check.
     status: completed
   - id: matrix-sync-on-exclusion-change
     content: On EXCLUSION_MAP edits, update matrix EXCLUSION_MAP section + key count 33; truth table test already guards drift.
     status: completed
   - id: matrix-registry-81-note
-    content: Document why implemented registry is 82 rows vs official 81 番种 (rankZone aliases vs QUAN_*).
+    content: Document MJ.pdf strict_81 baseline (81 registry rows); supersede old 82-row alias note.
     status: completed
 isProject: false
 ---

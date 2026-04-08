@@ -10,14 +10,15 @@ hooks.
 
 **Rule baseline:** `src/config/ruleBaseline.js` (`RULE_SOURCE`, `RULE_BASELINE`)
 
-**Last regenerated:** 2026-04-07 (v5.2.15; registry / detector rows **81**;
+**Last regenerated:** 2026-04-08 (v5.2.16; registry / detector rows **81**;
 `EXCLUSION_MAP` keys **33**)
 
 ## 81 registry rows (MJ.pdf strict baseline)
 
 This matrix follows the strict MJ.pdf canonical baseline with **81** registry
-rows and detector rows. Non-canonical split aliases were removed from the
-active registry and detector catalog.
+rows and one detector row per id (`FAN_CATALOG.length`). `QUAN_BU_KAO` is
+detected in `patternDetectors.js` using `win.pattern` or
+`input.specialPattern`.
 
 ## Column legend
 
@@ -80,7 +81,6 @@ the date changes. Expect **81** rows (`FAN_CATALOG.length`).
 |---|---:|---:|---|---|---|---|
 | MEN_QIAN_QING | 门前清 | 2 | context | contextDetectors.js | — | handState=menqian |
 | ZI_MO | 自摸 | 1 | context | contextDetectors.js | — | winType=zimo |
-| QUAN_BU_KAO | 全不靠 | 12 | context | contextDetectors.js | — | specialPattern=quan_bu_kao |
 | GANG_SHANG_HUA | 杠上开花 | 8 | context | contextDetectors.js | — | timingEvent=gangshang |
 | MIAO_SHOU_HUI_CHUN | 妙手回春 | 8 | context | contextDetectors.js | — | timingEvent=miaoshou |
 | HAI_DI_LAO_YUE | 海底捞月 | 8 | context | contextDetectors.js | — | timingEvent=haidi |
@@ -103,7 +103,7 @@ the date changes. Expect **81** rows (`FAN_CATALOG.length`).
 | HUA_PAI | 花牌 | 1 | context | contextDetectors.js | — | flowerCount>0 |
 | QI_XING_BU_KAO | 七星不靠 | 24 | context | contextDetectors.js | — | specialPattern=qixing_bukao |
 | WU_FAN_HE | 无番和 | 8 | context | contextDetectors.js | — | isChickenHand=true |
-| QUAN_BU_KAO | 全不靠 | 12 | context | contextDetectors.js | — | pattern=quan_bu_kao |
+| QUAN_BU_KAO | 全不靠 | 12 | pattern | patternDetectors.js | — | pattern\|specialPattern=quan_bu_kao |
 | QI_DUI | 七对 | 24 | pattern | patternDetectors.js | — | pattern=seven_pairs |
 | SHI_SAN_YAO | 十三幺 | 88 | pattern | patternDetectors.js | — | pattern=thirteen_orphans |
 | QING_YI_SE | 清一色 | 24 | feature | featureDetectors.js | pureOneSuit | feature=pureOneSuit |

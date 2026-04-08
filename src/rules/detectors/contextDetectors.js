@@ -30,11 +30,6 @@ export const CONTEXT_DETECTORS = Object.freeze([
     evidence: "winType=zimo"
   },
   {
-    id: "QUAN_BU_KAO",
-    detect: ({ input }) => input.specialPattern === "quan_bu_kao",
-    evidence: "specialPattern=quan_bu_kao"
-  },
-  {
     id: "GANG_SHANG_HUA",
     detect: ({ input }) => input.timingEvent === "gangshang",
     evidence: "timingEvent=gangshang"

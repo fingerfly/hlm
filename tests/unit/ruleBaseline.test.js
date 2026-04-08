@@ -10,7 +10,7 @@ test("rule baseline freezes rule version and min fan gate", () => {
 
 test("RULE_SOURCE matches baseline id and registry fan count", () => {
   assert.equal(RULE_SOURCE.baselineId, RULE_BASELINE.ruleVersion);
-  assert.equal(RULE_SOURCE.registryFanCount, 82);
+  assert.equal(RULE_SOURCE.registryFanCount, 81);
   assert.equal(typeof RULE_SOURCE.authorityZh, "string");
   assert.equal(typeof RULE_SOURCE.documentZh, "string");
 });

@@ -38,6 +38,12 @@ All notable changes to this project will be documented in this file.
   `npm run test:unit`、`npm run test:integration`、
   `npm run test:regression`、`npm test`、`npm run quality:complexity`。
 
+### Fixed
+- 2026-04-08：`RULE_SOURCE.registryFanCount`、`APP_VERSION`、`package.json` 与
+  strict_81 一致；`QUAN_BU_KAO` 仅保留 pattern 检测（含 `specialPattern`），
+  去掉 context 重复项，使 `FAN_CATALOG` 与追溯表均为 **81** 行；
+  `writeRuleTraceMatrix.mjs` / `ruleTraceMatrix.docSync.test.js` 同步。
+
 ## [5.2.15] - 2026-04-07
 
 ### Added

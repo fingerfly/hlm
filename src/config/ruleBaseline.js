@@ -20,7 +20,7 @@ export const RULE_SOURCE = Object.freeze({
   baselineId: "MCR-SPORTS-GENERAL-ADMIN-2018",
   authorityZh: "国家体育总局棋牌运动管理中心（竞赛规则口径）",
   documentZh: "麻将竞赛规则（国标番种与不计关系）",
-  registryFanCount: 82
+  registryFanCount: 81
 });
 
 export const ERROR_CODES = Object.freeze({

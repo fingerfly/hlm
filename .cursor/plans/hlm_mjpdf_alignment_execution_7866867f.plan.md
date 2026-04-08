@@ -79,11 +79,9 @@ plan.
 
 ## Rule-to-Code Gap Audit (Completed)
 
-### P0 (must fix first)
+### P0 (closed in this track)
 
-- `winValidator.js` does not validate `全不靠` (or related non-standard
-  special structures); current validator only supports `standard`, `seven_pairs`
-  and `thirteen_orphans`.
+- `winValidator.js` now validates `quan_bu_kao` (`全不靠`) per MJ.pdf `3.7.2`.
 - `fanRegistry.js` has been aligned to include MJ.pdf canonical entries
   (`全不靠`, `组合龙`, `一色四节高`, `妙手回春`) in the current slice.
 - `structuredContextValidator.js` now accepts canonical `specialPattern`
@@ -97,9 +95,11 @@ plan.
   - `HAI_DI_LAO_YUE` -> last-discard win.
 - `MCR_TARGET_FAN_COUNT` has been switched from `82` to strict `81`.
 
-### P2 (defer until core correctness is green)
+### P2 (optional follow-up)
 
-- Rule trace docs and lexicon wording cleanup after P0/P1 code and tests pass.
+- Historical plans (`hlm_mcr_full_official_alignment_*`, `hlm_desktop_context_*`)
+  may still mention old 82-row / `hedi` wording; treat as archive unless
+  reopened.
 
 ## Locked Decisions (Plan Baseline)
 
@@ -113,20 +113,11 @@ plan.
 - Execution order is locked:
   - Fail-first tests for P0/P1 gaps first, then minimal implementation.
 
-## Priority Backlog
+## Priority Backlog (track closed — retained for archive)
 
-- P0:
-  - Missing win-structure support for special hands required by MJ.pdf
-    (not only standard/7 pairs/13 orphans path).
-  - Missing fan entries/detectors identified against MJ.pdf 81 list
-    (expected includes items previously flagged).
-  - Timing terminology/behavior mismatch where scoring semantics differ.
-- P1:
-  - Lexicon/UI wording normalization to MJ.pdf terms while preserving
-    compatibility if needed.
-  - Exclusion/not-counted gaps that alter final fan outcomes.
-- P2:
-  - Documentation and trace-matrix refinements.
+- P0/P1 items above were addressed in code + tests for this slice; further
+  MJ.pdf depth (e.g. attachment 牌例逐条、全部「不计」与 PDF 附件八对照)
+  is a **new** track if you want exhaustive parity.
 
 ## P0 Fail-First Test Checklist (Execution-Ready)
 

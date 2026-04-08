@@ -43,7 +43,7 @@ describe("hlm_rule_code_trace_matrix.md", () => {
       "\n<!-- REGISTRY_TABLE_END -->"
     );
     assert.equal(inner, buildRegistryMarkdown());
-    assert.equal(REGISTRY_ROW_COUNT, 82);
+    assert.equal(REGISTRY_ROW_COUNT, 81);
   });
 
   it("EXCLUSION_MAP table matches exclusionMap.js", async () => {

@@ -327,7 +327,7 @@ practicality upgrade exit (or after Pages if practicality is deferred).
   [hlm_score_config_mcr_presets_620b275b.plan.md](hlm_score_config_mcr_presets_620b275b.plan.md).
 - MCR official settlement + gate alignment P0 (**completed** 2026-04-03):
   [hlm_mcr_p0_alignment_01c0c730.plan.md](hlm_mcr_p0_alignment_01c0c730.plan.md).
-- MJ.pdf authoritative alignment execution (**in_progress**):
+- MJ.pdf authoritative alignment execution (**completed** 2026-04-07):
   [hlm_mjpdf_alignment_execution_7866867f.plan.md](hlm_mjpdf_alignment_execution_7866867f.plan.md).
 - Onboarding in main shell + three-step wizard (**completed** 2026-04-03;
   **v5.2.0**): prerequisite `track-round-setup-table-ui` + four-player
@@ -403,7 +403,7 @@ practicality upgrade exit (or after Pages if practicality is deferred).
 ### Current Status
 
 - Owner: `project-owner`
-- OverallStatus: `in_progress`
+- OverallStatus: `maintenance`
 - ProgressPercent: `100`（MJ.pdf strict_81 alignment track completed）
 - ActivePhase: `maintenance`
 - Focus:
@@ -434,9 +434,10 @@ practicality upgrade exit (or after Pages if practicality is deferred).
   - `Preserve hlm_desktop_web_ui baseline: inline context host, help surfaces,`
     `two-pane shell.`
   - `TDD + npm test + quality:complexity + cloc per slice gates.`
-  - `Delivered 2026-04-07: full MCR official alignment track + rule->code trace`
-    `matrix + ruleTraceMatrix.docSync.test.js / writeRuleTraceMatrix.mjs`
-    `(v5.2.15) —`
+  - `Delivered 2026-04-07 / hygiene 2026-04-08: full MCR official alignment track`
+    `+ rule->code trace matrix + ruleTraceMatrix.docSync.test.js /`
+    `writeRuleTraceMatrix.mjs (v5.2.16 strict_81, RULE_SOURCE + APP_VERSION +`
+    `FAN_CATALOG 81 rows) —`
     [hlm_mcr_full_official_alignment_a1b2c3d4.plan.md](hlm_mcr_full_official_alignment_a1b2c3d4.plan.md)
   - `Delivered 2026-04-03: result modal 番数行含起和（v5.2.2）当 gateFan <`
     `totalFan 时显示「总番（起和 x 番）」。`
@@ -493,6 +494,9 @@ practicality upgrade exit (or after Pages if practicality is deferred).
     `splash skip, calculate hint, score bounds, details score-rule block,`
     `Escape/focus polish; see hlm_ux_audit_followup_5d8c2f1a.plan.md.`
 - ValidationEvidence:
+  - `2026-04-08: release hygiene — RULE_SOURCE.registryFanCount 81,`
+    `QUAN_BU_KAO single catalog row (pattern + specialPattern), matrix regen,`
+    `npm test + quality:complexity pass.`
   - `2026-04-07: maintenance iteration 32 — mobile calculate-path enabled;`
     `wizard 14-tiles -> result now passes on Chromium/WebKit/tablet/mobile;`
     `npm test + quality:complexity pass.`
