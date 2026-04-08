@@ -471,11 +471,10 @@
     <template id="helpArticleTemplate">
       <section class="help-section" aria-labelledby="helpPurposeTitle">
         <h4 id="helpPurposeTitle" class="help-section-title">本应用是做什么的</h4>
-        <p class="summary-text">和了么用于国标麻将的计番与番种拆解。</p>
-        <p class="summary-text">完成「设定玩家」、选满 14 张手牌并设置和牌条件后，
-          应用输出番种明细与总番，辅助核对。</p>
-        <p class="summary-text">说明文本不替代《中国麻将竞赛规则》原文；遇到规则
-          争议时，请以正式规则与裁判口径为准。</p>
+        <p class="summary-text">和了么用于国标麻将计番，帮你看懂“这手牌为什么是这些番”。</p>
+        <p class="summary-text">你录入 14 张手牌并选择和牌方式后，应用会给出番种明细、
+          总番和结算结果。</p>
+        <p class="summary-text">这是一份面向学习和复盘的说明，重点是“易懂、能对照”。</p>
       </section>
       <section class="help-section" aria-labelledby="helpStepsTitle">
         <h4 id="helpStepsTitle" class="help-section-title">推荐使用步骤</h4>
@@ -491,17 +490,12 @@
         </ol>
         <p class="summary-text">提示：底部「下一步/上一步」在三个步骤间切换；
           「重置和牌条件」只清空和牌条件；「清空」会清除当前手牌。</p>
-        <p class="summary-text">选满 14 张后应用会自动进入「和牌条件」步骤；若希望
-          关闭此行为，可在浏览器控制台执行
-          <code>localStorage.setItem("hlm_disableAutoWizardAdvance","1")</code>
-          后刷新页面。</p>
       </section>
       <section class="help-section" aria-labelledby="helpFanConceptTitle">
-        <h4 id="helpFanConceptTitle" class="help-section-title">番、起和与不计</h4>
-        <p class="summary-text">番是计分单位；番种能否叠加，受不计与互斥关系约束。
-        </p>
-        <p class="summary-text">本工具按内置规则与注册表做检测；是否满足赛事起和
-          门槛请以当场规程为准。</p>
+        <h4 id="helpFanConceptTitle" class="help-section-title">怎么看番种结果</h4>
+        <p class="summary-text">你可以把每个番理解为“这手牌的一个得分理由”。</p>
+        <p class="summary-text">点开任一番种后，会看到四段说明：定义、判定要点、
+          易错和例子。先看例子，再回看定义，最容易上手。</p>
       </section>
       <section id="helpFanLexiconRegion" class="help-section"
         aria-label="番种释义列表" aria-labelledby="helpFanLexiconTitle">

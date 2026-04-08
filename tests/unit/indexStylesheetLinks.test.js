@@ -101,8 +101,8 @@ test("help article template matches three-step wizard copy", () => {
   assert.match(html, /设定玩家/);
   assert.match(html, /步骤 2\/3/);
   assert.match(html, /步骤 3\/3/);
-  assert.match(html, /hlm_disableAutoWizardAdvance/);
   assert.match(html, /重置和牌条件/);
+  assert.match(html, /怎么看番种结果/);
 });
 
 test("help template includes four-block fan explanation headers", () => {

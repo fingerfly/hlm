@@ -29,3 +29,11 @@ test("FAN_LEXICON_ENTRIES provides four-block structure", () => {
     assert.equal(entry.example.length > 0, true);
   }
 });
+
+test("every fan entry has dedicated non-generic example copy", () => {
+  for (const id of Object.keys(FAN_LEXICON_ENTRIES)) {
+    const entry = FAN_LEXICON_ENTRIES[id];
+    assert.equal(entry.example.includes("即可计入该番"), false);
+    assert.equal(entry.example.startsWith("示例："), true);
+  }
+});

@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file.
 
+## [5.3.0] - 2026-04-08
+
+- 帮助系统升级为“番种四段释义”：每个番渲染 `定义 / 判定要点 / 易错 / 例子`，
+  并保留旧字符串词条的兼容渲染（`helpContentMount` 正常化）。
+- 帮助响应式优化：移动端去除横向滚动（长 token 与 code 自动换行），
+  桌面端提升帮助面板宽高与可读空间。
+- `FAN_LEXICON_ENTRIES` 改为四段结构对象（`brief/criteria/pitfalls/example`），
+  `fanLexicon` 读取 `brief` 以保持结果窗体释义兼容。
+- 帮助文案去技术化：删除面向开发者的控制台说明，改为面向最终用户的
+  “怎么看番种结果”引导；常见番种补充更直观示例文案。
+- 番种示例升级为 81 条一对一专属文案：`FAN_LEXICON_ENTRIES` 每个番种
+  均提供独立 example，不再依赖通用兜底示例句。
+
+### Tests
+- 新增/更新：
+  `helpContentMountFilter.test.js`（四段 normalizer 兼容）、
+  `fanLexicon.test.js`（词条四段结构契约）、
+  `indexStylesheetLinks.test.js`（帮助样式与响应式契约）。
+- `fanLexicon.test.js` 新增“每个番均为专属示例文案”断言。
+- 门禁通过：`npm test`、`npm run quality:complexity`。
+
 ## [5.2.17] - 2026-04-08
 
 ### Fixed
@@ -19,6 +40,7 @@ All notable changes to this project will be documented in this file.
 - `featureDetectors` 拆为 `detectors/featureDetectors/` 三段目录
  （suit/wind/dragon、sequences、advanced）+ `advancedDetect.js`，
   `featureDetectors.js` 按原 `FAN_CATALOG` 顺序拼接。
+
 
 ### Notes（开发环境）
 - Windows 上 Chocolatey 自带的 **`cloc` 2.08** 等打包 `.exe` 可能报错

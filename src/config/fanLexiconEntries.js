@@ -90,7 +90,92 @@ const FAN_LEXICON_BRIEF_ENTRIES = Object.freeze({
   SAN_SE_SHUANG_LONG_HUI: "三色双龙会：三色两组老少副且 5 作将，计 16 番。",
 });
 
+const EXAMPLE_BY_FAN_ID = Object.freeze({
+  MEN_QIAN_QING: "示例：全程不吃不碰不明杠，最后自摸和牌。",
+  ZI_MO: "示例：自己摸进和牌张后和牌，不是点和。",
+  QI_DUI: "示例：11万 22万 33条 44条 55筒 66筒 东东。",
+  SHI_SAN_YAO: "示例：19万19条19筒 东南西北 中发白 + 任一幺九字对子。",
+  QUAN_BU_KAO: "示例：按全不靠结构成手，单张互不连靠后和牌。",
+  GANG_SHANG_HUA: "示例：补杠后摸补牌，补牌即和。",
+  MIAO_SHOU_HUI_CHUN: "示例：摸到牌墙最后一张并和牌。",
+  HAI_DI_LAO_YUE: "示例：他家打出最后一张牌，你点和。",
+  QING_YI_SE: "示例：全是万子，如 123万 456万 789万 111万 + 22万。",
+  HUN_YI_SE: "示例：万子配字牌，如 123万 456万 东东东 + 55万。",
+  DUAN_YAO: "示例：只由 2-8 序数牌组成，不含 1/9 与字牌。",
+  PENG_PENG_HU: "示例：111万 999条 东东东 白白白 + 55筒。",
+  HUN_YAO_JIU: "示例：面子都围绕幺九牌与字牌组合成和。",
+  ZI_YI_SE: "示例：东东东 南南南 西西西 中中中 + 白白。",
+  QING_YAO_JIU: "示例：111万 999万 111条 999条 + 11筒。",
+  QING_LONG: "示例：同色同时有 123、456、789 三组顺子。",
+  PING_HU: "示例：四组顺子+将，且为平和有效听型后和牌。",
+  YI_BAN_GAO: "示例：同花色两组相同顺子，如 345万 + 345万。",
+  SAN_SE_SAN_TONG_SHUN: "示例：123万 + 123条 + 123筒。",
+  MEN_FENG_KE: "示例：你坐南位，手中有南南南刻。",
+  QUAN_FENG_KE: "示例：东圈时，手中有东东东刻。",
+  DA_SI_XI: "示例：东南西北四风全部成刻/杠。",
+  XIAO_SI_XI: "示例：东东东 南南南 西西西 + 北北将。",
+  DA_SAN_YUAN: "示例：中中中 发发发 白白白。",
+  XIAO_SAN_YUAN: "示例：中中中 发发发 + 白白将。",
+  HUA_LONG: "示例：123万 + 456条 + 789筒。",
+  XI_XIANG_FENG: "示例：两种花色同数顺子，如 456万 + 456条。",
+  LIAN_LIU: "示例：同色连六，如 123万 + 456万。",
+  LAO_SHAO_FU: "示例：同色同时出现 123 与 789。",
+  QUE_YI_MEN: "示例：只用万、条两门和牌，缺筒门。",
+  WU_ZI: "示例：和牌牌型中完全没有字牌。",
+  SAN_SE_SAN_BU_GAO: "示例：123万 + 234条 + 345筒。",
+  YI_SE_SAN_BU_GAO: "示例：123万 + 234万 + 345万。",
+  DA_YU_WU: "示例：全手序数牌都在 6-9 区间。",
+  XIAO_YU_WU: "示例：全手序数牌都在 1-4 区间。",
+  QUAN_DA: "示例：序数牌只用 7、8、9 组成和牌。",
+  QUAN_XIAO: "示例：序数牌只用 1、2、3 组成和牌。",
+  QUAN_ZHONG: "示例：序数牌只用 4、5、6 组成和牌。",
+  DA_SAN_FENG: "示例：东东东 南南南 西西西 + 北北将。",
+  SHUANG_JIAN_KE: "示例：中中中 + 发发发（或白刻）同手出现。",
+  SHUANG_TONG_KE: "示例：555万 + 555条。",
+  SAN_TONG_KE: "示例：777万 + 777条 + 777筒。",
+  LV_YI_SE: "示例：仅用可构成绿一色的牌（如发与绿色条牌）和牌。",
+  JIU_LIAN_BAO_DENG: "示例：同色 1112345678999 基础上听任一同色牌和。",
+  SI_GANG: "示例：手牌中形成四组杠后和牌。",
+  QI_LIAN_DUI: "示例：11万22万33万44万55万66万77万。",
+  SI_AN_KE: "示例：四组暗刻（或暗杠）+一对将成和。",
+  YI_SE_SHUANG_LONG_HUI: "示例：同色 123+789 各两组，并以 55 作将。",
+  YI_SE_SI_TONG_SHUN: "示例：同色四组相同顺子，如四组 234万。",
+  YI_SE_SI_JIE_GAO: "示例：同色刻子 333万444万555万666万。",
+  YI_SE_SI_BU_GAO: "示例：同色顺子 123万234万345万456万。",
+  SAN_GANG: "示例：形成三组杠并满足和牌。",
+  QI_XING_BU_KAO: "示例：七字齐全并按不靠结构成手后和牌。",
+  ZU_HE_LONG: "示例：147万 + 258条 + 369筒并满足和牌结构。",
+  QUAN_SHUANG_KE: "示例：刻子都为双数，如 222万 444条 666筒 888万。",
+  YI_SE_SAN_TONG_SHUN: "示例：同色三组相同顺子，如三组 456条。",
+  YI_SE_SAN_JIE_GAO: "示例：同色刻子依次递增，如 444筒 555筒 666筒。",
+  TUI_BU_DAO: "示例：仅用推不倒允许牌张组成和牌。",
+  SAN_SE_SAN_JIE_GAO: "示例：333万 + 444条 + 555筒。",
+  WU_FAN_HE: "示例：和牌后没有任何其他番可计时，记无番和。",
+  QIANG_GANG_HU: "示例：他家加杠时，你抢这张牌和。",
+  SHUANG_AN_GANG: "示例：同一手内有两组暗杠并和牌。",
+  QUAN_DAI_WU: "示例：每组面子与将都含数字 5。",
+  SAN_AN_KE: "示例：有三组暗刻并满足和牌。",
+  WU_MEN_QI: "示例：万、条、筒、风、箭五类牌都出现。",
+  QUAN_QIU_REN: "示例：高度副露，最后靠点和完成和牌。",
+  SHUANG_MING_GANG: "示例：同手出现两组明杠。",
+  QUAN_DAI_YAO: "示例：每组顺刻杠与将都带幺九属性。",
+  BU_QIU_REN: "示例：不吃不碰并自力和牌（按规则口径计）。",
+  AN_GANG: "示例：手中四张同牌暗扣成杠。",
+  MING_GANG: "示例：碰后补杠或直接明杠成组。",
+  JUE_ZHANG: "示例：和到该牌最后可用一张（绝张）。",
+  JIAN_KE: "示例：中中中（或发发发、白白白）成刻。",
+  YAO_JIU_KE: "示例：111万（或999条、风刻）成刻后计入。",
+  BIAN_ZHANG: "示例：12万听3，或89条听7成和。",
+  KAN_ZHANG: "示例：46筒听5筒成和。",
+  DAN_DIAO_JIANG: "示例：仅听一张将牌，如只等白板成将。",
+  HUA_PAI: "示例：和牌时有2张花牌，额外加2番。",
+  SHUANG_AN_KE: "示例：同手有两组暗刻并和牌。",
+  SI_GUI_YI: "示例：四张同牌分散在顺、刻、将中（非杠）后计入。",
+  SAN_SE_SHUANG_LONG_HUI: "示例：三色双龙结构齐全并以5作将后和牌。"
+});
+
 /**
+ * @param {string} id
  * @param {string} brief
  * @returns {{
  *   brief: string,
@@ -99,9 +184,11 @@ const FAN_LEXICON_BRIEF_ENTRIES = Object.freeze({
  *   example: string
  * }}
  */
-function buildFourBlockEntry(brief) {
+function buildFourBlockEntry(id, brief) {
   const text = String(brief || "");
   const fanName = text.split("：")[0] || "该番种";
+  const concreteExample = EXAMPLE_BY_FAN_ID[id]
+    || `示例：满足${fanName}判定后即可计入该番。`;
   return {
     brief: text,
     criteria: [
@@ -112,7 +199,7 @@ function buildFourBlockEntry(brief) {
       "只看牌面相似而忽略触发条件，导致误判。",
       "与近似番种重复计分，未先做不计检查。"
     ],
-    example: `示例：对照结果中的牌组与条件，满足${fanName}关键要件后计入该番。`
+    example: concreteExample
   };
 }
 
@@ -120,7 +207,7 @@ export const FAN_LEXICON_ENTRIES = Object.freeze(
   Object.fromEntries(
     Object.entries(FAN_LEXICON_BRIEF_ENTRIES).map(([id, brief]) => [
       id,
-      buildFourBlockEntry(brief)
+      buildFourBlockEntry(id, brief)
     ])
   )
 );
