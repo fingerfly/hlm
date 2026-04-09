@@ -55,6 +55,109 @@ function wizardBackLabel(step) {
 }
 
 /**
+ * Set aria-current on the desktop wizard step strip (≥1024px CSS).
+ *
+ * @param {number} step - Wizard step 1..3.
+ * @param {HTMLElement|null} stripRoot - #wizardStepStrip or null.
+ * @returns {void}
+ */
+export function syncWizardStepStripAria(step, stripRoot) {
+  if (!stripRoot) return;
+  const items = stripRoot.querySelectorAll("[data-wizard-step]");
+  for (const el of items) {
+    const n = Number.parseInt(el.getAttribute("data-wizard-step"), 10);
+    if (n === step) {
+      el.setAttribute("aria-current", "step");
+    } else {
+      el.removeAttribute("aria-current");
+    }
+  }
+}
+
+/**
+ * Toggle wizard-step sections, nav labels, and desktop rail classes.
+ *
+ * @param {number} wizardStep - Current step 1..3.
+ * @param {(id: string) => HTMLElement|null} byId - DOM lookup.
+ * @param {object} refs - App refs subset.
+ * @param {number} pickedCount - Selected tile count.
+ * @returns {void}
+ */
+function applyWizardStepDom(wizardStep, byId, refs, pickedCount) {
+  const gateEl = byId("roundSetupGate");
+  if (gateEl) {
+    gateEl.hidden = wizardStep !== 1;
+  }
+  const handSec = byId("handCardSection");
+  if (handSec) {
+    handSec.hidden = wizardStep === 1;
+  }
+  const resetCtx = byId("resetContextBtn");
+  if (resetCtx) {
+    resetCtx.hidden = wizardStep === 1;
+  }
+  if (refs.contextSummaryEl) {
+    refs.contextSummaryEl.textContent =
+      wizardStep >= 3 ? getContextSummary(byId) : "—";
+  }
+  if (refs.wizardStepHintEl) {
+    refs.wizardStepHintEl.textContent = wizardStepHint(wizardStep);
+  }
+  if (refs.wizardBackBtn) {
+    refs.wizardBackBtn.hidden = wizardStep === 1;
+    refs.wizardBackBtn.textContent = wizardBackLabel(wizardStep);
+  }
+  if (refs.wizardNextBtn) {
+    refs.wizardNextBtn.textContent = wizardNextLabel(wizardStep);
+  }
+  syncWizardStepStripAria(wizardStep, refs.wizardStepStripEl);
+  if (refs.desktopSidePanelEl) {
+    const desktop =
+      globalThis.matchMedia?.("(min-width: 1024px)")?.matches === true;
+    const hideContextRail = wizardStep === 1 || wizardStep === 2;
+    refs.desktopSidePanelEl.classList.toggle(
+      "desktop-step-1",
+      desktop && hideContextRail
+    );
+    refs.desktopSidePanelEl.classList.toggle(
+      "desktop-step-2",
+      desktop && wizardStep === 3
+    );
+  }
+  if (refs.openPickerBtn) refs.openPickerBtn.hidden = wizardStep !== 2;
+  if (refs.clearHandBtn) {
+    refs.clearHandBtn.hidden = wizardStep !== 2 || pickedCount === 0;
+  }
+}
+
+/**
+ * @param {number} wizardStep
+ * @param {number} pickedCount
+ * @param {boolean} canScore
+ * @param {HTMLElement} readyHintEl
+ * @returns {void}
+ */
+function applyWizardReadyHint(
+  wizardStep,
+  pickedCount,
+  canScore,
+  readyHintEl
+) {
+  if (wizardStep === 1) {
+    readyHintEl.textContent =
+      "确认四家名称、分数与庄家后进入下一步";
+    return;
+  }
+  if (wizardStep === 2) {
+    readyHintEl.textContent = canScore
+      ? "手牌已满，可进入下一步"
+      : `再选 ${14 - pickedCount} 张即可进入下一步`;
+    return;
+  }
+  readyHintEl.textContent = "确认和牌条件后进入计算";
+}
+
+/**
  * Render home widgets from current app state.
  *
  * @param {object} input - Render dependencies and mutable store.
@@ -91,59 +194,6 @@ export function syncHomeStateView(input) {
     refs.pickerDeleteBtn.hidden = !hasSelection;
     refs.pickerDeleteBtn.disabled = !hasSelection;
   }
-  const gateEl = byId("roundSetupGate");
-  if (gateEl) {
-    gateEl.hidden = wizardStep !== 1;
-  }
-  const handSec = byId("handCardSection");
-  if (handSec) {
-    handSec.hidden = wizardStep === 1;
-  }
-  const resetCtx = byId("resetContextBtn");
-  if (resetCtx) {
-    resetCtx.hidden = wizardStep === 1;
-  }
-  if (refs.contextSummaryEl) {
-    refs.contextSummaryEl.textContent =
-      wizardStep >= 3 ? getContextSummary(byId) : "—";
-  }
-  if (refs.wizardStepHintEl) {
-    refs.wizardStepHintEl.textContent = wizardStepHint(wizardStep);
-  }
-  if (refs.wizardBackBtn) {
-    refs.wizardBackBtn.hidden = wizardStep === 1;
-    refs.wizardBackBtn.textContent = wizardBackLabel(wizardStep);
-  }
-  if (refs.wizardNextBtn) {
-    refs.wizardNextBtn.textContent = wizardNextLabel(wizardStep);
-  }
-  if (refs.desktopSidePanelEl) {
-    const desktop =
-      globalThis.matchMedia?.("(min-width: 1024px)")?.matches === true;
-    const hideContextRail = wizardStep === 1 || wizardStep === 2;
-    refs.desktopSidePanelEl.classList.toggle(
-      "desktop-step-1",
-      desktop && hideContextRail
-    );
-    refs.desktopSidePanelEl.classList.toggle(
-      "desktop-step-2",
-      desktop && wizardStep === 3
-    );
-  }
-  if (refs.openPickerBtn) refs.openPickerBtn.hidden = wizardStep !== 2;
-  if (refs.clearHandBtn) {
-    refs.clearHandBtn.hidden = wizardStep !== 2 || pickedCount === 0;
-  }
-  if (wizardStep === 1) {
-    refs.readyHintEl.textContent =
-      "确认四家名称、分数与庄家后进入下一步";
-    return;
-  }
-  if (wizardStep === 2) {
-    refs.readyHintEl.textContent = canScore
-      ? "手牌已满，可进入下一步"
-      : `再选 ${14 - pickedCount} 张即可进入下一步`;
-    return;
-  }
-  refs.readyHintEl.textContent = "确认和牌条件后进入计算";
+  applyWizardStepDom(wizardStep, byId, refs, pickedCount);
+  applyWizardReadyHint(wizardStep, pickedCount, canScore, refs.readyHintEl);
 }

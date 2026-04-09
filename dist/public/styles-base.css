@@ -1,18 +1,54 @@
+/**
+ * Purpose: Global design tokens and base layout.
+ * Description:
+ *   - Semantic colors/spacing aliases for surfaces, text, accent, shadows.
+ *   - Legacy --bg/--card/--primary kept as aliases for existing rules.
+ *   - Focus-visible defaults for primary interactive controls.
+ */
 :root {
-  --bg: #f2f2f7;
-  --card: #ffffff;
-  --border: #e5e5ea;
-  --text: #111111;
-  --subtext: #636366;
-  --primary: #007aff;
+  /* Surfaces */
+  --surface-page: #f2f2f7;
+  --surface-raised: #ffffff;
+  --surface-muted: #f8f8f8;
+  --surface-hover: #f5f5f8;
+  --surface-tint: #f4f6fb;
+  --surface-sunken: #fafafa;
+  --sticky-footer-bg: rgba(242, 242, 247, 0.94);
+
+  /* Text */
+  --text-primary: #111111;
+  --text-muted: #636366;
+  --text-strong: #1f2328;
+
+  /* Borders + accent */
+  --border-default: #e5e5ea;
+  --accent: #007aff;
+  --accent-contrast: #ffffff;
+  --accent-soft: rgba(0, 122, 255, 0.08);
+  --accent-ring: rgba(0, 122, 255, 0.35);
+  --menu-border-soft: rgba(0, 0, 0, 0.08);
+
+  /* Elevation + overlay */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 2px 12px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.18);
+  --overlay-scrim: rgba(0, 0, 0, 0.36);
+
+  /* Legacy names (prefer semantic tokens in new/edited rules) */
+  --bg: var(--surface-page);
+  --card: var(--surface-raised);
+  --border: var(--border-default);
+  --text: var(--text-primary);
+  --subtext: var(--text-muted);
+  --primary: var(--accent);
 }
 
 /* Base layout: mobile first with touch-safe controls. */
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
-  background: var(--bg);
-  color: var(--text);
+  background: var(--surface-page);
+  color: var(--text-primary);
 }
 
 [hidden] {
@@ -43,7 +79,7 @@ body {
 }
 
 .version-badge {
-  color: var(--subtext);
+  color: var(--text-muted);
   font-size: 12px;
   margin: 8px 2px 12px;
 }
@@ -53,18 +89,26 @@ body {
 .primary-btn,
 .tab-btn {
   border-radius: 12px;
-  border: 1px solid var(--border);
-  background: #fff;
-  color: var(--text);
+  border: 1px solid var(--border-default);
+  background: var(--surface-raised);
+  color: var(--text-primary);
   min-height: 44px;
   padding: 0 14px;
   font-size: 15px;
 }
 
+.icon-btn:focus-visible,
+.ghost-btn:focus-visible,
+.primary-btn:focus-visible,
+.tab-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
 .primary-btn {
-  border-color: var(--primary);
-  background: var(--primary);
-  color: #fff;
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--accent-contrast);
   width: 100%;
 }
 
@@ -73,8 +117,8 @@ body {
 }
 
 .card {
-  background: var(--card);
-  border: 1px solid var(--border);
+  background: var(--surface-raised);
+  border: 1px solid var(--border-default);
   border-radius: 16px;
   padding: 12px;
   margin-bottom: 10px;
@@ -103,7 +147,7 @@ body {
 .summary-text,
 .hint {
   margin: 4px 0 10px;
-  color: var(--subtext);
+  color: var(--text-muted);
   font-size: 14px;
 }
 
@@ -112,8 +156,8 @@ body {
   position: sticky;
   bottom: 0;
   margin-top: 12px;
-  background: rgba(242, 242, 247, 0.94);
+  background: var(--sticky-footer-bg);
   backdrop-filter: blur(8px);
-  border-top: 1px solid var(--border);
+  border-top: 1px solid var(--border-default);
   padding: 8px 12px calc(8px + env(safe-area-inset-bottom));
 }

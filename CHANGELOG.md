@@ -4,6 +4,21 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [5.3.3] - 2026-04-09
+
+### Changed — 2026-04-09
+- 界面：在 `styles-base.css` 引入统一设计 token（surface、text、accent、
+  shadow、overlay 等），保留 `--bg` / `--card` / `--primary` 别名；主要
+  组件与弹层样式改为引用语义变量。
+- 桌面端（≥1024px）：主壳内增加三步向导步骤条（`#wizardStepStrip`），与
+  现有步骤流一致；`homeStateView` 中 `syncWizardStepStripAria` 同步
+  `aria-current`。
+- `homeStateView`：拆出 `applyWizardStepDom`、`applyWizardReadyHint` 以满足
+  函数体量与复杂度门禁。
+
+### Tests — 2026-04-09
+- 新增 `tests/unit/wizardStepStripAria.test.js`。
+
 ## [5.3.2] - 2026-04-09
 
 ### Changed（工程 / 可维护性）— 2026-04-09

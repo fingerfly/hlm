@@ -22,6 +22,7 @@ export function createAppRefs(byId) {
     pickerDeleteBtn: byId("pickerDeleteBtn"),
     contextSummaryEl: byId("contextSummary"),
     wizardStepHintEl: byId("wizardStepHint"),
+    wizardStepStripEl: byId("wizardStepStrip"),
     wizardBackBtn: byId("wizardBackBtn"),
     wizardNextBtn: byId("wizardNextBtn"),
     desktopSidePanelEl: byId("desktopSidePanel"),
