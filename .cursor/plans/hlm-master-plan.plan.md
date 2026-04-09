@@ -138,6 +138,12 @@ todos:
       audit rule-to-code gaps, apply TDD remediation, and run full validation
       gates. Child: hlm_mjpdf_alignment_execution_7866867f.plan.md
     status: completed
+  - id: track-bootstrap-complexity-hardening
+    content: >
+      Split `public/app.js` bootstrap into focused modules and harden
+      `scripts/quality-complexity.js` function-size detection. Child:
+      hlm_bootstrap_complexity_d4462b1a.plan.md
+    status: completed
 isProject: false
 ---
 
@@ -255,6 +261,8 @@ not present in current workspace)
   [hlm_mcr_full_official_alignment_a1b2c3d4.plan.md](hlm_mcr_full_official_alignment_a1b2c3d4.plan.md)
   ; trace matrix shell
   [hlm_rule_code_trace_matrix.plan.md](hlm_rule_code_trace_matrix.plan.md)
+- Bootstrap modularization + complexity guardrail hardening（**completed** 2026-04-09）:
+  [hlm_bootstrap_complexity_d4462b1a.plan.md](hlm_bootstrap_complexity_d4462b1a.plan.md)
 - Historical supporting plans (traceability only):
   - [hlm_版本升级工具与中文术语统一_35161103.plan.md](hlm_版本升级工具与中文术语统一_35161103.plan.md)
   - `spike_full_automation_6a79ecff.plan.md` (historical reference; file
@@ -348,14 +356,17 @@ practicality upgrade exit (or after Pages if practicality is deferred).
 
 ### Current delivery queue (post-baseline)
 
-- TrackId (latest closed): `track-mjpdf-official-alignment-execution`
-  （**completed** 2026-04-07）→
+- TrackId (latest closed): `track-bootstrap-complexity-hardening`
+  （**completed** 2026-04-09）→
+  [hlm_bootstrap_complexity_d4462b1a.plan.md](hlm_bootstrap_complexity_d4462b1a.plan.md)
+- Active TrackId: `none`（maintenance；prior bootstrap + complexity track closed）
+- Prior closed: `track-mjpdf-official-alignment-execution`（**completed** 2026-04-07）→
   [hlm_mjpdf_alignment_execution_7866867f.plan.md](hlm_mjpdf_alignment_execution_7866867f.plan.md)
 - Prior closed: `track-mcr-full-official-alignment`（**completed** 2026-04-07）→
   [hlm_mcr_full_official_alignment_a1b2c3d4.plan.md](hlm_mcr_full_official_alignment_a1b2c3d4.plan.md)
 - Prior closed: `track-ux-audit-followup`（**completed** 2026-04-05）→
   [hlm_ux_audit_followup_5d8c2f1a.plan.md](hlm_ux_audit_followup_5d8c2f1a.plan.md)
-- Active TrackId: `maintenance`（no queued code track）
+- Queue mode: `maintenance`（no active TrackId；latest close bootstrap + complexity）
 - Prior TrackId: `track-mcr-p0-official-alignment`（**completed** 2026-04-03）→
   [hlm_mcr_p0_alignment_01c0c730.plan.md](hlm_mcr_p0_alignment_01c0c730.plan.md)
 - Earlier: `track-score-config-mcr-presets`（**completed** 2026-04-03）→
@@ -379,6 +390,8 @@ practicality upgrade exit (or after Pages if practicality is deferred).
 - ChildPlans — 牌桌式启动门（已完成）:
   - [hlm_round_setup_table_ui_525519a5.plan.md](hlm_round_setup_table_ui_525519a5.plan.md)
 - ChildPlans — 最近完成:
+  - [hlm_bootstrap_complexity_d4462b1a.plan.md](hlm_bootstrap_complexity_d4462b1a.plan.md)
+    （**completed** 2026-04-09；`track-bootstrap-complexity-hardening`）
   - [hlm_help_fan_4block_upgrade_7088d9a3.plan.md](hlm_help_fan_4block_upgrade_7088d9a3.plan.md)
     （**completed** 2026-04-08；`track-help-fan-four-block-upgrade`）
   - [hlm_mjpdf_alignment_execution_7866867f.plan.md](hlm_mjpdf_alignment_execution_7866867f.plan.md)
@@ -397,7 +410,7 @@ practicality upgrade exit (or after Pages if practicality is deferred).
   `track-mcr-full-official-alignment`（**completed** 2026-04-07；trace matrix +
   doc-sync test + exclusion truth table；子计划
   [hlm_rule_code_trace_matrix.plan.md](hlm_rule_code_trace_matrix.plan.md)）
-- TrackTodoStatus: `completed`（`track-mjpdf-official-alignment-execution`）
+- TrackTodoStatus: `completed`（`track-bootstrap-complexity-hardening`，2026-04-09）
 - Prior closed: `track-onboarding-shell-hig` →
   [hlm_onboarding_shell_merge_f9a1c8e0.plan.md](hlm_onboarding_shell_merge_f9a1c8e0.plan.md)
 - Prior closed: `track-five-principles-exact-scoring` →
@@ -414,9 +427,12 @@ practicality upgrade exit (or after Pages if practicality is deferred).
 
 - Owner: `project-owner`
 - OverallStatus: `maintenance`
-- ProgressPercent: `100`（MJ.pdf strict_81 alignment track completed）
+- ProgressPercent: `100`（bootstrap + complexity hardening delivered 2026-04-09）
 - ActivePhase: `maintenance`
 - Focus:
+  - `Closed 2026-04-09: bootstrap modularization + brace-aware complexity`
+    `function-size scan; full gates pass —`
+    [hlm_bootstrap_complexity_d4462b1a.plan.md](hlm_bootstrap_complexity_d4462b1a.plan.md)
   - `MJ.pdf strict_81 slice-1 delivered: canonical ids + quan_bu_kao pattern`
     `support + timing semantics realigned; full gates pass for this slice.`
     [hlm_mjpdf_alignment_execution_7866867f.plan.md](hlm_mjpdf_alignment_execution_7866867f.plan.md)
@@ -491,6 +507,9 @@ practicality upgrade exit (or after Pages if practicality is deferred).
   - `Onboarding v5.2.0 shipped (2026-04-03): manual spot-check wizard 1→2→3 +`
     `resize/breakpoints still recommended beyond automated smoke.`
 - NextActions:
+  - `Closed 2026-04-09: track-bootstrap-complexity-hardening —`
+    `hlm_bootstrap_complexity_d4462b1a.plan.md; maintain npm test +`
+    `quality:complexity when touching bootstrap or complexity scripts.`
   - `MJ.pdf strict_81 alignment track closed; keep maintenance-only regression`
     `hygiene for scoring rules/docs synchronization.`
   - `MCR alignment track closed (2026-04-07): trace matrix v1 +`
@@ -508,6 +527,9 @@ practicality upgrade exit (or after Pages if practicality is deferred).
     `splash skip, calculate hint, score bounds, details score-rule block,`
     `Escape/focus polish; see hlm_ux_audit_followup_5d8c2f1a.plan.md.`
 - ValidationEvidence:
+  - `2026-04-09: bootstrap + complexity hardening — modular public bootstrap,`
+    `jsCodeCharMask + jsFunctionBodyScan + quality-complexity; gates: npm test +`
+    `quality:complexity + cloc.`
   - `2026-04-08: help four-block upgrade — FAN_LEXICON_ENTRIES four-block`
     `schema + normalize fallback; help content renders 定义/判定要点/易错/例子;`
     `mobile overflow-x removed and desktop help dimensions increased; gates`

@@ -4,6 +4,24 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [5.3.2] - 2026-04-09
+
+### Changed（工程 / 可维护性）— 2026-04-09
+- `public/app.js` 启动流程拆分为协作模块：`appSplash.js`（开屏与跳过）、
+  `desktopContextInlineMount.js`、`roundSetupDomSync.js`、
+  `roundSetupBindings.js`、`escapeKeyModalWiring.js`、
+  `wizardCalculateHint.js`；`app.js` 仅保留编排，行为保持不变。
+- `scripts/quality-complexity.js`：函数体行数检测改为注释/字符串/模板字面量
+  剥离后的括号深度扫描（`scripts/lib/jsCodeCharMask.js`、
+  `scripts/lib/jsFunctionBodyScan.js`）；保留 78 列宽检测与既有
+  `file:line` 报错格式；无变更文件时全量扫描包含 `src/`、`public/`、
+  `scripts/`。CLI 仅在被直接执行时跑扫描（`import.meta.url` 主入口判断）。
+
+### Tests — 2026-04-09
+- 新增单元测试：`appSplash`、`desktopContextInlineMount`、`roundSetupDomSync`、
+  `escapeKeyModalWiring`、`wizardCalculateHint`、`jsFunctionBodyScan`。
+- 门禁：`npm test`、`npm run quality:complexity`、对触及源文件的 `cloc`。
+
 ## [5.3.1] - 2026-04-08
 
 - 帮助文案去技术化：删除面向开发者的控制台说明，改为面向最终用户的

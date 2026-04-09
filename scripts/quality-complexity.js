@@ -1,7 +1,8 @@
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { spawnSync } from "node:child_process";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
+import { findOversizedFunctionBodies } from "./lib/jsFunctionBodyScan.js";
 
 /**
  * Purpose: Enforce local file-size and width guardrails.
@@ -88,23 +89,15 @@ function checkFile(filePath) {
   const text = readFileSync(filePath, "utf8");
   const lines = text.split("\n");
   const issues = [];
-  let fnStart = null;
   for (let i = 0; i < lines.length; i += 1) {
     const line = lines[i];
     if (line.length > MAX_LINE_WIDTH) {
       issues.push(`${filePath}:${i + 1} line exceeds ${MAX_LINE_WIDTH}`);
     }
-    if (fnStart === null && /function\s+\w+\s*\(/.test(line)) {
-      fnStart = i;
-    }
-    if (fnStart !== null && line.includes("}")) {
-      const size = i - fnStart + 1;
-      if (size > MAX_FUNCTION_LINES) {
-        const msg = `${filePath}:${fnStart + 1} function exceeds`;
-        issues.push(`${msg} ${MAX_FUNCTION_LINES} lines`);
-      }
-      fnStart = null;
-    }
+  }
+  for (const hit of findOversizedFunctionBodies(text, MAX_FUNCTION_LINES)) {
+    const msg = `${filePath}:${hit.startLine} function exceeds`;
+    issues.push(`${msg} ${MAX_FUNCTION_LINES} lines`);
   }
   return issues;
 }
@@ -118,8 +111,11 @@ function run() {
   const changed = collectChangedJsFiles();
   const files = changed.length > 0
     ? changed
-    : [path.join(ROOT, "src"), path.join(ROOT, "public")]
-      .flatMap((root) => collectJsFiles(root));
+    : [
+      path.join(ROOT, "src"),
+      path.join(ROOT, "public"),
+      path.join(ROOT, "scripts")
+    ].flatMap((root) => collectJsFiles(root));
   const allIssues = files.flatMap((f) => checkFile(f));
   if (allIssues.length > 0) {
     process.stderr.write(`${allIssues.join("\n")}\n`);
@@ -129,4 +125,11 @@ function run() {
   process.stdout.write("complexity check passed\n");
 }
 
-run();
+const isMain = Boolean(
+  process.argv[1]
+  && pathToFileURL(path.resolve(process.argv[1])).href === import.meta.url
+);
+
+if (isMain) {
+  run();
+}
