@@ -1,6 +1,6 @@
 {
   "name": "hlm",
-  "version": "5.3.3",
+  "version": "5.3.4",
   "private": true,
   "type": "module",
   "description": "Huleme (HLM) - Guobiao Mahjong Fan Calculator.",
@@ -32,7 +32,7 @@
     "file-type": "^21.3.1"
   },
   "dependencies": {
-    "jimp": "^1.6.0"
+    "jimp": "^1.6.1"
   },
   "devDependencies": {
     "@playwright/test": "^1.59.1"

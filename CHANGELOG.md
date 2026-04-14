@@ -4,20 +4,35 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [5.3.4] - 2026-04-14
+
+### Changed
+
+- `jimp` **^1.6.1**. **`.github/workflows/unit-and-e2e.yml`**: install with
+  **`npm ci`** when `package-lock.json` exists, else **`npm install`**; npm
+  cache key **`package.json`**.
+
 ## [5.3.3] - 2026-04-09
 
-### Changed — 2026-04-09
-- 界面：在 `styles-base.css` 引入统一设计 token（surface、text、accent、
-  shadow、overlay 等），保留 `--bg` / `--card` / `--primary` 别名；主要
-  组件与弹层样式改为引用语义变量。
-- 桌面端（≥1024px）：主壳内增加三步向导步骤条（`#wizardStepStrip`），与
-  现有步骤流一致；`homeStateView` 中 `syncWizardStepStripAria` 同步
-  `aria-current`。
-- `homeStateView`：拆出 `applyWizardStepDom`、`applyWizardReadyHint` 以满足
-  函数体量与复杂度门禁。
+### Changed（界面 / 可访问性）— 2026-04-09
+- 统一色调：`public/styles-base.css` 增加语义化设计 token（`--surface-*`、
+  `--text-*`、`--accent*`、`--shadow-*`、`--overlay-scrim` 等），并保留
+  `--bg` / `--card` / `--primary` 等别名以兼容既有规则。
+- 样式迁移：`public/styles-components.css`、`public/styles-modals.css`、
+  `public/styles-responsive.css` 中高流量背景/边框/阴影改为引用上述 token；
+  主按钮与常用控件补充 `:focus-visible` 轮廓（含 `stepper-btn`、
+  `fan-info-btn`）。
+- 桌面向导：`public/index.html` 增加 `#wizardStepStrip`（≥1024px 显示三步：
+  设定玩家 → 录入手牌 → 和牌条件）；`public/homeStateView.js` 导出并调用
+  `syncWizardStepStripAria` 维护步骤项 `aria-current`；`public/appRefs.js`
+  挂载 `wizardStepStripEl`。
+- 结构整理：`homeStateView` 拆出 `applyWizardStepDom`、`applyWizardReadyHint`，
+  满足 `quality-complexity` 函数体量门禁。
 
 ### Tests — 2026-04-09
 - 新增 `tests/unit/wizardStepStripAria.test.js`。
+- 门禁：`npm test`、`npm run quality:complexity`；发布物可执行
+  `npm run build:dist` 同步 `dist/`。
 
 ## [5.3.2] - 2026-04-09
 
